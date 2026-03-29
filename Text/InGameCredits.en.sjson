@@ -1,0 +1,3203 @@
+﻿{
+  lang = "en"
+  Texts = [
+    /* CreditsScreen / AboutScreen */
+    {
+      Id = "AboutScreen_Title"
+      DisplayName = "Credits"
+    }
+
+    /* Headings & Subheadings */
+    {
+      Id = "Credits_Heading_Supergiant"
+      DisplayName = "Supergiant Games"
+    }
+    {
+      Id = "Credits_Heading_AdditionalCredits"
+      DisplayName = "Additional Credits"
+    }
+    {
+      Id = "Credits_Heading_Contributors"
+      DisplayName = "Contributors"
+    }
+    {
+      Id = "Credits_Heading_VoiceCast"
+      DisplayName = "Voice Cast"
+    }
+    {
+      Id = "Credits_Heading_Translators"
+      DisplayName = "Translators"
+    }
+    {
+      Id = "Credits_Heading_MusicProduction"
+      DisplayName = "Music Production"
+    }
+    {
+      Id = "Credits_Heading_LanguageQA"
+      DisplayName = "Language Quality Assurance"
+    }
+    {
+      Id = "Credits_Title_CastingServices"
+      DisplayName = "Casting Services"
+    }
+    {
+      Id = "Credits_SubHeading_Proofreader"
+      DisplayName = "Proofreader"
+    }
+    {
+      Id = "Credits_Heading_Community"
+      DisplayName = "Community Contributors"
+    }
+    {
+      Id = "Credits_SubHeading_Discord"
+      DisplayName = "Discord Moderators"
+    }
+    {
+      Id = "Credits_SubHeading_ModLiaisons"
+      DisplayName = "Mod Community Liaisons"
+    }
+    {
+      Id = "Credits_SubHeading_BetaTesters"
+      DisplayName = "Beta Testers"
+    }
+    {
+      Id = "Credits_Heading_Acknowledgements"
+      DisplayName = "Acknowledgements"
+    }
+    {
+      Id = "Credits_Description_Acknowledgements"
+      DisplayName = "We dedicate Hades II to"
+    }
+    {
+      Id = "Credits_Description_Acknowledgements_B"
+      DisplayName = "our dear families and friends, including:"
+    }
+    {
+      Id = "Credits_Description_Acknowledgements_Close"
+      DisplayName = "Thank you for standing together"
+    }
+    {
+      Id = "Credits_Description_Acknowledgements_Close_B"
+      DisplayName = "with us through the years."
+    }
+    {
+      Id = "Credits_Description_Acknowledgements_Close_C"
+      DisplayName = "We love you forever."
+    }
+    {
+      Id = "Credits_Heading_SupergiantSalutes"
+      DisplayName = "Supergiant Games Salutes"
+    }
+    {
+      Id = "Credits_SubHeading_ScyllaBand"
+      DisplayName = "Scylla & the Sirens {#InlineCreditTitle}Vocalists"
+    }
+    {
+      Id = "EndCredits_SubHeading_ScyllaBand"
+      DisplayName = "Scylla & the Sirens {#EndCreditsInlineCreditTitle}Vocalists"
+    }
+    {
+      Id = "Credits_Role_Choir"
+      DisplayName = "Choir"
+    }
+    {
+      Id = "Credits_SubHead_Choir"
+      DisplayName = "London Voices Choir"
+    }
+    {
+      Id = "Credits_Heading_SpecialThanks"
+      DisplayName = "Special Thanks"
+    }
+    {
+      Id = "Credits_Heading_VerySpecialThanks"
+      DisplayName = "Very Special Thanks"
+    }
+    {
+      Id = "Credits_Heading_Other"
+      DisplayName = "Stuff at the End"
+    }
+
+    /* Titles, Supergiant */
+    {
+      Id = "Credits_Title_Design"
+      DisplayName = "Design"
+    }
+    {
+      Id = "Credits_Title_EngineeringDesign"
+      DisplayName = "Engineering & Design"
+    }
+    {
+      Id = "Credits_Title_WritingDesign"
+      DisplayName = "Writing & Design"
+    }
+    {
+      Id = "Credits_Title_DesignWriting"
+      DisplayName = "Design & Writing"
+    }
+    {
+      Id = "Credits_Title_Engineering"
+      DisplayName = "Engineering"
+    }
+    {
+      Id = "Credits_Title_MusicSound"
+      DisplayName = "Music & Sound"
+    }
+    {
+      Id = "Credits_Title_MusicAudio"
+      DisplayName = "Music & Audio"
+    }
+    {
+      Id = "Credits_Title_Art"
+      DisplayName = "Art"
+    }
+    {
+      Id = "Credits_Title_VO"
+      DisplayName = "Voiceover"
+    }
+    {
+      Id = "Credits_Title_UIVFX"
+      DisplayName = "Visual FX & UI Animation"
+    }
+    {
+      Id = "Credits_Title_Ops"
+      DisplayName = "Operations"
+    }
+    {
+      Id = "Credits_Title_EnvironmentArt"
+      DisplayName = "Environment Art"
+    }
+    {
+      Id = "Credits_Title_OfficeSupport"
+      DisplayName = "Office & Support"
+    }
+    {
+      Id = "Credits_Title_Publishing"
+      DisplayName = "Publishing"
+    }
+    {
+      Id = "Credits_Title_DesignQA"
+      DisplayName = "Design Quality Assurance"
+    }
+    {
+      Id = "Credits_Title_QA"
+      DisplayName = "Quality Assurance"
+    }
+    {
+      Id = "Credits_Title_ProductionQA"
+      DisplayName = "Production Quality Assurance"
+    }
+    {
+      Id = "Credits_Title_3DModeling"
+      DisplayName = "{$CreditsData.NumericTokens.Three}D Modeling"
+    }
+    {
+      Id = "Credits_Title_Animation"
+      DisplayName = "Animation"
+    }
+    {
+      Id = "Credits_Title_Finance"
+      DisplayName = "Finance"
+    }
+    {
+      Id = "Credits_Title_TechArt"
+      DisplayName = "Technical Art"
+    }
+    {
+      Id = "Credits_Title_PlatformsQA"
+      DisplayName = "Platforms Quality Assurance"
+    }
+
+    /* Titles, Additional */
+    {
+      Id = "Credits_Title_AdtlOfficeSupport"
+      DisplayName = "Additional Office & Support"
+    }
+    {
+      Id = "Credits_Title_AdtlMusicVocals"
+      DisplayName = "Additional Music Vocals"
+    }
+    {
+      Id = "Credits_Title_AdtlSetDressing"
+      DisplayName = "Additional Set Dressing"
+    }
+    {
+      Id = "Credits_Title_AdtlMapBeautification"
+      DisplayName = "Additional Map Beautification"
+    }
+    {
+      Id = "Credits_Title_AdtlAnimation"
+      DisplayName = "Additional Animation"
+    }
+    {
+      Id = "Credits_Title_AdtlModeling"
+      DisplayName = "Additional {$CreditsData.NumericTokens.Three}D Modeling"
+    }
+    {
+      Id = "Credits_Title_AdtlUIArt"
+      DisplayName = "Additional UI Art"
+    }
+    {
+      Id = "Credits_Title_AdtlQA"
+      DisplayName = "Additional Quality Assurance"
+    }
+    {
+      Id = "Credits_Title_AdtlRigging"
+      DisplayName = "Additional {$CreditsData.NumericTokens.Three}D Rigging"
+    }
+    {
+      Id = "Credits_Title_AdtlConceptArt"
+      DisplayName = "Additional Concept Art"
+    }
+    {
+      Id = "Credits_Title_AdtlSoundEditing"
+      DisplayName = "Additional Sound Editing"
+    }
+    {
+      Id = "Credits_Title_AdtlVFXConcepts"
+      DisplayName = "Additional Visual FX Concepts"
+    }
+    {
+      Id = "Credits_Title_AnimatedTrailers"
+      DisplayName = "Animated Trailers"
+    }
+    {
+      Id = "Credits_Title_AdtlVideoProduction"
+      DisplayName = "Additional Video Production"
+    }
+    {
+      Id = "Credits_Title_AdtlMarketingArt"
+      DisplayName = "Additional Marketing Art"
+    }
+    {
+      Id = "Credits_Title_AdtlUIAnimation"
+      DisplayName = "Additional UI Animation"
+    }
+    {
+      Id = "Credits_Title_Illustration"
+      DisplayName = "Illustration"
+    }
+
+    /* Music Production */
+    {
+      Id = "Credits_Title_Flute"
+      DisplayName = "Flutes"
+    }
+    {
+      Id = "Credits_Title_FluteSoloist"
+      DisplayName = "Flute Soloist - {#InlineCreditH3}The Necropolis"
+    }
+    {
+      Id = "EndCredits_Title_FluteSoloist"
+      DisplayName = "Flute Soloist - {#EndCreditsInlineCreditH3}The Necropolis"
+    }
+    {
+      Id = "Credits_Title_FluteSoloist_B"
+      DisplayName = "Flute Soloist - {#InlineCreditH3}Winged Apprentice"
+    }
+    {
+      Id = "EndCredits_Title_FluteSoloist_B"
+      DisplayName = "Flute Soloist - {#EndCreditsInlineCreditH3}Winged Apprentice"
+    }
+    {
+      Id = "Credits_Title_SaxophoneSoloist"
+      DisplayName = "Saxophone Soloist - {#InlineCreditH3}Sightless Shepherd"
+    }
+    {
+      Id = "EndCredits_Title_SaxophoneSoloist"
+      DisplayName = "Saxophone Soloist - {#EndCreditsInlineCreditH3}Sightless Shepherd"
+    }
+    {
+      Id = "Credits_Title_SaxophoneSoloist_B"
+      DisplayName = "Saxophone Soloist - {#InlineCreditH3}Lap of Luxury"
+    }
+    {
+      Id = "EndCredits_Title_SaxophoneSoloist_B"
+      DisplayName = "Saxophone Soloist - {#EndCreditsInlineCreditH3}Lap of Luxury"
+    }
+    {
+      Id = "Credits_Title_GuitarSoloist"
+      DisplayName = "Guitar Soloist - {#InlineCreditH3}Reflection Affection"
+    }
+    {
+      Id = "EndCredits_Title_GuitarSoloist"
+      DisplayName = "Guitar Soloist - {#EndCreditsInlineCreditH3}Reflection Affection"
+    }
+    {
+      Id = "Credits_Title_DrumSoloist"
+      DisplayName = "Drum Soloist - {#InlineCreditH3}The End of Time"
+    }
+    {
+      Id = "EndCredits_Title_DrumSoloist"
+      DisplayName = "Drum Soloist - {#EndCreditsInlineCreditH3}The End of Time"
+    }
+    {
+      Id = "Credits_Title_GuitarSoloists"
+      DisplayName = "Guitar Soloists - {#InlineCreditH3}The Unseen Ones"
+    }
+    {
+      Id = "Credits_Title_Vocalist_ArtemisSong"
+      DisplayName = "Vocalists - {#InlineCreditH3}Moonlight Guide Us"
+    }
+    {
+      Id = "EndCredits_Title_Vocalist_ArtemisSong"
+      DisplayName = "Vocalists - {#EndCreditsInlineCreditH3}Moonlight Guide Us"
+    }
+    {
+      Id = "Credits_Title_Vocalist_ApolloSong"
+      DisplayName = "Vocalist - {#InlineCreditH3}Fated Glory"
+    }
+    {
+      Id = "EndCredits_Title_Vocalist_ApolloSong"
+      DisplayName = "Vocalist - {#EndCreditsInlineCreditH3}Fated Glory"
+    }
+    {
+      Id = "Credits_Title_Vocalist_EndTheme"
+      DisplayName = "Vocalists - {#InlineCreditH3}Time Belongs to Us"
+    }
+    {
+      Id = "EndCredits_Title_Vocalist_EndTheme"
+      DisplayName = "Vocalists - {#EndCreditsInlineCreditH3}Time Belongs to Us"
+    }
+
+    {
+      Id = "Credits_Title_Conductor"
+      DisplayName = "Conductor & Co-Composer"
+    }
+    {
+      Id = "Credits_Title_Harp"
+      DisplayName = "Harp"
+    }
+    {
+      Id = "Credits_Title_Percussion"
+      DisplayName = "Percussion"
+    }
+    {
+      Id = "Credits_Title_FlutePiccolo"
+      DisplayName = "Flute / Piccolo"
+    }
+    {
+      Id = "Credits_Title_Oboe"
+      DisplayName = "Oboe"
+    }
+    {
+      Id = "Credits_Title_OboeCorAnglais"
+      DisplayName = "Oboe / Cor Anglais"
+    }
+    {
+      Id = "Credits_Title_Clarinet"
+      DisplayName = "Clarinet"
+    }
+    {
+      Id = "Credits_Title_ClarinetBassClarinet"
+      DisplayName = "Clarinet / Bass Clarinet"
+    }
+    {
+      Id = "Credits_Title_PrincipalViolin"
+      DisplayName = "Principal Violin"
+    }
+    {
+      Id = "Credits_Title_Violin"
+      DisplayName = "Violins"
+    }
+    {
+      Id = "Credits_Title_PrincipalViola"
+      DisplayName = "Principal Viola"
+    }
+    {
+      Id = "Credits_Title_Viola"
+      DisplayName = "Violas"
+    }
+    {
+      Id = "Credits_Title_PrincipalCello"
+      DisplayName = "Principal Cello"
+    }
+    {
+      Id = "Credits_Title_Cello"
+      DisplayName = "Cellos"
+    }
+    {
+      Id = "Credits_Title_PrincipalDoubleBass"
+      DisplayName = "Principal Double Bass"
+    }
+    {
+      Id = "Credits_Title_DoubleBass"
+      DisplayName = "Double Bass"
+    }
+    {
+      Id = "Credits_Title_Bassoon"
+      DisplayName = "Bassoons"
+    }
+    {
+      Id = "Credits_Title_BassoonContrabassoon"
+      DisplayName = "Bassoon / Contrabassoon"
+    }
+    {
+      Id = "Credits_Title_FrenchHorn"
+      DisplayName = "French Horns"
+    }
+    {
+      Id = "Credits_Title_Trumpet"
+      DisplayName = "Trumpets"
+    }
+    {
+      Id = "Credits_Title_TenorTrombone"
+      DisplayName = "Tenor Trombones"
+    }
+    {
+      Id = "Credits_Title_TenorTromboneBassTrombone"
+      DisplayName = "Tenor Trombone / Bass Trombone"
+    }
+    {
+      Id = "Credits_Title_BassTrombone"
+      DisplayName = "Bass Trombone"
+    }
+    {
+      Id = "Credits_Title_TubaCimbasso"
+      DisplayName = "Tuba / Cimbasso"
+    }
+    {
+      Id = "Credits_Title_Mastering"
+      DisplayName = "Mastering"
+    }
+    {
+      Id = "Credits_Title_OrchestralMixing"
+      DisplayName = "Orchestral Mixing"
+    }
+    {
+      Id = "Credits_Title_OrchestraContractor"
+      DisplayName = "Orchestra Contractors"
+    }
+    {
+      Id = "Credits_Title_OrchestraLeader"
+      DisplayName = "Orchestra Leader / Principal Violin"
+    }
+    {
+      Id = "Credits_Title_Librarian"
+      DisplayName = "Librarians"
+    }
+    {
+      Id = "Credits_Title_MixEngineer"
+      DisplayName = "Mix Engineer"
+    }
+    {
+      Id = "Credits_Title_MixAssistant"
+      DisplayName = "Mix Assistant"
+    }
+    {
+      Id = "Credits_Title_MusicEditor"
+      DisplayName = "Music Editor"
+    }
+    {
+      Id = "Credits_Title_AdditionalMusicEditing"
+      DisplayName = "Additional Music Editing"
+    }
+    {
+      Id = "Credits_Title_ScoringEngineer"
+      DisplayName = "Scoring Engineer"
+    }
+    {
+      Id = "Credits_Title_AssistantRecordingEngineer"
+      DisplayName = "Assistant Recording Engineer"
+    }
+    {
+      Id = "Credits_Title_MidiTranscription"
+      DisplayName = "MIDI Transcription / Orchestration Prep"
+    }
+    {
+      Id = "Credits_Title_OrchestralSessionAssistant"
+      DisplayName = "Orchestral Session Assistant"
+    }
+    {
+      Id = "Credits_Title_Orchestration"
+      DisplayName = "Orchestration"
+    }
+    {
+      Id = "Credits_Title_Copyist"
+      DisplayName = "Copyist"
+    }
+    {
+      Id = "Credits_Title_ChoirMaster"
+      DisplayName = "Choirmaster"
+    }
+    {
+      Id = "Credits_Title_Soprano"
+      DisplayName = "Sopranos"
+    }
+    {
+      Id = "Credits_Title_Alto"
+      DisplayName = "Altos"
+    }
+    {
+      Id = "Credits_Title_Tenor"
+      DisplayName = "Tenors"
+    }
+    {
+      Id = "Credits_Title_Bass"
+      DisplayName = "Bass"
+    }
+    {
+      Id = "Credits_Title_WindSoloist"
+      DisplayName = "Wind Soloist"
+    }
+
+    /* Team Names */
+    {
+      Id = "Credits_TeamName_StudioGrackle"
+      DisplayName = "Studio Grackle"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_TeamName_TheLine"
+      DisplayName = "The Line Animation Studio Ltd"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_TeamName_HalpNetwork"
+      DisplayName = "The Halp Network"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_TeamName_8-4"
+      DisplayName = "{$CreditsData.NumericTokens.Eight}-{$CreditsData.NumericTokens.Four}, Ltd."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_TeamName_StevenJuliani"
+      DisplayName = "Steven Juliani Music"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_TeamName_IsobelGriffiths"
+      DisplayName = "Isobel Griffiths Ltd"
+      OverwriteLocalization = true
+    }
+
+    /* Titles, Cast */
+    {
+      Id = "Credits_CastTitle_Melinoe"
+      DisplayName = "Melinoë"
+    }
+    {
+      Id = "Credits_CastTitle_JudyChars"
+      DisplayName = "Melinoë, Echo, & Additional Voices"
+    }
+    {
+      Id = "Credits_CastTitle_Hecate"
+      DisplayName = "Hecate"
+    }
+    {
+      Id = "Credits_CastTitle_Chronos"
+      DisplayName = "Chronos"
+    }
+    {
+      Id = "Credits_CastTitle_LoganChars"
+      DisplayName = "Chronos, Hades, Poseidon, Polyphemus, Homer, Charon"
+    }
+    {
+      Id = "Credits_CastTitle_LoganCharsAlt"
+      DisplayName = "Chronos, Hades, Poseidon, Homer, & Charon"
+    }
+    {
+      Id = "Credits_CastTitle_LoganChars01"
+      DisplayName = "Chronos, Hades, Poseidon,"
+    }
+    {
+      Id = "Credits_CastTitle_LoganChars02"
+      DisplayName = "Homer, Charon, Polyphemus, & Typhon"
+    }
+    {
+      Id = "Credits_CastTitle_LoganChars01_Alt"
+      DisplayName = "Chronos, Hades, Poseidon, Homer,"
+    }
+    {
+      Id = "Credits_CastTitle_LoganChars02_Alt"
+      DisplayName = "Charon, Polyphemus, Typhon, & Achilles"
+    }
+    {
+      Id = "Credits_CastTitle_Dora"
+      DisplayName = "Dora"
+    }
+    {
+      Id = "Credits_CastTitle_ErinChars"
+      DisplayName = "Dora, Scylla, & Additional Voices"
+    }
+    {
+      Id = "Credits_CastTitle_Nemesis"
+      DisplayName = "Nemesis"
+    }
+    {
+      Id = "Credits_CastTitle_Odysseus"
+      DisplayName = "Odysseus"
+    }
+    {
+      Id = "Credits_CastTitle_Moros"
+      DisplayName = "Moros"
+    }
+    {
+      Id = "Credits_CastTitle_Eris"
+      DisplayName = "Eris"
+    }
+    {
+      Id = "Credits_CastTitle_Skelly"
+      DisplayName = "Schelemeus"
+    }
+    {
+      Id = "Credits_CastTitle_DarrenChars1"
+      DisplayName = "Schelemeus, Narcissus,"
+    }
+    {
+      Id = "Credits_CastTitle_DarrenChars2"
+      DisplayName = "Zagreus, & Additional Voices"
+    }
+    {
+      Id = "Credits_CastTitle_DarrenCharsAlt"
+      DisplayName = "Schelemeus, & Additional Voices"
+    }
+    {
+      Id = "Credits_CastTitle_Selene"
+      DisplayName = "Selene"
+    }
+    {
+      Id = "Credits_CastTitle_Artemis"
+      DisplayName = "Artemis & Nyx"
+    }
+    {
+      Id = "Credits_CastTitle_Hermes"
+      DisplayName = "Hermes"
+    }
+    {
+      Id = "Credits_CastTitle_Arachne"
+      DisplayName = "Arachne"
+    }
+    {
+      Id = "Credits_CastTitle_Scylla"
+      DisplayName = "Scylla"
+    }
+    {
+      Id = "Credits_CastTitle_Jetty"
+      DisplayName = "Jetty"
+    }
+    {
+      Id = "Credits_CastTitle_Roxy"
+      DisplayName = "Roxy"
+    }
+    {
+      Id = "Credits_CastTitle_Narcissus"
+      DisplayName = "Narcissus"
+    }
+    {
+      Id = "Credits_CastTitle_Echo"
+      DisplayName = "Echo"
+    }
+    {
+      Id = "Credits_CastTitle_Polyphemus"
+      DisplayName = "Polyphemus"
+    }
+    {
+      Id = "Credits_CastTitle_Heracles"
+      DisplayName = "Heracles"
+    }
+    {
+      Id = "Credits_CastTitle_Medea"
+      DisplayName = "Medea"
+    }
+    {
+      Id = "Credits_CastTitle_Circe"
+      DisplayName = "Circe"
+    }
+    {
+      Id = "Credits_CastTitle_Icarus"
+      DisplayName = "Icarus"
+    }
+    {
+      Id = "Credits_CastTitle_Hades"
+      DisplayName = "Hades"
+    }
+    {
+      Id = "Credits_CastTitle_Homer"
+      DisplayName = "Homer"
+    }
+    {
+      Id = "Credits_CastTitle_Chaos"
+      DisplayName = "Chaos"
+    }
+    {
+      Id = "Credits_CastTitle_PeterChars"
+      DisplayName = "Zeus & Chaos"
+    }
+    {
+      Id = "Credits_CastTitle_Zeus"
+      DisplayName = "Zeus"
+    }
+    {
+      Id = "Credits_CastTitle_Hera"
+      DisplayName = "Hera"
+    }
+    {
+      Id = "Credits_CastTitle_Poseidon"
+      DisplayName = "Poseidon"
+    }
+    {
+      Id = "Credits_CastTitle_Apollo"
+      DisplayName = "Apollo"
+    }
+    {
+      Id = "Credits_CastTitle_Demeter"
+      DisplayName = "Demeter & Persephone"
+    }
+    {
+      Id = "Credits_CastTitle_Aphrodite"
+      DisplayName = "Aphrodite"
+    }
+    {
+      Id = "Credits_CastTitle_Hephaestus"
+      DisplayName = "Hephaestus"
+    }
+    {
+      Id = "Credits_CastTitle_Hestia"
+      DisplayName = "Hestia"
+    }
+    {
+      Id = "Credits_CastTitle_Charon"
+      DisplayName = "Charon"
+    }
+    {
+      Id = "Credits_CastTitle_Hypnos"
+      DisplayName = "Hypnos"
+    }
+    {
+      Id = "Credits_CastTitle_GregChars"
+      DisplayName = "Hypnos & Additional Voices"
+    }
+    {
+      Id = "Credits_CastTitle_Athena"
+      DisplayName = "Athena"
+    }
+    {
+      Id = "Credits_CastTitle_Dionysus"
+      DisplayName = "Dionysus"
+    }
+    {
+      Id = "Credits_CastTitle_CyrusChars"
+      DisplayName = "Dionysus & Ares"
+    }
+    {
+      Id = "Credits_CastTitle_Prometheus"
+      DisplayName = "Prometheus"
+    }
+    {
+      Id = "Credits_CastTitle_AdtlVoices"
+      DisplayName = "Additional Voices"
+    }
+
+    /* SubTitles, Languages */
+    {
+      Id = "Credits_Lang_FR"
+      DisplayName = "French"
+    }
+    {
+      Id = "Credits_Lang_IT"
+      DisplayName = "Italian"
+    }
+    {
+      Id = "Credits_Lang_PTBR"
+      DisplayName = "Brazilian Portuguese"
+    }
+    {
+      Id = "Credits_Lang_EL"
+      DisplayName = "Greek"
+    }
+    {
+      Id = "Credits_Lang_UK"
+      DisplayName = "Ukrainian"
+    }
+    {
+      Id = "Credits_Lang_ZHCN"
+      DisplayName = "Simplified Chinese"
+    }
+    {
+      Id = "Credits_Lang_ZHTW"
+      DisplayName = "Traditional Chinese"
+    }
+    {
+      Id = "Credits_Lang_TR"
+      DisplayName = "Turkish"
+    }
+    {
+      Id = "Credits_Lang_ES"
+      DisplayName = "Spanish"
+    }
+    {
+      Id = "Credits_Lang_ES_Proofreader"
+      DisplayName = "Spanish - Proofreading"
+    }
+    {
+      Id = "Credits_Lang_JP"
+      DisplayName = "Japanese"
+    }
+    {
+      Id = "Credits_Lang_DE"
+      DisplayName = "German"
+    }
+    {
+      Id = "Credits_Lang_KO"
+      DisplayName = "Korean"
+    }
+    {
+      Id = "Credits_Lang_PL"
+      DisplayName = "Polish"
+    }
+    {
+      Id = "Credits_Lang_RU"
+      DisplayName = "Russian"
+    }
+
+    /* Personal Names */
+    {
+      Id = "Credits_Name_001"
+      DisplayName = "Amir Rao"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_002"
+      DisplayName = "Gavin Simon"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_003"
+      DisplayName = "Greg Kasavin"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_004"
+      DisplayName = "Andrew Wang"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_005"
+      DisplayName = "Darren Korb"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_006"
+      DisplayName = "Jen Zee"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_007"
+      DisplayName = "Logan Cunningham"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_008"
+      DisplayName = "Josh Barnett"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_009"
+      DisplayName = "John-Paul Gabler"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_010"
+      DisplayName = "Dexter Friedman"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_011"
+      DisplayName = "Eduardo Gorinstein"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_012"
+      DisplayName = "Alice Lai"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_012b"
+      DisplayName = "Will Turnbull"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_013"
+      DisplayName = "Joanne Tran"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_014"
+      DisplayName = "Caitlin Sales"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_015"
+      DisplayName = "Will Turnbull"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_016"
+      DisplayName = "Nikola Šobajić"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_017"
+      DisplayName = "Devansh Maheshwari"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_018"
+      DisplayName = "James Auck"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_019"
+      DisplayName = "Allison Rassmann"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_020"
+      DisplayName = "Ellis Powell"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_021"
+      DisplayName = "Morgane Malville"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_021b"
+      DisplayName = "Craig Harris"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_022"
+      DisplayName = "Stephen Puckett"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_023"
+      DisplayName = "Raveen 'Ray' Rajadorai"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_024"
+      DisplayName = "Jonathan Villariasa"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_025"
+      DisplayName = "Caleb Cornett"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "Credits_Name_026"
+      DisplayName = "Ashley Barrett"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_026_B"
+      DisplayName = "Ashley Barrett {#InlineCreditTitle}- Roxy"
+    }
+    {
+      Id = "EndCredits_Name_026_B"
+      DisplayName = "Ashley Barrett {#EndCreditsInlineCreditTitle}- Roxy"
+    }
+    {
+      Id = "Credits_Name_027"
+      DisplayName = "Kristen Beech"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_028"
+      DisplayName = "Nikita Taranduke"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_029"
+      DisplayName = "Sylvain Decaux"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_030"
+      DisplayName = "Alicia Feng"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_031"
+      DisplayName = "Krystian 'Tiank' Doniec"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_032"
+      DisplayName = "Aliza Aeon Adviento"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_033"
+      DisplayName = "Adit Deshar"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_034"
+      DisplayName = "Jesse Turner"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_035"
+      DisplayName = "Brad Hagmann"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_036"
+      DisplayName = "Alon Helman"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_037"
+      DisplayName = "Crow"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_038"
+      DisplayName = "Spencer Wan"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_039"
+      DisplayName = "Andre Mina"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_040"
+      DisplayName = "Shaun Finney"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_041"
+      DisplayName = "Jesse Tan"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "Credits_Name_042"
+      DisplayName = "Judy Alice Lee"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_042_B"
+      DisplayName = "Judy Alice Lee {#InlineCreditTitle}- Jetty"
+    }
+    {
+      Id = "EndCredits_Name_042_B"
+      DisplayName = "Judy Alice Lee {#EndCreditsInlineCreditTitle}- Jetty"
+    }
+    {
+      Id = "Credits_Name_043"
+      DisplayName = "Amelia Tyler"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_044"
+      DisplayName = "Erin Yvette"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_044_B"
+      DisplayName = "Erin Yvette {#InlineCreditTitle}- Scylla"
+    }
+    {
+      Id = "EndCredits_Name_044_B"
+      DisplayName = "Erin Yvette {#EndCreditsInlineCreditTitle}- Scylla"
+    }
+    {
+      Id = "Credits_Name_045"
+      DisplayName = "Becca Q. Co"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_046"
+      DisplayName = "Jason Marnocha"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_047"
+      DisplayName = "Sterling Sulieman"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_048"
+      DisplayName = "Brianna Bryan"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_049"
+      DisplayName = "Sarah Grayson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_050"
+      DisplayName = "Jamie Landrum"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_051"
+      DisplayName = "Andrew Marks"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_052"
+      DisplayName = "Shelby Young"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_053"
+      DisplayName = "Matthew Waterson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_054"
+      DisplayName = "Tara Langella"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_055"
+      DisplayName = "Hannah Whiteoak"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_056"
+      DisplayName = "Asa Butterfield"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_057"
+      DisplayName = "Peter Canavese"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_058"
+      DisplayName = "Josette Eales"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_059"
+      DisplayName = "Colin Ryan"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_060"
+      DisplayName = "Laila Berzins"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_061"
+      DisplayName = "Courtney Vineys"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_062"
+      DisplayName = "Dave B. Mitchell"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_063"
+      DisplayName = "Cerris Morgan Moyer"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_064"
+      DisplayName = "John Ricciardi"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_065"
+      DisplayName = "Tina Carter {#InlineCreditTitle}- Producer"
+    }
+    {
+      Id = "EndCredits_Name_065"
+      DisplayName = "Tina Carter {#EndCreditsInlineCreditTitle}- Producer"
+    }
+    {
+      Id = "Credits_Name_066"
+      DisplayName = "Julia Bianco Schoeffling"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_067"
+      DisplayName = "Robert Kinsfather"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_068"
+      DisplayName = "Lexington Vanderberg"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "Credits_Name_069"
+      DisplayName = "Thibault Ortega"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_070"
+      DisplayName = "Simone Roberto"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_071"
+      DisplayName = "Sofia Aveline"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_072"
+      DisplayName = "Georgios Tziakos"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_073"
+      DisplayName = "Ma Mofan (Sirius Wolf)"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_074"
+      DisplayName = "Bohdana Vozniuk"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_075"
+      DisplayName = "Alyssa Chung"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_076"
+      DisplayName = "Onur Saatcioğlu"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_077"
+      DisplayName = "Andrés Moon Ahn"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_078"
+      DisplayName = "Henrike Kupsch"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_079"
+      DisplayName = "Somyeong Kim"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_080"
+      DisplayName = "Elżbieta Grzesiak-Niespodziewany"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_081"
+      DisplayName = "Ekaterina Dyakonenko"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "Credits_Name_082"
+      DisplayName = "Josh Plotner"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "Credits_Name_083"
+      DisplayName = "Beatriz Esteban Agustí"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_083_B"
+      DisplayName = "Beatriz Esteban Agustí {#InlineCreditTitle}- Proofreader"
+    }
+    {
+      Id = "EndCredits_Name_083_B"
+      DisplayName = "Beatriz Esteban Agustí {#EndCreditsInlineCreditTitle}- Proofreader"
+    }
+    {
+      Id = "Credits_Name_084"
+      DisplayName = "Josh Lee"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_085"
+      DisplayName = "Wenyue Ouyang"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_086"
+      DisplayName = "Chung-Kuan Chen"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_087"
+      DisplayName = "Dina Andreeva"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_088"
+      DisplayName = "Stella Del Cielo"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_089"
+      DisplayName = "Dimitris Koronios"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_090"
+      DisplayName = "Berkay Şahinoğlu"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_091"
+      DisplayName = "Monika Piwowarczyk"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_091b"
+      DisplayName = "Sonia Pulido Maroto"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_091c"
+      DisplayName = "Eva Jucci"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_092"
+      DisplayName = "Clémence Dieryck {#InlineCreditTitle}- Addt'l. Translator"
+    }
+    {
+      Id = "EndCredits_Name_092"
+      DisplayName = "Clémence Dieryck {#EndCreditsInlineCreditTitle}- Addt'l. Translator"
+    }
+    {
+      Id = "Credits_Name_093"
+      DisplayName = "Christian 'ChrisLeverne' Taubeneck"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_094"
+      DisplayName = "Yuliia Trakaliuk"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_094b"
+      DisplayName = "Won Jeongho (zzt)"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_095"
+      DisplayName = "Nina Sinigaglia {#InlineCreditTitle}- Addt'l. Translator"
+    }
+    {
+      Id = "EndCredits_Name_095"
+      DisplayName = "Nina Sinigaglia {#EndCreditsInlineCreditTitle}- Addt'l. Translator"
+    }
+    {
+      Id = "Credits_Name_096"
+      DisplayName = "Dmitry Kulchitsky"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_097"
+      DisplayName = "Lin Feiyang"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_098"
+      DisplayName = "Melanie Chen"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_099"
+      DisplayName = "Edward Chiu"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_100"
+      DisplayName = "Marta Niespodziewany"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_101"
+      DisplayName = "Ceyda Atuğ"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_102"
+      DisplayName = "Luismi García Ramírez"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_103"
+      DisplayName = "Thedoros 'Theo' Kalyvas"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_104"
+      DisplayName = "Sangjin Lee"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_105"
+      DisplayName = "Evelyn Tesche"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_106"
+      DisplayName = "Dmytro Holovchenko"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_107"
+      DisplayName = "Virginia Petrarca"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_108"
+      DisplayName = "Alberto Gómez Herrera"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_109"
+      DisplayName = "Keiko Fukuichi {#InlineCreditTitle}- Translator"
+    }
+    {
+      Id = "EndCredits_Name_109"
+      DisplayName = "Keiko Fukuichi {#EndCreditsInlineCreditTitle}- Translator"
+    }
+    {
+      Id = "Credits_Name_110"
+      DisplayName = "Hiroyuki Matsushita"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_111"
+      DisplayName = "Alissa Staples"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_112"
+      DisplayName = "Sami Ragone"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_113"
+      DisplayName = "JP Wentz"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_114"
+      DisplayName = "Hiroko Minamoto"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_115"
+      DisplayName = "Frederick Allain"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_116"
+      DisplayName = "Sam Gendel"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_117"
+      DisplayName = "Marin Miller"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_118"
+      DisplayName = "Cyrus Nemati"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_119"
+      DisplayName = "Ben Starr"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_120"
+      DisplayName = "Austin Wintory"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_121"
+      DisplayName = "Amy Ewen"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_122"
+      DisplayName = "Jill Streater"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_123"
+      DisplayName = "Ann Barnard"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_124"
+      DisplayName = "Ben Parry"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_125"
+      DisplayName = "Jackie Shave"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_126"
+      DisplayName = "Skaila Kanga"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_127"
+      DisplayName = "Frank Ricotti"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_128"
+      DisplayName = "Chris Baron"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_129"
+      DisplayName = "Rob Farrer"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_130"
+      DisplayName = "Julian Poole"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_131"
+      DisplayName = "Karen Jones"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_132"
+      DisplayName = "Anna Noakes"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_133"
+      DisplayName = "Tom Hancox"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_134"
+      DisplayName = "Tom Blomfield"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_135"
+      DisplayName = "Ruth Contractor"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_136"
+      DisplayName = "Nicholas Rodwell"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_137"
+      DisplayName = "Anthony Pike"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_138"
+      DisplayName = "Daniel Jemison"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_139"
+      DisplayName = "Paul Boyes"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_140"
+      DisplayName = "Gavin McNaughton"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_141"
+      DisplayName = "Richard Watkins"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_142"
+      DisplayName = "Martin Owen"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_143"
+      DisplayName = "Laurence Davies"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_144"
+      DisplayName = "Nigel Black"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_145"
+      DisplayName = "John Ryan"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_146"
+      DisplayName = "Corinne Bailey"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_147"
+      DisplayName = "Philip Cobb"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_148"
+      DisplayName = "Kate Moore"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_149"
+      DisplayName = "James Fountain"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_150"
+      DisplayName = "Tom Fountain"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_151"
+      DisplayName = "Daniel Newell"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_152"
+      DisplayName = "Patrick White"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_153"
+      DisplayName = "Christian Barraclough"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_154"
+      DisplayName = "Rebecca Crawshaw"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_155"
+      DisplayName = "Mark Nightingale"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_156"
+      DisplayName = "Ed Tarrant"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_157"
+      DisplayName = "Andy Wood"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_158"
+      DisplayName = "Dave Stewart"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_159"
+      DisplayName = "Owen Slade"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_160"
+      DisplayName = "Thomas Gould"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_161"
+      DisplayName = "Lorraine McAslan"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_162"
+      DisplayName = "Kathy Shave"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_163"
+      DisplayName = "Tom Pigott-Smith"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_164"
+      DisplayName = "Patrick Savage"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_165"
+      DisplayName = "Ben Buckton"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_166"
+      DisplayName = "Gaby Lester"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_167"
+      DisplayName = "Fenella Barton"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_168"
+      DisplayName = "Clare Thompson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_169"
+      DisplayName = "Philippe Honore"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_169b"
+      DisplayName = "Clio Gould"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_170"
+      DisplayName = "Harriet Davies"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_171"
+      DisplayName = "Bea Lovejoy"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_172"
+      DisplayName = "Thomas Kemp"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_173"
+      DisplayName = "Michael Trainor"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_174"
+      DisplayName = "Helena Wood"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_175"
+      DisplayName = "Martin Burgess"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_176"
+      DisplayName = "Dorina Markoff"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_177"
+      DisplayName = "Peter Lale"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_178"
+      DisplayName = "Ian Rathbone"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_179"
+      DisplayName = "Robert Smissen"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_180"
+      DisplayName = "Kate Musker"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_181"
+      DisplayName = "Andy Parker"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_182"
+      DisplayName = "Gillianne Haddow"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_183"
+      DisplayName = "Edward Vanderspar"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_184"
+      DisplayName = "John Metcalfe"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_185"
+      DisplayName = "David Daniels"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_186"
+      DisplayName = "Tim Gill"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_187"
+      DisplayName = "Caroline Dearnley"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_188"
+      DisplayName = "David Lale"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_189"
+      DisplayName = "Joely Koos"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_190"
+      DisplayName = "Rachael Lander"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_191"
+      DisplayName = "Julia Graham"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_192"
+      DisplayName = "Sophie Harris"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_193"
+      DisplayName = "Stacey Watton"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_194"
+      DisplayName = "Rory Dempsey"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_195"
+      DisplayName = "Laurence Ungless"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_196"
+      DisplayName = "Beth Symmons"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_197"
+      DisplayName = "Roger Linley"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_198"
+      DisplayName = "Lucy Shaw"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_199"
+      DisplayName = "Freya Parry"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_200"
+      DisplayName = "Nicholas Garrett"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_201"
+      DisplayName = "Grace Davidson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_202"
+      DisplayName = "Imogen Parry"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_203"
+      DisplayName = "Isabella Gibber"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_204"
+      DisplayName = "Joanna Forbes L'Estrange"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_205"
+      DisplayName = "Katy Hill"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_206"
+      DisplayName = "Alexandra Gibson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_207"
+      DisplayName = "Christina Gill"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_208"
+      DisplayName = "Louise Marshall"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_209"
+      DisplayName = "Lucy Goddard"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_210"
+      DisplayName = "Melanie Marshall"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_211"
+      DisplayName = "Sumudu Jayatilaka"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_212"
+      DisplayName = "CJ Neale"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_213"
+      DisplayName = "Daniel Lewis"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_214"
+      DisplayName = "Guy Cutting"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_215"
+      DisplayName = "Matthew Howard"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_216"
+      DisplayName = "Richard Eteson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_217"
+      DisplayName = "Steve Trowell"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_218"
+      DisplayName = "Andrew Tipple"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_219"
+      DisplayName = "Edward Randell"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_220"
+      DisplayName = "Ken Burton"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_221"
+      DisplayName = "Julian Chou-Lambert"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_222"
+      DisplayName = "Michael Dore"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_223"
+      DisplayName = "Kristin Naigus"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_224"
+      DisplayName = "Steve Kempster"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_225"
+      DisplayName = "Matt Friedman"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_226"
+      DisplayName = "Kevin Globerman"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_227"
+      DisplayName = "Mike Miller"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_228"
+      DisplayName = "Jake Jackson"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_229"
+      DisplayName = "Christopher Parker"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_230"
+      DisplayName = "Dallas Crane"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_231"
+      DisplayName = "Shireen Ghosh"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_232"
+      DisplayName = "Carol Gao"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_233"
+      DisplayName = "Susie Seiter"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_234"
+      DisplayName = "Elle Hansen"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_235"
+      DisplayName = "Jeremy Anninos"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_236"
+      DisplayName = "Pau Figueres"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_237"
+      DisplayName = "Louis Cole"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_238"
+      DisplayName = "Ethel Cutler"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_239"
+      OverwriteLocalization = true
+      DisplayName = "Masahiro Aoki"
+    }
+    {
+      Id = "Credits_Name_240"
+      OverwriteLocalization = true
+      DisplayName = "Daisuke Kurosawa"
+    }
+    {
+      Id = "Credits_Name_241"
+      OverwriteLocalization = true
+      DisplayName = "Graeme Howard"
+    }
+    {
+      Id = "Credits_Name_242"
+      OverwriteLocalization = true
+      DisplayName = "Ryoichi Hasegawa"
+    }
+    {
+      Id = "Credits_Name_243"
+      OverwriteLocalization = true
+      DisplayName = "Greg Boyd"
+    }
+    {
+      Id = "Credits_Name_244"
+      OverwriteLocalization = true
+      DisplayName = "Stacey Dell"
+    }
+    {
+      Id = "Credits_Name_245"
+      OverwriteLocalization = true
+      DisplayName = "Kassidy Gerber"
+    }
+    {
+      Id = "Credits_Name_246"
+      OverwriteLocalization = true
+      DisplayName = "Tal Grinblat"
+    }
+    {
+      Id = "Credits_Name_247"
+      OverwriteLocalization = true
+      DisplayName = "Mac Ishanov"
+    }
+    {
+      Id = "Credits_Name_248"
+      OverwriteLocalization = true
+      DisplayName = "Geoff Keighley"
+    }
+    {
+      Id = "Credits_Name_249"
+      OverwriteLocalization = true
+      DisplayName = "Harrison Krix"
+    }
+    {
+      Id = "Credits_Name_250"
+      OverwriteLocalization = true
+      DisplayName = "Mason Lieberman"
+    }
+    {
+      Id = "Credits_Name_251"
+      OverwriteLocalization = true
+      DisplayName = "Alex Palomares"
+    }
+    {
+      Id = "Credits_Name_252"
+      OverwriteLocalization = true
+      DisplayName = "Jane Panatopoulos"
+    }
+    {
+      Id = "Credits_Name_253"
+      OverwriteLocalization = true
+      DisplayName = "Sara Popescu"
+    }
+    {
+      Id = "Credits_Name_254"
+      OverwriteLocalization = true
+      DisplayName = "Brian Silva"
+    }
+    {
+      Id = "Credits_Name_255"
+      OverwriteLocalization = true
+      DisplayName = "Steve Singer"
+    }
+    {
+      Id = "Credits_Name_256"
+      OverwriteLocalization = true
+      DisplayName = "John Vignocchi"
+    }
+    {
+      Id = "Credits_Name_257"
+      OverwriteLocalization = true
+      DisplayName = "Ann Wicks"
+    }
+    {
+      Id = "Credits_Name_258"
+      OverwriteLocalization = true
+      DisplayName = "Andrew McGarity"
+    }
+    {
+      Id = "Credits_Name_259"
+      OverwriteLocalization = true
+      DisplayName = "Tyler Inouye"
+    }
+    {
+      Id = "Credits_Name_260"
+      OverwriteLocalization = true
+      DisplayName = "Maria Matsui"
+    }
+    {
+      Id = "Credits_Name_261"
+      OverwriteLocalization = true
+      DisplayName = "Lynette Greathouse"
+    }
+    {
+      Id = "Credits_Name_262"
+      OverwriteLocalization = true
+      DisplayName = "Amber Kenyon"
+    }
+    {
+      Id = "Credits_Name_263"
+      OverwriteLocalization = true
+      DisplayName = "Sylvia Graf-Schumer"
+    }
+    {
+      Id = "Credits_Name_264"
+      OverwriteLocalization = true
+      DisplayName = "Soejima Yusuke"
+    }
+    {
+      Id = "Credits_Name_265"
+      OverwriteLocalization = true
+      DisplayName = "Eto Takafumi"
+    }
+    {
+      Id = "Credits_Name_266"
+      OverwriteLocalization = true
+      DisplayName = "Noah Lane"
+    }
+    {
+      Id = "Credits_Name_267"
+      OverwriteLocalization = true
+      DisplayName = "Reid Young"
+    }
+    {
+      Id = "Credits_Name_268"
+      OverwriteLocalization = true
+      DisplayName = "Thomas 'wightfyre' Coe"
+    }
+    {
+      Id = "Credits_Name_269"
+      OverwriteLocalization = true
+      DisplayName = "Răzvan 'radish' Botezatu"
+    }
+    {
+      Id = "Credits_Name_270"
+      OverwriteLocalization = true
+      DisplayName = "Andrew 'Dr. Perplexed' Shelton"
+    }
+    {
+      Id = "Credits_Name_271"
+      OverwriteLocalization = true
+      DisplayName = "Jared 'PearUhDox' Schneider"
+    }
+    {
+      Id = "Credits_Name_272"
+      OverwriteLocalization = true
+      DisplayName = "Sparrow"
+    }
+    {
+      Id = "Credits_Name_273"
+      OverwriteLocalization = true
+      DisplayName = "Alma Lifshitz"
+    }
+    {
+      Id = "Credits_Name_274"
+      OverwriteLocalization = true
+      DisplayName = "Sam Day 'Commissar Tyr'"
+    }
+    {
+      Id = "Credits_Name_275"
+      OverwriteLocalization = true
+      DisplayName = "Rhiannon 'DC' Brannan"
+    }
+    {
+      Id = "Credits_Name_276"
+      OverwriteLocalization = true
+      DisplayName = "Tatzel"
+    }
+    {
+      Id = "Credits_Name_277"
+      OverwriteLocalization = true
+      DisplayName = "Kam"
+    }
+    {
+      Id = "Credits_Name_278"
+      OverwriteLocalization = true
+      DisplayName = "cheeewwwy"
+    }
+    {
+      Id = "Credits_Name_279"
+      OverwriteLocalization = true
+      DisplayName = "Ilias 'Icathios' Eimecke"
+    }
+    {
+      Id = "Credits_Name_280"
+      OverwriteLocalization = true
+      DisplayName = "Shaheen Rabiee"
+    }
+    {
+      Id = "Credits_Name_281"
+      OverwriteLocalization = true
+      DisplayName = "Zofia 'Klerka' Malinowska"
+    }
+    {
+      Id = "Credits_Name_282"
+      OverwriteLocalization = true
+      DisplayName = "Julia 'Crucia' Jankowska"
+    }
+    {
+      Id = "Credits_Name_283"
+      OverwriteLocalization = true
+      DisplayName = "Christoph 'Kräs' Reitmeier"
+    }
+    {
+      Id = "Credits_Name_284"
+      OverwriteLocalization = true
+      DisplayName = "Kyle Madigan"
+    }
+    {
+      Id = "Credits_Name_285"
+      OverwriteLocalization = true
+      DisplayName = "Charlie 'Hryggo' Randall"
+    }
+    {
+      Id = "Credits_Name_286"
+      OverwriteLocalization = true
+      DisplayName = "Decker Hou"
+    }
+    {
+      Id = "Credits_Name_287"
+      OverwriteLocalization = true
+      DisplayName = "Max Hunter"
+    }
+    {
+      Id = "Credits_Name_288"
+      OverwriteLocalization = true
+      DisplayName = "Matthew Cole"
+    }
+    {
+      Id = "Credits_Name_289"
+      OverwriteLocalization = true
+      DisplayName = "Ritvik Bansal"
+    }
+    {
+      Id = "Credits_Name_290"
+      OverwriteLocalization = true
+      DisplayName = "Epsilonyx - Taylor M."
+    }
+    {
+      Id = "Credits_Name_291"
+      OverwriteLocalization = true
+      DisplayName = "Karl Rassmann"
+    }
+    {
+      Id = "Credits_Name_292"
+      OverwriteLocalization = true
+      DisplayName = "Zachary 'Zephyr' Crawford"
+    }
+    {
+      Id = "Credits_Name_293"
+      OverwriteLocalization = true
+      DisplayName = "Sophia Uy"
+    }
+    {
+      Id = "Credits_Name_294"
+      OverwriteLocalization = true
+      DisplayName = "PolarFrosty"
+    }
+    {
+      Id = "Credits_Name_295"
+      OverwriteLocalization = true
+      DisplayName = "Jules 'blackmarketbingo' Abbadini"
+    }
+    {
+      Id = "Credits_Name_296"
+      OverwriteLocalization = true
+      DisplayName = "Mrinalini Basu"
+    }
+    {
+      Id = "Credits_Name_297"
+      OverwriteLocalization = true
+      DisplayName = "Museus"
+    }
+    {
+      Id = "Credits_Name_298"
+      OverwriteLocalization = true
+      DisplayName = "Eden 'Kenorah' Kennedy-Amor"
+    }
+    {
+      Id = "Credits_Name_299"
+      OverwriteLocalization = true
+      DisplayName = "Wriste13"
+    }
+    {
+      Id = "Credits_Name_300"
+      OverwriteLocalization = true
+      DisplayName = "Caleb 'cgull' Goertel"
+    }
+    {
+      Id = "Credits_Name_301"
+      OverwriteLocalization = true
+      DisplayName = "Nimish 'Croven' Mishra"
+    }
+    {
+      Id = "Credits_Name_302"
+      OverwriteLocalization = true
+      DisplayName = "Toph Pottschmidt (Zyruvias)"
+    }
+    {
+      Id = "Credits_Name_303"
+      OverwriteLocalization = true
+      DisplayName = "'CherryDad' - Jacob Gregory Dammons"
+    }
+    {
+      Id = "Credits_Name_304"
+      OverwriteLocalization = true
+      DisplayName = "Vorime"
+    }
+    {
+      Id = "Credits_Name_305"
+      OverwriteLocalization = true
+      DisplayName = "Latt Millard"
+    }
+    {
+      Id = "Credits_Name_306"
+      OverwriteLocalization = true
+      DisplayName = "Aleksi 'bablo' Kanerva"
+    }
+    {
+      Id = "Credits_Name_307"
+      OverwriteLocalization = true
+      DisplayName = "Brian 'ello' Gallenstein"
+    }
+    {
+      Id = "Credits_Name_308"
+      OverwriteLocalization = true
+      DisplayName = "Bryan 'OnyxCicada' Nguyen"
+    }
+    {
+      Id = "Credits_Name_309"
+      OverwriteLocalization = true
+      DisplayName = "Matt 'Ananke' Salomone"
+    }
+    {
+      Id = "Credits_Name_310"
+      OverwriteLocalization = true
+      DisplayName = "Joan 'ChangelingRain' Lung"
+    }
+    {
+      Id = "Credits_Name_311"
+      OverwriteLocalization = true
+      DisplayName = "Aurum 'aggy' Lucens"
+    }
+    {
+      Id = "Credits_Name_312"
+      OverwriteLocalization = true
+      DisplayName = "Pepijn 'Wingblade' Lamers"
+    }
+    {
+      Id = "Credits_Name_313"
+      OverwriteLocalization = true
+      DisplayName = "Jason Bowers"
+    }
+    {
+      Id = "Credits_Name_314"
+      OverwriteLocalization = true
+      DisplayName = "Renatto 'HeartfulPeach' Iza"
+    }
+    {
+      Id = "Credits_Name_315"
+      OverwriteLocalization = true
+      DisplayName = "Carson Christ"
+    }
+    {
+      Id = "Credits_Name_316"
+      OverwriteLocalization = true
+      DisplayName = "Hampton Cade"
+    }
+    {
+      Id = "Credits_Name_317"
+      OverwriteLocalization = true
+      DisplayName = "Babstion"
+    }
+    {
+      Id = "Credits_Name_318"
+      OverwriteLocalization = true
+      DisplayName = "Alexander Shaw"
+    }
+    {
+      Id = "Credits_Name_319"
+      OverwriteLocalization = true
+      DisplayName = "D. 'Faltora' Haines"
+    }
+    {
+      Id = "Credits_Name_320"
+      OverwriteLocalization = true
+      DisplayName = "Akhénaton 'Rondelle' TOURNIER"
+    }
+    {
+      Id = "Credits_Name_321"
+      OverwriteLocalization = true
+      DisplayName = "Dusan 'marwood' Pavlovic"
+    }
+    {
+      Id = "Credits_Name_322"
+      OverwriteLocalization = true
+      DisplayName = "Sam 'ghostyboyy97' Joy"
+    }
+    {
+      Id = "Credits_Name_323"
+      OverwriteLocalization = true
+      DisplayName = "bright01"
+    }
+    {
+      Id = "Credits_Name_324"
+      OverwriteLocalization = true
+      DisplayName = "Fotis Karafotakis"
+    }
+    {
+      Id = "Credits_Name_325"
+      OverwriteLocalization = true
+      DisplayName = "Lexi 'Lyrinae' Wade"
+    }
+    {
+      Id = "Credits_Name_326"
+      OverwriteLocalization = true
+      DisplayName = "William Ivancic"
+    }
+    {
+      Id = "Credits_Name_327"
+      OverwriteLocalization = true
+      DisplayName = "Austin T."
+    }
+    {
+      Id = "Credits_Name_328"
+      OverwriteLocalization = true
+      DisplayName = "Ekaterina Podsevalova"
+    }
+    {
+      Id = "Credits_Name_329"
+      OverwriteLocalization = true
+      DisplayName = "Bertrand Marchand"
+    }
+    {
+      Id = "Credits_Name_330"
+      OverwriteLocalization = true
+      DisplayName = "nnevic"
+    }
+    {
+      Id = "Credits_Name_331"
+      OverwriteLocalization = true
+      DisplayName = "Mirco Semper"
+    }
+    {
+      Id = "Credits_Name_332"
+      OverwriteLocalization = true
+      DisplayName = "Ofer 'tulioz' Goldstein"
+    }
+    {
+      Id = "Credits_Name_333"
+      OverwriteLocalization = true
+      DisplayName = "esistmull"
+    }
+    {
+      Id = "Credits_Name_334"
+      OverwriteLocalization = true
+      DisplayName = "Jakub 'Med' Pańczyszyn"
+    }
+    {
+      Id = "Credits_Name_335"
+      OverwriteLocalization = true
+      DisplayName = "Spencer Meachum"
+    }
+    {
+      Id = "Credits_Name_336"
+      OverwriteLocalization = true
+      DisplayName = "Zachary Levenson"
+    }
+    {
+      Id = "Credits_Name_337"
+      OverwriteLocalization = true
+      DisplayName = "Andrew 'Arctos' Stuart"
+    }
+    {
+      Id = "Credits_Name_338"
+      OverwriteLocalization = true
+      DisplayName = "Victoria Lavrentyeva"
+    }
+    {
+      Id = "Credits_Name_339"
+      OverwriteLocalization = true
+      DisplayName = "Lyudmila Pechenkina"
+    }
+    {
+      Id = "Credits_Name_340"
+      OverwriteLocalization = true
+      DisplayName = "gymprincess99"
+    }
+    {
+      Id = "Credits_Name_341"
+      OverwriteLocalization = true
+      DisplayName = "Bajamin 'Baj' Potvin"
+    }
+    {
+      Id = "Credits_Name_342"
+      OverwriteLocalization = true
+      DisplayName = "Zachary Jones (Oshi)"
+    }
+    {
+      Id = "Credits_Name_343"
+      OverwriteLocalization = true
+      DisplayName = "Jakub 'Kraja' Krajczewski"
+    }
+    {
+      Id = "Credits_Name_344"
+      OverwriteLocalization = true
+      DisplayName = "Cyrus 'Frinos' Liptak"
+    }
+    {
+      Id = "Credits_Name_345"
+      OverwriteLocalization = true
+      DisplayName = "Caitlin 'QTPI' Quinn"
+    }
+    {
+      Id = "Credits_Name_346"
+      OverwriteLocalization = true
+      DisplayName = "Bee 'Myntkaramell' Alegría-Millet "
+    }
+    {
+      Id = "Credits_Name_347"
+      OverwriteLocalization = true
+      DisplayName = "SleepSoul"
+    }
+    {
+      Id = "Credits_Name_348"
+      OverwriteLocalization = true
+      DisplayName = "Paulos Rakitzis"
+    }
+    {
+      Id = "Credits_Name_349"
+      OverwriteLocalization = true
+      DisplayName = "Ben Fischbacher"
+    }
+    {
+      Id = "Credits_Name_350"
+      OverwriteLocalization = true
+      DisplayName = "Eleanor Kaur"
+    }
+    {
+      Id = "Credits_Name_351"
+      OverwriteLocalization = true
+      DisplayName = "Colin Cole"
+    }
+    {
+      Id = "Credits_Name_352"
+      OverwriteLocalization = true
+      DisplayName = "Chris 'Bismuth' Bloomfield"
+    }
+    {
+      Id = "Credits_Name_353"
+      OverwriteLocalization = true
+      DisplayName = "Felis Ailurin"
+    }
+    {
+      Id = "Credits_Name_354"
+      OverwriteLocalization = true
+      DisplayName = "Ian 'Coinflip' Sisson"
+    }
+    {
+      Id = "Credits_Name_355"
+      OverwriteLocalization = true
+      DisplayName = "Brian Kravitz"
+    }
+    {
+      Id = "Credits_Name_356"
+      OverwriteLocalization = true
+      DisplayName = "Girvin 'ChickenSoup' Junod"
+    }
+    {
+      Id = "Credits_Name_357"
+      OverwriteLocalization = true
+      DisplayName = "Kacper 'Coldshade' Chruscinski"
+    }
+    {
+      Id = "Credits_Name_358"
+      OverwriteLocalization = true
+      DisplayName = "Clio"
+    }
+    {
+      Id = "Credits_Name_359"
+      OverwriteLocalization = true
+      DisplayName = "Logan 'Foolish' Healey"
+    }
+    {
+      Id = "Credits_Name_360"
+      OverwriteLocalization = true
+      DisplayName = "David Beaumont"
+    }
+    {
+      Id = "Credits_Name_361"
+      OverwriteLocalization = true
+      DisplayName = "el.huevito 'Egg'"
+    }
+    {
+      Id = "Credits_Name_362"
+      OverwriteLocalization = true
+      DisplayName = "Jonathan 'Noobe' Friberg"
+    }
+    {
+      Id = "Credits_Name_363"
+      OverwriteLocalization = true
+      DisplayName = "Thomas 'BeagleJack' Juanso"
+    }
+    {
+      Id = "Credits_Name_364"
+      OverwriteLocalization = true
+      DisplayName = "diethyl (melon) malonate"
+    }
+    {
+      Id = "Credits_Name_365"
+      OverwriteLocalization = true
+      DisplayName = "Jamie Bibb"
+    }
+    {
+      Id = "Credits_Name_366"
+      OverwriteLocalization = true
+      DisplayName = "Steve Neiman"
+    }
+    {
+      Id = "Credits_Name_367"
+      OverwriteLocalization = true
+      DisplayName = "Rachel Jacobson"
+    }
+    {
+      Id = "Credits_Name_368"
+      OverwriteLocalization = true
+      DisplayName = "Vicente 'nooby' Flores"
+    }
+    {
+      Id = "Credits_Name_369"
+      OverwriteLocalization = true
+      DisplayName = "Swan"
+    }
+    {
+      Id = "Credits_Name_370"
+      OverwriteLocalization = true
+      DisplayName = "PonyWarrior"
+    }
+    {
+      Id = "Credits_Name_371"
+      OverwriteLocalization = true
+      DisplayName = "Jen 'Jowday' Guerra"
+    }
+    {
+      Id = "Credits_Name_372"
+      OverwriteLocalization = true
+      DisplayName = "Kate Wiest"
+    }
+    {
+      Id = "Credits_Name_373"
+      OverwriteLocalization = true
+      DisplayName = "Catherine Litvaitis"
+    }
+    {
+      Id = "Credits_Name_374"
+      OverwriteLocalization = true
+      DisplayName = "Alex 'Codex' Miller"
+    }
+    {
+      Id = "Credits_Name_375"
+      OverwriteLocalization = true
+      DisplayName = "Heather 'Seren' Miller"
+    }
+    {
+      Id = "Credits_Name_376"
+      OverwriteLocalization = true
+      DisplayName = "Claire Stalter"
+    }
+    {
+      Id = "Credits_Name_377"
+      OverwriteLocalization = true
+      DisplayName = "Lionbridge"
+    }
+
+    /* Personal Acknowledgement Name Lines */
+
+    {
+      Id = "Credits_Acknowledgements_001"
+      OverwriteLocalization = true
+      DisplayName = "Dawn Ang"
+    }
+    {
+      Id = "Credits_Acknowledgements_002"
+      OverwriteLocalization = true
+      DisplayName = "James & Karen Auck"
+    }
+    {
+      Id = "Credits_Acknowledgements_003"
+      OverwriteLocalization = true
+      DisplayName = "Mars, Penelope & Felix Barnett"
+    }
+    {
+      Id = "Credits_Acknowledgements_004"
+      OverwriteLocalization = true
+      DisplayName = "Saumya Chola"
+    }
+    {
+      Id = "Credits_Acknowledgements_005"
+      OverwriteLocalization = true
+      DisplayName = "Ashley Cornett"
+    }
+    {
+      Id = "Credits_Acknowledgements_006"
+      OverwriteLocalization = true
+      DisplayName = "James & Susan Cunningham"
+    }
+    {
+      Id = "Credits_Acknowledgements_007"
+      OverwriteLocalization = true
+      DisplayName = "Grandma & Papa Davis"
+    }
+    {
+      Id = "Credits_Acknowledgements_008"
+      OverwriteLocalization = true
+      DisplayName = "Joy Fields"
+    }
+    {
+      Id = "Credits_Acknowledgements_009"
+      OverwriteLocalization = true
+      DisplayName = "Chee Fong"
+    }
+    {
+      Id = "Credits_Acknowledgements_010"
+      OverwriteLocalization = true
+      DisplayName = "Jim, June, Alan & Lauren Friedman"
+    }
+    {
+      Id = "Credits_Acknowledgements_011"
+      OverwriteLocalization = true
+      DisplayName = "Natalie, Joey, & Violet Gabler-Vishny"
+    }
+    {
+      Id = "Credits_Acknowledgements_012"
+      OverwriteLocalization = true
+      DisplayName = "Aleksandra Gegović"
+    }
+    {
+      Id = "Credits_Acknowledgements_013"
+      OverwriteLocalization = true
+      DisplayName = "Alan & Lina Gorinstein"
+    }
+    {
+      Id = "Credits_Acknowledgements_014"
+      OverwriteLocalization = true
+      DisplayName = "Eileen Gorinstein"
+    }
+    {
+      Id = "Credits_Acknowledgements_015"
+      OverwriteLocalization = true
+      DisplayName = "Mary Griffin"
+    }
+    {
+      Id = "Credits_Acknowledgements_016"
+      OverwriteLocalization = true
+      DisplayName = "Bo & Nana Harris"
+    }
+    {
+      Id = "Credits_Acknowledgements_017"
+      OverwriteLocalization = true
+      DisplayName = "Meredith, Colton, & Tanner Harris"
+    }
+    {
+      Id = "Credits_Acknowledgements_018"
+      OverwriteLocalization = true
+      DisplayName = "Alexander, Marina, & Alex Kasavin"
+    }
+    {
+      Id = "Credits_Acknowledgements_019"
+      OverwriteLocalization = true
+      DisplayName = "Jenna, Esme, & Isaac Kasavin"
+    }
+    {
+      Id = "Credits_Acknowledgements_020"
+      OverwriteLocalization = true
+      DisplayName = "Damon & Daniel Korb"
+    }
+    {
+      Id = "Credits_Acknowledgements_021"
+      OverwriteLocalization = true
+      DisplayName = "David & Darlene Korb"
+    }
+    {
+      Id = "Credits_Acknowledgements_022"
+      OverwriteLocalization = true
+      DisplayName = "Michelle Labrador-Korb & Milo Korb"
+    }
+    {
+      Id = "Credits_Acknowledgements_023"
+      OverwriteLocalization = true
+      DisplayName = "Hannah Lienhard"
+    }
+    {
+      Id = "Credits_Acknowledgements_024"
+      OverwriteLocalization = true
+      DisplayName = "Alok, Bharti & Devishi Maheshwari"
+    }
+    {
+      Id = "Credits_Acknowledgements_025"
+      OverwriteLocalization = true
+      DisplayName = "Renaud Malville, Isabelle Boso, Zoé & Noémy Malville-Boso"
+    }
+    {
+      Id = "Credits_Acknowledgements_026"
+      OverwriteLocalization = true
+      DisplayName = "Andre & Sol Mina"
+    }
+    {
+      Id = "Credits_Acknowledgements_027"
+      OverwriteLocalization = true
+      DisplayName = "Marlon & Natalie Novelozo"
+    }
+    {
+      Id = "Credits_Acknowledgements_028"
+      OverwriteLocalization = true
+      DisplayName = "Tracy & David Powell"
+    }
+    {
+      Id = "Credits_Acknowledgements_029"
+      OverwriteLocalization = true
+      DisplayName = "Kassie, Henry, & Harrison Puckett"
+    }
+    {
+      Id = "Credits_Acknowledgements_030"
+      OverwriteLocalization = true
+      DisplayName = "David & Luann Puckett"
+    }
+    {
+      Id = "Credits_Acknowledgements_031"
+      OverwriteLocalization = true
+      DisplayName = "Raj, Roshni & Reva Rajadorai"
+    }
+    {
+      Id = "Credits_Acknowledgements_032"
+      OverwriteLocalization = true
+      DisplayName = "Steebie Ramirez"
+    }
+    {
+      Id = "Credits_Acknowledgements_033"
+      OverwriteLocalization = true
+      DisplayName = "Anna Lee, Kai Rao & Musa Rao"
+    }
+    {
+      Id = "Credits_Acknowledgements_034"
+      OverwriteLocalization = true
+      DisplayName = "Atambir Rao"
+    }
+    {
+      Id = "Credits_Acknowledgements_035"
+      OverwriteLocalization = true
+      DisplayName = "Rob, Jane, & Karl Rassmann"
+    }
+    {
+      Id = "Credits_Acknowledgements_036"
+      OverwriteLocalization = true
+      DisplayName = "Gary Gabler, Debbie Gabler & Ted Reynolds"
+    }
+    {
+      Id = "Credits_Acknowledgements_037"
+      OverwriteLocalization = true
+      DisplayName = "Kaykay Chung, Michele & Joe Pagnelli, Sean Savona"
+    }
+    {
+      Id = "Credits_Acknowledgements_038"
+      OverwriteLocalization = true
+      DisplayName = "Jim, Linda, & Derek Simon"
+    }
+    {
+      Id = "Credits_Acknowledgements_039"
+      OverwriteLocalization = true
+      DisplayName = "Mandi Simon"
+    }
+    {
+      Id = "Credits_Acknowledgements_040"
+      OverwriteLocalization = true
+      DisplayName = "Rima Singh"
+    }
+    {
+      Id = "Credits_Acknowledgements_041"
+      OverwriteLocalization = true
+      DisplayName = "Slađana Šobajić"
+    }
+    {
+      Id = "Credits_Acknowledgements_042"
+      OverwriteLocalization = true
+      DisplayName = "Maddison Spejcher"
+    }
+    {
+      Id = "Credits_Acknowledgements_043"
+      OverwriteLocalization = true
+      DisplayName = "Caty Moniz & Naomi Turnbull"
+    }
+    {
+      Id = "Credits_Acknowledgements_044"
+      OverwriteLocalization = true
+      DisplayName = "Leslie Van den Broeck"
+    }
+    {
+      Id = "Credits_Acknowledgements_045"
+      OverwriteLocalization = true
+      DisplayName = "Steve & Katherine Villariasa"
+    }
+    {
+      Id = "Credits_Acknowledgements_046"
+      OverwriteLocalization = true
+      DisplayName = "Vivian Wang"
+    }
+    {
+      Id = "Credits_Acknowledgements_047"
+      OverwriteLocalization = true
+      DisplayName = "Audrey, Damian, & Beckett Wang"
+    }
+    {
+      Id = "Credits_Acknowledgements_048"
+      OverwriteLocalization = true
+      DisplayName = "Peter Anninos & Wenbo Yuan"
+    }
+    {
+      Id = "Credits_Acknowledgements_049"
+      OverwriteLocalization = true
+      DisplayName = "The Zee Family"
+    }
+    
+    
+
+
+    /* Legal & Licensing */
+    {
+      Id = "Credits_Legal_01"
+      DisplayName = "© Supergiant Games, LLC 2025. All rights reserved."
+    }
+    {
+      Id = "Credits_Legal_02B"
+      DisplayName = "Hades II is © Supergiant Games, LLC {$CreditsData.NumericTokens.TwentyTwentyFive}. All rights reserved."
+    }
+    {
+      Id = "Credits_Legal_03"
+      DisplayName = "Hades is a registered trademark of Supergiant Games, LLC."
+    }
+    {
+      Id = "Credits_Legal_04"
+      DisplayName = "All code, art, music, voice, & game design is © Supergiant Games."
+    }
+    {
+      Id = "Credits_License_01"
+      DisplayName = "FMOD Studio, © Firelight Technologies {$CreditsData.NumericTokens.NineteenNinetyFour}-{$CreditsData.NumericTokens.TwentyTwentyFive}"
+    }
+    {
+      Id = "Credits_License_02"
+      DisplayName = "Uses Bink Video, © {$CreditsData.NumericTokens.NineteenNinetySeven}-{$CreditsData.NumericTokens.TwentyTwentyFive} by Epic Games Tools LLC"
+    }
+
+    /* Placeholder */
+    {
+      Id = "Credits_Main_Placeholder"
+      DisplayName = "[Main Heading]"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Heading_Placeholder"
+      DisplayName = "[Heading]"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_SubHeading_Placeholder"
+      DisplayName = "[SubHeading]"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_TeamName_Placeholder"
+      DisplayName = "[Team Name]"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_SubTitle_Placeholder"
+      DisplayName = "[SubTitle]"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Credits_Name_Placeholder"
+      DisplayName = "[Name]"
+      OverwriteLocalization = true
+    }
+
+    /* other */
+    {
+      Id = "Credits_With"
+      DisplayName = "with"
+    }
+    {
+      Id = "Credits_AsIcarus"
+      DisplayName = "as Icarus"
+    }
+    {
+      Id = "Credits_AbbeyRoad"
+      DisplayName = "Orchestra & Choir Recorded at"
+    }
+    {
+      Id = "Credits_AbbeyRoad_B"
+      DisplayName = "Abbey Road Studios, Studio 1"
+    }
+    {
+      Id = "Credits_Div_B"
+      DisplayName = "@GUI\\HorizontalDividerLong"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "Credits_Message_AIDisclosure_01"
+      DisplayName = "This game was intentionally made by human beings."
+    }
+    {
+      Id = "Credits_Message_AIDisclosure_02"
+      DisplayName = "No generative AI was used in the creation of its"
+    }
+    {
+      Id = "Credits_Message_AIDisclosure_03"
+      DisplayName = "artwork, voiceover, or any other content."
+    }
+    {
+      Id = "Credits_Message_Thanks_EarlyAccessPlayers"
+      DisplayName = "Our Early Access Players"
+    }
+    {
+      Id = "Credits_Message_Thanks_DiscordMods"
+      DisplayName = "Our Discord Moderators"
+    }
+    {
+      Id = "Credits_Message_Thanks_BetaPlayers"
+      DisplayName = "Our Community Beta Testers"
+    }
+    {
+      Id = "Credits_Message_Thanks_FriendsFamily"
+      DisplayName = "Our Loved Ones for Their Undying Support"
+    }
+    {
+      Id = "Credits_Message_Thanks_HadesDevTeam"
+      DisplayName = "All Those Who Worked on the Original {#Prev}{#InlineCreditName}Hades {#Prev}Game"
+    }
+    {
+      Id = "EndCredits_Message_Thanks_HadesDevTeam"
+      DisplayName = "All Those Who Worked on the Original {#Prev}{#EndCreditsInlineCreditName}Hades {#Prev}Game"
+    }
+    {
+      Id = "Credits_Message_Thanks_Gods"
+      DisplayName = "The Gods & Heroes of Myth for Inspiring Us"
+    }
+    {
+      Id = "Credits_Message_Thanks_Time"
+      DisplayName = "Chronos, for the Time We Have"
+    }
+    {
+      Id = "Credits_Message_Thanks_Closing"
+      DisplayName = "go unseen, & may moonlight guide you"
+    }
+
+  ]
+}

@@ -1,0 +1,3089 @@
+﻿{
+  lang = "en"
+  Texts =
+  [
+    /* Miscellaneous Menu Screens */
+
+    {
+      Id = "Menu_Exit"
+      DisplayName = "{CN} EXIT"
+    }
+    {
+      Id = "Menu_Close"
+      DisplayName = "{CN} CLOSE"
+    }
+    {
+      Id = "Menu_Continue"
+      DisplayName = "{CN} CONTINUE"
+    }
+    {
+      Id = "Menu_NextCategory"
+      DisplayName = "{MR} NEXT"
+    }
+    {
+      Id = "Menu_MoreContents"
+      DisplayName = "{MR} MORE..."
+    }
+    {
+      Id = "Menu_PrevCategory"
+      DisplayName = "{ML} PREVIOUS"
+    }
+    {
+      Id = "Menu_FewerContents"
+      DisplayName = "{ML} PREVIOUS"
+    }
+    {
+      Id = "Menu_CloseSubmenu"
+      DisplayName = "{CN} RETURN"
+    }
+    {
+      Id = "Menu_Buy"
+      DisplayName = "{SL} PURCHASE"
+    }
+    {
+      Id = "Menu_Rush"
+      DisplayName = "{SL} EXPEDITE"
+    }
+    {
+      Id = "Menu_Order"
+      DisplayName = "{SL} ORDER"
+    }
+    {
+      Id = "Menu_Sell"
+      DisplayName = "{SL} SELL ONE"
+    }
+    {
+      Id = "Menu_SellAll"
+      DisplayName = "{IP} SELL ALL"
+    }
+
+    {
+      Id = "Menu_Exchange"
+      DisplayName = "{SL} RECYCLE"
+    }
+    {
+      Id = "Menu_ExchangeAll"
+      DisplayName = "{IP} RECYCLE ALL"
+    }
+
+
+    {
+      Id = "Menu_Purge"
+      DisplayName = "{SL} PURGE"
+    }
+    {
+      Id = "Menu_Unlock"
+      DisplayName = "{SL} UNLOCK"
+    }
+    {
+      Id = "Menu_Plant"
+      DisplayName = "{SL} PLANT"
+    }
+    {
+      Id = "Menu_MultiPlant"
+      DisplayName = "{IP} PLANT x{$TempTextData.PlantAmount}"
+    }
+    {
+      Id = "Menu_Gift"
+      DisplayName = "{SL} GIFT"
+    }
+    {
+      Id = "Menu_Pin"
+      DisplayName = "{IP} FORGET-ME-NOT"
+    }
+    {
+      Id = "Menu_PinBoon_On"
+      DisplayName = "{IP} TRACK"
+    }
+    {
+      Id = "Menu_PinBoon_Off"
+      DisplayName = "{IP} UN-TRACK"
+    }
+    {
+      Id = "Menu_SaveKeepsake"
+      DisplayName = "{IP} PRIORITIZE"
+    }
+    {
+      Id = "Menu_UnSaveKeepsake"
+      DisplayName = "{IP} DEPRIORITIZE"
+    }
+    {
+      Id = "Menu_TraitPin"
+      DisplayName = "{SL} PIN"
+    }
+    {
+      Id = "Menu_TraitUnPin"
+      DisplayName = "{SL} UN-PIN"
+    }
+    {
+      Id = "Menu_BoonInfo"
+      DisplayName = "{MX} BOON LIST"
+    }
+    {
+      Id = "Menu_TraitList"
+      DisplayName = "{MX} OFFERINGS"
+    }
+    {
+      Id = "Menu_QuestLog"
+      DisplayName = "{SL} CLAIM"
+    }
+    {
+      Id = "Menu_Equip"
+      DisplayName = "{SL} EQUIP"
+    }
+    {
+      Id = "Menu_ChangeAspect"
+      DisplayName = "{SL} CHOOSE"
+    }
+    {
+      Id = "Menu_Unequip"
+      DisplayName = "{SL} REMOVE"
+    }
+    {
+      Id = "Menu_Upgrade"
+      DisplayName = "{SL} UPGRADE"
+    }
+    {
+      Id = "Menu_Info"
+      DisplayName = "{MX} INFO"
+    }
+    {
+      Id = "Menu_OpenTraitTray"
+      DisplayName = "{AT} BOON INFO"
+    }
+    {
+      Id = "Menu_Sort"
+      DisplayName = "{MX} SORT"
+    }
+
+    {
+      Id = "Shop_ItemCost"
+      DisplayName = "{$TempTextData.Amount}{!Icons.Currency}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Shop_Purchased"
+      DisplayName = "{!Icons.PurchasedCheckmark}"
+    }
+    {
+      Id = "Shop_Removable"
+      DisplayName = "{!Icons.DefaultPurchasedCheckmark}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Shop_ReAdd"
+      DisplayName = "{!Icons.MirrorInactive}"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "ResourceCost"
+      DisplayName = "{$TempTextData.Amount}{!TempTextData.IconPath}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ResourceCostSelling"
+      DisplayName = "+{$TempTextData.Amount}{!TempTextData.IconPath}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ResourceCostFraction"
+      DisplayName = "{$TempTextData.Current} {#ShopCostFormat}/ {$TempTextData.Amount}"
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "ResourceCostInventoryAmount"
+      DisplayName = "{!Icons.InventoryIcon}x{$TempTextData.InventoryAmount}"
+      OverwriteLocalization = true
+    }    
+
+	  /* In-Game Choice Screens / Menu Screens */
+    /* Boon Screen / Upgrade Choice Menu */
+    {
+      Id = "Boon_Common"
+      DisplayName = " "
+      OverwriteLocalization = true
+    }
+    {
+      Id = "Boon_Rare"
+      DisplayName = "Rare"
+    }
+    {
+      Id = "Boon_Epic"
+      DisplayName = "Epic"
+    }
+    {
+      Id = "Boon_Heroic"
+      DisplayName = "Heroic"
+    }
+    {
+      Id = "Boon_Legendary"
+      DisplayName = "Legendary"
+    }
+    {
+      Id = "Boon_Duo"
+      DisplayName = "Duo"
+    }
+    {
+      Id = "Boon_Infusion"
+      DisplayName = "Infusion"
+    }
+    {
+      Id = "UpgradeChoiceMenu_Title"
+      DisplayName = "Boons of {{GodName}}"
+    }
+    {
+      Id = "UpgradeChoiceMenu_Artemis"
+      DisplayName = "Boons of Artemis"
+    }
+    {
+      Id = "UpgradeChoiceMenu_Chaos"
+      DisplayName = "Boons of Chaos"
+    }
+    {
+      Id = "UpgradeChoiceMenu_Dionysus"
+      DisplayName = "Boons of Dionysus"
+    }
+    {
+      Id = "UpgradeChoiceMenu_Athena"
+      DisplayName = "Boons of Athena"
+    }
+    {
+      Id = "UpgradeChoiceMenu_Hades"
+      DisplayName = "Boons of Hades"
+    }
+    {
+      Id = "StackUpgradeChoiceMenu_Title"
+      DisplayName = "Pom of Power"
+    }
+    {
+      Id = "WeaponUpgradeChoiceMenu_Title"
+      DisplayName = "Daedalus Hammer"
+    }
+    {
+      Id = "CurrentRunDepth"
+      DisplayName = "location {$CurrentRun.RunDepthCache}"
+    }
+
+    {
+      Id = "Boon_Select"
+      DisplayName = "{SL} CHOOSE"
+    }
+    {
+      Id = "Talent_Select"
+      DisplayName = "{SL} CHOOSE"
+    }
+    {
+      Id = "Talent_Deselect"
+      DisplayName = "{SL} REMOVE"
+    }
+    {
+      Id = "Boon_Sacrifice"
+      DisplayName = "{SL} ACCEPT"
+    }
+    {
+      Id = "Boon_Upgrade"
+      DisplayName = "{RY} RARIFY"
+    }
+    {
+      Id = "Boon_Upgrade_Count"
+      DisplayName = "{RY} RARIFY {#StatFormat}\[{$TempTextData.Amount}\]"
+    }
+    {
+      Id = "Boon_Reroll"
+      DisplayName = "{RR} RE-OFFER {#StatFormat}\[-{$TempTextData.Amount}{!Icons.ReRoll}\]"
+    }
+    {
+      Id = "TraitRarityUpgrade"
+      DisplayName = "{$Keywords.RarityUpgrade}"
+    }
+
+    /* Zeus Boons */
+    {
+      Id = "ZeusUpgrade"
+      DisplayName = "Zeus"
+      Description = "King of the Olympians"
+    }
+    {
+      Id = "ZeusUpgrade_FlavorText01"
+      DisplayName = "once he led his fellow gods to victory against the titans, and so intends again."
+    }
+    {
+      Id = "ZeusUpgrade_FlavorText02"
+      DisplayName = "the heavens themselves could split asunder if he so willed."
+    }
+    {
+      Id = "ZeusUpgrade_FlavorText03"
+      DisplayName = "the patriarch of mount olympus did not rise to his station by mere happenstance."
+    }
+
+    /* Hera Boons */
+    {
+      Id = "HeraUpgrade"
+      DisplayName = "Hera"
+      Description = "Queen of the Olympians"
+    }
+    {
+      Id = "HeraUpgrade_FlavorText01"
+      DisplayName = "the goddess of unions knows even the strongest bonds can break."
+    }
+    {
+      Id = "HeraUpgrade_FlavorText02"
+      DisplayName = "she alone has the capacity to keep the other gods in check."
+    }
+    {
+      Id = "HeraUpgrade_FlavorText03"
+      DisplayName = "her powers over the intangible are never to be underestimated."
+    }
+
+    /* Poseidon Boons */
+    {
+      Id = "PoseidonUpgrade"
+      DisplayName = "Poseidon"
+      Description = "God of the Sea"
+    }
+    {
+      Id = "PoseidonUpgrade_FlavorText01"
+      DisplayName = "the vast seas roil when he wills it thus, and the mountains tremble."
+    }
+    {
+      Id = "PoseidonUpgrade_FlavorText02"
+      DisplayName = "the surface of the world in its entirety is his domain by fate."
+    }
+    {
+      Id = "PoseidonUpgrade_FlavorText03"
+      DisplayName = "the raw might of a crashing wave; a simple manifesting of his awesome strength."
+    }
+
+    /* Apollo Boons */
+    {
+      Id = "ApolloUpgrade"
+      DisplayName = "Apollo"
+      Description = "God of Light"
+    }
+    {
+      Id = "ApolloUpgrade_FlavorText01"
+      DisplayName = "brilliance without measure, talent without equal."
+    }
+    {
+      Id = "ApolloUpgrade_FlavorText02"
+      DisplayName = "he has yet to find a skill at which he does not excel."
+    }
+    {
+      Id = "ApolloUpgrade_FlavorText03"
+      DisplayName = "music and poetry would both be void of life if not for him."
+    }
+
+    /* Aphrodite Boons */
+    {
+      Id = "AphroditeUpgrade"
+      DisplayName = "Aphrodite"
+      Description = "Goddess of Love"
+    }
+    {
+      Id = "AphroditeUpgrade_FlavorText01"
+      DisplayName = "she instills in mortalkind the longing that inspires them and spurs them to action."
+    }
+    {
+      Id = "AphroditeUpgrade_FlavorText02"
+      DisplayName = "her power is such that, even in the realm of the dead, a certain beauty thrives."
+    }
+    {
+      Id = "AphroditeUpgrade_FlavorText03"
+      DisplayName = "mortals can perhaps survive without her power; but without it, cannot truly live."
+    }
+
+    /* Demeter Boons */
+    {
+      Id = "DemeterUpgrade"
+      DisplayName = "Demeter"
+      Description = "Goddess of Seasons"
+    }
+    {
+      Id = "DemeterUpgrade_FlavorText01"
+      DisplayName = "she controls the very cycle of life and death; of abundance and decay."
+    }
+    {
+      Id = "DemeterUpgrade_FlavorText02"
+      DisplayName = "with the turning of the seasons can come hope and renewal, or desolation beyond words."
+    }
+    {
+      Id = "DemeterUpgrade_FlavorText03"
+      DisplayName = "the mistress of seasons holds sway over everything between heaven and earth."
+    }
+
+    /* Hestia Boons */
+    {
+      Id = "HestiaUpgrade"
+      DisplayName = "Hestia"
+      Description = "Goddess of Flame"
+    }
+    {
+      Id = "HestiaUpgrade_FlavorText01"
+      DisplayName = "from the comfort of the hearth, to the rage of an inferno."
+    }
+    {
+      Id = "HestiaUpgrade_FlavorText02"
+      DisplayName = "the eldest, most reclusive olympian has fire in her heart."
+    }
+    {
+      Id = "HestiaUpgrade_FlavorText03"
+      DisplayName = "her flames bring quaint comfort, or ruinous destruction."
+    }
+    {
+      Id = "HestiaUpgrade_SacrificeBoon"
+      DisplayName = "Burnt Offering"
+    }
+    {
+      Id = "HestiaUpgrade_SacrificeBoon_FlavorText"
+      DisplayName = "make your sacrifice to the goddess of the hearth."
+    }
+    {
+      Id = "Hestia_UpgradeChoice_Sacrifice"
+      DisplayName = "{SL} CHOOSE"
+    }
+
+    /* Hephaestus Boons */
+    {
+      Id = "HephaestusUpgrade"
+      DisplayName = "Hephaestus"
+      Description = "God of the Forge"
+    }
+    {
+      Id = "HephaestusUpgrade_FlavorText01"
+      DisplayName = "the forge-god's volcanic furnace births the world's finest arms."
+    }
+    {
+      Id = "HephaestusUpgrade_FlavorText02"
+      DisplayName = "the strongest metal still bends effortlessly to his will."
+    }
+    {
+      Id = "HephaestusUpgrade_FlavorText03"
+      DisplayName = "the incomparable arms and armor that he fashions are prized even by gods."
+    }
+
+    /* Hermes Boons */
+    {
+      Id = "HermesUpgrade"
+      DisplayName = "Hermes"
+      Description = "God of Swiftness"
+    }
+    {
+      Id = "HermesUpgrade_FlavorText01"
+      DisplayName = "the family messenger is often tasked with spreading vital news, or keeping vital secrets."
+    }
+    {
+      Id = "HermesUpgrade_FlavorText02"
+      DisplayName = "none can travel as swiftly from the peaks of olympus to the depths of the underworld."
+    }
+    {
+      Id = "HermesUpgrade_FlavorText03"
+      DisplayName = "the herald of the gods is never one to sit idly by when opportunity awaits."
+    }
+
+    /* Artemis Boons */
+    {
+      Id = "ArtemisUpgrade"
+      DisplayName = "Artemis"
+      Description = "Goddess of the Hunt"
+    }
+    {
+      Id = "ArtemisUpgrade_FlavorText01"
+      DisplayName = "the lone huntress moves in moonlight to the rhythms of the earth."
+    }
+    {
+      Id = "ArtemisUpgrade_FlavorText02"
+      DisplayName = "she moves through the woods like a flash of silver, lethal to her prey."
+    }
+    {
+      Id = "ArtemisUpgrade_FlavorText03"
+      DisplayName = "the hunt means knowing when to be utterly still, and knowing when to strike."
+    }
+
+    /* Dionysus Boons */
+    {
+      Id = "DionysusUpgrade_FlavorText01"
+      DisplayName = "mirth is needed more than ever in the darkest of times."
+    }
+    {
+      Id = "DionysusUpgrade_FlavorText02"
+      DisplayName = "the greatest joys cannot be contained and are to be shared."
+    }
+    {
+      Id = "DionysusUpgrade_FlavorText03"
+      DisplayName = "moments spent in good company and cheer are to be savored."
+    }
+
+    /* Athena Boons */
+    {
+      Id = "AthenaUpgrade_FlavorText01"
+      DisplayName = "however fraught the path to victory may be, she always finds the way."
+    }
+    {
+      Id = "AthenaUpgrade_FlavorText02"
+      DisplayName = "with wisdom, many challenges may be overcome; and many more, avoided."
+    }
+    {
+      Id = "AthenaUpgrade_FlavorText03"
+      DisplayName = "she who bears the aegis is protector of the heavens and the righteous."
+    }
+
+    /* Ares Boons */
+    {
+      Id = "AresUpgrade"
+      DisplayName = "Ares"
+      Description = "God of War"
+    }
+    {
+      Id = "AresUpgrade_FlavorText01"
+      DisplayName = "he stokes his violent conflicts so that mortalkind can never multiply too quickly."
+    }
+    {
+      Id = "AresUpgrade_FlavorText02"
+      DisplayName = "violence is a force of nature in and of itself, and not merely a consequence."
+    }
+    {
+      Id = "AresUpgrade_FlavorText03"
+      DisplayName = "the impulse to harm and eliminate can be as powerful as the impulse to nurture and create."
+    }
+
+    /* Hades Boons */
+    {
+      Id = "HadesUpgrade_FlavorText01"
+      DisplayName = "his is an infernal strength flowing from darkest depths."
+    }
+    {
+      Id = "HadesUpgrade_FlavorText02"
+      DisplayName = "the living and the dead yet fear his very name."
+    }
+    {
+      Id = "HadesUpgrade_FlavorText03"
+      DisplayName = "his surpassing might once overwhelmed the titans."
+    }
+
+    /* Selene Spells / SpellScreen */
+    {
+      Id = "SpellScreenMenu_Title"
+      DisplayName = "Gifts of the Moon"
+    }
+    {
+      Id = "SpellScreenMenu_Subtitle"
+      DisplayName = "you received:"
+    }
+    {
+      Id = "SpellDrop_FlavorText01"
+      DisplayName = "she in her silver chariot conceals ferocious power known to few."
+    }
+    {
+      Id = "SpellDrop_FlavorText02"
+      DisplayName = "the eye of night watches silently, taking stock of all that transpires."
+    }
+    {
+      Id = "SpellDrop_FlavorText03"
+      DisplayName = "her distant silver light is a guiding beacon to all those who move in shadow."
+    }
+    {
+      Id = "Spell_Select"
+      DisplayName = "{SL} CHOOSE"
+    }
+
+    /* Chaos Boons */
+    {
+      Id = "TrialUpgrade"
+      DisplayName = "Chaos"
+      Description = "Primordial Originator"
+    }
+    {
+      Id = "TrialUpgrade_FlavorText01"
+      DisplayName = "all once sprang from the infinite void, even time itself."
+    }
+    {
+      Id = "TrialUpgrade_FlavorText02"
+      DisplayName = "from an unfathomable abyss emerged creation and life, gods and mortals."
+    }
+    {
+      Id = "TrialUpgrade_FlavorText03"
+      DisplayName = "the darkness from which all existence emerged yet remains."
+    }
+
+    /* WeaponUpgrade Screen / Daedalus Hammer Screen */
+    {
+      Id = "WeaponUpgrade_FlavorText01"
+      DisplayName = "the ever-reclusive artisan lets his masterwork do the talking."
+    }
+    {
+      Id = "WeaponUpgrade_FlavorText02"
+      DisplayName = "no mere weaponsmith can hone the nocturnal arms; only one of talent to surpass the gods."
+    }
+    {
+      Id = "WeaponUpgrade_FlavorText03"
+      DisplayName = "his surpassing skill as craftsman and inventor was well-recognized even in death." 
+    }
+
+    {
+      Id = "WeaponUpgradeScreen_Kills"
+      DisplayName = "Foes Vanquished:"
+    }
+    {
+      Id = "WeaponUpgradeScreen_Clears"
+      DisplayName = "Nights Prevailed:"
+    }
+    {
+      Id = "WeaponUpgradeScreen_ClearTimeRecord_Underworld"
+      DisplayName = "{!Icons.UnderworldIcon} Swiftest Victory:"
+    }
+    {
+      Id = "WeaponUpgradeScreen_ClearTimeRecord_Surface"
+      DisplayName = "{!Icons.SurfaceIcon} Swiftest Victory:"
+    }
+    {
+      Id = "WeaponUpgradeScreen_ShrinePointRecord_Underworld"
+      DisplayName = "{!Icons.UnderworldIcon} Highest {!Icons.ShrinePoint}{#BoldFormatGraft}Fear{#Prev}:"
+    }
+    {
+      Id = "WeaponUpgradeScreen_ShrinePointRecord_Surface"
+      DisplayName = "{!Icons.SurfaceIcon} Highest {!Icons.ShrinePoint}{#BoldFormatGraft}Fear{#Prev}:"
+    }
+
+    /* StackUpgrade Screen / Pom of Power Screen */
+    {
+      Id = "StackUpgrade_FlavorText01"
+      DisplayName = "its each and every seed, like a drop of blood; life as well as death."
+    }
+    {
+      Id = "StackUpgrade_FlavorText02"
+      DisplayName = "whether they sprang from the surface or from underworld, who now can say?"
+    }
+    {
+      Id = "StackUpgrade_FlavorText03"
+      DisplayName = "the power of the warmth of spring; the strength of dark of the earth."
+    }
+
+    /* TalentScreen / Path of the Stars / Path of Stars */
+    {
+      Id = "TalentScreenMenu_Title"
+      DisplayName = "Path of Stars"
+    }
+    {
+      Id = "TalentDrop_FlavorText01"
+      DisplayName = "one's possibilities for growth are as innumerable as the stars."
+    }
+    {
+      Id = "TalentDrop_FlavorText02"
+      DisplayName = "the constant stars above, eternal in their multitude and possibility."
+    }
+    {
+      Id = "TalentDrop_FlavorText03"
+      DisplayName = "even the moon must find her way across the sky by certain means."
+    }
+
+    {
+      Id = "AdditionalTalentPointDisplay"
+      DisplayName = "Talent Point(s)"
+    }
+
+    /* QuestLog / Quest Log / Fated List */
+    {
+      Id = "UseQuestLog"
+      DisplayName = "{I} Foresee"
+    }
+    {
+      Id = "QuestLogScreen_Title"
+      DisplayName = "The Fated List"
+    }
+    {
+      Id = "QuestLogScreen_Flavor"
+      DisplayName = "“The Weavings of the Three Fates Invariably Come to Pass”"
+    }
+    {
+      Id = "QuestLogReward"
+      DisplayName = "{#HighlightQuestReward}{#Prev}+{$TempTextData.Amount}{!TempTextData.Icon}"
+    }
+    {
+      Id = "QuestLog_SelectHint"
+      DisplayName = "A Prophecy Shall be Selected"
+    }
+    {
+      Id = "QuestLog_SelectHintAllClear"
+      DisplayName = "\n\n All Minor Prophecies Fulfilled \n\n Thank You For Ensuring Fate"
+    }
+    {
+      Id = "QuestLog_ProgressCountIncomplete"
+      DisplayName = "{!Icons.QuestProgressIncomplete} {$TempTextData.Current} {!Icons.SlashDark} {$TempTextData.Goal}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "QuestLog_ProgressCountComplete"
+      DisplayName = "{!Icons.QuestProgressComplete} {$TempTextData.Current} {!Icons.Slash} {$TempTextData.Goal}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "QuestLog_QuestProgressIncomplete"
+      DisplayName = "{!Icons.QuestProgressIncomplete}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "QuestLog_QuestProgressComplete"
+      DisplayName = "{!Icons.QuestProgressComplete}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "QuestLog_QuestProgressRequirement"
+      DisplayName = "{$TempTextData.Requirement}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "QuestLog_QuestAdded"
+      DisplayName = "Prophecy Foretold..."
+    }
+    {
+      Id = "QuestLog_QuestComplete"
+      DisplayName = "Prophecy Fulfilled!!"
+    }    
+
+    /* BountyBoard / Bounty Board / Pitch-Black Stone */
+    {
+      Id = "UseBountyBoard"
+      DisplayName = "{I} Scry"
+    }
+    {
+      Id = "UseBountyBoard_Locked"
+      DisplayName = "{I} {#LockedFormat}Check?"
+    }
+
+    {
+      Id = "BountyIntro"
+      DisplayName = "Chaos Trials"
+      Description = """
+      You now can see into the {#AlertBoldFormat}Pitch-Black Stone{#Prev}, revealing {#BountyHighlightFormat}Chaos Trials {#Prev}that influence reality as you know it. Consider the following:
+
+      · {#BountyHighlightFormat}Chaos Trials {#Prev}are an alternate, optional way to pursue your task.
+
+      · Each {#BountyHighlightFormat}Trial {#Prev}equips you with a certain loadout and has other twists.
+
+      · Your previous loadout is always restored when you return.
+
+      Note you will {#AlertItalicFormat}not {#Prev}find most of the usual resources on your way. Successfully clear {#BountyHighlightFormat}Chaos Trials {#Prev}to earn {!Icons.Mixer5CommonIcon}{#AlertBoldFormat}Star Dust{#Prev}, used in the {#AlertBoldFormat}Cauldron {#Prev}to brew powerful resources that let you unlock the potential of your {#AlertBoldFormat}Arcana Cards {#Prev}or bond with {#AlertBoldFormat}Animal Familiars{#Prev}!
+
+      {!Icons.DivLong}
+
+      {#AlertItalicFormat}Beware the Eyes! {#Prev}The more {!Icons.BountyEyeIcon} you see, the tougher the {#BountyHighlightFormat}Chaos Trial{#Prev}. New {#BountyHighlightFormat}Trials {#Prev}will be revealed as you progress. {#AlertItalicFormat}Go with Chaos!
+    """
+    }   
+
+    {
+      Id = "BountyLogScreen_Title"
+      DisplayName = "Pitch-Black Stone"
+    }
+    {
+      Id = "BountyLogScreen_Flavor"
+      DisplayName = "“To Serve Chaos is to Improve One's Own Reality”"
+    }
+
+    {
+      Id = "BountyBoard_StartChallenge"
+      DisplayName = "{SL} COMMENCE"
+    }
+    {
+      Id = "BountyBoard_RepeatChallenge"
+      DisplayName = "{SL} RECOMMENCE"
+    }
+    {
+      Id = "BountyBoard_ClearMessage"
+      DisplayName = "clears: {$TempTextData.ClearCount}        best time: {$TempTextData.BestClearTimeString}"
+    }
+    {
+      Id = "BountyBoard_ClearMessageStreaks"
+      DisplayName = "current streak: {$TempTextData.CurrentStreak}        best streak: {$TempTextData.BestStreak}"
+    }
+    {
+      Id = "BountyBoard_ClearMessage_NonRepeatable"
+      DisplayName = "cleared!!"
+    }
+    {
+      Id = "BountyBoard_RandomWeapon"
+      DisplayName = "Random Weapon"
+    }
+    {
+      Id = "BountyBoard_RandomKeepsake"
+      DisplayName = "Random Keepsake"
+    }
+    {
+      Id = "BountyBoard_UnderworldRun"
+      DisplayName = "Underworld"
+    }
+    {
+      Id = "BountyBoard_SurfaceRun"
+      DisplayName = "Surface"
+    }
+    {
+      Id = "BountyBoard_Reward"
+      DisplayName = "{#HighlightFormatGraft}reward: {#Prev}{#LegendaryFormat}+{$TempTextData.Amount}{!TempTextData.Icon}"
+    }
+    {
+      Id = "BountyBoard_RewardEarned"
+      DisplayName = "{#HighlightFormatGraft}reward claimed"
+    }
+
+    /* InventoryScreen / Inventory */
+    {
+      Id = "InventoryScreen_Title"
+      DisplayName = "Bag of Holding"
+    }
+    {
+      Id = "InventoryScreen_ResourceNotFound"
+      DisplayName = "Unavailable"
+      Description = "You have not found this yet."
+    }
+    {
+      Id = "InventoryScreen_GiftNotWanted"
+      DisplayName = "Not Interested"
+      Description = "This does not seem a suitable gift."
+    }
+    {
+      Id = "InventoryScreen_GiftNotAvailable"
+      DisplayName = "None Left"
+      Description = "This could be gifted if you had any."
+    }
+    {
+      Id = "InventoryScreen_SeedNotWanted"
+      DisplayName = "Cannot Be Planted"
+      Description = "This does not seem a suitable seed."
+    }
+    {
+      Id = "InventoryScreen_SeedNotAvailable"
+      DisplayName = "Unavailable"
+      Description = "You have nothing to plant at this time."
+    }
+    {
+      Id = "InventoryScreen_NoPinsHint"
+      DisplayName = "No Forget-Me-Nots tracked. \n\n Press {IP} on recipes to track what you need for them."
+    }
+    {
+      Id = "InventoryScreen_LineHistoryTab"
+      DisplayName = "Recent Remarks"
+    }
+    {
+      Id = "InventoryScreen_ResourcesTab"
+      DisplayName = "Reagents"
+    }
+    {
+      Id = "InventoryScreen_GiftsTab"
+      DisplayName = "Indulgences"
+    }
+    {
+      Id = "InventoryScreen_GardenTab"
+      DisplayName = "Greeneries"
+    }
+    {
+      Id = "InventoryScreen_FishTab"
+      DisplayName = "Fishings"
+    }
+    {
+      Id = "InventoryScreen_PinTab"
+      DisplayName = "Forget-Me-Nots"
+    }
+    {
+      Id = "InventoryScreen_RemovePin"
+      DisplayName = "{IP} REMOVE"
+    }
+    {
+      Id = "InventoryScreen_UnknownDetails"
+      DisplayName = "· ? ? ?"
+    }
+
+    /* Arachne Costume Screen */
+    {
+      Id = "ArachneCostumeMenu_Title"
+      DisplayName = "Silken Fineries"
+    }
+    {
+      Id = "ArachneCostumeMenu_FlavorText01"
+      DisplayName = "supple garments, dyes, and fabrics rivaling those of the gods themselves."
+    }
+
+    /* Narcissus Gifts Screen */
+    {
+      Id = "NarcissusGiftsMenu_Title"
+      DisplayName = "Second-Hand Gifts"
+    }
+    {
+      Id = "NarcissusGiftsMenu_FlavorText01"
+      DisplayName = "would-be suitors lavished him, yet such love cannot be bought at any price."
+    }
+
+    /* Echo Blessings Screen */
+    {
+      Id = "EchoChoiceMenu_Title"
+      DisplayName = "Plaintive Echoes"
+    }
+    {
+      Id = "EchoChoiceMenu_FlavorText01"
+      DisplayName = "only others can give voice to her desires; but she, in turn, can lend them potency."
+    }
+    {
+      Id = "EchoChoiceMenu_LastRun"
+      InheritFrom = "EchoChoiceMenu_Title"
+    }
+    {
+      Id = "EchoChoiceMenu_LastRun_FlavorText"
+      InheritFrom = "EchoChoiceMenu_FlavorText01"
+    }
+
+    /* Medea Curses Screen */
+    {
+      Id = "MedeaCurseMenu_Title"
+      DisplayName = "Nightly Curses"
+    }
+    {
+      Id = "MedeaCurseMenu_FlavorText01"
+      DisplayName = "those who shunned or scorned her served only to inspire her more."
+    }
+
+    /* Circe Blessings Screen */
+    {
+      Id = "CirceChoiceMenu_Title"
+      DisplayName = "Changes & Fortunes"
+    }
+    {
+      Id = "CirceChoiceMenu_FlavorText01"
+      DisplayName = "how best to transform oneself and others is a limitless pursuit."
+    }
+
+    /* Icarus Blessings Screen */
+    {
+      Id = "IcarusChoiceMenu_Title"
+      DisplayName = "Latest Inventions"
+    }
+    {
+      Id = "IcarusChoiceMenu_FlavorText01"
+      DisplayName = "even the gods can benefit from craftwork of a certain skill."
+    }
+
+    /* Wretched Broker / MarketScreen / Market Screen */
+    {
+      Id = "ResourceShopScreen_Title"
+      DisplayName = "Wretched Broker"
+    }
+    {
+      Id = "MarketScreen_Hint"
+      DisplayName = "vital reagents and resources, in exchange for the bones of the dead"
+    }
+    {
+      Id = "MarketScreen_FlavorText01"
+      DisplayName = "the bones of the deceased retain a certain kind of power, and a certain pride."
+    }
+    {
+      Id = "MarketScreen_FlavorText02"
+      DisplayName = "in the realm of the dead, one currency is valued above all."
+    }
+    {
+      Id = "MarketScreen_FlavorText03"
+      DisplayName = "the longer the dead persist, the more they value remnants of their mortal lives."
+    }
+    {
+      Id = "Market_LimitedTimeOffer"
+      DisplayName = "{!Icons.LimitedTimeOffer}"
+    }
+    {
+      Id = "MarketScreen_Resources"
+      DisplayName = "Reagent Market"
+    }
+    {
+      Id = "MarketScreen_Sell"
+      DisplayName = "Bone Exchange"
+    }
+    {
+      Id = "MarketScreen_Gifts"
+      DisplayName = "Exotic Goods"
+    }
+    {
+      Id = "MarketScreen_Exchange"
+      DisplayName = "Recycling Service"
+    }
+    {
+      Id = "MarketScreen_BuyAmount"
+      DisplayName = "x{$TempTextData.BuyAmount}"
+    }
+    {
+      Id = "MarketScreen_SellAmount"
+      DisplayName = "-1"
+    }
+    {
+      Id = "MarketScreen_InventoryAmount"
+      DisplayName = "{!Icons.InventoryIcon} x{$TempTextData.InventoryAmount}"
+    }
+    {
+      Id = "MarketScreen_Cost"
+      DisplayName = "{$TempTextData.CostAmount} {$TempTextData.CostIcon}"
+    }
+    {
+      Id = "MarketScreen_CurrentAmountsHeader"
+      DisplayName = "You Have"
+    }
+    {
+      Id = "MarketScreen_BuyingHeader"
+      DisplayName = "Purchase Price"
+    }
+    {
+      Id = "MarketScreen_SellingHeader"
+      DisplayName = "Trade-In Value"
+    }
+    {
+      Id = "MarketScreen_SellAllPrompt"
+      DisplayName = "Confirm Exchange"
+      Description = "You shall donate {#BoldFormatGraft}{$TempTextData.SellAmount}{!TempTextData.SellResourceIcon} {#Prev}to the {$Keywords.Broker}. \n\n You shall receive {#UpgradeFormat}+{$TempTextData.BuyAmount}{!TempTextData.BuyResourceIcon} {#Prev}in exchange. \n\n All trades are final."
+    }
+    {
+      Id = "MarketScreen_ConfirmSellAll"
+      DisplayName = "Proceed"
+    }
+    {
+      Id = "MarketScreen_CancelSellAll"
+      DisplayName = "Cancel"
+    }
+
+    /* TradeScreen / Trade Screen */
+
+    {
+      Id = "TradeScreen_Title"
+      DisplayName = "Fair Trade"
+    }
+    {
+      Id = "TradeScreen_Subtitle"
+      DisplayName = "the incarnate of retribution ensures all get their just deserts."
+    }
+    {
+      Id = "TradeScreen_GiveHint"
+      DisplayName = "you give:"
+    }
+    {
+      Id = "TradeScreen_GetHint"
+      DisplayName = "you take:"
+    }
+    {
+      Id = "TradeScreen_CurrentMoney"
+      DisplayName = "you have: {#MoneyFormatBold}{$TempTextData.Amount}{!Icons.Currency}"
+    }
+    {
+      Id = "TradeScreen_CurrentMoney_CantAfford"
+      DisplayName = "you have: {#MoneyFormatCantAffordBold}{$TempTextData.Amount}{!Icons.Currency}"
+    }
+    {
+      Id = "TradeScreen_Accept"
+      DisplayName = "{CF} ACCEPT"
+    }
+    {
+      Id = "TradeScreen_Decline"
+      DisplayName = "{CN} DECLINE"
+    }
+    {
+      Id = "TradeScreen_TradeCost"
+      DisplayName = "{$TooltipData.Cost} {$TooltipData.ResourceName}"
+      Description = "A price in {!Icons.Currency}, in exchange for what {$Keywords.CharNemesis} has to offer."
+    }
+    {
+      Id = "TradeScreen_ResourceCost"
+      DisplayName = "{$TooltipData.ResourceName} {#TooltipUpgradeFormat}({$TooltipData.Cost})"
+    }
+    {
+      Id = "TradeScreen_DamageAmount"
+      DisplayName = "{#AltPenaltyFormat}Free Hit"
+      Description = "Invite {$Keywords.CharNemesis} to take her best shot. She will deal {#AltPenaltyFormat}{$TooltipData.DamageAmount} {#Prev}damage."
+    }
+
+    /* Narrative Screen */
+    {
+      Id = "Choice_MorosBecomingCloser01"
+      DisplayName = "{#Emph}Remain with Moros? {#DialogChoiceInstructionFormat}(Follow your heart...)"
+    }
+    {
+      Id = "Choice_MorosAccept"
+      DisplayName = "{CF} AGREE"
+    }
+    {
+      Id = "Choice_MorosDecline"
+      DisplayName = "{CN} REFUSE"
+    }
+
+    {
+      Id = "Choice_NemesisBecomingCloser01"
+      DisplayName = "{#Emph}Stay with Nemesis? {#DialogChoiceInstructionFormat}(Follow your heart...)"
+    }
+    {
+      Id = "Choice_NemesisAccept"
+      DisplayName = "{CF} GO TO HER"
+    }
+    {
+      Id = "Choice_NemesisDecline"
+      DisplayName = "{CN} HOLD OFF"
+    }
+
+    {
+      Id = "Choice_ErisBecomingCloser01"
+      DisplayName = "{#Emph}Be with Eris? {#DialogChoiceInstructionFormat}(Follow your heart...)"
+    }
+    {
+      Id = "Choice_ErisAccept"
+      DisplayName = "{CF} WHY NOT"
+    }
+    {
+      Id = "Choice_ErisDecline"
+      DisplayName = "{CN} NO THANKS"
+    }
+
+    {
+      Id = "Choice_IcarusBecomingCloser01"
+      DisplayName = "{#Emph}Go to Icarus? {#DialogChoiceInstructionFormat}(Follow your heart...)"
+    }
+    {
+      Id = "Choice_IcarusAccept"
+      DisplayName = "{CF} VERY WELL"
+    }
+    {
+      Id = "Choice_IcarusDecline"
+      DisplayName = "{CN} SORRY..."
+    }
+
+    {
+      Id = "Choice_Accept"
+      DisplayName = "{CF} ACCEPT"
+    }
+    {
+      Id = "Choice_Decline"
+      DisplayName = "{CN} DECLINE"
+    }
+
+    /* Charon Shipments / MailboxScreen / Mailbox Screen / Supply Drop */
+    {
+      Id = "UseMailbox"
+      DisplayName = "{I} Check"
+    }
+    {
+      Id = "UseMailbox_DeliveryPending"
+      DisplayName = "{I} {#LockedFormat}Check?"
+    }
+    {
+      Id = "UseMailbox_DeliveryReady"
+      DisplayName = "{I} Claim"
+    }
+    {
+      Id = "MailboxScreen_Title"
+      DisplayName = "Gold Rewards"
+    }
+    {
+      Id = "MailboxScreen_Hint"
+      DisplayName = "spending {#LegendaryFormat}{$ScreenData.MailboxScreen.MoneySpentPerCharonPoint}{#Prev}{!Icons.Currency} earns you {#UpgradeFormat}1{#Prev}{!Icons.CharonPoints}, redeemed here for supplies {#ItalicFormat}(that soon arrive)"
+    }
+
+    {
+      Id = "MailboxScreen_DeliveryTime"
+      DisplayName = "delivered in {$TempTextData.DeliveryTime}{!Icons.Clock}"
+    }
+
+    {
+      Id = "MailboxStatus_DeliveryPending"
+      DisplayName = "{$TempTextData.TimeRemaining}{!Icons.Clock}"
+    }
+
+    /* Cauldron / Critical Item Store / Ghost Admin */
+    {
+      Id = "GhostAdminScreen_Title"
+      DisplayName = "Crossroads Cauldron"
+    }
+    {
+      Id = "GhostAdminUnlock"
+      DisplayName = "INCANTATION COMPLETE"
+    }
+    {
+      Id = "RepeatableUnlock"
+      DisplayName = "ALCHEMY COMPLETE"
+    }
+    {
+      Id = "GhostAdminScreen_Hint"
+      DisplayName = "with pure intention, scant reagents, and the proper words, anything can be achieved."
+    }
+    {
+      Id = "GhostAdmin_CategoryEmpty"
+      DisplayName = "more incantations required"
+    }
+    {
+      Id = "WorldUpgradeScreen_Critical"
+      DisplayName = "INCANTATIONS"
+    }
+    {
+      Id = "WorldUpgradeScreen_Repeatable"
+      DisplayName = "ALCHEMY"
+    }
+    {
+      Id = "CosmeticMainHall"
+      DisplayName = "VISIONS"
+    }
+    {
+      Id = "CosmeticLounge"
+      DisplayName = "ALTERATIONS"
+    }
+    {
+      Id = "CosmeticBedroom"
+      DisplayName = "RECIPES"
+    }
+    {
+      Id = "WeaponShopItemConfirm"
+      DisplayName = "{SL} Reveal..."
+    }
+    {
+      Id = "Menu_CauldronUnlock"
+      DisplayName = "{SL} INCANT"
+    }
+    {
+      Id = "Menu_CosmeticsUnlock"
+      DisplayName = "{SL} APPROVE"
+    }
+    {
+      Id = "Menu_CosmeticsRemove"
+      DisplayName = "{SL} REMOVE"
+    }
+    {
+      Id = "Menu_CosmeticsReAdd"
+      DisplayName = "{SL} CHOOSE"
+    }
+
+    /* Card Table / Meta Upgrades / Altar / Card Table / Card Screen / CardScreen / MetaUpgradeScreen */
+    {
+      Id = "MetaUpgrade_Locked"
+      DisplayName = "? ? ?"
+    }
+    {
+      Id = "MetaUpgrade_CostPrefix"
+      DisplayName = "Psyche:"
+    }
+    {
+      Id = "Unlock_MetaUpgrade"
+      DisplayName = "Unlock"
+    }
+    {
+      Id = "IncreaseMetaUpgradeLimit"
+      DisplayName = "{#MemFormat}+{$TempTextData.Amount} {#Prev}Grasp"
+    }
+    {
+      Id = "Max_MetaUpgrade"
+      DisplayName = "{#MemFormat}MAX"
+    }
+    {
+      Id = "Max_MetaUpgrade_FlavorText01"
+      DisplayName = "We each have our limits; usually far beyond what we believe them to be, but nevertheless there."
+    }
+    {
+      Id = "MetaUpgrade_Slash"
+      DisplayName = " {!Icons.Slash}"
+    }
+    {
+      Id = "MetaUpgrade_EquipAvailable"
+      DisplayName = "Untapped Potential!"
+      Description = """
+      You are below the limit of your {!Icons.ManaCrystal}{#MemFormatBold}Grasp{#Prev}.
+
+      You have more {#BoldFormatGraft}Arcana Cards {#Prev}available, which you can activate and become even stronger.
+      """
+    }
+    {
+    Id = "MetaUpgrade_CardUnlocksAvailable"
+        DisplayName = "Reveal the Cards!"
+        Description = "You have the means to use {#BoldFormatGraft}Arcana Cards{#Prev}. Each one you activate makes you stronger in a unique way.
+
+        Select a revealed {#BoldFormatGraft}Card {#Prev}to permanently unlock it."
+    }
+    {
+      Id = "MetaUpgradeEquip_CardUnlockBack"
+      DisplayName = "Unlock Cards"
+    }
+    {
+      Id = "MetaUpgradeEquip_Proceed"
+      DisplayName = "Exit Anyway"
+    }
+    {
+      Id = "MetaUpgradeEquip_Back"
+      DisplayName = "Use More Cards"
+    }
+    {
+      Id = "MetaUpgradeTable_UnableToEquip"
+      DisplayName = "{#MemFormat}Grasp {#Prev}Limit Reached!"
+      Description = """
+      Your new {#BoldFormatGraft}Arcana Card {#Prev}requires more {!Icons.ManaCrystal}{#MemFormatBold}Grasp {#Prev}than you have available. 
+
+      You may use the gauge shown below to extend your {!Icons.ManaCrystal}{#MemFormatBold}Grasp{#Prev}, or deactivate other {#BoldFormatGraft}Cards{#Prev}.
+
+      @GUI\\Screens\\MetaUpgrade\\MemModulePreview
+      """
+    }
+      {
+      Id = "MetaUpgradeTable_UnableToEquip_Alt"
+      DisplayName = "{#MemFormat}Grasp {#Prev}Limit Reached!"
+      Description = """
+      You cannot use all your {#BoldFormatGraft}Arcana Cards{#Prev}, because they require more {!Icons.ManaCrystal}{#MemFormatBold}Grasp {#Prev}than you have available. 
+
+      You may use the gauge shown below to extend your {!Icons.ManaCrystal}{#MemFormatBold}Grasp{#Prev}, or deactivate other {#BoldFormatGraft}Cards{#Prev}.
+
+      @GUI\\Screens\\MetaUpgrade\\MemModulePreview
+      """
+    }
+      {
+      Id = "MetaUpgradeTable_UnableToEquip_Alt2"
+      DisplayName = "Reach Beyond!"
+      Description = """
+      You now have enough {!Icons.MemPointsCommon_NoTooltip} {#BoldFormatGraft}{$ResourceData.MemPointsCommon.Name} {#Prev} to extend your {!Icons.ManaCrystal}{#MemFormatBold}Grasp{#Prev}, which lets you activate more {#BoldFormatGraft}Arcana Cards {#Prev}at once! Simply use the gauge shown below.
+
+      @GUI\\Screens\\MetaUpgrade\\MemModulePreview
+      """
+    }
+    {
+      Id = "MetaUpgrade_UpgradesAvailable"
+      DisplayName = "{#BoldFormatGraft}Insights {#Prev}Unlocked!"
+      Description = "You may now use {!Icons.CardUpgradePoints} {#BoldFormatGraft}{$ResourceData.CardUpgradePoints.Name} {#Prev}to unlock the full potential of each of your {#BoldFormatGraft}Arcana Cards{#Prev}. \n\n Using the {#BoldFormatGraft}Altar{#Prev}, press {CF} to switch to {#BoldFormatGraft}Insights{#Prev}."
+    }
+    {
+      Id = "MetaUpgrade_UpgradesAvailable_Close"
+      DisplayName = "Continue"
+    }
+    {
+      Id = "ElementalPrompt"
+      DisplayName = "{#BoldFormatGraft}Elements {#Prev}Revealed!"
+      Description = """You now can see the essence of {#BoldFormatGraft}Olympian Boons{#Prev}.
+
+      These essences include {!Icons.CurseEarth}{#BoldFormatGraft}Earth{#Prev}, {!Icons.CurseWater}{#BoldFormatGraft}Water{#Prev}, {!Icons.CurseAir}{#BoldFormatGraft}Air{#Prev}, and {!Icons.CurseFire}{#BoldFormatGraft}Fire{#Prev}... and perhaps more!
+
+      While these have no innate benefit, {#BoldFormatGraft}Olympians {#Prev}will sometimes offer powerful {#ElementalFormat}Infusion Boons {#Prev}that grow stronger with your elemental essences.
+      """
+    }
+    {
+      Id = "ElementalPrompt_Close"
+      DisplayName = "Continue"
+    }
+    {
+      Id = "MetaUpgrade_Ineligible"
+      DisplayName = "-"
+    }
+    {
+      Id = "MetaUpgrade_Equip"
+      DisplayName = "{SL} ACTIVATE"
+    }
+    {
+      Id = "MetaUpgrade_Unequip"
+      DisplayName = "{SL} DEACTIVATE"
+    }
+    {
+      Id = "MetaUpgrade_Unlock"
+      DisplayName = "{SL} UNLOCK"
+    }
+    {
+      Id = "MetaUpgradeMem_Upgrade"
+      DisplayName = "{SL} EXTEND"
+    }
+    {
+      Id = "MetaUpgradeCard_Upgrade"
+      DisplayName = "{SL} IMPROVE"
+    }
+    {
+      Id = "MetaUpgradeCard_Inspect"
+      DisplayName = "{IP} INSPECT"
+    }
+    {
+      Id = "MetaUpgradeMem_UpgradeMode"
+      DisplayName = "{CF} INSIGHTS {#StatFormat}\[{$TempTextData.Amount}{!Icons.CardUpgradePoints}\]"
+    }
+    {
+      Id = "MetaUpgrade_PrevLayout"
+      DisplayName = "{PL} PREVIOUS SET"
+    }
+    {
+      Id = "MetaUpgrade_NextLayout"
+      DisplayName = "{NL} NEXT SET"
+    }
+    {
+      Id = "MetaUpgrade_SwapLayoutArt"
+      DisplayName = "{IP} THEME"
+    }
+    {
+      Id = "MetaUpgrade_SwapLayoutArtSelect"
+      DisplayName = "{SL} SET"
+    }
+    {
+      Id = "MetaUpgradeMem_ExitUpgradeMode"
+      DisplayName = "{CF} RETURN"
+    }
+    {
+      Id = "MetaUpgradeMem_Exit"
+      DisplayName = "{CN} EXIT"
+    }
+    {
+      Id = "MetaUpgrade_Hidden"
+      DisplayName = "{#ItalicFormat}Unlock an adjacent Card to reveal this"
+    }
+    {
+      Id = "MetaUpgrade_Pin"
+      DisplayName = "{IP} FORGET-ME-NOT"
+    }
+    {
+      Id = "MetaUpgrade_StartSwap"
+      DisplayName = "{A3} START SWAP"
+    }
+    {
+      Id = "MetaUpgrade_EndSwap"
+      DisplayName = "{A3} CONFIRM SWAP"
+    }
+    {
+      Id = "MetaUpgrade_CancelSwap"
+      DisplayName = "{A3} CANCEL SWAP"
+    }
+    {
+      Id = "MetaUpgradeCardLimit_Upgrade"
+      DisplayName = "Grasp of the Arcana"
+    }
+
+    /* Weapon Shop / Silver Pool */
+    {
+      Id = "UseWeaponShop"
+      DisplayName = "{I} Inspect"
+    }
+    {
+      Id = "WeaponShopScreen_Title"
+      DisplayName = "Silver Pool"
+    }
+    {
+      Id = "WeaponShopUnlock"
+      DisplayName = "ARTIFACT AWAKENED"
+    }
+    {
+      Id = "WeaponShopAspectUnlock"
+      DisplayName = "ASPECT REVEALED"
+    }
+    {
+      Id = "ToolShopUnlock"
+      DisplayName = "TOOL RETRIEVED"
+    }
+    {
+      Id = "ToolShopUpgrade"
+      DisplayName = "TOOL RESTORED"
+    }
+    {
+      Id = "WeaponShop_Weapons"
+      DisplayName = "Nocturnal Arms"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_StaffUpgrades"
+      DisplayName = "Aspects of the Witch's Staff"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_DaggerUpgrades"
+      DisplayName = "Aspects of the Sister Blades"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_TorchUpgrades"
+      DisplayName = "Aspects of the Umbral Flames"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_AxeUpgrades"
+      DisplayName = "Aspects of the Moonstone Axe"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_LobUpgrades"
+      DisplayName = "Aspects of the Argent Skull"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_SuitUpgrades"
+      DisplayName = "Aspects of the Black Coat"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_Tools"
+      DisplayName = "Gathering Tools"
+      Description = ""
+    }
+    {
+      Id = "WeaponShop_ToolUpgrades"
+      DisplayName = "Tool Refinements"
+      Description = ""
+    }
+    {
+      Id = "WeaponShopScreen_Hint"
+      DisplayName = "“Look Deep Within, Bearer of the Nocturnal Arms”"
+    } 
+
+    /* Familiar Shop */
+    {
+      Id = "FamiliarShopUnlock"
+      DisplayName = "Familiar Bonds"
+    }
+    {
+      Id = "FamiliarShopScreen_Title"
+      DisplayName = "Familiar Bonds"
+    }
+    {
+      Id = "FamiliarShopScreen_Hint"
+      DisplayName = "with proper training and diet, a witch's familiar can grow mighty indeed"
+    }
+    {
+      Id = "FamiliarShopUpgrade"
+      DisplayName = "{$TooltipData.UpgradeName} {#AltUpgradeFormat}{$TooltipData.AspectRarityText}"
+    }
+    {
+      Id = "FamiliarShop_Select"
+      DisplayName = "{SL} CHOOSE"
+    }
+
+    /* Familiar Costume Shop */
+    {
+      Id = "Menu_FamiliarCostumeUnlock"
+      DisplayName = "{SL} TRANSFORM"
+    }
+    {
+      Id = "Menu_FamiliarCostumeReAdd"
+      DisplayName = "{SL} SWITCH"
+    }
+
+    /* Hades Fountain / StoryReset Screen */
+    {
+      Id = "StoryResetIntro"
+      DisplayName = "Myths Retold"
+      Description = """
+      Thank you for playing {#AlertHeaderFormat}Hades II{#Prev}, and congratulations on your victory!
+
+      Here, you may choose to {#AlertItalicFormat}turn back Time {#Prev}to an earlier possible point in the story, in which {#AlertHighlightFormat}Melinoë {#Prev}has fought, but not yet vanquished, {#AlertHighlightFormat}Chronos {#Prev}and {#AlertHighlightFormat}Typhon{#Prev}... thus shall her tale be retold!
+
+     · This lets you {#AlertBoldFormat}re-experience key events in the story{#Prev}, or experience rare events you may have missed, without resetting the rest of your progress.
+
+     · Most of {#AlertBoldFormat}your progress will be preserved{#Prev}. Any {#AlertBoldFormat}{!Icons.MixerIBoss} Z·Sand {#Prev}and {#AlertBoldFormat}{!Icons.MixerQBoss} V·Lens {#Prev}you have will be restored after the end credits. Just about everything else you have already unlocked will remain unlocked.
+
+     · If you have not yet fulfilled the Fated List Prophecy {#AlertBoldFormat}Melinoë, Help Us{#Prev}, bear in mind it can only be fulfilled after the end credits.
+
+    {#AlertItalicFormat}Note: {#Prev}Only key events in the story will be reset if you proceed.
+    """
+    }
+    {
+      Id = "StoryReset_Title"
+      DisplayName = "UNDO STORY PROGRESS?"
+    }
+    {
+      Id = "StoryReset_Details"
+      DisplayName = "Proceed if you wish to reset key events in the story. \n\n {#WarningHighlightFormat}This action cannot be undone."
+    }
+    {
+      Id = "StoryReset_Confirm"
+      DisplayName = "PROCEED"
+    }
+    {
+      Id = "StoryReset_Cancel"
+      DisplayName = "CANCEL"
+    }
+
+    /* Book of Shadows / Codex / CodexScreen / Codex Screen */
+    {
+      Id = "Codex_NextEntry"
+      DisplayName = "{DN} Next Entry"
+    }
+    {
+      Id = "Codex_PrevEntry"
+      DisplayName = "{UP} Previous Entry"
+    }
+    {
+      Id = "Codex_NextChapter"
+      DisplayName = "{MR} NEXT"
+    }
+    {
+      Id = "Codex_PrevChapter"
+      DisplayName = "{ML} PREVIOUS"
+    }
+    {
+      Id = "Codex_EntryLocked"
+      DisplayName = "Undiscovered"
+    }
+    {
+      Id = "Codex_EntryUnlocked"
+      DisplayName = "{CX} Updated"
+    }
+    {
+      Id = "Codex_DefaultGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} would welcome an offering of {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_KeepGoingHint"
+      DisplayName = "{$TempTextData.CharacterName} would welcome an offering of {!TempTextData.ResourceIcon}."
+    }
+
+    {
+      Id = "Codex_LockedActivityHint"
+      DisplayName = "{$TempTextData.CharacterName} would be open to {!TempTextData.ResourceIcon} when possible. You may need to grow closer..."
+    }
+
+    {
+      Id = "Codex_FishingGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} may be open to a visit to the Fishing Pier if you offer {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_HotSpringsGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} may be open to a visit to the Hot Springs if you offer {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_TavernaGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} may be open to a visit to the Taverna if you offer {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_TavernaGiftHintEris"
+      DisplayName = "{$TempTextData.CharacterName} would relish a visit to the Taverna again if you offer {!TempTextData.ResourceIcon}."
+    }
+
+    {
+      Id = "Codex_FishNextHint"
+      DisplayName = "{$TempTextData.CharacterName} would rather do something else before accepting {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_UnavailableHint"
+      DisplayName = "{$TempTextData.CharacterName} wants nothing more from you for now {#ItalicLightFormat}(perhaps in the future...)."
+    }
+    {
+      Id = "Codex_AlreadyReceivedGift"
+      DisplayName = "{$TempTextData.CharacterName} wants nothing more from you this night."
+    }
+    {
+      Id = "Codex_DoesntWantGiftHint"
+      DisplayName = "Now seems not the time to offer gifts to {$TempTextData.CharacterName}."
+    }
+    {
+      Id = "Codex_TimePassesGiftUsed"
+      DisplayName = "There is not time enough this night to invite {$TempTextData.CharacterName} for an outing."
+    }
+    {
+      Id = "Codex_GrowingCloser01"
+      DisplayName = "{$TempTextData.CharacterName} may feel more deeply about you after an offering of {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_TrustDeepened01"
+      DisplayName = "{$TempTextData.CharacterName} feels closer to you now and may soon be open to another offering."
+    }
+    {
+      Id = "Codex_NyxHint01"
+      DisplayName = "{$TempTextData.CharacterName} desires only your continued service to the realm."
+    }
+    {
+      Id = "Codex_PreBondForgedHecate"
+      DisplayName = "{$TempTextData.CharacterName} still is holding something back... perhaps you may grow closer still if you knew why."
+    }
+    {
+      Id = "Codex_BondForgedHecate"
+      DisplayName = "You and {$TempTextData.CharacterName} share an inseparable bond."
+    }
+    {
+      Id = "Codex_BondForgedOdysseus"
+      DisplayName = "You and {$TempTextData.CharacterName} share a bond of many turns."
+    }
+    {
+      Id = "Codex_BondForgedSkelly"
+      DisplayName = "You and {$TempTextData.CharacterName} share a disciplined bond."
+    }
+    {
+      Id = "Codex_BondForgedDora"
+      DisplayName = "You and {$TempTextData.CharacterName} share a supernatural bond."
+    }
+    {
+      Id = "Codex_BondForgedNemesis"
+      DisplayName = "You and {$TempTextData.CharacterName} share a reciprocal bond."
+    }
+    {
+      Id = "Codex_BondForgedCharon"
+      DisplayName = "You and {$TempTextData.CharacterName} share an unspeakable bond."
+    }
+    {
+      Id = "Codex_BondForgedMoros"
+      DisplayName = "You and {$TempTextData.CharacterName} share a fateful bond."
+    }
+    {
+      Id = "Codex_BondForgedEris"
+      DisplayName = "You and {$TempTextData.CharacterName} share a troubling bond."
+    }
+    {
+      Id = "Codex_BondForgedHermes"
+      DisplayName = "You and {$TempTextData.CharacterName} share a steadfast bond."
+    }
+    {
+      Id = "Codex_BondForgedArtemis"
+      DisplayName = "You and {$TempTextData.CharacterName} share an unwavering bond."
+    }
+    {
+      Id = "Codex_BondForgedSelene"
+      DisplayName = "You and {$TempTextData.CharacterName} share a constant bond."
+    }
+
+    {
+      Id = "Codex_BondForgedZeus"
+      DisplayName = "You and {$TempTextData.CharacterName} share a crackling bond."
+    }
+    {
+      Id = "Codex_BondForgedHera"
+      DisplayName = "You and {$TempTextData.CharacterName} share a highborn bond."
+    }
+    {
+      Id = "Codex_BondForgedPoseidon"
+      DisplayName = "You and {$TempTextData.CharacterName} share a deep bond."
+    }
+    {
+      Id = "Codex_BondForgedDemeter"
+      DisplayName = "You and {$TempTextData.CharacterName} share an evergreen bond."
+    }
+    {
+      Id = "Codex_BondForgedApollo"
+      DisplayName = "You and {$TempTextData.CharacterName} share a brilliant bond."
+    }
+    {
+      Id = "Codex_BondForgedAphrodite"
+      DisplayName = "You and {$TempTextData.CharacterName} share a lovely bond."
+    }
+    {
+      Id = "Codex_BondForgedHephaestus"
+      DisplayName = "You and {$TempTextData.CharacterName} share a durable bond."
+    }
+    {
+      Id = "Codex_BondForgedHestia"
+      DisplayName = "You and {$TempTextData.CharacterName} share a comforting bond."
+    }
+    {
+      Id = "Codex_BondForgedAres"
+      DisplayName = "You and {$TempTextData.CharacterName} share a blood bond."
+    }
+    {
+      Id = "Codex_BondForgedAthena"
+      DisplayName = "You and {$TempTextData.CharacterName} share a glorious bond."
+    }
+    {
+      Id = "Codex_BondForgedDionysus"
+      DisplayName = "You and {$TempTextData.CharacterName} share a delirious bond."
+    }
+
+    {
+      Id = "Codex_BondForgedArachne"
+      DisplayName = "You and {$TempTextData.CharacterName} share a delicate bond."
+    }
+    {
+      Id = "Codex_BondForgedNarcissus"
+      DisplayName = "You and {$TempTextData.CharacterName} share an unbelievably attractive bond."
+    }
+    {
+      Id = "Codex_BondForgedEcho"
+      DisplayName = "You and {$TempTextData.CharacterName} share a bond... bond... bond..."
+    }
+    {
+      Id = "Codex_BondForgedHeracles"
+      DisplayName = "You and {$TempTextData.CharacterName} share the mightiest of bonds."
+    }
+    {
+      Id = "Codex_BondForgedMedea"
+      DisplayName = "You and {$TempTextData.CharacterName} share a dark bond."
+    }
+    {
+      Id = "Codex_BondForgedCirce"
+      DisplayName = "You and {$TempTextData.CharacterName} share an immutable bond."
+    }
+    {
+      Id = "Codex_BondForgedIcarus"
+      DisplayName = "You and {$TempTextData.CharacterName} share a soaring bond."
+    }
+    {
+      Id = "Codex_BondForgedZagreus"
+      DisplayName = "You and {$TempTextData.CharacterName} share a timeless bond."
+    }
+    {
+      Id = "Codex_BondForgedHadesPersephone"
+      DisplayName = "You and {$TempTextData.CharacterName} share a regal bond."
+    }
+    {
+      Id = "Codex_BondForgedPersephoneAlt"
+      DisplayName = "You and {$TempTextData.CharacterName} share a flourishing bond."
+    }
+    {
+      Id = "Codex_BondForgedChronos"
+      DisplayName = "You and {$TempTextData.CharacterName} share an inevitable bond."
+    }
+    {
+      Id = "Codex_BondForgedChaos"
+      DisplayName = "You and {$TempTextData.CharacterName} share an ancient bond."
+    }
+
+    {
+      Id = "Codex_DoraNotInTent"
+      DisplayName = "{$TempTextData.CharacterName} is not inclined to accept {!TempTextData.ResourceIcon} outside the comfort of your tent."
+    }
+    {
+      Id = "Codex_DoraNotInMain"
+      DisplayName = "{$TempTextData.CharacterName} is not inclined to accept {!TempTextData.ResourceIcon} all the way over here in the Training Grounds."
+    }
+    {
+      Id = "Codex_DoraUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in an offering of {!TempTextData.ResourceIcon} in the confines of your tent."
+    }
+    {
+      Id = "Codex_DoraUnlockHint02"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} once you help her recall something important."
+    }
+    {
+      Id = "Codex_DionysusGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} is practically desperate for an offering of {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_DionysusGiftHint02"
+      DisplayName = "{$TempTextData.CharacterName} is eagerly anticipating an offering of exactly {$UnitSetData.NPC_Dionysus.NPC_Dionysus_01.GiftTextLineSets.DionysusGift07.Cost.SuperGiftPoints}{!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_DionysusUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} would be very interested in {!TempTextData.ResourceIcon}, once he remembers a key detail."
+    }
+    {
+      Id = "Codex_AthenaUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in an offering of {!TempTextData.ResourceIcon} but only on Olympus."
+    }
+    {
+      Id = "Codex_AthenaUnlockHint02"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} in time after her immediate concerns subside."
+    }
+    {
+      Id = "Codex_ArachneGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} is not receptive to {!TempTextData.ResourceIcon} until you better understand each other."
+    }
+    {
+      Id = "Codex_CharonGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} would not say no to an offering of {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_CharonUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may not say no to {!TempTextData.ResourceIcon} after earning more {!Icons.WeaponPointsRare} and using {!Icons.CharonPoints} to redeem rewards."
+    }
+    {
+      Id = "Codex_NemesisGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} would grudgingly accept an offering of {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_NemesisHotSpringsGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} may be persuaded to visit the Hot Springs if you have {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_NemesisHotSpringsGiftHintAlt"
+      DisplayName = "{$TempTextData.CharacterName} would join you at the Hot Springs again if you have {!TempTextData.ResourceIcon}."
+    }
+    {
+      Id = "Codex_NemesisUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after more battles together."
+    }
+    {
+      Id = "Codex_MorosUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after further conversation and prophecies fulfilled."
+    }
+    {
+      Id = "Codex_HecateUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} would perhaps be interested in {!TempTextData.ResourceIcon} once your great task is less of a concern."
+    }
+    {
+      Id = "Codex_ArtemisUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} would be interested in {!TempTextData.ResourceIcon} if you sing with her and fight alongside her more."
+    }
+    {
+      Id = "Codex_IcarusUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} is reluctant to accept {!TempTextData.ResourceIcon} until you've had more time to reconnect."
+    }
+    {
+      Id = "Codex_IcarusUnlockHint02"
+      DisplayName = "{$TempTextData.CharacterName} longs to be whole again, and {!TempTextData.ResourceIcon} may help him achieve it."
+    }
+    {
+      Id = "Codex_ErisUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after more victories against her."
+    }
+    {
+      Id = "Codex_OdysseusUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after he settles up with a few old acquaintances."
+    }
+    {
+      Id = "Codex_ArachneUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} once she is no longer preoccupied with her condition and the gods."
+    }
+    {
+      Id = "Codex_SkellyUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept {!TempTextData.ResourceIcon} after you master enough Nocturnal Arms to spur his desire for change."
+    }
+    {
+      Id = "Codex_MedeaUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after you help her brew a certain concoction."
+    }
+    {
+      Id = "Codex_CirceUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} once she is convinced your grasp of the Arcana is complete."
+    }
+    {
+      Id = "Codex_HeraclesGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may consider an offering of {!TempTextData.ResourceIcon} after you prove your worth on a fearful night."
+    }
+    {
+      Id = "Codex_NarcissusUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after you aid in certain other matters."
+    }
+    {
+      Id = "Codex_EchoUnlockHint01"
+      DisplayName = "{$TempTextData.CharacterName} may be interested in {!TempTextData.ResourceIcon} after she makes peace with part of her past."
+    }
+    {
+      Id = "Codex_ZeusGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} in time after his immediate concerns subside."
+    }
+    {
+      Id = "Codex_HeraDemeterGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} in time after her immediate concerns subside."
+    }
+    {
+      Id = "Codex_PoseidonGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} once you prove your prowess with the {$WeaponShopItemData.ToolFishingRod.Name}."
+    }
+    {
+      Id = "Codex_ApolloGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} after you keep vanquishing your greatest foes."
+    }
+    {
+      Id = "Codex_AphroditeGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} once you deepen more relationships with those closest to you."
+    }
+    {
+      Id = "Codex_HephaestusGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} once you fully upgrade more Nocturnal Arms."
+    }
+    {
+      Id = "Codex_HestiaGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} once you decorate the Crossroads more."
+    }
+    {
+      Id = "Codex_AresGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} once you vanquish more foes."
+    }
+    {
+      Id = "Codex_SeleneGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept {!TempTextData.ResourceIcon} once you prove your worth with a certain weapon in her Aspect."
+    }
+    {
+      Id = "Codex_HermesGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept {!TempTextData.ResourceIcon} after his immediate concerns subside and you spend enough at his Shrines."
+    }
+    {
+      Id = "Codex_ChaosGiftHint01"
+      DisplayName = "{$TempTextData.CharacterName} may accept an offering of {!TempTextData.ResourceIcon} once you clear more {$Keywords.PackagedBounties}."
+    }
+    {
+      Id = "Codex_HadesGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} is not exactly interested in {!TempTextData.ResourceIcon} at this time."
+    }
+    {
+      Id = "Codex_ZagreusGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} is too preoccupied with Underworld business to accept {!TempTextData.ResourceIcon} at this time."
+    }
+    {
+      Id = "Codex_ChronosGiftHint"
+      DisplayName = "{$TempTextData.CharacterName} is reluctant to accept {!TempTextData.ResourceIcon} at this time."
+    }
+    {
+      Id = "Codex_Boon_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by accepting boons from {$TempTextData.Name}: {#CodexPreReqNumberFormat}{$TempTextData.Amount} {#CodexStandardFormat} \]"
+    }
+    {
+      Id = "Codex_Wield_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by slaying foes with the {$TempTextData.Name}: {#CodexPreReqNumberFormat}{$TempTextData.Amount} {#CodexStandardFormat} \]"
+    }
+    {
+      Id = "Codex_Slay_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by slaying the {$TempTextData.Name}: {#CodexPreReqNumberFormat}{$TempTextData.Amount} {#CodexStandardFormat} \]"
+    }
+    {
+      Id = "Codex_SlayAlt_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by vanquishing {$TempTextData.Name}: {#CodexPreReqNumberFormat}{$TempTextData.Amount} {#CodexStandardFormat} \]"
+    }
+    {
+      Id = "Codex_Interact_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by conversing with {$TempTextData.Name}: {#CodexPreReqNumberFormat}{$TempTextData.Amount} {#CodexStandardFormat} \]"
+    }
+    {
+      Id = "Codex_Enter_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by entering {$TempTextData.Name}: {#CodexPreReqNumberFormat}{$TempTextData.Amount} {#CodexStandardFormat} \]"
+    }
+    {
+      Id = "Codex_Mystery_Locked"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by awaiting further instruction... {#Prev}\]"
+    }
+    {
+        Id = "Codex_Custom_Relationship_Requirement"
+      DisplayName = "\n {#CodexStandardFormat}\[ {#CodexPreReqFormat} learn more by deepening your connection with {$TempTextData.Name} {#CodexStandardFormat} \]"
+    }
+    {
+        Id = "Codex_Custom_Story_Requirement"
+      DisplayName = "\n {#CodexStandardFormat}{!Icons.CodexEntryIncompleteIcon}  {#CodexChapterClearFormat}More is to be learned... {#CodexStandardFormat}"
+    }
+    {
+      Id = "Codex_Complete"
+      DisplayName = "\n {#CodexStandardFormat}{!Icons.CodexEntryCompleteIcon}{#CodexStandardFormat}"
+    }
+    {
+      Id = "Codex_ChthonicGodsChapter"
+      DisplayName = "The Unseen"
+    }
+    {
+      Id = "Codex_OlympianGodsChapter"
+      DisplayName = "The Olympians"
+    }
+    {
+      Id = "Codex_OtherDenizensChapter"
+      DisplayName = "The Rest"
+    }
+    {
+      Id = "Codex_EnemiesUWChapter"
+      DisplayName = "Stygian Dangers"
+    }
+    {
+      Id = "Codex_EnemiesSFChapter"
+      DisplayName = "Surface Threats"
+    }
+    {
+      Id = "Codex_WeaponsChapter"
+      DisplayName = "Nocturnal Arms"
+    }
+    {
+      Id = "Codex_FamiliarsChapter"
+      DisplayName = "Familiars"
+    }
+    {
+      Id = "Codex_BiomesChapter"
+      DisplayName = "Places of Interest"
+    }
+
+    {
+      Id = "Codex_ItemsChapter"
+      DisplayName = "Artifacts"
+    }
+    {
+      Id = "Codex_FishChapter"
+      DisplayName = "Fished Findings"
+    }
+    {
+      Id = "Codex_GiftChapter"
+      DisplayName = "Fables"
+    }
+    {
+      Id = "UnknownCodexChapter"
+      DisplayName = "Undiscovered"
+    }
+    {
+      Id = "Codex_EnemyStats",
+      DisplayName = "— vanquished: {#CodexVanquishedFormat}{$TempTextData.KillCount}"
+    }
+
+    /* BoonInfoScreen / BoonInfo Screen */
+
+    {
+      Id = "Codex_BoonInfo_Title"
+      DisplayName = "Boons of {$TempTextData.BoonName}"
+    }
+
+    {
+      Id = "Codex_BoonInfo_Title_Hammer"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+    {
+      Id = "Codex_BoonInfo_Title_Hammer_Staff"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+    {
+      Id = "Codex_BoonInfo_Title_Hammer_Dagger"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+    {
+      Id = "Codex_BoonInfo_Title_Hammer_Torch"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+    {
+      Id = "Codex_BoonInfo_Title_Hammer_Axe"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+    {
+      Id = "Codex_BoonInfo_Title_Hammer_Lob"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+    {
+      Id = "Codex_BoonInfo_Title_Hammer_Suit"
+      DisplayName = "{$TempTextData.WeaponName} Enchantments"
+    }
+
+    {
+      Id = "Codex_BoonInfo_Selene"
+      DisplayName = "Hexes of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Arachne"
+      DisplayName = "Garments of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Narcissus"
+      DisplayName = "Gifts of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Echo"
+      DisplayName = "Blessings of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Medea"
+      DisplayName = "Curses of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Circe"
+      DisplayName = "Fortunes of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Icarus"
+      DisplayName = "Inventions of {$TempTextData.BoonName}"
+    }
+    {
+      Id = "Codex_BoonInfo_Charon"
+      DisplayName = "Wares of {$TempTextData.BoonName}"
+    }
+
+    {
+      Id = "BoonInfo_BulletPoint"
+      DisplayName = "{!Icons.Bullet}{$TempTextData.TraitName}"
+    }
+    {
+      Id = "BoonInfo_BulletPoint_NoTraitName"
+      DisplayName = "{!Icons.Bullet}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "BoonInfo_Requirements"
+      DisplayName = "Offering Requirements"
+    }
+    {
+      Id = "BoonInfo_NoRequirements"
+      DisplayName = "(None In Particular)"
+    }
+    {
+      Id = "BoonInfo_OneOf_Singular"
+      DisplayName = "The Following:"
+    }
+    {
+      Id = "BoonInfo_OneOf"
+      DisplayName = "One of the Following:"
+    }
+    {
+      Id = "BoonInfo_TwoOf"
+      DisplayName = "Two of the Following:"
+    }
+    {
+      Id = "BoonInfo_LinkedGod_Header"
+      InheritFrom = "BoonInfo_OneOf"
+    }
+    {
+      Id = "BoonInfo_LinkedGod_Boon"
+      DisplayName = "{!Icons.Bullet}Any Boon of {$TempTextData.LinkedGod}"
+    }
+
+    {
+      Id = "BoonInfo_CountRequirement"
+      DisplayName = "{!Icons.Bullet}{$TempTextData.FinalKey}: {$TempTextData.Value}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "BoonInfo_CountRequirementIcon"
+      DisplayName = "{$TempTextData.Value}{!TempTextData.FinalKeyIcon}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "BoonInfo_Elements"
+      DisplayName = "Elements:"
+    }
+    {
+      Id = "BoonInfo_GodBoonRarities"
+      DisplayName = "Rarities:"
+    }
+    {
+      Id = "BoonInfo_HighestBaseElementCount"
+      DisplayName = "{$TempTextData.Value}{!Icons.EarthNoTooltip}, {$TempTextData.Value}{!Icons.WaterNoTooltip}, {$TempTextData.Value}{!Icons.AirNoTooltip}, or {$TempTextData.Value}{!Icons.FireNoTooltip}"
+    }
+    {
+      Id = "BoonInfo_NoneOf"
+      DisplayName = "None of the Following:"
+    }
+
+    {
+      Id = "BoonInfo_PageNumber"
+      DisplayName = "{$TempTextData.CurrentPageNum} {!Icons.Slash} {$TempTextData.NumPages}"
+    }
+    {
+      Id = "BoonInfo_ShowTooltips"
+      DisplayName = "{CF} SHOW TIPS"
+    }
+    {
+      Id = "BoonInfo_ShowRequirements"
+      DisplayName = "{CF} SHOW REQS"
+    }
+
+    /* AwardScreen / Keepsakes Screen / AwardMenu Screen */
+    {
+      Id = "AwardMenu_Title"
+      DisplayName = "Keepsakes"
+    }
+    {
+      Id = "AwardMenu_SubTitle"
+      DisplayName = "“Here, Even Mortal Companionship Can Be Eternal”"
+    }
+    {
+      Id = "Keepsake_Level_1"
+      DisplayName = "rank   {!Icons.AwardRank1}"
+    }
+    {
+      Id = "Keepsake_Level_2"
+      DisplayName = "rank   {!Icons.AwardRank2}"
+    }
+    {
+      Id = "Keepsake_Level_3"
+      DisplayName = "rank   {!Icons.AwardRank3}"
+    }
+    {
+      Id = "LegendaryKeepsake_Level_1"
+      DisplayName = "rank   {!Icons.LegendaryAwardRank1}"
+    }
+    {
+      Id = "LegendaryKeepsake_Level_2"
+      DisplayName = "rank   {!Icons.LegendaryAwardRank2}"
+    }
+    {
+      Id = "LegendaryKeepsake_Level_3"
+      DisplayName = "rank   {!Icons.LegendaryAwardRank3}"
+    }
+    {
+      Id = "LegendaryKeepsake_Level_4"
+      DisplayName = "rank   {!Icons.LegendaryAwardRank4}"
+    }
+    {
+      Id = "LegendaryKeepsake_Level_5"
+      DisplayName = "rank   {!Icons.LegendaryAwardRank5}"
+    }
+    {
+      Id = "Keepsake_Level_Progress"
+      DisplayName = "Clear {#BoldFormatGraft}{$TempTextData.Chambers} {#Prev}{$Keywords.Encounter} with this to {#BoldFormatGraft}rank up{#Prev}!"
+    }
+    {
+      Id = "Keepsake_Level_Progress_Few"
+      DisplayName = "Clear {#BoldFormatGraft}{$TempTextData.Chambers} {#Prev}{$Keywords.EncounterPlural} with this to {#BoldFormatGraft}rank up{#Prev}!"
+    }
+    {
+      Id = "Keepsake_Level_Progress_Many"
+      DisplayName = "Clear {#BoldFormatGraft}{$TempTextData.Chambers} {#Prev}{$Keywords.EncounterPlural} with this to {#BoldFormatGraft}rank up{#Prev}!"
+    }
+    {
+      Id = "Keepsake_Level_Progress_Other"
+      DisplayName = "Clear {#BoldFormatGraft}{$TempTextData.Chambers} {#Prev}{$Keywords.EncounterPlural} with this to {#BoldFormatGraft}rank up{#Prev}!"
+    }
+    {
+      Id = "Legendary_Keepsake_Level_Progress"
+      DisplayName = "Make an offering of {!Icons.SuperGiftPoints} to {#BoldFormatGraft}rank up{#Prev}!"
+    }
+    {
+      Id = "Keepsake_Level_Progress_Max"
+      DisplayName = " "
+    }
+    {
+      Id = "Equipped_Subtitle"
+      DisplayName = "Equipped!"
+    }
+    {
+      Id = "Keepsake_Blocked_Subtitle"
+      DisplayName = "Expired (for Now...)"
+    }
+    {
+      Id = "Hades_Keepsake_Blocked_Subtitle"
+      DisplayName = "Locked (Olympian Aid Chosen)"
+    }
+    {
+      Id = "NewTraitUnlocked_Subtitle"
+      DisplayName = "{$TempTextData.Gift}"
+    }
+    {
+      Id = "NewGiftPrefix"
+      DisplayName = "New!"
+    }
+    {
+      Id = "UnknownAward"
+      DisplayName = "(Empty Slot)"
+      Description = "Give someone a gift to earn this Keepsake."
+    }
+    {
+      Id = "UnknownLegendaryAward"
+      DisplayName = "(Secret Stash)"
+      Description = "Give someone {!Icons.SuperGiftPoints} to earn the Companion that goes here."
+    }
+    {
+      Id = "UnknownLegendaryAward_Hidden"
+      DisplayName = "(Secret Stash)"
+      Description = "Whatever this may contain remains to be discovered..."
+    }
+    {
+      Id = "UnknownLegendaryAward_Locked"
+      DisplayName = "(Secret Stash)"
+      Description = "The Companion that goes here is not yet available. \n\n {#ItalicFormatDark}Ongoing Underworld renovations are likely to blame for this limitation."
+    }
+    {
+      Id = "UnknownLegendaryAward_Locked_Hidden"
+      DisplayName = "(Secret Stash)"
+      Description = "Whatever this may contain is not yet available due to ongoing Underworld renovations. \n\n {#ItalicFormatDark}Ongoing Underworld renovations are likely to blame for this limitation."
+    }
+
+    /* GameStatsScreen / Archivist */
+    {
+      Id = "GameStatsScreen_Title"
+      DisplayName = "Archived Trivia"
+    }
+    {
+      Id = "GameStats_Weapons"
+      DisplayName = "Nocturnal Arms"
+    }
+    {
+      Id = "GameStats_Boons"
+      DisplayName = "Olympian Boons"
+    }
+    {
+      Id = "GameStats_WeaponUpgrades"
+      DisplayName = "Hammer Upgrades"
+    }
+    {
+      Id = "GameStats_Aspects"
+      DisplayName = "Alternate Aspects"
+    }
+    {
+      Id = "GameStats_Keepsakes"
+      DisplayName = "Special Keepsakes"
+    }
+    {
+      Id = "GameStatsScreen_Usage"
+      DisplayName = "Times Used"
+    }
+    {
+      Id = "GameStats_Missing"
+      DisplayName = "--"
+      OverwriteLocalization = true
+    }
+
+    /* RunHistoryScreen / Sage */
+    {
+      Id = "RunHistoryScreen_Title"
+      DisplayName = "Past Deeds"
+    }
+    {
+      Id = "RunHistoryScreen_RunName"
+      DisplayName = "{$TempTextData.RouteName} Night {$TempTextData.RunNum}"
+    }
+    {
+      Id = "RunHistoryScreen_Num"
+      DisplayName = "Night"
+    }
+    {
+      Id = "RunHistoryScreen_RouteF"
+      DisplayName = "{!Icons.UnderworldIcon}"
+    }
+    {
+      Id = "RunHistoryScreen_RouteN"
+      DisplayName = "{!Icons.SurfaceIcon}"
+    }
+    {
+      Id = "RunHistoryScreen_RouteBounty"
+      DisplayName = "{!Icons.ChaosIcon}"
+    }
+    {
+      Id = "RunHistoryScreen_RunErased"
+      DisplayName = "{#LockedFormat}Lost in Time..."
+    }
+    {
+      Id = "RunHistoryScreen_Cleared"
+      DisplayName = "{#RunHistorySuccessFormat}Prevailed!!"
+    }
+    {
+      Id = "RunHistoryScreenResult_Erebus"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.F.BaseF.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Oceanus"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.G.BaseG.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Fields"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.H.BaseH.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_ClockworkTartarus"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.I.BaseI.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Ephyra"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.N.BaseN.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Thessaly"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.O.BaseO.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Olympus"
+      DisplayName = "Failed on {#RunHistoryFailureFormat}{$RoomSetData.P.BaseP.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Q"
+      DisplayName = "Failed on {#RunHistoryFailureFormat}{$RoomSetData.Q.BaseQ.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Anomaly"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.Anomaly.BaseAnomaly.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Secret"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.Chaos.BaseChaos.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_Elysium"
+      DisplayName = "Failed in {#RunHistoryFailureFormat}{$RoomSetData.C.C_Boss01.SaveProfileLocationText}{#Prev}"
+    }
+    {
+      Id = "RunHistoryScreenResult_BountyFailed"
+      DisplayName = "{#RunHistoryFailureFormat}Failed"
+    }
+    {
+      Id = "RunHistoryScreenResult_BountyCleared"
+      DisplayName = "{#RunHistorySuccessFormat}Cleared!"
+    }
+    {
+      Id = "RunHistoryScreenResult_UnknownFail"
+      InheritFrom = "RunHistoryScreenResult_BountyFailed"
+    }
+    {
+      Id = "RunHistoryScreen_PackagedBounty"
+      DisplayName = "- {$TooltipData.BountyName} -"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "RunHistoryScreen_Weapon"
+      DisplayName = "Weapon"
+    }
+    {
+      Id = "RunHistoryScreen_Keepsake"
+      DisplayName = "Keepsake"
+    }
+    {
+      Id = "RunHistoryScreen_KeepsakePlural"
+      DisplayName = "Keepsakes"
+    }
+    {
+      Id = "RunHistoryScreen_Assist"
+      DisplayName = "Familiar"
+    }
+
+    /* RunClearScreen / Victory Screen */
+    {
+      Id = "RunClearScreen_Title"
+      DisplayName = "V i c t o r y !"
+    }
+    {
+      Id = "RunClearScreen_Title_Surface"
+      DisplayName = "G l o r y !"
+    }
+    {
+      Id = "RunClearScreen_EasyModeLevel"
+      DisplayName = "{!Icons.EasyModeIcon}"
+    }
+    {
+      Id = "RunClearScreen_ClearTime"
+      DisplayName = "Clear Time:"
+    }    
+    {
+      Id = "RunClearScreen_RunStats"
+      DisplayName = "Results"
+    }
+    {
+      Id = "RunClearScreen_ClearTimeRecord"
+      DisplayName = "Best Time:"
+    }
+    {
+      Id = "RunClearScreen_ShrinePoints"
+      DisplayName = "{!Icons.ShrinePoint} Used:"
+    }
+    {
+      Id = "RunClearScreen_ShrinePointsRecord"
+      DisplayName = "{!Icons.ShrinePoint} Best:"
+    }
+    {
+      Id = "RunClearScreen_DamageDealt"
+      DisplayName = "Most Damage Inflicted"
+    }
+    {
+      Id = "RunClearScreen_DamageDealtAllies"
+      DisplayName = "Allies"
+    }
+    {
+      Id = "RunClearScreen_DamageTaken"
+      DisplayName = "Most Damage Suffered"
+    }
+
+    {
+      Id = "RunClearScreen_TotalClears"
+      DisplayName = "Total Clears:"
+    }
+    {
+      Id = "RunClearScreen_ClearStreak"
+      DisplayName = "Current Streak:"
+    }
+    {
+      Id = "RunClearScreen_ClearStreakRecord"
+      DisplayName = "Best Streak:"
+    }
+    {
+      Id = "RunClearScreen_NewRecord"
+      DisplayName = "New Record!"
+    }
+    {
+      Id = "RunClearScreen_Header_Weapon"
+      DisplayName = "Weapon"
+    }
+    {
+      Id = "RunClearScreen_Header_Clears"
+      DisplayName = "Clears"
+    }
+    {
+      Id = "RunClearScreen_Header_RecordClearTime_Underworld"
+      DisplayName = "{!Icons.UnderworldIcon}"
+    }
+    {
+      Id = "RunClearScreen_Header_RecordShrinePoints_Underworld"
+      DisplayName = "{!Icons.UnderworldFearIcon}"
+    }
+    {
+      Id = "RunClearScreen_Header_RecordClearTime_Surface"
+      DisplayName = "{!Icons.SurfaceIcon}"
+    }
+    {
+      Id = "RunClearScreen_Header_RecordShrinePoints_Surface"
+      DisplayName = "{!Icons.SurfaceFearIcon}"
+    }
+
+    /* Victory Screen Weapon Data / Projectile Names / Weapon Names */
+    {
+      Id = "HeroSkyTouchdown"
+      DisplayName = "Olympic Slam"
+    }
+    {
+      Id = "WeaponMorphedAttack"
+      DisplayName = "Sheep Strike"
+    }
+    {
+      Id = "WeaponMorphedAttack_Pig"
+      DisplayName = "Pig Rush"
+    }
+    {
+      Id = "WeaponMorphedAttack_Rat"
+      DisplayName = "Rat Scratch"
+    }
+
+    /* Music Player / Bard Shade */
+
+    {
+      Id = "Menu_MusicPlayerPurchase"
+      DisplayName = "{SL} UNLOCK"
+    }
+    {
+      Id = "Menu_MusicPlayerPlay"
+      DisplayName = "{SL} PERFORM"
+    }
+    {
+      Id = "Menu_MusicPlayerPause"
+      DisplayName = "{SL} CEASE"
+    }
+    {
+      Id = "Menu_MusicPlayerShuffle"
+      DisplayName = "{CF} RANDOMIZE"
+    }
+
+    /* Run Cleared Messages / Victory Screen Messages / Commendations / Run Commendations */
+    {
+      Id = "ClearRequiredTraitsZeus"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Zeus{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsHera"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Hera{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsPoseidon"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Poseidon{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsApollo"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Apollo{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsDemeter"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Demeter{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsAphrodite"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Aphrodite{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsHephaestus"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Hephaestus{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsHestia"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Hestia{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsHermes"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Hermes{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsAres"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hand of Ares{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredTraitsChaos"
+      DisplayName = "{!Icons.RunClearDotsLeft}Agent of Chaos{!Icons.RunClearDotsRight}"
+    }
+
+    {
+      Id = "ClearUnderworldNumOne"
+      DisplayName = "{!Icons.RunClearDotsLeft}Titan Slayer{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearUnderworldNumTen"
+      DisplayName = "{!Icons.RunClearDotsLeft}Ten Times{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearUnderworldNumFifty"
+      DisplayName = "{!Icons.RunClearDotsLeft}Fifty Times{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearUnderworldNumOneHundred"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hundred Times{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearUnderworldNumTwoFifty"
+      DisplayName = "{!Icons.RunClearDotsLeft}Two-Fifty Times{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearUnderworldNumFiveHundred"
+      DisplayName = "{!Icons.RunClearDotsLeft}Five-Hundred Times{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSurfaceNumOne"
+      DisplayName = "{!Icons.RunClearDotsLeft}Surface Scourer{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSurfaceNumTen"
+      DisplayName = "{!Icons.RunClearDotsLeft}Ten Ascents{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSurfaceNumFifty"
+      DisplayName = "{!Icons.RunClearDotsLeft}Fifty Ascents{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSurfaceNumOneHundred"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hundred Ascents{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSurfaceNumTwoFifty"
+      DisplayName = "{!Icons.RunClearDotsLeft}Two-Fifty Ascents{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSurfaceNumFiveHundred"
+      DisplayName = "{!Icons.RunClearDotsLeft}Five Hundred Ascents{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearNearDeath"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hair's Breadth{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearFullHealth"
+      DisplayName = "{!Icons.RunClearDotsLeft}In Perfect Health{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighArmor"
+      DisplayName = "{!Icons.RunClearDotsLeft}Heavy Armor{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearTimeFast"
+      DisplayName = "{!Icons.RunClearDotsLeft}Quick Silver{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearTimeVeryFast"
+      DisplayName = "{!Icons.RunClearDotsLeft}Faster Than Darkness{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearTimeSlow"
+      DisplayName = "{!Icons.RunClearDotsLeft}Meticulous Planner{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearMoneyNone"
+      DisplayName = "{!Icons.RunClearDotsLeft}{$ConstantsData.OneHundred}% Gold-Free{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearMoneyHigh"
+      DisplayName = "{!Icons.RunClearDotsLeft}Swimming in Gold{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearAllUnderworldStoryRooms"
+      DisplayName = "{!Icons.RunClearDotsLeft}Friends In Low Places{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearAllSurfaceStoryRooms"
+      DisplayName = "{!Icons.RunClearDotsLeft}Friends In High Places{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearAllUnderworldReprieveRooms"
+      DisplayName = "{!Icons.RunClearDotsLeft}Fountain Finder Award{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighMaxHealth"
+      DisplayName = "{!Icons.RunClearDotsLeft}Thick-Skinned{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearSynergyTraits"
+      DisplayName = "{!Icons.RunClearDotsLeft}Dynamic Duos{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearLegendaryTraits"
+      DisplayName = "{!Icons.RunClearDotsLeft}Pride of Olympus{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredIntactArachneDress"
+      DisplayName = "{!Icons.RunClearDotsLeft}Silk-Saver{!Icons.RunClearDotsRight}"
+    }
+    
+    {
+      Id = "ClearNoOlympianBoons"
+      DisplayName = "{!Icons.RunClearDotsLeft}Godless Goddess{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighSacrificeBoons"
+      DisplayName = "{!Icons.RunClearDotsLeft}Sacrifice Savant{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighMaxMana"
+      DisplayName = "{!Icons.RunClearDotsLeft}Mistress of Magick{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighSpentLastStands"
+      DisplayName = "{!Icons.RunClearDotsLeft}Death Defier{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearElementalTraits"
+      DisplayName = "{!Icons.RunClearDotsLeft}Mega-Infused{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighOlympianBoons"
+      DisplayName = "{!Icons.RunClearDotsLeft}Family Gatherer{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearNoNPCs"
+      DisplayName = "{!Icons.RunClearDotsLeft}Without Comrades{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighFear"
+      DisplayName = "{!Icons.RunClearDotsLeft}Terrifying Night{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearRequiredIntactIcarusArmor"
+      DisplayName = "{!Icons.RunClearDotsLeft}Custom Coated{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighHammerCount"
+      DisplayName = "{!Icons.RunClearDotsLeft}Hammer Hoarder{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearLowMetaUpgradeTraits"
+      DisplayName = "{!Icons.RunClearDotsLeft}Who Needs Arcana?{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearHighMetaUpgradeTraits"
+      DisplayName = "{!Icons.RunClearDotsLeft}Full Arcana{!Icons.RunClearDotsRight}"
+    }
+    {
+      Id = "ClearNoDamageTakenFromBosses"
+      DisplayName = "{!Icons.RunClearDotsLeft}Untouchable{!Icons.RunClearDotsRight}"
+    }
+
+    /* Shrine / Shrine Screen / Shrine Upgrades / Oath of the Unseen */
+    {
+      Id = "UseShrineObject"
+      DisplayName = "{I} Kneel"
+    }
+    {
+      Id = "UseOrSpecialShrineObject"
+      DisplayName = "{I} Kneel\n {SI} Salute"
+    }
+    {
+      Id = "ShrineIntro"
+      DisplayName = "The Oath"
+      Description = """
+      {#AlertItalicFormat}Salutations! {#Prev}You are worthy of the {#AlertHeaderFormat}Oath of the Unseen{#Prev}, and may now enact the {#AlertHighlightFormat}{$Keywords.Bounties} of Night{#Prev}, if you dare. Thus it is done:
+
+      · Activate various {#AlertHighlightFormat}Vows {#Prev}to raise {!Icons.ShrinePoint}{#AlertBoldFormat}Fear{#Prev}, a measure of adversity.
+
+      · Then, pursue the marked {#BoldFormat}{$Keywords.Boss} {#Prev}using the specified weapon.
+
+      · Prevail, and earn {!Icons.WeaponPointsRare}{#AlertBoldFormat}Nightmare {#Prev}for upgrades in the {#AlertBoldFormat}Silver Pool{#Prev}.
+
+      Many {#AlertHighlightFormat}Vows {#Prev}can be intensified to raise {!Icons.ShrinePoint}{#AlertBoldFormat}Fear {#Prev}even more, though you are also free to rescind {#AlertHighlightFormat}Vows {#Prev}without consequence. Your continued service to the realm is appreciated either way.
+
+      {!Icons.DivLong}
+
+      {#AlertItalicFormat}Hint: {#Prev}Enact available {#AlertHighlightFormat}{$Keywords.Bounties} {#Prev}to reveal more. If one proves to be a struggle, you may switch weapons to attempt another!
+    """
+    }
+    {
+      Id = "ShrineScreen_BountyHeader"
+      DisplayName = "{$Keywords.Bounties} ({$TempTextData.Completed} {!Icons.Slash} {$TempTextData.Total})"
+    }
+    {
+      Id = "ShrineMenu_Flavor"
+      DisplayName = "“A Healthy Fear Keeps Gods and Mortals Well in Check”"
+    }
+    {
+      Id = "ShrineMenu_Info"
+      DisplayName = "Info"
+    }
+    {
+      Id = "ShrineScreen_NextRankPoints"
+      DisplayName = "+{$TempTextData.NextRankPoints}{!Icons.ShrinePoint}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShrineScreen_BountyShrinePoints"
+      DisplayName = "{$TempTextData.RequiredShrinePoints}{!Icons.ShrinePoint}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShrineScreen_RankMaxed"
+      DisplayName = "MAX"
+    }
+    {
+      Id = "ShrineScreen_Activate"
+      DisplayName = "{SL} ACTIVATE"
+    }
+    {
+      Id = "ShrineScreen_RankUp"
+      DisplayName = "{SL} INTENSIFY"
+    }
+    {
+      Id = "ShrineScreen_RankDown"
+      DisplayName = "{RD} RESCIND"
+    }
+    {
+      Id = "ShrineScreen_ResetAll"
+      DisplayName = "{ML} RESET"
+    }
+    {
+      Id = "ShrineScreen_UpgradeMaxed"
+      DisplayName = "max"
+    }
+    {
+      Id = "ShrineScreen_BountyProgress"
+      DisplayName = "{#LockedFormat}Enacted: {#Prev}{#BoldFormat}{$TempTextData.Completed} {!Icons.Slash} {$TempTextData.Total}"
+    }
+    {
+      Id = "ShrineScreen_ActivePoints"
+      DisplayName = "{$GameState.SpentShrinePointsCache}{!Icons.ShrinePoint}"
+    }
+    {
+      Id = "ShrineScreen_SkellyHeader"
+      DisplayName = "Become {#VowScreenNightsChampion}Night's Champion{#Prev}!"
+    }
+    {
+      Id = "ShrineScreen_SkellyHeader_Complete"
+      DisplayName = "We Salute {#VowScreenNightsChampion}Night's Champion{#Prev}!"
+    }
+    {
+      Id = "ShrineScreen_SkellyStatueSurface_Incomplete"
+      DisplayName = "Conquer the {#BoldFormatGraft}Surface {#Prev}— {#ShrineHighlightFormat}{$ActiveScreens.Shrine.NextSurfaceSkellyShrinePointGoal}{!Icons.ShrinePoint}"
+    }
+    {
+      Id = "ShrineScreen_SkellyStatueSurface_Insufficient"
+      DisplayName = "Conquer the {#BoldFormatGraft}Surface {#Prev}— {#ShrineHighlightInsufficientFormat}{$ActiveScreens.Shrine.NextSurfaceSkellyShrinePointGoal}{!Icons.ShrinePoint}"
+    }
+    {
+      Id = "ShrineScreen_SkellyStatueSurface_Complete"
+      InheritFrom = "ShrineScreen_SkellyStatueSurface_Incomplete"
+    }
+    {
+      Id = "ShrineScreen_SkellyStatueUnderworld_Incomplete"
+      DisplayName = "Conquer the {#BoldFormatGraft}Underworld {#Prev}— {#ShrineHighlightFormat}{$ActiveScreens.Shrine.NextUnderworldSkellyShrinePointGoal}{!Icons.ShrinePoint}"
+    }
+    {
+        Id = "ShrineScreen_SkellyStatueUnderworld_Insufficient"
+        DisplayName = "Conquer the {#BoldFormatGraft}Underworld {#Prev}— {#ShrineHighlightInsufficientFormat}{$ActiveScreens.Shrine.NextUnderworldSkellyShrinePointGoal}{!Icons.ShrinePoint}"
+    }
+    {
+      Id = "ShrineScreen_SkellyStatueUnderworld_Complete"
+      InheritFrom = "ShrineScreen_SkellyStatueUnderworld_Incomplete"
+    }
+
+    {
+      Id = "ShrineScreen_NoBountyAvailable"
+      DisplayName = "The will of Night is done."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_CurrentWeapon"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. The {$TempTextData.WeaponName}, on the other hand..."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_Staff"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. But the {$TempTextData.WeaponName} stirs..."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_Dagger"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. But the {$TempTextData.WeaponName} shine..."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_Torch"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. But the {$TempTextData.WeaponName} flare..."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_Axe"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. But the {$TempTextData.WeaponName} hungers..."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_Lob"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. But the {$TempTextData.WeaponName} leers..."
+    }
+    {
+      Id = "ShrineScreen_NoBountyAvailable_Suit"
+      DisplayName = "No {$Keywords.Bounties} for your current weapon. But the {$TempTextData.WeaponName} thrums..."
+    }
+    {
+      Id = "ShrineScreen_BountyAvailable_ZeroPoints"
+      DisplayName = "Activate Vows to mark a {$Keywords.Bounty}."
+    }
+  	{
+  	  Id = "ShrineScreen_BountyAvailable_BelowPoints"
+  	  DisplayName = "More {$Keywords.ShrinePoints} required for the next {$Keywords.Bounty}."
+  	}
+    {
+  	  Id = "ShrineScreen_BountyAvailable_ExactPoints"
+  	  DisplayName = "{$Keywords.Bounty} marked. Enact it, and earn Night's reward."
+  	}
+    {
+  	  Id = "ShrineScreen_BountyAvailable_ExcessPoints1"
+  	  DisplayName = "{$Keywords.Bounty} marked. {$Keywords.ShrinePoints} exceeds the requirement."
+  	}
+    {
+  	  Id = "ShrineScreen_BountyAvailable_ExcessPoints2"
+      DisplayName = "{$Keywords.Bounty} marked. {$Keywords.ShrinePoints} exceeds the requirement by a lot."
+  	}
+    {
+  	  Id = "ShrineScreen_BountyAvailable_ExcessPoints3"
+      DisplayName = "{$Keywords.Bounty} marked. {$Keywords.ShrinePoints} exceeds the requirement, not that you care."
+  	}
+    {
+      Id = "ShrineScreen_BountyAvailable_MaxPoints"
+      DisplayName = "{$Keywords.Bounty} marked. {$Keywords.ShrinePoints} is for the weak, is that what you think?"
+    }
+
+    /* WellShop / Well Shop */
+    {
+      Id = "WellShop_Title"
+      DisplayName = "Well of Charon"
+    }
+    {
+      Id = "UseWell_Unlocked"
+      DisplayName = "{I} Shop"
+    }
+    {
+      Id = "UseWell_Locked"
+      DisplayName = "{I} {#UseTextDisabledFormat}Shop?"
+    }
+    {
+      Id = "UseStore"
+      DisplayName = "{I} Shop"
+    }
+
+    {
+      Id = "WellShop_FlavorText01"
+      DisplayName = "not even the ravages of time can spoil the boatman's quality goods."
+    }
+    {
+      Id = "WellShop_FlavorText02"
+      DisplayName = "the boundless riches of the underworld are never simple to secure."
+    }
+    {
+      Id = "WellShop_FlavorText03"
+      DisplayName = "the deathless boatman of the river styx yet plies his ancient trade."
+    }
+
+    /* Sell Trait Shop / SellTrait Shop / Trait Shop */
+    {
+      Id = "UseTraitShop_Unlocked"
+      DisplayName = "{I} Sell"
+    }
+    {
+      Id = "UseTraitShop_Locked"
+      DisplayName = "{I} {#UseTextDisabledFormat}Sell?"
+    }
+    {
+      Id = "SellTrait_Title"
+      DisplayName = "Pool of Purging"
+    }
+    {
+      Id = "SellTraitPrefix"
+      DisplayName = "Purge"
+    }
+    {
+      Id = "Sell_ItemCost"
+      DisplayName = "+{$TempTextData.Amount} {!Icons.Currency}"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "SellTrait_Hint"
+      DisplayName = "sacrifice your boons in exchange for {!Icons.Currency}."
+    }
+
+    {
+      Id = "SellTrait_FlavorText01"
+      DisplayName = "one can free oneself from even the most compelling influences."
+    }
+    {
+      Id = "SellTrait_FlavorText02"
+      DisplayName = "the will of the olympians is tenuous, at best, within the underworld."
+    }
+    {
+      Id = "SellTrait_FlavorText03"
+      DisplayName = "the gift of the gods is worth a tidy sum in the land of the dead."
+    }
+
+    /* Surface Shop */
+    {
+      Id = "SurfaceShop_Title"
+      DisplayName = "Shrine of Hermes"
+    }
+    {
+      Id = "Store_Hint"
+      DisplayName = "upon retreat, all {!Icons.Currency} will be lost. all sales final."
+    }
+    {
+      Id = "PendingDeliveryDuration"
+      DisplayName = "{#LockedFormat}In Stock. {#Prev}{#PropertyFormat}Delivered after {#BoldFormat}{$TempTextData.Delay} {#Prev}{$Keywords.Encounter}."
+    }
+    {
+      Id = "SpeedUpDelivery"
+      DisplayName = "{#LegendaryFormat}Ordered! {#Prev}{#PropertyFormat}Arriving after {#BoldFormat}{$TempTextData.Delay} {$Keywords.Encounter}{#Prev}, or Pay Extra to Get It {#BoldFormatGraft}Now{#Prev}!!"
+    }
+
+  ]
+}

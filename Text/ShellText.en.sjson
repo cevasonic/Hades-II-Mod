@@ -1,0 +1,2728 @@
+﻿{
+  lang = "en"
+  Texts =
+  [
+    /* Shell Screens / Main Menu */
+    {
+      Id = "MainMenuScreen_PlayGame"
+      DisplayName = "Play"
+    }
+    {
+      Id = "MainMenuScreen_CloudSave"
+      DisplayName = "Cross-Saves"
+    }
+    {
+      Id = "MainMenuScreen_Settings"
+      DisplayName = "Options"
+    }
+    {
+      Id = "MainMenuScreen_Controls"
+      DisplayName = "Controls"
+    }
+    {
+      Id = "MainMenuScreen_Quit"
+      DisplayName = "Quit"
+    }
+
+    /* Main Menu - External Links */
+    {
+      Id = "MainMenuScreen_Discord"
+      DisplayName = "Discord"
+    }
+    {
+      Id = "MainMenuScreen_Website"
+      DisplayName = "Website"
+    }
+    {
+      Id = "MainMenuScreen_Soundtrack"
+      DisplayName = "Soundtrack"
+    }
+    {
+      Id = "MainMenuScreen_MailingList"
+      DisplayName = "Mailing List"
+    }
+    {
+      Id = "MainMenuScreen_RoadmapLabel"
+      DisplayName = "Roadmap"
+    }
+
+    /* Profile Screen */
+    {
+      Id = "ProfileScreen_Title"
+      DisplayName = "PLAY"
+    }
+    {
+      Id = "ProfileScreen_ContinueGame"
+      DisplayName = "Continue"
+    }
+    {
+      Id = "ProfileScreen_StartNewGame"
+      DisplayName = "New Game"
+    }
+    {
+      Id = "ProfileScreen_ResetGame"
+      DisplayName = "Clear This Save Slot?"
+      Description = "Any progress will be overwritten once you start a new game and your progress is saved."
+    }
+    {
+      Id = "ProfileScreen_InProgressSave_LastPlayed"
+      DisplayName = "updated: \n {#NameHighlightFormat}"
+    }
+    {
+      Id = "ProfileScreen_InProgressSave_Location"
+      DisplayName = "region: \n {#NameHighlightFormat}"
+    }
+    {
+      Id = "ProfileScreen_InProgressSave_CompletedRuns"
+      DisplayName = "nights: \n {#NameHighlightFormat}"
+    }
+    {
+      Id = "ProfileScreen_InProgressSave_TotalMemPoints"
+      DisplayName = "grasp: \n {#NameHighlightFormat}"
+    }
+    {
+      Id = "ProfileScreen_InProgressSave_TotalCosmeticsPoints"
+      DisplayName = "kudos: \n {#NameHighlightFormat}"
+    }
+  	{
+      Id = "ProfileScreen_InProgressSave_EasyMode"
+      DisplayName = "@GUI\\Shell\\EasyMode {#SpecialMenuSettingLightFormat}God Mode"
+    }
+    {
+      Id = "ProfileScreen_EmptySave"
+      DisplayName = "( Empty Save Slot )"
+    }
+    {
+      Id = "ProfileScreen_Hint"
+      DisplayName = "choose a save slot — progress saves whenever @GUI\\Icons\\LoadingSymbol_01 appears"
+    }
+    {
+      Id = "ProfileScreen_InstructionHint_Cloud"
+      DisplayName = "cross-saves enabled — select 'sync & quit' from pause menu to upload"
+    }
+    
+    /* SettingsMenuScreen / Settings Screen */
+    {
+      Id = "SettingsMenuScreen_Settings"
+      DisplayName = "Settings"
+    }
+    {
+      Id = "SettingsMenuScreen_DisplaySettings"
+      DisplayName = "Resolution"
+    }
+    {
+      Id = "SettingsMenuScreen_KeyMapping"
+      DisplayName = "Controls"
+    }
+    {
+      Id = "SettingsMenuScreen_AboutUs"
+      DisplayName = "Credits"
+    }
+    {
+      Id = "SettingsMenuScreen_Language"
+      DisplayName = "Languages"
+    }
+
+    /* Pause Screen */
+    {
+      Id = "PauseScreen_Title"
+      DisplayName = "Paused"
+    }
+    {
+      Id = "PauseScreen_Resume"
+      DisplayName = "Continue"
+      Description = "close this screen and proceed."
+    }
+    {
+      Id = "PauseScreen_LoadCheckpoint"
+      DisplayName = "Load Checkpoint"
+      Description = "return to the last point progress was saved?"
+    }
+    {
+      Id = "PauseScreen_Settings"
+      DisplayName = "Options"
+      Description = "adjust audio, toggle god mode, and more."
+    }
+    {
+      Id = "PauseScreen_DisplaySettings"
+      DisplayName = "Resolution"
+      Description = "set screen resolution and more."
+    }
+    {
+      Id = "PauseScreen_Controls"
+      DisplayName = "Controls"
+      Description = "remap controls and more."
+    }
+    {
+      Id = "PauseScreen_Abandon"
+      DisplayName = "Undo Night"
+    }
+    {
+      Id = "PauseScreen_Exit"
+      DisplayName = "Quit"
+    }
+    {
+      Id = "PauseScreen_Exit_Alt"
+      DisplayName = "Quit to Main Menu"
+    }
+    {
+      Id = "PauseScreen_Exit_CrossSaves"
+      DisplayName = "Sync & Quit"
+    }
+  	{
+      Id = "PauseScreen_GiveUp_ValidCheckpoint"
+      DisplayName = "pretend this night never happened?"
+    }
+    {
+      Id = "PauseScreen_GiveUp_DeathArea"
+      DisplayName = "the night is young and cannot be undone."
+    }
+    {
+      Id = "PauseScreen_ValidCheckpoint_Recent"
+      DisplayName = "progress saved less than a minute ago."
+    }
+    {
+      Id = "PauseScreen_ValidCheckpoint"
+      DisplayName = "progress saved "
+    }
+    {
+      Id = "PauseScreen_InvalidCheckpoint"
+      DisplayName = "clear this encounter to safely quit!"
+    }
+    {
+      Id = "PauseScreen_InvalidCheckpoint_RewardAvailable"
+      DisplayName = "collect reward to safely quit!"
+    }
+    {
+      Id = "PauseScreen_InvalidCheckpoint_EncounterClear"
+      DisplayName = "proceed to the next location to safely quit!"
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_ValidCheckpoint_Recent"
+      DisplayName = "Quit for Now?"
+      Description = "You will return to the Main Menu, and may then resume your task from this same Location. \n \n Progress saved less than a minute ago."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_ValidCheckpoint"
+      DisplayName = "Quit for Now?"
+      Description = "You will return to the Main Menu, and may then resume your task from this same Location. \n \n Progress saved "
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_ValidCheckpoint_HasCloudSaves_Recent"
+      DisplayName = "Sync Save Data & Quit"
+      Description = "Upload current progress to the cloud and return to the Main Menu? You will be able to continue from this point. \n\n Progress saved less than a minute ago."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_ValidCheckpoint_HasCloudSaves"
+      DisplayName = "Sync Save Data & Quit"
+      Description = "Upload current progress to the cloud and return to the Main Menu? You will be able to continue from here. \n\n Progress saved "
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_LastSaveSingular"
+      DisplayName = " minute ago."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_LastSavePlural"
+      DisplayName = " minutes ago."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_LastSavePluralHours"
+      DisplayName = " hours ago."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_LastSavePluralDays"
+      DisplayName = " days ago."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_InvalidCheckpoint"
+      DisplayName = "Undo This Night?"
+      Description = "{#ExitConfirmWarningFormat}BEWARE: {#Prev}You will return to the Main Menu, and any progress since you last left the Crossroads will be lost. \n\n Your task will resume from that point."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_InvalidCheckpointFirstRun"
+      DisplayName = "Quit Without Saving?"
+      Description = "{#ExitConfirmWarningFormat}BEWARE: {#Prev}You will return to the Main Menu, and all your progress will be lost."
+    }
+    {
+      Id = "PauseScreen_ExitConfirm_AbandonWhileQuitAvailable"
+      InheritFrom = "PauseScreen_ExitConfirm_InvalidCheckpoint"
+    }
+
+    /* Key Mappings Screen / Controls Screen */
+    {
+      Id = "KeyMappingScreen_Title"
+      DisplayName = "Controls"
+    }
+    {
+      Id = "ControlScheme_Mouse"
+      DisplayName = "Mouse Config"
+    }
+    {
+      Id = "ControlScheme_WASD"
+      DisplayName = "Keyboard Config"
+    }
+    {
+      Id = "ControlScheme_GamePad"
+      DisplayName = "Controller Config"
+    }
+    {
+      Id = "KeyMappingScreen_MouseMoveDefaults"
+      DisplayName = "Mouse Defaults"
+    }
+    {
+      Id = "KeyMappingScreen_KeyboardMoveDefaults"
+      DisplayName = "WASD Defaults"
+    }
+    {
+      Id = "KeyMappingScreen_GamepadDefaults"
+      DisplayName = "Defaults"
+    }
+    {
+      Id = "KeyMappingScreen_UnmappedControl"
+      DisplayName = "Unmapped Controls"
+      Description = "At least one control currently is not mapped to any input: \n\n"
+    }
+    {
+      Id = "MoveUp"
+      DisplayName = "Move Up"
+    }
+    {
+      Id = "MoveDown"
+      DisplayName = "Move Down"
+    }
+    {
+      Id = "MoveLeft"
+      DisplayName = "Move Left"
+    }
+    {
+      Id = "MoveRight"
+      DisplayName = "Move Right"
+    }
+    {
+      Id = "Attack2"
+      DisplayName = "Attack"
+    }
+    {
+      Id = "Attack1"
+      DisplayName = "Cast"
+    }
+    {
+      Id = "Attack3"
+      DisplayName = "Special"
+    }
+    {
+      Id = "Reload"
+      DisplayName = "Reload"
+    }
+    {
+      Id = "Shout"
+      DisplayName = "Hex"
+    }
+    {
+      Id = "Assist"
+      DisplayName = "Assist"
+    }
+    {
+      Id = "Rush"
+      DisplayName = "Dash"
+    }
+    {
+      Id = "Use"
+      DisplayName = "Interact"
+    }
+    {
+      Id = "Codex"
+      DisplayName = "Book of Shadows"
+    }
+    {
+      Id = "Inventory"
+      DisplayName = "Inventory"
+    }
+    {
+      Id = "ItemPin"
+      DisplayName = "Forget-Me-Not"
+    }
+    {
+      Id = "ReportFeedback"
+      DisplayName = "Report Bug"
+    }
+    {
+      Id = "TakeScreenshot"
+      DisplayName = "Screenshot"
+    }
+    {
+      Id = "AdvancedTooltip"
+      DisplayName = "Boon Info"
+    }
+    {
+      Id = "Gift"
+      DisplayName = "Gift"
+    }
+    {
+      Id = "SpecialInteract"
+      DisplayName = "Salute"
+    }
+    {
+      Id = "Reroll"
+      DisplayName = "Alter"
+    }
+    {
+      Id = "Rarify"
+      DisplayName = "Rarify"
+    }
+    {
+      Id = "Select"
+      DisplayName = "Select"
+    }
+    {
+      Id = "Cancel"
+      DisplayName = "Cancel"
+    }
+    {
+      Id = "MenuLeft"
+      DisplayName = "Tab Left"
+    }
+    {
+      Id = "MenuRight"
+      DisplayName = "Tab Right"
+    }
+    {
+      Id = "ExorcismLeft"
+      DisplayName = "Compel Left"
+    }
+    {
+      Id = "ExorcismRight"
+      DisplayName = "Compel Right"
+    }
+    {
+      Id = "Emote"
+      DisplayName = "Quip"
+    }
+    {
+      Id = "Menu_PressAnyKey"
+      DisplayName = "Press Any Key or Button"
+    }
+    {
+      Id = "Menu_PressAnyButton"
+      DisplayName = "Press Any Button"
+    }
+
+    /* Misc. Settings Screen */
+    {
+      Id = "SettingsScreen_Options"
+      DisplayName = "Options"
+    }
+    {
+      Id = "MiscSettingsScreen_RequiresRestartWarning"
+      DisplayName = "Notice: Settings Updated"
+      Description = "You may need to quit out and restart the game for some changes to take effect."
+    }
+    {
+      Id = "CloudSettingsScreen_Title"
+      DisplayName = "Cross-Saves"
+    }
+    {
+      Id = "SettingsMenuScreen_Title"
+      DisplayName = "Options"
+    }
+
+    /* Settings Categories */
+    {
+      Id = "MiscSettingsScreen_GameplayOptions"
+      DisplayName = "Gameplay"
+    }
+    {
+      Id = "MiscSettingsScreen_AudioOptions"
+      DisplayName = "Audio"
+    }
+    {
+      Id = "MiscSettingsScreen_ControlsOptions"
+      DisplayName = "Controls"
+    }
+    {
+      Id = "MiscSettingsScreen_DisplayOptions"
+      DisplayName = "Display"
+    }
+    {
+      Id = "MiscSettingsScreen_InterfaceOptions"
+      DisplayName = "Interface"
+    }
+    {
+      Id = "MiscSettingsScreen_LanguageOptions"
+      DisplayName = "Language"
+    }
+    {
+      Id = "MiscSettingsScreen_CreditsOptions"
+      DisplayName = "Credits"
+    }
+    {
+      Id = "MiscSettingsScreen_EditorOptions"
+      DisplayName = "Editor"
+    }
+    {
+      Id = "MiscSettingsScreen_GraphicsOptions"
+      DisplayName = "Graphics"
+    }
+    {
+      Id = "MiscSettingsScreen_AccessibilityOptions"
+      DisplayName = "Accessibility"
+    }
+    {
+      Id = "MiscSettingsScreen_PerformanceOptions"
+      DisplayName = "Performance"
+    }
+    {
+      Id = "MiscSettingsScreen_LoggingOptions"
+      DisplayName = "Logging"
+    }
+    {
+      Id = "MiscSettingsScreen_SavesOptions"
+      DisplayName = "Saves"
+    }
+    {
+      Id = "MiscSettingsScreen_CheatsOptions"
+      DisplayName = "Cheats"
+    }
+    {
+      Id = "MiscSettingsScreen_OverlayOptions"
+      DisplayName = "Overlays"
+    }
+    {
+      Id = "MiscSettingsScreen_DebugOptions"
+      DisplayName = "Debug"
+    }
+    {
+      Id = "MiscSettingsScreen_RestoreDefaults"
+      DisplayName = "{MX} RESET"
+      Description = "Restore the default settings for any options in this sub-menu."
+    }
+    {
+      Id = "MiscSettingsScreen_Back"
+      DisplayName = "{CN} RETURN"
+    }
+    {
+      Id = "MiscSettingsScreen_Exit"
+      DisplayName = "{CN} EXIT"
+    }
+    {
+      Id = "MiscSettingsScreen_Confirm"
+      DisplayName = "{SL} CONFIRM"
+    }
+    {
+      Id = "MiscSettingsScreen_Select"
+      DisplayName = "{SL} SELECT"
+    }
+    {
+      Id = "MiscSettingsScreen_SelectKBM"
+      DisplayName = "{SL} SET"
+    }
+    {
+      Id = "MiscSettingsScreen_Toggle"
+      DisplayName = "{SL} TOGGLE"
+    }
+
+    /* Audio Options */
+    {
+      Id = "DisableAudio"
+      DisplayName = "Disable Audio"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MasterVolume"
+      DisplayName = "Main Volume"
+      Description = ""
+    }
+    {
+      Id = "MusicVolume"
+      DisplayName = "Music Volume"
+      Description = ""
+    }
+    {
+      Id = "AmbienceVolume"
+      DisplayName = "Ambience Volume"
+      Description = ""
+    }
+    {
+      Id = "FxVolume"
+      DisplayName = "SFX Volume"
+      Description = ""
+    }
+    {
+      Id = "DialogueVolume"
+      DisplayName = "Speech Volume"
+      Description = ""
+    }
+    {
+      Id = "AllowPlaySpeech"
+      DisplayName = "Play Dialogue"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MonoSound"
+      DisplayName = "Mono Sound"
+      Description = "Audio plays back in one audio channel."
+    }
+
+    /* Gameplay Options / Controls Options */
+    {
+      Id = "EasyMode"
+      DisplayName = "{!Icons.EasyModeIcon} God Mode"
+      Description = """
+      {#AlertHighlightFormat}Instantly makes you tougher, more so whenever you fail.
+
+      {#AlertItalicFormat}Failure is the greatest instructor of all. {#Prev}Try this if you find you're struggling, want to focus on the story, or any reason.
+      """
+    }
+    {
+      Id = "EasyModeResistanceCap"
+      DisplayName = "{!Icons.EasyModeIcon} God Mode Limit"
+      Description = """
+      Adjust the max amount of damage you resist using {#AlertHighlightFormat}God Mode{#Prev}.
+      """
+    }
+    {
+      Id = "EasyModeResistanceCap_Disabled"
+      DisplayName = "God Mode Limit"
+      Description = """
+      Adjust the max amount of damage you resist using {#AlertHighlightFormat}God Mode{#Prev}.
+      """
+    }
+    {
+      Id = "AllowAutoLock"
+      DisplayName = "Aim Assist"
+      Description = "While attacking, automatically lock onto foes in range."
+    }
+    {
+      Id = "AttackTurbo"
+      DisplayName = "Auto-Fire"
+    }
+    {
+      Id = "TurboStyle_Off"
+      DisplayName = "Off"
+      Description = "Use {TB} to strike repeatedly while holding Attack or Special."
+    }
+    {
+      Id = "TurboStyle_Hold"
+      DisplayName = "Hold"
+      Description = "Hold {TB} to strike repeatedly while holding Attack or Special."
+    }
+    {
+      Id = "TurboStyle_Toggle"
+      DisplayName = "Toggle"
+      Description = "Press {TB} to toggle striking repeatedly while holding Attack or Special."
+    }
+    {
+      Id = "SprintAutoHold"
+      DisplayName = "Auto-Sprint"
+      Description = "Sprint automatically after pressing Dash (no need to hold)."
+    }
+    {
+      Id = "BlinkAtCursor"
+      DisplayName = "Dash at Cursor"
+      Description = "Dash toward the mouse cursor rather than straight ahead."
+    }
+    {
+      Id = "ApplyDeadZone"
+      DisplayName = "Enable Dead Zone"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "GamepadLightBrightness"
+      DisplayName = "Controller Light"
+      Description = "If your controller has a light on it, you can adjust the brightness."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DeadZone"
+      DisplayName = "Dead Zone"
+      Description = "Fine-tune control stick sensitivity, in case controls feel jittery."
+    }
+    {
+      Id = "MiscSettingsScreen_DeadZone_Nintendo"
+      InheritFrom = "DeadZone"
+    }
+    {
+      Id = "Rumble"
+      DisplayName = "Vibration"
+      Description = "Enable controller vibration, for controllers thus capable."
+    }
+    {
+      Id = "GeneralRumbleMultiplier"
+      DisplayName = "Vibration Intensity"
+      Description = "Fine-tune controller vibration intensity."
+    }
+    {
+      Id = "AllowControlHotSwap"
+      DisplayName = "Allow Control Hot Swap"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ControlsStyle"
+      DisplayName = "Button Labels"
+      Description = "Go against the grain with button labels of your choosing."
+    }
+    {
+      Id = "ControlsStyle_Auto"
+      DisplayName = "Auto"
+    }
+    {
+      Id = "ControlsStyle_KeyboardMouse"
+      DisplayName = "KB&M"
+    }
+    {
+      Id = "ControlsStyle_TypeA"
+      DisplayName = "Type A"
+    }
+    {
+      Id = "ControlsStyle_TypeB"
+      DisplayName = "Type B"
+    }
+    {
+      Id = "ControlsStyle_TypeC"
+      DisplayName = "Type C"
+    }
+    {
+      Id = "GraphicsQualityPreset_Low"
+      DisplayName = "Low"
+    }
+    {
+      Id = "GraphicsQualityPreset_Medium"
+      DisplayName = "Medium"
+    }
+    {
+      Id = "GraphicsQualityPreset_High"
+      DisplayName = "High"
+    }
+    {
+      Id = "GraphicsDevice_Default"
+      DisplayName = "Auto"
+    }
+    {
+      Id = "ReticleMagnetismDistance"
+      DisplayName = "Reticle Magnetism"
+      Description = "Fine-tune the degree to which targeted abilities stick to foes."
+    }
+    {
+      Id = "ReticleMoveSpeed"
+      DisplayName = "Reticle Speed"
+      Description = "Fine-tune the speed of aiming targeted abilities with a controller."
+    }
+    {
+      Id = "ReticleMoveSpeed_Alt"
+      DisplayName = "Reticle Speed"
+      Description = "Fine-tune the speed of aiming targeted abilities."
+    }
+    {
+      Id = "ReticleReMagnetizeTimeout"
+      DisplayName = "Reticle Lock-On Delay"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ReticleMagnetismSpeed"
+      DisplayName = "Reticle Magnetism Speed"
+      OverwriteLocalization = true
+    }
+
+    /* Interface Options */
+    {
+      Id = "FullScreen"
+      DisplayName = "Fullscreen"
+      Description = "Switches to Windowed mode, or consumes your entire display."
+    }
+    {
+      Id = "NoBorder"
+      DisplayName = "Borderless"
+      Description = "Removes window borders in Windowed display mode."
+    }
+    {
+      Id = "VSync"
+      DisplayName = "VSync"
+      Description = "Sets frame rate to display's refresh rate. Leave this be if everything looks OK."
+    }
+    {
+      Id = "FpsLimit"
+      DisplayName = "FPS Limit"
+      Description = "Limits max frames-per-second to your preference. Requires VSync to be disabled."
+    }
+    {
+      Id = "Resolution"
+      DisplayName = "Resolution"
+      Description = "Change the number of pixels simultaneously shown onscreen."
+    }
+    {
+      Id = "Resolution_InGame"
+      Description = "For reasons more convoluted than myth, one must return to the Main Menu to adjust this."
+    }
+    {
+      Id = "DisplayIndex"
+      DisplayName = "Default Display"
+      Description = "If you have multiple displays, congratulations! And also you can set the one the game starts in."
+    }
+    {
+      Id = "DisplayIndex_InGame"
+      Description = "As with its Resolution kin, this can only be adjusted after first returning to the Main Menu."
+    }
+    {
+      Id = "Brightness"
+      DisplayName = "Brightness"
+      Description = "In case the darkness of the Underworld is too spooky."
+    }
+    {
+      Id = "AllowOversizeWindows"
+      DisplayName = "Allow Oversize Windows"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AttemptHighDPI"
+      DisplayName = "Attempt High DPI"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawHealthFX"
+      DisplayName = "Draw Vignettes"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowUIAnimations"
+      DisplayName = "Show Combat UI"
+      Description = "Disable this for Video Capture Mode, in which many aspects of UI presentation are disabled."
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "HUDOpacity"
+      DisplayName = "Interface Opacity"
+      Description = "Make invaluable gameplay information more difficult to see."
+    }
+  	{
+      Id = "UseAltCursor"
+      DisplayName = "Bright Cursor"
+      Description = "Change the mouse cursor to the color of polished silver."
+    }
+    {
+      Id = "Subtitles"
+      DisplayName = "Subtitles"
+      Description = "Display text captions during speech."
+    }
+    {
+      Id = "MusicSubtitles"
+      DisplayName = "Song Subtitles"
+      Description = "Display text captions for lyrics from songs that may be playing."
+    }
+    {
+      Id = "ShowDamageNumbers"
+      DisplayName = "Damage Numbers"
+      Description = "In case you prefer the violence to be unquantifiable."
+    }
+    {
+      Id = "ShowGameplayTimer"
+      DisplayName = "Timer Display"
+      Description = "Display a measure of each and every fleeting instant."
+    }
+    {
+      Id = "AutoAdvanceNarration"
+      DisplayName = "Auto-Advance Dialogue"
+      Description = "Remove the need to interact to advance dialogue sequences."
+    }
+    {
+      Id = "CameraShake"
+      DisplayName = "Screen Shake"
+      Description = "Turn this off if screen-shake effects are unwelcome."
+    }
+    {
+      Id = "LowHealthPulse"
+      DisplayName = "Danger Pulse"
+      Description = "Turn this off if the flashing effects when Life is critical are unwelcome."
+    }
+    {
+      Id = "RequireFocusToUpdate"
+      DisplayName = "Pause On Alt-Tab"
+      Description = "Stop time (Chronos permitting) if you switch applications."
+    }
+    {
+      Id = "LockInputToWindow"
+      DisplayName = "Mouse Lock"
+      Description = "Release your mouse cursor from the confines of this window."
+    }
+    {
+      Id = "PlayerOptInToCloudSaves"
+      DisplayName = "Epic Services"
+      Description = "This setting enables achievements, cloud saves, and cross-saves. To upload save data, select 'Sync & Quit' from the Pause Menu."
+    }
+    
+    /* Exit Confirmation */
+    {
+      Id = "Shell_Confirm"
+      DisplayName = "Confirm"
+    }
+    {
+      Id = "Shell_Back"
+      DisplayName = "Back"
+    }
+    {
+      Id = "On"
+      DisplayName = "On"
+    } 
+    {
+      Id = "Off"
+      DisplayName = "Off"
+    }
+    {
+      Id = "Restore Defaults"
+      DisplayName = "Restore Defaults"
+    }
+    {
+      Id = "ExitConfirm_Confirm"
+      DisplayName = "OK"
+    }
+    {
+      Id = "ExitConfirm_Cancel"
+      DisplayName = "Cancel"
+    }
+    {
+      Id = "ExitConfirm_Ignore"
+      DisplayName = "Ignore"
+    }
+    {
+      Id = "ExitConfirm_FixIt"
+      DisplayName = "Fix It"
+    }    
+    {
+      Id = "ExitConfirm_Retry"
+      DisplayName = "Retry"
+    }
+
+    /* Save/Load & EasyStorage Messages */
+    {
+      Id = "forceCanceledReselection"
+      DisplayName = "No storage device selected. A storage device is required to continue."
+    }
+    {
+      Id = "forceDisconnectedReselectionMessage"
+      DisplayName = "The storage device was disconnected. A storage device is required to continue."
+    }
+    {
+      Id = "No_Continue_without_device"
+      DisplayName = "Continue Without Saving"
+    }
+    {
+      Id = "promptForCancelledMessage"
+      DisplayName = "No storage device selected. Your progress will not be saved. Select a device or continue without saving?"
+    }
+    {
+      Id = "promptForDisconnectedMessage"
+      DisplayName = "Storage device disconnected. Select a device or continue without saving?"
+    }
+    {
+      Id = "Reselect_Storage_Device"
+      DisplayName = "Reselect storage device?"
+    }
+    {
+      Id = "Storage_Device_Required"
+      DisplayName = "Storage device required."
+    }
+    {
+      Id = "StorageDevice_is_not_valid"
+      DisplayName = "Storage device is not valid."
+    }
+    {
+      Id = "Yes_Select_new_device"
+      DisplayName = "Select Device"
+    }
+    {
+      Id = "WarningSaveOverwrite"
+      DisplayName = "Any existing saves on this device will be overwritten."
+    }
+    {
+      Id = "ErrorFailedToSave"
+      DisplayName = "Unable to save game to device."
+    }
+    {
+      Id = "GraphicsDriverWarning"
+      DisplayName = "Old Graphics Drivers detected! Please Quit and update your drivers."
+    }    
+    /* TCR Strings */
+    {
+      Id = "Downloading"
+      DisplayName = "Downloading"
+    }
+    {
+      Id = "SignedInAsGuest"
+      DisplayName = "Currently signed in as guest. Please sign in using a non-guest gamer profile."
+    }
+    {
+      Id = "SignInChangeOccurred"
+      DisplayName = "A sign-in change has occurred. You will now be returned to the title screen."
+    }
+    {
+      Id = "NoStorageDeviceSelected"
+      DisplayName = "No storage device selected. Your progress will not be saved. Select a device or continue without saving?"
+    }
+    {
+      Id = "SelectDevice"
+      DisplayName = "Select Device"
+    }
+    {
+      Id = "ResumeGame"
+      DisplayName = "Resume Game"
+    }
+    {
+      Id = "SaveFileOverwriteWarning"
+      DisplayName = "Notice: Corrupted Save Data"
+      Description = "Unfortunately, something went wrong with your save. Choose 'OK' to restore a recent backup, then try again."
+    }
+    {
+      Id = "SaveFileOverwriteWarningRestoreFailed"
+      DisplayName = "Notice"
+      Description = "Your save data has been corrupted and could not be restored from a backup. Delete save data?"
+    }
+    {
+      Id = "SaveFileRestoreBackup"
+      DisplayName = "Notice"
+      Description = "Your save data has been corrupted and can no longer be read. Restore from backup?"
+    }
+    {
+      Id = "ProfileErrorCorrupt"
+      DisplayName = "Notice"
+      Description = "Settings for current profile are corrupted, and cannot be read. Default settings restored."
+    }
+    /* Downloading Ids */
+    {
+      Id = "CloudSaves_SyncingDialogText"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is retrieved..."
+    }
+    {
+      Id = "CloudSaves_SyncingDialogTextLongWait"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is retrieved... \n\n (This is taking longer than expected...)"
+    }
+    {
+      Id = "CloudSaves_SyncingDialogTextSuccess"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is retrieved... \n\n Sync complete!"
+    }
+    {
+      Id = "CloudSaves_SyncingDialogTextFailure"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is retrieved... \n\n Sync failed. Please check your connection."
+    }
+    /* Uploading Ids */
+    {
+      Id = "CloudSaves_SyncingOnQuitDialogText"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is uploaded..."
+    }
+    {
+      Id = "CloudSaves_SyncingOnQuitDialogTextLongWait"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is uploaded... \n\n (This is taking longer than expected...)"
+    }
+    {
+      Id = "CloudSaves_SyncingOnQuitDialogTextSuccess"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is uploaded... \n\n Sync complete!"
+    }
+    {
+      Id = "CloudSaves_SyncingOnQuitDialogTextFailure"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is uploaded... \n \n Sync failed. Please check your connection."
+    }
+    {
+      Id = "CloudSaves_SyncingOnQuitDialogTextDeferResolution"
+      DisplayName = "Syncing Cross-Save Data"
+      Description = "Please wait while your save data information is uploaded... \n \n Save conflict detected."
+    }
+    {
+      Id = "ErrorOfflineProfile"
+      DisplayName = "You must sign in to use this feature."
+    }
+    {
+      Id = "ErrorMissingStorageDevice"
+      DisplayName = "Storage device not detected. Check your storage device."
+    }
+    {
+      Id = "ErrorAchievementFailed"
+      DisplayName = "Unable to award a Trophy because the active user profile is unavailable."
+    }
+
+    /* Debug-Only Options using OverwriteLocalization */
+    {
+      Id = "DrawBuildNumber"
+      DisplayName = "Draw Build Number"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowSpeechBubble"
+      DisplayName = "Show Speech Bubbles"
+      Description = ""
+      OverwriteLocalization = true
+    }    
+    {
+      Id = "OnlyFancyText"
+      DisplayName = "Only Fancy Text"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "KioskMode"
+      DisplayName = "Kiosk Mode"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowSocialLinks"
+      DisplayName = "Show Social Links"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AllowPause"
+      DisplayName = "Allow Pause"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MouseTetherEnabled"
+      DisplayName = "Mouse Tether"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AllowHardQuit"
+      DisplayName = "Allow Hard Quit"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableEpicOverlay"
+      DisplayName = "Enable Epic Overlay"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    /* PC Specific */
+    {
+      Id = "DisableScreenSaver"
+      DisplayName = "Disable Screen Saver"
+      Description = "Ignore your mean operating system's screen saver setting."
+    }
+    {
+      Id = "ResChangeWarning"
+      DisplayName = "Do you wish to keep this setting? The previous setting shall be restored in 10 seconds."
+    }
+    {
+      Id = "Graphics"
+      DisplayName = "Graphics Settings"
+    }
+    {
+      Id = "Display"
+      DisplayName = "Display"
+    }
+    {
+      Id = "2x"
+      DisplayName = "2X"
+    }
+    {
+      Id = "4x"
+      DisplayName = "4X"
+    }
+    {
+      Id = "Vsync"
+      DisplayName = "Vertical Sync"
+    }
+    {
+      Id = "Gamepad"
+      DisplayName = "Gamepad"
+    }
+    {
+      Id = "MissingGamepad"
+      DisplayName = "No Gamepad Detected"
+    }
+    {
+      Id = "SoundtrackAvailable"
+      DisplayName = "Original Soundtrack Available at:"
+    }
+
+    /* Editor Options */
+    {
+      Id = "EditorAngleSnapping"
+      DisplayName = "Angle Snapping"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "SelectionRelativeEditing"
+      DisplayName = "Selection Relative Editing"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ValueRelativeEditing"
+      DisplayName = "Value Relative Editing"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImPhysicalPropertiesEnableColorEditing"
+      DisplayName = "Enable Color Editing"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AllowEditFlippedMaps"
+      DisplayName = "Allow Flipped Map Editing"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableColor"
+      DisplayName = "Template Editor: Color"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableApplyAlphaToSelection"
+      DisplayName = "Template Editor: Apply Alpha to Selection"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableGrabAlphaFromSelection"
+      DisplayName = "Template Editor: Grab Alpha from Selection"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableScale"
+      DisplayName = "Template Editor: Scale"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableAngle"
+      DisplayName = "Template Editor: Angle"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableAmbient"
+      DisplayName = "Template Editor: Ambient"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableHue"
+      DisplayName = "Template Editor: Hue"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableSaturation"
+      DisplayName = "Template Editor: Saturation"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ImTemplateEditorEnableValue"
+      DisplayName = "Template Editor: Value"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowAutoOpenAssetSwatch"
+      DisplayName = "Auto Open Asset Swatch"
+      Description = "Automatically open the Asset Swatch when entering EditingMode."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowAutoOpenMapProperties"
+      DisplayName = "Auto Open Map Properties"
+      Description = "Automatically open Map Properties when entering EditingMode."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowAutoOpenPhysicalProperties"
+      DisplayName = "Auto Open Physical Properties"
+      Description = "Automatically open Physical Properties when entering EditingMode."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowAutoOpenTemplateEditor"
+      DisplayName = "Auto Open Template Editor"
+      Description = "Automatically open the Template Editor when entering EditingMode."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowAutoOpenGroupEditor"
+      DisplayName = "Auto Open Group Editor"
+      Description = "Automatically open the Group Editor when entering EditingMode."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowsStayOnTop"
+      DisplayName = "Editor Always On Top"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowsToggleMenuOnEditingMode"
+      DisplayName = "Toggle Editor Menu with Editing Mode"
+      Description = """Hides the "Editor Windows" menu when exiting EditingMode with F5"""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWindowsToggleEditorOnEditingMode"
+      DisplayName = "Toggle Editor Windows with Editing Mode"
+      Description = "Hides other Editor windows when exiting EditingMode with F5"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorWarnIfLocked"
+      DisplayName = "Map Lock Warning"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorCreateThumbnails"
+      DisplayName = "Create Thumbnails"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorAutoSaveBackups"
+      DisplayName = "Auto Save Backups"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorAutoSaveInterval"
+      DisplayName = "Auto Save Interval"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableEditorTimeLapse"
+      DisplayName = "Enable Time Lapse Screenshots"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorTimeLapseInterval"
+      DisplayName = "Time Lapse Interval"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AutoHotLoad"
+      DisplayName = "Auto Hot Load"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "HotLoadScripts"
+      DisplayName = "Script Hot Loading"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LiveCreateTextures"
+      DisplayName = "Live Create Textures"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LiveCreateTexturesRetryAttempts"
+      DisplayName = "Live Create Textures Retry Attempts"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorGridSize"
+      DisplayName = "Grid Size"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorSelectionAsHighlight"
+      DisplayName = "Selection As Highlight"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorOutlineThickness"
+      DisplayName = "Outline Thickness"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorOutlineThreshold"
+      DisplayName = "Outline Threshold"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorPreviewNameAndId"
+      DisplayName = "Preview Name and ID"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ParseTextMarkup"
+      DisplayName = "Parse Text Markup"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EditorCameraScrollSpeed"
+      DisplayName = "Camera Scroll Speed"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    /* Graphics Options */
+    {
+      Id = "UseSwapchainBlit"
+      DisplayName = "Swapchain Blit"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseSwapEffectDiscard"
+      DisplayName = "Swap Effect Discard"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseDXGI12SwapChain"
+      DisplayName = "DXGI12 Swap Chain"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseDefaultGpu"
+      DisplayName = "Use Default GPU"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MSAA"
+      DisplayName = "MSAA"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "SSAA"
+      DisplayName = "SSAA"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawGround"
+      DisplayName = "Draw Ground"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawCamera"
+      DisplayName = "Draw Camera"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    /* Performance Options */
+    {
+      Id = "GraphicsQualityPreset"
+      DisplayName = "Graphics Quality"
+      Description = "Adjusts the amount of visual effects. Performance may improve at lower settings."
+    }
+    {
+      Id = "GraphicsAdapter"
+      DisplayName = "Graphics Device"
+      Description = "Choose from available Graphics devices. Note you have to restart the game for the change to take effect."
+    }
+    {
+      Id = "AudioStreamBufferSize"
+      DisplayName = "Audio Stream Buffer Size"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AudioMaxVirtualVoices"
+      DisplayName = "Max Virtual Audio Channels"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AudioMaxAudibleVoices"
+      DisplayName = "Max Audible Audio Channels"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "PlatformAudioAlloc"
+      DisplayName = "Platform Audio Allocation"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ForceVoiceBankStreaming"
+      DisplayName = "Force Voice Bank Streaming"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AllowVoiceBankStreaming"
+      DisplayName = "Allow Voice Bank Streaming"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AudioMemoryPoolSize"
+      DisplayName = "Audio Memory Pool Size"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "SfxFrameCap"
+      DisplayName = "Max SFX Per Frame"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "BinkStreamCacheSize"
+      DisplayName = "Bink Stream Cache Size"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LuaGCStepSize"
+      DisplayName = "Lua Garbage Collector Step Size"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseRenderMeshCache"
+      DisplayName = "Use Render Mesh Cache"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseOverlayHardware"
+      DisplayName = "Use Overlay Hardware"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawLights"
+      DisplayName = "Draw Lights"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawBloom"
+      DisplayName = "Draw Bloom"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawBlur"
+      DisplayName = "Draw Blur"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawBlendEnabledMask"
+      DisplayName = "Draw Blend Enabled Mask"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawColorGrading"
+      DisplayName = "Draw Color Grading"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableHulls"
+      DisplayName = "Enable Hulls"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AutoDetectLowResAssets"
+      DisplayName = "Auto Detect Low Res Assets"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseLowResAssets"
+      DisplayName = "Use Low Resolution Assets"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "PermanentVfxCap"
+      DisplayName = "Persistent Decal Cap"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "VfxFrameCap"
+      DisplayName = "Max VFX Per Frame"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "VfxManagerCapMultiplier"
+      DisplayName = "VFX Manager Cap Multiplier"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DisableRenderThread"
+      DisplayName = "Disable Render Thread"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MaxWorkerThreads"
+      DisplayName = "Max Worker Threads"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "BackgroundAudioThread"
+      DisplayName = "Background Audio Thread"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseCpuBoost"
+      DisplayName = "Use CPU Boost"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MultiThreadMeshFromDrawable"
+      DisplayName = "Multi-Thread Mesh From Drawable"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    /* Logging Options */
+    {
+      Id = "UseAnalytics"
+      DisplayName = "Transmit Data"
+      Description = "Send non-identifying gameplay data to us to help tune the game."
+    }
+    {
+      Id = "DebugMessages"
+      DisplayName = "Debug Messages"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "OutputWindowLogging"
+      DisplayName = "Output Window Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugPrintAnimations"
+      DisplayName = "Animation Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "CheckNonExistingTextures"
+      DisplayName = "Check Non-Existing Textures"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AssetErrorAsserts"
+      DisplayName = "Asset Asserts"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MissingVOAsserts"
+      DisplayName = "Missing VO Asserts"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EmptyScriptActionAsserts"
+      DisplayName = "Empty Script Asserts"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableOutOfMemoryAsserts"
+      DisplayName = "OOM Asserts"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AudioLogging"
+      DisplayName = "Audio Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ProfileAudio"
+      DisplayName = "Profile Audio"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableAudioDeviceChangeCallBack"
+      DisplayName = "Audio Device Change Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugLogSounds"
+      DisplayName = "Sound Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DisableManifestLogging"
+      DisplayName = "Disable Manifest Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowSaveErrors"
+      DisplayName = "Show Save Error"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowLogFileError"
+      DisplayName = "Show Log File Error"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowDocumentsPathError"
+      DisplayName = "Show Documents Path Error"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableWin32DebugHelpLogging"
+      DisplayName = "Win32 Debug Help"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugPrintSpeed"
+      DisplayName = "Speed Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugPrintInteractTarget"
+      DisplayName = "Interact Target Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugPrintCollisions"
+      DisplayName = "Collision Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugPrintWeapons"
+      DisplayName = "Weapon Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LuaSpikeWarningMs"
+      DisplayName = "Lua Spike Warning Ms"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "VerboseScriptLogging"
+      DisplayName = "Verbose Script Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LogCombatMultipliers"
+      DisplayName = "Combat Multiplier Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LogFrameNumber"
+      DisplayName = "Frame Number Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LogLuaMemoryDump"
+      DisplayName = "Lua Memory Dump Logging"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "TrackLuaMemoryAllocs"
+      DisplayName = "Track Lua Memory Allocations"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "SpellCheck"
+      DisplayName = "Spell Check"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ShowMissingSubtitles"
+      DisplayName = "Show Missing Subtitle Error"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "TextDebugShowIds"
+      DisplayName = "Show Text IDs"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ZTesting"
+      DisplayName = "Z Testing"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawExtentsForPassable"
+      Description = "Having this on also shows the interact radius of interactable objects when you toggle Ctrl + E."
+      OverwriteLocalization = true
+    }
+
+
+    /* Saves Options */
+    {
+      Id = "RepeatSaveOnLoad"
+      DisplayName = "Repeat Save On Load"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AllowSaveLoad"
+      DisplayName = "Allow Save/Load"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LoadSavedControls"
+      DisplayName = "Load Saved Controls"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "CopyDragAndDroppedSaves"
+      DisplayName = "Copy Drag And Dropped Saves"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ValidateSaves"
+      DisplayName = "Validate Saves"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseDevSaves"
+      DisplayName = "Use Dev Saves"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DevSaveCustomName"
+      DisplayName = "Dev Save Custom Name"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AutoDeleteExtraDevSaves"
+      DisplayName = "Auto-Delete Extra Dev Saves"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "MaxDevSaves"
+      DisplayName = "Max Dev Saves"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    /* Debug Options / Debug Settings */
+    {
+      Id = "FilterSearchHint"
+      DisplayName = "Type to Search"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LoadSaveScreen_DeleteHint"
+      DisplayName = "[DEL] Delete Highlighted Save"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "LoadSaveScreen_OpenInWindowsHint"
+      DisplayName = "[SHIFT+CLICK] Open In File Explorer"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugKeysEnabled"
+      DisplayName = "Enable Debug Keys"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AllowStripRequirements"
+      DisplayName = "Allow Strip Requirements"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "PauseSoundsWhenPaused"
+      DisplayName = "Pause Sounds When Paused"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "FastForwardSpeed"
+      DisplayName = "Fast Forward Speed"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "StepFrameRepeatInterval"
+      DisplayName = "Step Frame Repeat Interval"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AutoSafeMode"
+      DisplayName = "Auto Safe Mode"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugEnemySpawnIdle"
+      DisplayName = "Keep Spawns Idle"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugEnemySpawnAtHero"
+      DisplayName = "Spawn On Hero"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugEnemySpawnWithAttribute"
+      DisplayName = "Elite Attribute"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "SkipCollisionCheck"
+      DisplayName = "Skip Collision Check"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugEnemyCapOverride"
+      DisplayName = "Enemy Cap Override"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugCameraZoom"
+      DisplayName = "Debug Camera Zoom"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugOverlayFilterEdit"
+      DisplayName = "Debug Overlay Filter Edit"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "AttachmentMode"
+      DisplayName = "Attachment Mode"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "EnableSimulateCloudConflicts"
+      DisplayName = "Simulate Cloud Conflicts"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DisableDamage"
+      DisplayName = "Disable Damage"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DamageTakenMultiplier"
+      DisplayName = "Damage Taken Multiplier"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DamageMultiplier"
+      DisplayName = "Damage Multiplier"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawExtents"
+      DisplayName = "Draw Extents"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawLightsWithExtents"
+      DisplayName = "Draw Lights With Extents"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugDrawPathfinding"
+      DisplayName = "Draw Pathfinding"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugDraw"
+      DisplayName = "Debug Draw (Enable Debug Overlay)"
+      Description = "Toggles visibility of the debug overlays. Use Ctrl+D / CtrlShift+D to switch between overlays."
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugDrawGridManager"
+      DisplayName = "Draw Grid Manager"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugGridManager"
+      DisplayName = "Grid Manager"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugDrawBounds"
+      DisplayName = "Draw Bounds"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugDrawMouseCoordinates"
+      DisplayName = "Draw Mouse Coordinates"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugDrawScissorRects"
+      DisplayName = "Draw Scissor Rects"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugBenchmarks"
+      DisplayName = "Draw Benchmarks"
+      Description = ""
+      OverwriteLocalization = true
+    }
+	{
+	  Id = "DebugDrawUseableManager"
+      DisplayName = "Debug Draw Useable Manager"
+      Description = ""
+      OverwriteLocalization = true
+
+	}
+    {
+      Id = "DebugDrawLiveEditorQuadTree"
+      DisplayName = "Draw Editor Quad Tree"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ColorGradingScreenshot"
+      DisplayName = "Color Grading Screenshot"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DrawIds"
+      DisplayName = "Draw IDs"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "PerfDash"
+      DisplayName = "Show Performance Dash"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "PerfDashWarnings"
+      DisplayName = "Perf Dash Warnings"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "PerfDashFpsOnly"
+      DisplayName = "Perf Dash FPS Only"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugOverlayBackgroundAlpha"
+      DisplayName = "Overlay Bg. Alpha"
+      Description = "Modifies the background transparency of the Debug Overlay"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugOverlayFontSize"
+      DisplayName = "Debug Overlay Font Size"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UseNewDebugDisplays"
+      DisplayName = "Use New Debug Displays"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "ClearDebugLogOnDevLoad"
+      DisplayName = "Clear Debug Log On Dev Load"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DebugOverlayAllowMouseWheelScroll"
+      DisplayName = "Allow Mouse Wheel Scroll in Overlays"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DirectLoadShell"
+      DisplayName = "Direct Load Shell"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "DirectLoadCheckpoint"
+      DisplayName = "Direct Load Checkpoint"
+      Description = ""
+      OverwriteLocalization = true
+    }
+    {
+      Id = "FastForward"
+      DisplayName = "Fast Forward"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    {
+      Id = "LoadLastManualLoad"
+      DisplayName = "Reload Last Loaded Save"
+      Description = ""
+      OverwriteLocalization = true
+    }
+
+    /* Dev / Debug Save/Load / Save Screen */
+    {
+      Id = "LoadSaveScreen_SortAlphabetical"
+      OverwriteLocalization = true,
+      DisplayName = "Sort by Name"
+    }
+    {
+      Id = "LoadSaveScreen_SortChronological"
+      OverwriteLocalization = true,
+      DisplayName = "Sort by Date"
+    }
+    {
+      Id = "LoadMapScreen_SortAlphabetical"
+      OverwriteLocalization = true,
+      DisplayName = "Sort by Name"
+    }
+    {
+      Id = "LoadMapScreen_SortChronological"
+      OverwriteLocalization = true,
+      DisplayName = "Sort by Load Time"
+    }
+    {
+      Id = "LoadMapScreen_PostRewardSaves"
+      OverwriteLocalization = true,
+      DisplayName = "Load PostReward"
+    }
+    {
+        Id = "OpenGoToBox"
+        OverwriteLocalization = true,
+        DisplayName = "GoTo / Find / Search for Id"
+    }
+
+    /* Misc. Error Messages That May Still Be in Use */
+    {
+      Id = "InGameUI_Saving"
+      DisplayName = "Saving..."
+    }
+    {
+      Id = "WaitingForDownload"
+      DisplayName = "Waiting for Download"
+    }
+    {
+      Id = "Supergiant"
+      DisplayName = "Supergiant"
+    }
+    {
+      Id = "SaveErrorNoSpace"
+      DisplayName = "Notice"
+      Description = "Insufficient storage available on storage device. \n\n Retry?"
+    }
+    {
+      Id = "SaveErrorNoSpacePC"
+      DisplayName = "Insufficient Storage"
+      Description = "Data could not be saved because your storage device is full. Please free up additional space."
+    }
+    {
+      Id = "SaveErrorCorrupt"
+      DisplayName = "Save data has been corrupted and can no longer be read."
+    }
+    {
+      Id = "SaveErrorCorruptPC"
+      DisplayName = "Corrupt Save Data"
+      Description = """
+      Something happened to your save data, and unfortunately it can no longer be read. Please follow these steps to attempt to restore it.
+
+  		1. Navigate to {#AlertBoldFormat}/Saved Games/Hades II{#Prev}
+  		2. Backup the entire folder
+		  3. Sort by 'Date modified' to locate your most recent save matching one of these names (assuming you use Save Slot 1): {#AlertItalicFormat}Profile1_Temp.sav{#Prev}, {#AlertItalicFormat}Profile1_Temp.sav.bak{#Prev}, or {#AlertItalicFormat}Profile1.sav.bak{#Prev}
+		  4. Rename that file to {#AlertItalicFormat}Profile1.sav{#Prev}
+		  5. Then open the Play menu in-game and look for the save.
+
+      If none of this helps, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+		"""
+    }
+    {
+      Id = "UnsupportedControllerPC"
+      DisplayName = "Unrecognized Controller"
+      Description = """
+      We were unable to identify your game controller. Please try the following:
+
+      · If using a wireless controller, a wired connection may fix this.
+
+      · Enable Steam Input and relaunch Hades II. Or, disable Steam Input if it's enabled.
+
+      · Try a different controller if you have one available.
+
+      · If none of this helps, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+    """
+    }
+    {
+      Id = "UnsupportedControllerSteamInput"
+      DisplayName = "Controller Notice"
+      Description = """
+      We detected that Steam Input is enabled, but we were unable to identify your game controller. If your controller functions normally in-game, you may safely disregard this message. Otherwise, we recommend the following:
+
+      · Disable Steam Input and relaunch Hades II.
+
+      · Configure your desired Button Labels under Options > Interface.
+
+      · For a list of supported controllers, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+    """
+    }
+    {
+      Id = "InputWarningStickyKeysDetected"
+      DisplayName = "Notice"
+      Description = "We detected that StickyKeys is enabled on your computer. This may impact your gameplay experience. We recommend disabling StickyKeys in system Settings or Control Panel."
+    }
+    {
+      Id = "InputWarningClickLockDetected"
+      DisplayName = "Notice"
+      Description = "We detected that mouse ClickLock is enabled on your computer. This may impact your gameplay experience. We recommend disabling ClickLock under Mouse Properties in Control Panel."
+    }
+    {
+      Id = "SaveErrorInvalidUserLogin"
+      DisplayName = "User signed out, unable to save to storage device."
+    }
+    {
+      Id = "SaveErrorGeneric"
+      DisplayName = "Notice"
+      Description = "Unable to save progress to storage device. \n \n Retry?"
+    }
+  	{
+      Id = "SaveErrorPC"
+      DisplayName = "Unable to Save"
+      Description = """
+      Your progress should have automatically saved just now, but something went wrong. Please try the following:
+
+		  · If you are running antivirus software, try disabling it; or, whitelist {#AlertBoldFormat}Hades2.exe{#Prev}, and try running the game again
+
+      · Ensure the game has write access to your save folder. Locate and right-click {#AlertBoldFormat}%USERPROFILE%/Saved Games/Hades II{#Prev}, select {#AlertItalicFormat}Properties{#Prev}, and ensure {#AlertItalicFormat}Read-only {#Prev}is {#AlertItalicFormat}not {#Prev}selected; on the Security tab, ensure your account has {#AlertItalicFormat}Full control {#Prev}or {#AlertItalicFormat}Modify {#Prev}permissions
+
+      · Locate {#AlertBoldFormat}Hades2.exe {#Prev}in your install folder, and run it with {#AlertBoldFormat}Administrator {#Prev}privileges {#AlertItalicFormat}(in the right-click menu){#Prev}
+
+      · If none of this helps, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+      """
+    }
+    {
+      Id = "FileAccessErrorPC"
+      DisplayName = "Unable to Read Data"
+      Description = """
+			Something went wrong, and the game was unable to read or access files needed for it to run properly. Please try the following:
+
+			· If you are running antivirus software, try disabling it; or, whitelist {#AlertBoldFormat}Hades2.exe{#Prev}, and try running the game again
+
+      · Ensure the game has write access to your save data folder:
+            {#AlertBoldFormat}%USERPROFILE%/Saved Games/Hades II{#Prev}
+            {#AlertItalicFormat}(Right-click it, select {#Prev}Properties{#AlertItalicFormat}, and ensure {#Prev}Read-only {#AlertItalicFormat}is NOT selected){#Prev}
+
+			· Locate {#AlertBoldFormat}Hades2.exe {#Prev}in your install folder, and run it with {#AlertBoldFormat}Administrator {#Prev}privileges {#AlertItalicFormat}(in the right-click menu){#Prev}
+
+      · If none of this helps, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+      """
+    }
+	{
+      Id = "DataFileCorrupt"
+      DisplayName = "Unable to Read Data"
+      Description = """
+			Something went wrong, and the game was unable to read or access files needed for it to run properly. Please try the following:
+
+			· Verify the integrity of the game files through the launcher
+
+			· If you are running antivirus software, try disabling it; or, whitelist {#AlertBoldFormat}Hades2.exe{#Prev}, and try running the game again
+
+      · Re-install the game entirely
+
+      · If none of this helps, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+      """
+    }
+
+	{
+      Id = "WarningLowMemory"
+      DisplayName = "Low System Memory"
+      Description = """
+      Your system may be running low on memory, which may affect game performance and stability. Please try the following:
+
+      · Close any other applications currently running on your system
+
+      · After the next automatic save point, quit out of the game and restart it
+
+      · If none of this helps, please see our Technical Support FAQ at: {#AlertBoldFormat}supergiant.games/hades2faq{#Prev}
+      """
+    }
+
+    {
+        Id = "ErrorSendCrashReport"
+        DisplayName = "Notice: Game Crash Detected"
+        Description = "Something happened earlier, causing the game to crash. Transmit the crash report to Supergiant Games?"
+    }
+
+  	/* Error messages not displayed by the normal game window */
+  	{
+        Id = "ErrorCrashReport"
+        DisplayName = "Hades II Encountered an Error"
+        Description = """
+  		[Let us know what was happening here.]
+
+  		We're sorry you experienced an error trying to play Hades II. If this issue continues to occur, please try the following:
+  		1. Verify the integrity of the game files through the launcher
+  		2. Download and install the latest drivers for your graphics card
+  		3. If none of this helps, see our Technical Support FAQ at:
+  		  supergiant.games/hades2faq
+  		
+  		If you lose save progress, you may be able to recover it with these steps:
+  		1. Navigate to \\Saved Games\\Hades II\\
+  		2. Rename Profile1_Temp.sav.bak to Profile1.sav (or Profile1.sav.bak to Profile1.sav); this assumes you use Save Slot 1
+  		
+  		We hope you are able to resolve the issue and thank you for playing.
+      
+  	 	- Supergiant Games
+  		"""
+  	}
+  	{
+        Id = "ErrorDirectXDriver"
+        DisplayName = "Error: DirectX Device"
+        Description = """
+        Connection to your DirectX graphics device was lost. Please ensure your drivers are up to date. If the problem persists, please try using the Vulkan executable instead.
+  		"""
+  	}
+  	{
+        Id = "ErrorVulkanStartup"
+        DisplayName = "Vulkan Driver Failure"
+        Description = """
+        Vulkan initialization failed. Unable to use Vulkan. Please launch using the DirectX executable instead.
+  		"""
+  	}
+  	{
+        Id = "ErrorNoGraphicsDevice"
+        DisplayName = "Error: No GPU Found"
+        Description = """
+        Hades II was unable to detect a graphics device. Please ensure one is connected and has up-to-date drivers, then try again.
+  		"""
+  	}
+  	{
+        Id = "ErrorOutOfMemory"
+        DisplayName = "Memory Allocation Error"
+        Description = """
+        Hades II was unable to allocate needed memory. Please ensure enough memory is free on your system, then try again.
+  		"""
+  	}
+
+  	{
+        Id = "ErrorAccessDenied"
+        DisplayName = "File Access Denied"
+        Description = """
+        Hades II was unable to access needed game files. Please ensure the game has permission to run, and is not blocked by antivirus software.
+  		"""
+  	}
+  	{
+        Id = "ErrorDuplicateApp"
+        DisplayName = "Hades II Already Running"
+        Description = """
+        Please close any other instances of Hades2.exe, then try again.
+  		"""
+  	}
+
+  	/* Misc Warnings / Confirmations */
+
+    {
+      Id = "SaveWarning_Confirm"
+      DisplayName = "OK"
+    }    
+    {
+      Id = "SaveErrorOverflow"
+      DisplayName = "Notice"
+      Description = "Exceeded max allowable save size. \n \n Unable to save progress to storage device."
+    }
+    {
+      Id = "ScreenshotSaved"
+      DisplayName = "Saved Screenshot: %s"
+    }
+    {
+      Id = "ScreenshotFailed"
+      DisplayName = "Failed to save screenshot. Please try again."
+    }
+    {
+      Id = "BugReportThankYouMessage"
+      DisplayName = "Report Submitted"
+      Description = "Thank you for taking the time. We read every report we receive, and they help us continue improving Hades II."
+    }
+    {
+      Id = "BugReportOpenedMessage"
+      DisplayName = "Reporting a Bug"
+      Description = "Please look for the Hades II Bug Reporter in a new window. You may need to press Alt+Tab to locate it."
+    }
+    {
+      Id = "BugReportOpenedSteamDeckMessage"
+      DisplayName = "Steam Deck Notice"
+      Description = "The Hades II Bug Reporter requires a desktop computer, so you cannot submit a report at this time. We apologize for the inconvenience."
+    }
+    {
+      Id = "Sign Out"
+      DisplayName = "Sign Out"
+    }
+    {
+      Id = "ConfirmResolution"
+      DisplayName = "Notice"
+      Description = "Do you wish to keep these display settings?"
+    }
+    {
+      Id = "RevertResolutionCountdown"
+      DisplayName = "Reverting to previous display settings in "
+    }
+    {
+      Id = "RevertResolutionCountdownSeconds"
+      DisplayName = " sec."
+    }
+    /* Cloud save messages/ errors */
+    {
+      Id = "CloudSaveError_NoInternet"
+      DisplayName = "Notice: Cross-Saves Unavailable"
+      Description = "Cross-Saves are unavailable because an Internet connection could not be established. Please check your connection."
+    }
+    {
+      Id = "CloudSaveError_SteamAuthFailure"
+      DisplayName = "Notice: Connection Failed"
+      Description = "There was a problem connecting to your Steam account. Please try to connect again."
+    }
+    {
+      Id = "CloudSaveError_SteamSessionExpired"
+      DisplayName = "Notice: Connection Expired"
+      Description = "Your Steam session has expired. Please reconnect to your Steam account in the Cross-Saves menu."
+    }
+    {
+      Id = "CloudSaveError_Corrupt"
+      DisplayName = "Notice: Corrupted Save Data"
+      Description = "Unfortunately, something went wrong with your save data."
+    }
+    {
+      Id = "CloudSaveMessage_SteamPrompt"
+      DisplayName = "Would you like to download your profiles from Steam? {#ExitConfirmItalicFormat}Note{#Prev}: This will open a browser to authenticate you with Steam, if you aren't already authenticated."
+    }
+    {
+      Id = "CloudSaveMessage_CloudSyncSpinnerText"
+      DisplayName = "Calling Olympus..."
+    }
+    {
+      Id = "CloudSaveMessage_CloudSyncSpinnerText_Failed"
+      DisplayName = "Save Failed"
+    }
+    {
+      Id = "CloudSaveError_SyncTimeout"
+      DisplayName = "Notice: Save Data Not Synced"
+      Description = "Cloud save data syncing timed out. Please check your Internet connection."
+    }
+    {
+      Id = "CloudSaveButton_LocalSaves"
+      DisplayName = "Local"
+    }
+    {
+      Id = "CloudSaveButton_CloudSaves"
+      DisplayName = "Cloud"
+    }
+    {
+      Id = "CloudSaveButton_ConnectSteam"
+      DisplayName = "Connect Steam"
+    }
+    {
+      Id = "CloudSaveButton_DisconnectSteam"
+      DisplayName = "Disconnect Steam"
+    }
+    {
+      Id = "CloudSaveButton_ConnectEpic"
+      DisplayName = "Connect Epic Games"
+    }
+    {
+      Id = "CloudSaveButton_DisconnectEpic"
+      DisplayName = "Disconnect Epic Games"
+    }
+    {
+      Id = "CloudSaveButton_Info"
+      DisplayName = "Help & Info"
+    }    
+    {
+      Id = "CloudSaveMessage_StorageConflictShort"
+      DisplayName = "{#SpecialMenuSettingLightFormat}{SL} Save Conflict"
+    }
+    {
+      Id = "CloudSaveMessage_StorageConflict"
+      DisplayName = "Notice: Cross-Save Conflict"
+      Description = "Your local saves and your cloud saves are out of sync. Please choose which save data to use in this Save Slot: \n {#ExitConfirmItalicFormat}Local - %d Night(s){#Prev}: %s %s\n {#ExitConfirmItalicFormat}Cloud - %d Night(s){#Prev}: %s %s"
+    }
+    {
+      Id = "CloudSaveMessage_DisconnectedSteam"
+      DisplayName = "Cross-Saves Disconnected"
+      Description = "Your Steam account is no longer linked. Your save data will not sync with Steam."
+    }
+    {
+      Id = "CloudSaveMessage_DisconnectedEpic"
+      DisplayName = "Cross-Saves Disconnected"
+      Description = "Your Epic Games account is no longer linked. Your save data will not sync with Epic Games."
+    }    
+    {
+      Id = "CloudSaves_LinkedSteamSuccess"
+      DisplayName = "Connected!"
+      Description = "Successfully linked Steam account. Cross-Saves enabled."
+    }
+    {
+      Id = "CloudSaves_LinkedSteamFail"
+      DisplayName = "Notice: Connection Failed"
+      Description = "Failed to link to Steam account. Cross-Saves disabled."
+    }
+    {
+      Id = "CloudSaves_LinkedEpicSuccess"
+      DisplayName = "Connected!"
+      Description = "Successfully linked Epic Games account. Cross-Saves enabled."
+    }
+    {
+      Id = "CloudSaves_LinkedEpicFail"
+      DisplayName = "Notice: Connection Failed"
+      Description = "Failed to link to Epic Games account. Cross-Saves disabled."
+    }
+    {
+      Id = "CloudSaves_LinkOnlyOnePlease_Steam"
+      DisplayName = "Notice: Already Connected"
+      Description = "Only one cross-platform connection can exist at a time. Please disconnect from Steam."
+    }
+    {
+      Id = "CloudSaves_LinkOnlyOnePlease_Epic"
+      DisplayName = "Notice: Already Connected"
+      Description = "Only one cross-platform connection can exist at a time. Please disconnect from Epic."
+    }
+    {
+      Id = "SaveErrorIncompatible"
+      DisplayName = "Warning: Incompatible Save Data!"
+      Description = "This save data is from a newer version of the game on another platform, and cannot be loaded at this time. For now, please continue play on the platform where this data was created. We sincerely apologize for the inconvenience."
+    }
+    {
+      Id = "CloudSaves_ComingSoon"
+      DisplayName = "Cross-Saves: Coming Soon"
+      Description = "Cross-Saves are not yet available, and will be added in a forthcoming update. We appreciate your patience."
+    }
+    {
+      Id = "CloudSaves_EpicDoYouWant"
+      DisplayName = "Enable Epic Online Services?"
+      Description = "We need your permission to enable achievements, cloud saves, and cross-saves. While playing, select 'Sync & Quit' from the Pause Menu to upload your save data."
+    }
+    {
+      Id = "CloudSaves_InstructionHint"
+      DisplayName = "{#AlertHeaderFormat}Note: {#Prev}While connected, your save data is uploaded when you choose 'Sync & Quit' from the Pause Menu"
+    }
+    {
+      Id = "CloudSaves_Newer"
+      DisplayName = "(newer)"
+    }
+    {
+      Id = "CloudSaves_Corrupt"
+      DisplayName = "{#ExitConfirmWarningFormat}(data error)"
+    }
+    {
+      Id = "CloudSaves_Incompatible"
+      DisplayName = "{#ExitConfirmWarningFormat}(version error)"
+    }
+    {
+      Id = "CloudSaves_Help"
+      DisplayName = "Cross-Saves"
+      Description = """
+      If you play {#AlertHeaderFormat}Hades II {#Prev}on a personal computer as well as {#AlertHighlightFormat}Nintendo Switch{#Prev}, you can transfer your save data using {#AlertHighlightFormat}Cross-Saves{#Prev}!
+
+      {!Icons.DivLong}
+
+      {#AlertBoldFormat}Getting Started: {#Prev}To enable {#AlertHighlightFormat}Cross-Saves{#Prev}, on the previous screen, connect to either {#AlertHighlightFormat}Steam {#Prev}or {#AlertHighlightFormat}Epic Games {#Prev} by signing in to your secure account.
+
+      Once enabled, your save data on your {#AlertHighlightFormat}Nintendo Switch {#Prev}will sync with your cloud save data on {#AlertHighlightFormat}Steam {#Prev}or {#AlertHighlightFormat}Epic Games {#Prev}whenever you bring up the {#AlertHighlightFormat}Play Menu {#Prev}{#AlertItalicFormat}(to choose a save slot to load){#Prev}.
+
+      {#AlertBoldFormat}Uploading Save Data: {#Prev}After a play session, pause the game and select {#AlertHighlightFormat}Sync & Quit {#Prev}to automatically upload your progress.
+
+      Assuming you have cloud saves enabled on {#AlertHighlightFormat}Steam {#Prev}or {#AlertHighlightFormat}Epic Games{#Prev}, you can then continue on your computer where you left off!
+
+      {#AlertBoldFormat}Troubleshooting: {#Prev}You need a live Internet connection to sync {#AlertHighlightFormat}Cross-Saves{#Prev}. In some cases, a save conflict may occur between versions. You may then choose whether to use local save data or cloud save data.
+
+      If you have a different game going in the same save slot on both your computer and {#AlertHighlightFormat}Nintendo Switch{#Prev}, to prevent a save conflict, please rename your computer save data to reference a different save slot.
+
+      For example, if you use the first save slot, search for {#AlertBoldFormat}Profile1.sav {#Prev}on your computer, and rename it to {#AlertBoldFormat}Profile2.sav{#Prev}. {#AlertHighlightFormat}Cross-Saves {#Prev}should then sync so that you have your two separate games in two separate save slots.
+     
+      Thank you for playing, and good luck killing Time!
+      """
+    }
+    {
+      Id = "CloudSaves_Help_Alt"
+      DisplayName = "Cross-Saves"
+      Description = """
+      If you play {#AlertHeaderFormat}Hades II {#Prev}on a personal computer as well as {#AlertHighlightFormat}Nintendo Switch 2{#Prev}, you can transfer your save data using {#AlertHighlightFormat}Cross-Saves{#Prev}!
+
+      {!Icons.DivLong}
+
+      {#AlertBoldFormat}Getting Started: {#Prev}To enable {#AlertHighlightFormat}Cross-Saves{#Prev}, on the previous screen, connect to either {#AlertHighlightFormat}Steam {#Prev}or {#AlertHighlightFormat}Epic Games {#Prev} by signing in to your secure account.
+
+      Once enabled, your save data on your {#AlertHighlightFormat}Nintendo Switch 2 {#Prev}will sync with your cloud save data on {#AlertHighlightFormat}Steam {#Prev}or {#AlertHighlightFormat}Epic Games {#Prev}whenever you bring up the {#AlertHighlightFormat}Play Menu {#Prev}{#AlertItalicFormat}(to choose a save slot to load){#Prev}.
+
+      {#AlertBoldFormat}Uploading Save Data: {#Prev}After a play session, pause the game and select {#AlertHighlightFormat}Sync & Quit {#Prev}to automatically upload your progress.
+
+      Assuming you have cloud saves enabled on {#AlertHighlightFormat}Steam {#Prev}or {#AlertHighlightFormat}Epic Games{#Prev}, you can then continue on your computer where you left off!
+
+      {#AlertBoldFormat}Troubleshooting: {#Prev}You need a live Internet connection to sync {#AlertHighlightFormat}Cross-Saves{#Prev}. In some cases, a save conflict may occur between versions. You may then choose whether to use local save data or cloud save data.
+
+      If you have a different game going in the same save slot on both your computer and {#AlertHighlightFormat}Nintendo Switch 2{#Prev}, to prevent a save conflict, please rename your computer save data to reference a different save slot.
+
+      For example, if you use the first save slot, search for {#AlertBoldFormat}Profile1.sav {#Prev}on your computer, and rename it to {#AlertBoldFormat}Profile2.sav{#Prev}. {#AlertHighlightFormat}Cross-Saves {#Prev}should then sync so that you have your two separate games in two separate save slots.
+     
+      Thank you for playing, and good luck killing Time!
+      """
+    }
+    {
+      Id = "AnnouncementSignature"
+      DisplayName = "@GUI\\SupergiantLogoConsole"
+    }
+    {
+      Id = "CloudSaves_BadPickAreYouSure"
+      DisplayName = "Load Earlier Older Save Data?"
+      Description = "You selected save data that is older and has less progress. Choose 'OK' to overwrite the newer file."
+    }
+    {
+      Id = "CloudSaves_BadPickAreYouSureOlder"
+      DisplayName = "Load Older Save Data?"
+      Description = "You selected save data that is older of the two options. Choose 'OK' to overwrite the newer file."
+    }
+    {
+      Id = "CloudSaves_BadPickAreYouSureFewerRuns"
+      DisplayName = "Load Earlier Save Data?"
+      Description = "You selected save data that has less progress. Choose 'OK' to overwrite the other file."
+    }
+    {
+      Id = "BootWarning_FailedToQuitProperly"
+      DisplayName = "Notice: Exiting the Game"
+      Description = "Last time, the game closed during play. To avoid losing progress, please pause and select Quit when finished."
+    }    
+    {
+      Id = "LoadingProfiles"
+      DisplayName = "Loading"
+      Description = "Loading profiles..."
+    }
+    {
+      Id = "UnsavedChangesDialog_Title"
+      DisplayName = "Unsaved Changes!"
+      Description = "Save changes to this map?"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UnsavedChangesDialog_Save"
+      DisplayName = "Save"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "UnsavedChangesDialog_NoSave"
+      DisplayName = "Don't Save"
+      OverwriteLocalization = true
+    }
+    {
+      Id = "CrashPopup_Main"
+      DisplayName = "Hades II Crash Notice"
+      Description = "Something went wrong, and Hades II stopped working unexpectedly. Please accept our apologies for the inconvenience! Technical details about the crash may be indecipherable, but are here:"
+    }
+    {
+      Id = "CrashPopup_TransmitData"
+      DisplayName = "NOTE: Because you have the 'Transmit Data' setting enabled, we receive this data automatically, so there's no further need to report it to us. Thank you for your patience as we investigate this issue!"
+    }
+    {
+      Id = "CrashPopup_NoTransmitData"
+      DisplayName = "NOTE: Because you have the 'Transmit Data' setting disabled, we do not receive this data."
+    }
+    {
+      Id = "CrashPopup_ModifiedBuild"
+      DisplayName = "Hades II Crash Notice"
+      Description = "Something went wrong, and Hades II stopped working unexpectedly. If you are using third-party mods or made any changes to the game files, please try removing them, which may alleviate this issue."
+    }
+    {
+      Id = "Switch2_Upgrade"
+      DisplayName = "Upgrade Available!"
+      Description = "Would you like to download the free Nintendo Switch 2 Edition upgrade pack in Nintendo eShop?"
+    }
+    {
+      Id = "Switch2_Upgrade_eShop"
+      DisplayName = "Open eShop"
+    }
+  ]
+}

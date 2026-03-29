@@ -1,0 +1,1616 @@
+{
+  lang = "en"
+  Texts = [
+
+    {
+      Id = "CodexData_Melinoe_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You. I know everything about you. Especially that you are weak.
+
+        {#CodexItalicFormat}. . . .
+
+        {#CodexItalicFormat}What are you fighting for? What do you hope to prove? And if by some stroke of Fate you prevail, what then? Do give it all some thought whilst you're out and about.
+      """
+    }
+    {
+      Id = "CodexData_Melinoe_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You. I know everything about you. Especially that you are weak.
+
+        {#CodexItalicFormat}How do I know? Because you wonder, if you had never been born, perhaps none of this would have happened? When instead your charge is to live, and move beyond the past.
+
+        {#CodexItalicFormat}What are you fighting for? What do you hope to prove? And if by some stroke of Fate you prevail, what then? Do give it all some thought whilst you're out and about.
+      """
+    }
+    {
+      Id = "CodexData_Hades_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your father you know by the reputation that he earned and cultivated up until your birth. Or shortly after, to be more precise, for he was then taken from us all. Yet his shadow still looms large.
+
+        {#CodexItalicFormat}. . . .
+
+        {#CodexItalicFormat}He is a deathless god, after all. Not even Time can destroy him. But you had best not give Time undue opportunity to try.
+      """
+    }
+    {
+      Id = "CodexData_Hades_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your father you know by the reputation that he earned and cultivated up until your birth. Or shortly after, to be more precise, for he was then taken from us all. Yet his shadow still loomed large.
+
+        {#CodexItalicFormat}You brought him back. Your connection to him may be stronger than you think. He is a deathless god, after all. Not even Time could destroy him. Now Time is what shall bring you closer together, if anything can.
+      """
+    }
+    {
+      Id = "CodexData_Persephone_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Queen of the Underworld, goddess of verdure, daughter to the goddess of seasons, and your birthmother.
+
+        {#CodexItalicFormat}Honor her, knowing Time and circumstance denied her the right to see either of her children grow. How she came to reside in the Underworld is a long and complicated tale for another time.
+      """
+    }
+    {
+      Id = "CodexData_Zagreus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You know of him through depictions and tales. It was enough to make you feel some connection there. That tenuous connection was vital, and you made it grow strong.
+
+        {#CodexItalicFormat}At first you thought he was nothing like you, and in many ways, you were correct. But you do feel that familial bond with him... stronger or at least different than any other.
+      """
+    }
+    {
+      Id = "CodexData_Nyx_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Mother Night. Her influence is felt from the highest peaks of the surface to the darkest abyss.
+
+        {#CodexItalicFormat}Existence without her and her many children is unimaginable. The Unseen all are sworn to serve the Underworld, by extension of her will. 
+      """
+    }
+    {
+      Id = "CodexData_Hecate_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You wish that you were her. Understandable.
+
+        {#CodexItalicFormat}Yet how many times must she tell you she is not your mother? She, who taught you much of what you know, other than that which is already in your heart.
+
+        {#CodexItalicFormat}. . . .
+      """
+    }
+    {
+      Id = "CodexData_Hecate_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You wish that you were her. Understandable.
+
+        {#CodexItalicFormat}Yet how many times must she tell you she is not your mother? She, who taught you much of what you know, other than that which is already in your heart.
+
+        {#CodexItalicFormat}Remember that she has taught you, trained you only for one particular purpose. Should you somehow achieve it, only then may you begin to learn all that she could never possibly teach.
+      """
+    }
+    {
+      Id = "CodexData_Selene_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}All think her beautiful, few know her power; for she is distant and conceals it well. She is the Eye of Night. You look up to her.
+
+        {#CodexItalicFormat}A Titaness fostered by Nyx herself, she ensures that the Unseen have visibility above the surface, as we below.
+      """
+    }
+    {
+      Id = "CodexData_Odysseus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Some know him as the man of many ways; certainly, he is a complicated one. In life, he made many friends as well as enemies. You do not see him as they do, but know him well enough to trust him.
+
+        {#CodexItalicFormat}He, in turn, knows mortals, and he knows the land above. He knows a great deal, in fact, and he is resourceful. His weakness for witches, however, seems to have no remedy.
+      """
+    }
+    {
+      Id = "CodexData_Nemesis_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A daughter of Night, and bringer of Retribution to those who achieve, shall we say, an overabundance of happiness. She keeps mortals penitent and grateful for the scraps they have.
+
+        {#CodexItalicFormat}She is bigger and stronger than you. You wonder why she was not tasked with your responsibility.
+      """
+    }
+    {
+      Id = "CodexData_Eris_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}We have Night to thank for many of the primordial forces without which the world as we know it scarce can be imagined.
+
+        {#CodexItalicFormat}Strife, for better or worse, is one such force. She scoffs at any sort of order, natural or otherwise. You are drawn to her like a moth to a flame.
+      """
+    }
+
+    {
+      Id = "CodexData_Charon_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}One of the elder sons of Night, he has served the realm beneath the Earth in a variety of ways for some aeons. He once ferried the dead to their final resting-place, but now has other burdens.
+
+        {#CodexItalicFormat}Even his own kin struggle to communicate with him, and find him to be off-putting, cryptic, or aloof. You are pleased to know him otherwise.
+      """
+    }
+    {
+      Id = "CodexData_Skelly_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}An unyielding presence, that much at least is true. You admire his wisdom and resilience. Practiced with him since you were no taller than his femur.
+
+        {#CodexItalicFormat}He bears the manner of a mortal, which gives him an ease with which he is able to earn the trust of many of the Shades of the Crossroads. Or that is your impression anyhow.
+      """
+    }
+    {
+      Id = "CodexData_Medea_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A more-feared witch you likely shall not meet. Those who crossed her, she would put on a list. Ill fortune would befall them then, and she would cross them off.
+
+        {#CodexItalicFormat}We have an understanding, and see past who mortals think she is; think past what they think we are.
+      """
+    }
+    {
+      Id = "CodexData_Circe_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Change is an inevitability, certainly for mortals, even for gods. Yet there are those who resist change with the ferocity of a caged beast. Others welcome it, and others still seek mastery of it.
+
+        {#CodexItalicFormat}Our capacity to be and our capacity to change are intertwined. She knows this, and it was enough to drive her off from polite society. Yet she is gentle with you.
+      """
+    }
+
+    {
+      Id = "CodexData_Zeus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your father's younger brother, who took Olympus after deposing his own father, Chronos.
+
+        {#CodexItalicFormat}He has few checks on his power. We are one of them.
+      """
+    }
+    {
+      Id = "CodexData_Poseidon_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your boisterous uncle, sometimes called the Earth-Shaker, although he is best known for the seas which smother much of the surface.
+
+        {#CodexItalicFormat}He is comfortable in adverse situations, and quite unable to hold still, much like the seas themselves.
+      """
+    }
+    {
+      Id = "CodexData_Hera_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The revered Queen of Olympus. She has more in common with us than one may first expect.
+
+        {#CodexItalicFormat}She ensures some level of order on Olympus is maintained, but there is only so much she can do. You wonder if you can help her.
+      """
+    }
+    {
+      Id = "CodexData_Apollo_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A god in the guise of a beautiful youth. You are left to conclude that his genial manner toward you is, in fact, sincere.
+
+        {#CodexItalicFormat}Conflict is not really in his nature, thus he is often out of his depth, despite how well he gets on anyway.
+      """
+    }
+    {
+      Id = "CodexData_Demeter_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your mother once fled from her, such is her doting and particular nature, our great goddess of seasons.
+
+        {#CodexItalicFormat}Her long life has fueled in her a particular kind of wrath that is feared even on her mountain. It is fortunate she likes you.
+      """
+    }
+    {
+      Id = "CodexData_Hestia_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The goddess of the hearth is very wise, inasmuch as she altogether avoids most matters of family. But there are some in which even she must become involved.
+
+        {#CodexItalicFormat}She likes you, and you like her. She does not stand on ceremony. You could learn a thing or two of that.
+      """
+    }
+    {
+      Id = "CodexData_Aphrodite_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You have much to learn from her, at some point.
+
+        {#CodexItalicFormat}She is more than she appears. For instance, she is older than most others on her mountain, yet holds fast to her carefree look and spirit.
+      """
+    }
+    {
+      Id = "CodexData_Artemis_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your circumstances and training required many sacrifices; one is the warmth of companionship. It was fortunate, then, that you met Artemis when you did.
+
+        {#CodexItalicFormat}Olympus knows her as a wayward daughter. We know her as one of us. The Silver Sisters watch and wait.
+      """
+    }
+    {
+      Id = "CodexData_Hephaestus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}In the heart of Olympus is a great forge, his pride. He rejects our craft, believes only in what he can grasp with his thick hands.
+
+        {#CodexItalicFormat}But he is a recluse in his own realm. In that you feel a connection.
+      """
+    }
+    {
+      Id = "CodexData_Hermes_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Amongst Olympians, you know him well. His business often takes him to the edge of the Underworld, and sometimes farther below.
+
+        {#CodexItalicFormat}His swiftness is renowned, but little else; merely a messenger! His kin on the mountain underestimate him. Long has this proven to your benefit, and to this realm's.
+      """
+    }
+    {
+      Id = "CodexData_Athena_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The goddess of wisdom and strategy has been preoccupied of late. Not even she anticipated the audacity and intensity of the Titan's attack on the gods' mountain abode.
+
+        {#CodexItalicFormat}Yet, nothing brings out a god's wrath quite like a bit of humiliation. If one could look behind the poise and cordiality, doubtless one would find a great deal of anger there.
+      """
+    }
+    {
+      Id = "CodexData_Dionysus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Normally, the god of wine is perhaps the most agreeable of all Olympians, and his influence helps make the lives and relationships of the other gods more comfortable.
+
+        {#CodexItalicFormat}But there are certain conflicts not even he can smooth over. As he would never stoop to violence, what choice is he left with now?
+      """
+    }
+    {
+      Id = "CodexData_Ares_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Certain Olympians preside over the very nature of the world and the fundamental elements that drive it along. Others concern themselves more with our basest urges.
+
+        {#CodexItalicFormat}The god of war most likely falls into the latter category, yet can you be certain? Perhaps the higher consciousness yearns for destruction as the flower yearns for rain.
+      """
+    }
+
+    {
+      Id = "CodexData_Cerberus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}With the Gates of Hell flung wide, their feared guardian is no longer required. Especially since the beast is loyal to the Underworld's King, not the usurper of his throne.
+
+        {#CodexItalicFormat}Cast like a common cur from the House of Hades into the Fields of Mourning, the beast rages on, implacable. You were an infant last you met; why would he remember you?
+      """
+    }
+    {
+      Id = "CodexData_Cerberus_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}With the Gates of Hell flung wide, their feared guardian is no longer required. Not until the Underworld is fully restored, and none can say when that shall be.
+
+        {#CodexItalicFormat}After he was cast like a common cur from the House of Hades into the Fields of Mourning, the beast raged on, implacable. Now, he goes at will, and he finally remembers you. 
+      """
+    }
+
+    {
+      Id = "CodexData_Typhon_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Monstrosity may be explained, perhaps, as that which violates all our senses, and usually most of them at once. It did not always exist, true; but it has been ever-present for a long, long time.
+
+        {#CodexItalicFormat}The hateful progenitor of all this rose from the Earth like a pestilent boil. In this Father of All Monsters, you see the antithesis of everything you dearly wish were in this world.
+      """
+    }
+
+    {
+      Id = "CodexData_Fates_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The three with the strongest influence on both the greatest turns and perhaps even the smallest minutiae of our existences, meddlesome bunch that they are.
+
+        {#CodexItalicFormat}Our efforts often do not go as planned. How much of that is our doing and how much of it is theirs? Just as they must apportion their weavings for us all, we too must take both what we can and cannot control in appropriate measure.
+      """
+    }
+
+    {
+      Id = "CodexData_Chaos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Untold aeons ago, infinity yawned wide, and from that Chaos sprang forth Night and Darkness, and the deepest reaches of your world. All else sooner or later followed: desire, the Sea, and so on.
+
+        {#CodexItalicFormat}That single point of origin remains, ever-watching. All living things, in the end, are one family, sharing this exceedingly uncommon ancestor.
+      """
+    }
+
+    {
+      Id = "CodexData_Chronos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The source of all your problems. Death to Chronos!
+
+        {#CodexItalicFormat}So much of your hatred for him comes to you secondhand. Fear not; ere this is over, you shall know each other well.
+      """
+    }
+    {
+      Id = "CodexData_Chronos_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Time heals all wounds: a lie. Some wounds never heal. Many can, to an extent. Even if some pain lingers with a warped memory of its cause.
+
+        {#CodexItalicFormat}We typically do not have opportunity to re-live our past, re-make our choices. Time does not allow for such things. But why should Time not be the exception?
+      """
+    }
+    {
+      Id = "CodexData_Heracles_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Beware the Glory of Hera. A monster of a man and a danger to himself and others.
+
+        {#CodexItalicFormat}Tales of his exploits dull with time, whilst the reality is lost even to him. He has no love for our craft or your kind.
+      """
+    }
+    {
+      Id = "CodexData_Moros_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A son of Nyx, and the harbinger of Doom. You have too little experience beyond the narrow scope of your practice to understand why he is hated so.
+
+        {#CodexItalicFormat}The Three Fates rely on him to ensure their will is done, whilst he relies on them for his sense of purpose. What would he do without them? 
+      """
+    }
+    {
+      Id = "CodexData_Arachne_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A talented and solitary weaver cursed by the gods. You do not fear her, and for that reason alone, she liked you from the start.
+
+        {#CodexItalicFormat}She has made a home of sorts in Erebus, where the living are no longer a threat to her, and where she can pursue perfection in peace.
+      """
+    }
+    {
+      Id = "CodexData_Icarus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Flight is somehow symbolic of freedom; the ability to go where one pleases, without constraint! Nonsense, of course. Flight can be very taxing. Or in some cases, worse.
+
+        {#CodexItalicFormat}This one is not alone in living, or rather existing, in his father's shadow. Not even he can fly away from that.
+      """
+    }
+    {
+      Id = "CodexData_Narcissus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The irony of this one's punishment was lost on him, such was his longing for a beauty he alone possesses; even still he gazes at his own reflection.
+
+        {#CodexItalicFormat}Depending on who you ask, the love of oneself is either a virtue or a sin. Have you a position on the subject?
+      """
+    }
+    {
+      Id = "CodexData_Echo_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}There are such Nymphs as spoke too much for their own good. After this one crossed a certain goddess of high status, she (the Nymph) never got to choose her words again.
+
+        {#CodexItalicFormat}As trite as it is to die of a broken heart, that she did, too. Yet she persists, her voice a dim reflection of her circumstance.
+      """
+    }
+    {
+      Id = "CodexData_Hypnos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A son of Nyx, and the incarnate of Sleep. How you would gaze upon him in wonder of his dreams.
+
+        {#CodexItalicFormat}He served in your father's House, and narrowly avoided the fate the others met soon after your birth.
+      """
+    }
+    {
+      Id = "CodexData_Thanatos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A son of Nyx, and the incarnate of Death. You are very familiar with his work, and respect his well-reputed discipline.
+
+        {#CodexItalicFormat}He and your brother share a close bond, though his work sometimes takes him far beyond the Underworld.
+      """
+    }
+    {
+      Id = "CodexData_Megaera_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}She is first of the Fury Sisters, whose charge is to tend to those who deserve a protracted stay in Tartarus using widely-feared methods that need not be described.
+
+        {#CodexItalicFormat}Your brother and she have a complicated, long-standing connection. 
+      """
+    }
+    {
+      Id = "CodexData_Achilles_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A loyal subject of your father's, and trusted friend of your brother's. In death, he has abandoned his bloody past, but is said to retain his martial skill.
+
+        {#CodexItalicFormat}He often visits Elysium, where he has strong ties. You can imagine all that such a warrior could teach you.
+      """
+    }
+    {
+      Id = "CodexData_Orpheus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The talented court musician of the House of Hades left a strong impression on your mother and father with his songs, enough so that he has remained in their employ.
+
+        {#CodexItalicFormat}His imaginative ballads have a way of spreading far and wide. Perhaps he shall eventually compose one about you.
+      """
+    }
+    {
+      Id = "CodexData_Dusa_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A gorgon tending to the House of Hades and the various needs of its denizens. As Chief Custodian, she often has more work than time... a feeling you know only too well.
+
+        {#CodexItalicFormat}You also wonder what it would be like having snakes for hair, which could assist in various chores or perhaps in battle.
+      """
+    }
+
+    {
+      Id = "CodexData_Dora_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}She aimlessly gravitated toward your tent, and your attempts to exorcise her failed. Thus a long-standing companionship began.
+
+        {#CodexItalicFormat}She is noteworthy inasmuch as she is able to communicate well beyond the means of lesser Shades such as she, for reasons you have yet to grasp.
+
+        {#CodexItalicFormat}. . . .
+      """
+    }
+    {
+      Id = "CodexData_Dora_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}She aimlessly gravitated toward your tent, and your attempts to exorcise her failed. Thus a long-standing companionship began.
+
+        {#CodexItalicFormat}She is noteworthy inasmuch as she is able to communicate well beyond the means of lesser Shades such as she, for she is much older.
+
+        {#CodexItalicFormat}Did she forever curse mortalkind to suffer their innumerable ailments, or did the gods, or did the Fates? Does it matter? What's done is done.
+      """
+    }
+
+    {
+      Id = "CodexData_Frinos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}An amphibious Familiar with whom you bonded early on. Content to ensure your meager residence is free of insects.
+
+        {#CodexItalicFormat}How many of your secrets have you told this one? More than to any other creature, perhaps.
+      """
+    }
+    {
+      Id = "CodexData_Toula_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You have your theories about this one. Cats seldom roam the shores of Ephyra, certainly not of late.
+
+        {#CodexItalicFormat}As loyal as the species' nature would allow.
+      """
+    }
+    {
+      Id = "CodexData_Raki_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A pale raven that took a shine to you, perhaps mistaking you for the Moon. Or perhaps seeing in you a fellow outcast.
+
+        {#CodexItalicFormat}The beak on this creature is hard enough to puncture solid rock.
+      """
+    }
+    {
+      Id = "CodexData_Hecuba_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You have known this hound for some time; she is extraordinarily obedient, for she is grateful for all that she now has.
+
+        {#CodexItalicFormat}When first you met, you saw the fierce intelligence behind her eyes. Now she follows you as though you were her mistress.
+      """
+    }
+    {
+      Id = "CodexData_Gale_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The ever-inquisitive polecat is drawn to going wheresoever it is forbidden, and does so very well.
+
+        {#CodexItalicFormat}This one is even more gifted, as though she took her form by choice and not by birth. Many a witch would surely choose the same.
+      """
+    }
+    {
+      Id = "CodexData_WeaponStaff_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Amongst the Nocturnal Arms, Descura was first to wake when you approached. She is yours.
+
+        {#CodexItalicFormat}How does it feel to wield her, something which should have never been used? Forged in Chaos as a last resort, to bring her brother-arms to heel if need arose.
+      """
+    }
+    {
+      Id = "CodexData_WeaponDagger_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The sister blades Lim and Oros were created for you; for us. Their song is the last so many of your foes shall hear.
+
+        {#CodexItalicFormat}We reap what we sow. Remember this when you put the blades to use. Make short and thorough work.
+      """
+    }
+    {
+      Id = "CodexData_WeaponAxe_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}No; do not use Zorephet the Moonstone Axe. She is for the likes of Nemesis, not for goddesses of modest proportion.
+
+        {#CodexItalicFormat}...Infuriating, is it not, such an idea? Zorephet cares not who wields her, so long as she drinks.
+      """
+    }
+    {
+      Id = "CodexData_WeaponTorch_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You are ready for the Umbral Flames of Ygnium. You are ready for them. Why, however, a weapon of light?
+
+        {#CodexItalicFormat}In light, the darkness deepens, and the shadows dance. That is why. So much the better, then, that you have two such sources.
+      """
+    }
+    {
+      Id = "CodexData_WeaponLob_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Argent Skull once belonged to the Adjudicator Revaal, and now Revaal belongs to you.
+
+        {#CodexItalicFormat}Revaal deserves it, and indeed is very fortunate that you are more responsible than once was she.
+      """
+    }
+    {
+      Id = "CodexData_WeaponSuit_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}From the shadows the Nocturnal Arms were born, but those shadows never dissipated; they congealed into one final form.
+
+        {#CodexItalicFormat}We call them Arms for a reason; they are extensions of ourselves and our will. Xinth is simply that idea made manifest.
+      """
+    }
+    {
+      Id = "CodexData_Guard_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You know the lonely sound of wind gusting through the branches.
+
+        {#CodexItalicFormat}All that is left of such Shades is the feeling it accompanies.
+      """
+    }
+    {
+      Id = "CodexData_Guard2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}There are such souls as vanish to the bottom of the deep, and choose there to remain. The darkness and the pressure has a certain allure.
+
+        {#CodexItalicFormat}Thus situated, they wish never to be near light nor life again.
+      """
+    }
+    {
+      Id = "CodexData_Radiator_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}All mortal things must die. You know this well. Some deaths, however, come too soon.
+
+        {#CodexItalicFormat}Perhaps it is a boon to know naught of death ere it occurs.
+      """
+    }
+    {
+      Id = "CodexData_Radiator2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A watery grave is quite a common one. Such a thing, water! A source of life as well as death.
+
+        {#CodexItalicFormat}Souls that spiraled into liquid oblivion sometimes retain that property in the beyond.
+      """
+    }
+    {
+      Id = "CodexData_Brawler_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}There is no escape from Erebus. You have seen Shades shimmering in the hollows of old trees, in search of exits that do not exist.
+
+        {#CodexItalicFormat}Well, there is no crossing through such thresholds without paying the necessary toll.
+      """
+    }
+    {
+      Id = "CodexData_Screamer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Anguish slowly subsides. Even still, there are those who hold fast to it longer than others.
+
+        {#CodexItalicFormat}You can at least bring them a certain peace.
+      """
+    }
+    {
+      Id = "CodexData_Screamer2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}All creatures can be overwhelmed. Some are susceptible to emotion alone, for it can crush with the weight of a fallen trunk.
+
+        {#CodexItalicFormat}Occasionally, the ensuing cries and sobs never cease. Such emotion does not merely crush; it consumes.
+      """
+    }
+    {
+      Id = "CodexData_Mage_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Bound forever in Erebus, these Shades, until their bindings became manifest.
+
+        {#CodexItalicFormat}Their hate is as boundless as it is aimless.
+      """
+    }
+    {
+      Id = "CodexData_Mage2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}To scorn the sea that killed you is a fool's way to persist eternally; yet fools abound.
+
+        {#CodexItalicFormat}Some haunt the decks of wooden ships as though a vengeance of some sort is possible.
+      """
+    }
+    {
+      Id = "CodexData_SiegeVine_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Roots long for the darkness of earth, and the dead long for the living. You mislike the combination of the two.
+
+        {#CodexItalicFormat}These brambles are particularly cruel to your feet.
+      """
+    }
+    {
+      Id = "CodexData_FogEmitter_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Dark is the natural state of things. Yet there is an unnatural darkness born of deceit and despair.
+
+        {#CodexItalicFormat}You had best avoid that kind.
+      """
+    }
+    {
+      Id = "CodexData_FogEmitter2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}None can escape their shadow. But also there are those for whom this is especially the case.
+
+        {#CodexItalicFormat}In their small-minded ignorance, they are desperate to flee from the fear and darkness in their hearts; but the more they scuttle, the deeper that darkness grows.
+      """
+    }
+    {
+      Id = "CodexData_Treant_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}From roots spring life, resilient and strong. But even roots can rot, you know.
+
+        {#CodexItalicFormat}There is no saving that which grows from such roots.
+      """
+    }
+    {
+      Id = "CodexData_Treant2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}What mortals refer to as their civilization merely is their attempt to hold the natural world at bay. They do not know, or cannot accept, that Mother Gaia has her claws in everything.
+
+        {#CodexItalicFormat}One can cut through trees and grass; set them ablaze, and so on. But they shall grow back. Vengefully, at times.
+      """
+    }
+    {
+      Id = "CodexData_Wisp_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The faintest wisp of a soul remains in these waxy formations coalesced from scattered debris and mournful memories adrift in the River Cocytus.
+
+        {#CodexItalicFormat}If disturbed, they have a single primal urge, to shake free of what little corporeal form they possess, which happens in a painful flash.
+      """
+    }
+    {
+      Id = "CodexData_ZombieAssassinMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The worst souls used to be in Tartarus but some have since escaped, even learned to take advantage of their now-less-physical forms. And the worst of these have been in high demand.
+
+        {#CodexItalicFormat}They can move undetected across the surface or Underworld, through light as well as shadow, in search of whichever victim they decided to pursue... whether for a price or for a grudge.
+      """
+    }
+    {
+      Id = "CodexData_Wringer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}There are such irredeemably compulsive thieves as have claimed that their stealing hands took on lives of their own. These have accumulated in Tartarus.
+
+        {#CodexItalicFormat}They rudely reach for anything that may be seen as having value of some sort, and not just riches, so beware.
+      """
+    }
+    {
+      Id = "CodexData_Boar_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Whilst it drew breath, the massive beast earned widespread notoriety even before it became the subject of an impossible hunt. Who but Heracles himself could have taken such a thing alive?
+
+        {#CodexItalicFormat}But, being mortal, it did not remain alive for long. What lasted much longer was its rage, for captivity brought out a truly monstrous quality in an already savage beast.
+      """
+    }
+
+    {
+      Id = "CodexData_FishSwarmer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}No telling how many varieties of sea-dwelling beasts spawn uncontrollably in that dark abyss.
+
+        {#CodexItalicFormat}Neither could you explain why some are fool enough to burst forth from the water to our suffocating air.
+      """
+    }
+    {
+      Id = "CodexData_FishmanMelee_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The sea is perhaps the best remaining trace of the infinite Chaos from which all creation sprang.
+
+        {#CodexItalicFormat}All ultimately sprang from Chaos; the successes, as well as the mistakes. And mistakes, as you well know, are best avoided.
+      """
+    }
+    {
+      Id = "CodexData_FishmanRanged_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The majestic mares and stallions of the surface... you should see their underwater counterparts.
+
+        {#CodexItalicFormat}Poseidon, predisposed to horses, must in some way be responsible.
+      """
+    }
+    {
+      Id = "CodexData_Turtle_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Gurgling undersea monsters, all clacking claws and sturdy shells no sword or spear could pierce. What made them thus?
+
+        {#CodexItalicFormat}You know that they belong within Poseidon's realm, not underneath the Earth.
+      """
+    }
+    {
+      Id = "CodexData_WaterUnit_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Serpents of the sea, bane of sailors and voyagers. You know the tales.
+
+        {#CodexItalicFormat}The truth, as often is the case, is much less dignified. So be warned.
+      """
+    }
+    {
+      Id = "CodexData_WaterUnitMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Mortal sailors would be disinclined from making their sea-journeys if only they knew what lurked beneath their waters.
+
+        {#CodexItalicFormat}They overlook such beasts as could turn their triremes into splinters.
+      """
+    }
+    {
+      Id = "CodexData_ThiefMineLayer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Many mortals have this quaint love-affair with the seas, which would sooner swallow them whole. Even when their time comes to an end, they wish to be buried not on solid ground.
+
+        {#CodexItalicFormat}In certain instances, their ashes mingle with the salt and brine in such a way as to produce unfortunate results.
+      """
+    }
+    {
+      Id = "CodexData_CrawlerMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Once there were beasts that grew tall and strong. They quickly died. It is the small and furtive that survive.
+
+        {#CodexItalicFormat}Accordingly there are such times when the smaller the foe, the greater the threat.
+      """
+    }
+
+    {
+      Id = "CodexData_CorruptedShadeSmall_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}All the dead come to the Underworld, sooner or later, one way or another. Used to, anyway.
+
+        {#CodexItalicFormat}The smallest flecks of former life, given sufficient time and absolutely nothing more, sometimes grow weary of their lot. In the Fields, they flock.
+      """
+    }
+    {
+      Id = "CodexData_CorruptedShadeMedium_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Mortals often wonder what they did to deserve their fate, not just in life but for aeons afterward. Most eventually come to an understanding.
+
+        {#CodexItalicFormat}Those that do not generally fare worse, manifesting their indignation and spite in a callous form.
+      """
+    }
+    {
+      Id = "CodexData_CorruptedShadeLarge_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The living leave the world in all different shapes and sizes, and the dead have their commensurate proportions. But the size of the soul has no inherent bearing on its quality.
+
+        {#CodexItalicFormat}Have you seen some of these shuffling wretches? To extinguish life is their only purpose now.
+      """
+    }
+    {
+      Id = "CodexData_DespairElemental_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Despair comes in many shapes and sizes; for instance, the shape of a large, crushing rock. This particular form suitably explains why there is not even more of that accursed strain of wheat growing in the Fields of Mourning.
+
+        {#CodexItalicFormat}Giving in to Despair is easy. Avoiding it is difficult, but possible. Sometimes. Is that not so?
+      """
+    }
+
+    {
+      Id = "CodexData_BrokenHearted_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Who can say whence our emotions arise? Daemons sometimes surely are to blame; not exclusively for negative sentiments, though more often than not.
+
+        {#CodexItalicFormat}In the Fields of Mourning now growing uncontrollably just outside Tartarus, negative emotions run high, and Daemons run rampant.
+      """
+    }
+    {
+      Id = "CodexData_Lovesick_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}So much like common mortals, we deathless gods are often caught between what our minds say, and what our hearts desire.
+
+        {#CodexItalicFormat}When mortal hearts utterly give in, leaving their hosts with nothing at all, these unfortunates sometimes become mere husks of their former selves. Even in death.
+      """
+    }
+    {
+      Id = "CodexData_Mourner_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}How odd, the shedding of tears. Think on it! When overwhelmed by emotion, moisture excretes from our very eyes, blinding and stinging; yet, at times, providing some relief.
+
+        {#CodexItalicFormat}But for those that withheld their tears all through their miserable little lives, there is no relief to be found any longer. No matter how many tears they may now care to shed.
+      """
+    }
+    {
+      Id = "CodexData_LycanSwarmer_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Father of All Monsters gave rise to a multitude of things that mortals and perhaps gods fear, rivaling in number even all the sons and daughters of Night.
+
+        {#CodexItalicFormat}Some of these can hardly be described as living things; they are more like flashes of malice given form... sometimes even a decorative form, oddly enough.
+      """
+    }
+    {
+      Id = "CodexData_Lycanthrope_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Beasts, with their keen senses and clarity of purpose, offer much for us to learn, as well as envy.
+
+        {#CodexItalicFormat}Granted, if one were to confront the bestial monstrosities stalking through the tall brush of the Mourning Fields, one might reevaluate such an assertion. The idea that these come from a bloodline that the gods once cursed into this form is an insult to the wolves they crassly resemble, if not the gods as well.
+      """
+    }
+    {
+      Id = "CodexData_Vampire_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Blood is the essence of life; a relatively potent substance, useful for a prolonged living or for a variety of incantations. It is a delectable beverage, as well, for Daemons of a certain disposition.
+
+        {#CodexItalicFormat}These apparitions sometimes haunt the surface, where blood exists in relatively ample supply. But even they fear the break of Dawn, so in their cowardice, they huddle in the Underworld, harboring an ever-growing thirst.
+      """
+    }
+    {
+      Id = "CodexData_Lamia_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Our craft, like any tool, need not necessarily be used only for beneficial purposes. There are such creatures as possess a basic knowledge of destructive arts, and that is the extent of their magickal inclinations.
+
+        {#CodexItalicFormat}The snake-haired spawn of Queen Lamia come to mind, their venomous thoughts manifesting in a crude yet potent way.
+      """
+    }
+    {
+      Id = "CodexData_LamiaMiniboss_01",
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Within the Mourning Fields are those that have truly given in, and those that feast upon such negative auras. The abominable Queen Lamia, long since having shed her mortal guise, fits into either category.
+
+        {#CodexItalicFormat}She controls her self-named spawn only through fear. If she even remembers the reasons for her burning hatred for deathless gods and mortals alike, none can say by now.
+      """
+    }
+
+    {
+      Id = "CodexData_SwarmerClockwork_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Essentially-mindless apparitions of the throes of death; they prey upon the souls of the damned, if any lately they can find.
+
+        {#CodexItalicFormat}They serve no master, yet also pose no great threat to Chronos or his followers. Thus they are tolerated, barely, if but for the sport of Satyr cultists seeking to test the strength of their hooves.
+      """
+    }
+    {
+      Id = "CodexData_ClockworkHeavyMelee_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Lord and Master of the realm had numerous responsibilities, but chief amongst them was the burden to judge lives. For the foulest such lives, the sentence was simple.
+
+        {#CodexItalicFormat}Some of these vindictive wretches, freed from their shackles, saw fit to serve the Titan Lord who liberated them. Whyever should they not?
+      """
+    }
+
+    {
+      Id = "CodexData_Swarmer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Daemons shaped much like a mortal's skull, even perhaps a god's. Deep in the Underworld, they were everywhere.
+
+        {#CodexItalicFormat}If ever there was a spark behind their burning eyes, it suggested aggression or even terror.
+      """
+    }
+    {
+      Id = "CodexData_LightRanged_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}That which you study and practice may take eternity to master. Rather impressive, then, how certain mortals can grasp some of it during their brief time alive.
+
+        {#CodexItalicFormat}Now they are your sisters by creed. They revel in silence and follow orders well.
+      """
+    }
+    {
+      Id = "CodexData_SpreadShotUnit_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}They were shunned, feared; until those qualities became a part of them. If ever you were to meet, no need to take it personally.
+
+        {#CodexItalicFormat}Some are now in our employ, but too many are too raw. Perhaps all in due time.
+      """
+    }
+    {
+      Id = "CodexData_BloodlessNaked_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Bereft of skin and sinew, armor and weapons, even still they fight. Such is their monstrous urge for war.
+
+        {#CodexItalicFormat}In magma-heated corners of your Lord Father's Underworld, their impulses could oft be satisfied.
+      """
+    }
+    {
+      Id = "CodexData_BloodlessWaveFist_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Even the remains of hateful worshipers of long-dead monstrosities deserve a home of sorts within the Underworld.
+
+        {#CodexItalicFormat}May you never cross paths with them, or more specifically, with the waves of wrath they fan like flames.
+      """
+    }
+    {
+      Id = "CodexData_BloodlessBerserker_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}By all rights, they ought have wallowed in the pits of Tartarus. But for one reason or another, they were given a bit of reprieve.
+
+        {#CodexItalicFormat}Your Lord Father wanted to cultivate a certain reputation for the Underworld, after all. Wretches such as these could see to it.
+      """
+    }
+    {
+      Id = "CodexData_BloodlessGrenadier_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Mortals are inexorably drawn to death, and to various devices that can bring it about. Sometimes, no matter the cost.
+
+        {#CodexItalicFormat}Even in the infernal depths below, they would sooner try and bottle the roaring flames than avoid them.
+      """
+    }
+    {
+      Id = "CodexData_BloodlessSelfDestruct_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The soul subjected to a particularly violent death may sometimes become trapped in such patterns. Though, this may also be a choice of theirs.
+
+        {#CodexItalicFormat}They cannot break free from your Lord Father's realm, but certainly they thrash about.
+      """
+    }
+    {
+      Id = "CodexData_BloodlessPitcher_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Earth safeguards her many mysteries, sometimes with rather deadly traps. Often, all it takes is a pinch of this, a bit of that...
+
+        {#CodexItalicFormat}Some mortals simply cannot resist the knowing of such matters. And who are we to blame them?
+      """
+    }
+    {
+      Id = "CodexData_SatyrCrossbow2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}For those that serve the Titan Lord, what greater mockery of purpose could there be than to weather the storms of Olympus and die to the gods and their mechanical defenses?
+
+        {#CodexItalicFormat}The mortal conception of death could not be further from the minds of creatures such as these.
+      """
+    }
+
+    {
+      Id = "CodexData_SatyrLancer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Titan's vanguard rigorously train to bring about his victory beneath the heavens and the Earth. Their devotion is almost admirable, if not for their malevolent intent.
+
+        {#CodexItalicFormat}They improvise their tactics from the Shades of mortals who once fought and perished in the flames of war. Supposedly they wish to bring about another Golden Age; but their lust for violence suggests other motives.
+      """
+    }
+    {
+      Id = "CodexData_SatyrLancer2_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Of those Satyrs with a violent temperament, most are predisposed to pointy weapons, probably because they are much like the horns atop their wretched heads.
+
+        {#CodexItalicFormat}Those that show the greatest martial expertise and have the most resilience to inclement weather are chosen for the Titan Lord's surface assault forces.
+      """
+    }
+    {
+      Id = "CodexData_Crawler_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}What is it about small, fast-scurrying creatures that make mortals go pale with fright and drive them to the brink of madness?
+
+        {#CodexItalicFormat}Satyrs are perhaps the wiser, for they harbor no such fear. Instead, they use that fear against their enemies; and their innumerable, furtive, belly-crawling collaborators are all too happy to oblige. 
+      """
+    }
+    {
+      Id = "CodexData_SatyrRatCatcher_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}One could mistake these cloven-footed fiends for beggar-men, in all their tattered robes. One would, of course, have to ignore the chittering cacophony of all the vicious little things within those folds.
+
+        {#CodexItalicFormat}These Satyrs seem to coexist in symbiosis with the vermin swarming at their hooves; but they would sooner flay each other to shreds, had they no others to attend to first.
+      """
+    }
+    {
+      Id = "CodexData_SatyrRatCatcherMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Dionysus himself would certainly attest that Satyrs, for all their quirks, are creatures prone to no degree of moderation whatsoever when it comes to any of their appetites.
+
+        {#CodexItalicFormat}As such, we need but use imagination to discern how these abhorrent creatures could occasionally grow to an extraordinary size. Naturally, other Satyrs look up to these staggering examples of their kind in more ways than one; but also have the sense to remain very far away.
+      """
+    }
+    {
+      Id = "CodexData_SatyrCultist_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Some would kill for Chronos; some would die for him. Those who gladly would do both may find themselves within his inner circle, however briefly.
+
+        {#CodexItalicFormat}As Time, by the Titan's own admission, cannot be stopped, not even he can turn back the moment of these creatures' doom. But, even as their bodies turn to dust, they soon seem to return... a power the Titan hoards not entirely for himself.
+      """
+    }
+    {
+      Id = "CodexData_TimeElemental_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Time does not flow as evenly as tends to be believed. Aeons can pass in an instant. Yet there are moments that stretch on for eternity. To further complicate, experience of Time is unique to each individual contained within its span.
+
+        {#CodexItalicFormat}Consider all those everlasting moments, and all the ways in which they manifest. That the Titan can harness their potential ought come as no surprise.
+      """
+    }
+    {
+      Id = "CodexData_GoldElemental_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Titan's love of gold is widely known. In fact, one of his first decrees as the usurper of the Underworld was to imprint his likeness onto shiny coins of that gaudy metal, and dispense them all throughout the realm; a means to signify his new ubiquity.
+
+        {#CodexItalicFormat}Gold has its many uses, to be sure. More pliable than most other such materials, it can almost seem to take on a life of its own... though the Titan is to blame for the most literal of cases such as these.
+      """
+    }
+    {
+      Id = "CodexData_GoldElementalMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Of all the many vices that can twist decisions and the mind, avarice deserves special recognition. To want for more! It starts as such a subtle thing. But soon it manifests in various destructive ways.
+
+         {#CodexItalicFormat}Indeed, it is to avarice alone that we may attribute the most ruinous of deeds, both for mortals and the divine. And it is precisely these deeds that later manifest in forms that want for even more.
+      """
+    }
+    {
+      Id = "CodexData_Carrion_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}North they soared, night after night, far from their homes in Lake Stymphalis. They somehow knew a veritable feast of flesh awaited them.
+
+        {#CodexItalicFormat}So gorged upon the dead have they become, that they themselves are not so much alive any longer.
+      """
+    }
+    {
+      Id = "CodexData_Zombie_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}With the gates of the Underworld thrown wide, and the Lord and Master of the realm deposed, the dead upon the surface have nowhere to go.
+
+        {#CodexItalicFormat}Thus most remain right where they fall. But others are more restless, and have will enough to clamber to their feet.
+      """
+    }
+    {
+      Id = "CodexData_ZombieOlympus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}There is no better way to ensure something-or-other gets done than by making it forbidden. The mountain of the gods is not for mortals, yet some always attempt the climb.
+
+        {#CodexItalicFormat}It is perilous of course. But now, with the Titan Lord exerting his influence, such fools have a new opportunity at hand.
+      """
+    }
+    {
+      Id = "CodexData_ZombieCrewman_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Chronos raised a sunken fleet to sail against the gods; helming each ship must surely be less difficult than that.
+
+        {#CodexItalicFormat}Yet, the competence of these drowned crew leaves much to be desired. It is as though they are not a serious armada, but a diversion.
+      """
+    }
+    {
+      Id = "CodexData_ZombieAssassin_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Thievery and banditry are two of the most ancient preoccupations practiced by mortalkind. To certain individuals, these are more than necessities; they are callings.
+
+        {#CodexItalicFormat}Having lost their lives, they are desperate now to find others, and take them for themselves.
+      """
+    }
+    {
+      Id = "CodexData_ZombieHeavyRanged_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}When Poseidon split the surface asunder, many believed only the strong would survive. But the strong perished, too.
+
+        {#CodexItalicFormat}They have no use now for the casks they once held to for dear life.
+      """
+    }
+    {
+      Id = "CodexData_ZombieSpawner_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}One must admit, if grudgingly, that a shallow grave is preferable to no grave at all.
+
+        {#CodexItalicFormat}Such graves do not afford the dead very much rest. Even the softest footfall in the general vicinity is cause enough to wake what lies nearby.
+      """
+    }
+    {
+      Id = "CodexData_Mudman_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Earth herself heaves with disgust at times.
+
+        {#CodexItalicFormat}All that mud and refuse, taking form; whether from an accident of nature, or of reckless willful disregard for creation, who can say?
+      """
+    }
+    {
+      Id = "CodexData_SatyrCrossbow_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The horned ones loyal to the Titan Lord; where would he, and any of us be, if not for all their sacrifices?
+
+        {#CodexItalicFormat}Long did they toil in the Temple of Styx, fulfilling an age-old dream; for not since the Golden Age did they last scour the surface as now they do once more. Their cruelest and strongest rise naturally to the forefront, for all the misery and havoc they cause.
+      """
+    }
+    {
+      Id = "CodexData_SatyrSapper_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Amongst those who relinquish their lives to the Titan Lord, and have made his cause their own, no greater glory exists than to despoil the mountain of the gods firsthand.
+
+        {#CodexItalicFormat}Breaching the formidable defenses of Mount Olympus is not easy, but there are Satyrs of sufficient brawn and ferocity that stand ready to make the attempt, again and again as required.
+      """
+    }
+    {
+      Id = "CodexData_WaterElemental_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Naiads and the Oceanids have their own problems, living in their waters. These spirits, for example.
+
+        {#CodexItalicFormat}When a mortal's skull earns a watery tomb, sometimes a certain type of Water-Daemon takes up residence therein; then once settled, it can quickly make more.
+      """
+    }
+    {
+      Id = "CodexData_Scimiterror_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Exotic weapons from a distant land, instilled with malevolent intent, and crowded into crates by the dozens: what possibly could go amiss?
+
+        {#CodexItalicFormat}Whence came these blades and whether they serve Chronos is unclear. Whether the blades are sharp and swift, however, is not a subject of dispute.
+      """
+    }
+    {
+      Id = "CodexData_Stickler_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The javelin is one of those simple, effective inventions for which mortalkind seems rather proud of itself.
+
+        {#CodexItalicFormat}Consequently, there are such would-be masters of the associated throwing technique who insist on practicing well past the point of their earthly demise... and are prepared to render their services in exchange for gold.
+      """
+    }
+    {
+      Id = "CodexData_Drunk_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Likely it is but a fad that mortals are beginning to use cylindrical containers built of wooden slats for storage purposes. Clay is perfectly suitable and no trees are required.
+
+        {#CodexItalicFormat}But, nay! A certain type of miscreant begs to differ... gorging upon the contents of this new age of containment, and meeting an ungainly end drowning in only who-knows-what. Thus they linger.
+      """
+    }
+    {
+      Id = "CodexData_Swab_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}What draws a mortal to the seas? The search for sustenance is understandable, at least. The search for the sublime, somewhat less so.
+
+        {#CodexItalicFormat}Death by drowning is a fairly common way for such pursuits to end. But such a man's commitment to the sea is only beginning at that stage. And often he is weighed down by more than his obsession.
+      """
+    }
+    {
+      Id = "CodexData_HarpyCutter_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Once, Harpies lived in crags and caves, supping on vermin and the lost. But in their insolence, they sought to rise higher and higher above their station.
+
+        {#CodexItalicFormat}To roost upon the mountain of the gods appears to be something of a generational challenge. Thus they have made powerful enemies, but in Chronos, they have a powerful facilitator. 
+      """
+    }
+    {
+      Id = "CodexData_HarpyDropper_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Some Harpies are well-adapted to the frigid cold of high altitudes, yet that is not enough for them. Higher and higher they seek to fly, so that they might dig their talons into the Moon herself.
+
+        {#CodexItalicFormat}You know the Moon can fend for herself, but for all that she has done for you, why not save her the trouble if you have the means? 
+      """
+    }
+    {
+      Id = "CodexData_Charybdis_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Amongst the very worst of ways that mortal sailors may meet their demise, this is one.
+
+        {#CodexItalicFormat}To plunge headlong toward such a thing is clearly ill-advised. But, wherever it resides, other dangers always abound, making the choice of how best to perish difficult. Incidentally, the suspicion that the thing was rooted to a certain place proved false.
+      """
+    }
+    {
+      Id = "CodexData_SentryBot_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The automated security on Mount Olympus has to fulfill a variety of requirements, many of which unfortunately have naught to do with ridding the mountain of invading forces.
+
+        {#CodexItalicFormat}This particular model needed to have an elegant, decorative appearance that did not detract from the natural beauty of its environs. It is the earliest such model still in use.
+      """
+    }
+    {
+      Id = "CodexData_AutomatonBeamer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}All Olympians agreed about the potential benefits of using Automatons to ensure their mountain's security, but the responsibility to make them work fell solely to Hephaestus.
+
+        {#CodexItalicFormat}One especially troublesome issue was how to quickly and consistently identify a hostile presence. It seems Automatons, much like the rest of us, do not know who to trust.
+      """
+    }
+    {
+      Id = "CodexData_AutomatonEnforcer_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Originally invented to aid Lord Hephaestus with his great forge, these Automatons have such brute strength that they proved rather capable in other ways.
+
+        {#CodexItalicFormat}They do not fare particularly well with complex tasks, and are not receptive to verbal commands. You are nothing but a lump of coal to them.        
+      """
+    }
+    {
+      Id = "CodexData_Dragon_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The legions of the Titan Lord are bent on striking the mountain of the gods using all available means. Flying beasts can bypass many of the mountain's defenses, and even transport other forces and supplies.
+
+        {#CodexItalicFormat}Such beasts normally would never be concerned with the outcome of the Titan's feud. But they bear the Titan's own brand, suggesting either that they were bred for this purpose, or very strongly compelled.
+      """
+    }
+    {
+      Id = "CodexData_DragonMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}To ransack the mountain of the gods, one must be sufficiently equipped and able to bypass its rudimentary defenses. The Titan Lord uses a massive winged serpent to make both of these conditions distinctly possible.
+
+        {#CodexItalicFormat}The blood of creatures such as this runs cold. They are drawn to sources of heat, of which Mount Olympus has many, especially when so much of it is aflame.
+      """
+    }
+    {
+      Id = "CodexData_Talos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Extraordinary talent is required to breathe life into a statue, and for that, Lord Hephaestus ought to be quite proud. Of all his Automaton creations, this one stands tallest in every respect.
+
+        {#CodexItalicFormat}An earlier design was battle tested on a distant isle, where it proved fairly capable but was ultimately destroyed. But the parts were recovered, and this newer model, whilst smaller, now reassembles on its own.
+      """
+    }
+
+    {
+      Id = "CodexData_Mati_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Monstrous eyes shorn from something horrifying beyond measure. Best to avoid contact of any kind.
+
+        {#CodexItalicFormat}Supposedly they are able to see only the worst in anything and everything, and in so doing, reveal it to others.
+      """
+    }
+    {
+      Id = "CodexData_EarthElemental_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Far under the cold veneer of Olympus is a burning-hot core, which fuels the forge of Hephaestus and the hearth of Hestia alike.
+
+        {#CodexItalicFormat}Such hellish heat and pressure can twist even solid stone into agonizing shapes; traces of brigands who ventured too far.
+      """
+    }
+    {
+      Id = "CodexData_DragonBurrower_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The ever-writhing, serpentine body of Typhon sheds these snakelike parasites, which burrow then into the ground, mistaking it for their father's flesh.
+
+        {#CodexItalicFormat}Lacking sufficient nourishment or perhaps entertainment, they lie in ambush and lash out from the earth.
+      """
+    }
+    {
+      Id = "CodexData_SimpleSquad_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Though closely resembling eyes, of which the Father of All Monsters has an overabundance, these seem to be more of a pupal form of something worse.
+
+        {#CodexItalicFormat}They swarm, only so that more can swarm. Very few survive, their lifeless husks becoming sustenance for the rest. And for what?
+      """
+    }
+    {
+      Id = "CodexData_Stalker_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Monsters often live in shadows as do you. Most of the similarities end there, and for that, we can all be thankful.
+
+        {#CodexItalicFormat}This particular strain of Typhon's offspring has such hatred for air and light that it whiles away its short, violent existence underground. Except to feed.
+      """
+    }
+    {
+      Id = "CodexData_StalkerMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Every monstrosity you can imagine shares an ancestry; those you cannot imagine, likewise. One rule appears to drive them... that the strong feast on the weak.
+
+        {#CodexItalicFormat}Some apparently have learned to hunt in pairs, not out of any sense of kinship but for the pure convenience of it. Had they nothing to kill, they would turn on each other, no doubt.
+      """
+    }
+    {
+      Id = "CodexData_Brute_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The enormous mass that is Typhon is more than a single living organism, but a colony of all manner of things that cannot be described with what language we have. These are a fine example.
+
+        {#CodexItalicFormat}The calcified protrusions on their heads probably once served as their father's teeth, of which he has many, many more than can be counted. Best not to wonder what that means for their own teeth.
+      """
+    }
+    {
+      Id = "CodexData_BruteMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Like too many other creatures, Typhon appears to care nothing at all for his progeny, in spite of their staggering numbers. Even for his largest, most ferocious children, the Father of All Monsters has no love at all; no single trace detectable even by magickal means.
+
+        {#CodexItalicFormat}You have no love for such things, either. But, deep down, you do perhaps admire them a bit; the largest of them are more efficient at what they do than you can ever hope to be.
+      """
+    }
+    {
+      Id = "CodexData_Captain_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You have known Shades of mortals claiming to have sailed all the way across Poseidon's waters. That arrogance is probably what got them killed before their brief days living necessarily ran out.
+
+        {#CodexItalicFormat}But there are famous sailors, it is true. Infamous ones as well who preyed upon the other kind. In death, blood no longer flows through their veins, but the salt of the sea does still.
+      """
+    }
+    {
+      Id = "CodexData_OctofishMiniboss_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}How is it that Chaos could give shape to all that exists before you? Perhaps to fill this world's void, the Primordial Originator brought in this or that from worlds beyond.
+
+        {#CodexItalicFormat}No explanation comes to you that better explains the form of this particular sea-beast and its floating flock. You cannot tell if it is capable even of simple thought; but it can definitely sting.
+      """
+    }
+            
+    {
+      Id = "CodexData_Scylla_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A witch cursed her, you know; to look the way she does, though not to be the way she is. Her disposition is of her own choice. But her dislike for witches is worthy of note. 
+
+        {#CodexItalicFormat}She has a partnership with other loathsome daughters of the deep; but they can sing, you have to give them that.
+      """
+    }
+    {
+      Id = "CodexData_Polyphemus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A lifetime of devouring mortals takes its toll, so this sightless Cyclops decided to give it all up for the life of a simple shepherd. 
+
+        {#CodexItalicFormat}But you must know he has not lost the taste for flesh. For he shall remind you of this, again and again.
+      """
+    }
+    {
+      Id = "CodexData_Prometheus_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}A rebellious Titan who once fought alongside the gods of Olympus, but later stole from them, all for the sake of mortalkind. And for that, he was punished in a manner now well-known.
+
+        {#CodexItalicFormat}If truly he knows what shall come to pass, then he bears a terrible burden. Yet perhaps in the future he foresees, he shall finally rid himself of it.
+      """
+    }
+
+    {
+      Id = "CodexData_Hub_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You belong in the House of Hades. But instead, you are here. Unseen, with scant few others, amid paths that can take you any which way.
+
+        {#CodexItalicFormat}Choose carefully where you go from this point forward.
+      """
+    }
+    {
+      Id = "CodexData_BiomeF_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Erebus has less fallen to ruin as it has returned to its more-natural state.
+
+        {#CodexItalicFormat}The Lost Souls that dwell there have nowhere left to go. They are well past the point where grieving for them is of any use.
+      """
+    }
+    {
+      Id = "CodexData_BiomeG_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Oceanus is largely the domain of Lord Poseidon, but the edge of it spills out into the Underworld. You are fortunate in that.
+
+        {#CodexItalicFormat}But you are unfortunate in that the lurking monstrosities that there reside prefer you no more than Chronos or any god or Titan.
+      """
+    }
+    {
+      Id = "CodexData_BiomeH_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The Mourning Fields spread across the outer reaches of the Underworld, languishing together with those residing there.
+
+        {#CodexItalicFormat}How unusual that, in such an increasingly well-populated place, a sense of utter solitude should be so pervasive, so oppressive. Nothing prevents the Shades that wallow there from leaving, save for they themselves.
+      """
+    }
+    {
+      Id = "CodexData_BiomeI_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The ever-shifting depths of the Underworld are not as once they were. Chronos now resides there, with his retinue of Satyr worshipers.
+
+        {#CodexItalicFormat}How exactly the Titan escaped an inescapable prison, he alone can say. But the groaning wheels and machinery throughout the place have grown more prevalent since his return, suggesting long-dormant plans that came finally to fruition. 
+      """
+    }
+    {
+      Id = "CodexData_BiomeI_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The ever-shifting depths of the Underworld are not as once they were. The Titan of Time may no longer hold the seat of power, but his influence remains.
+
+        {#CodexItalicFormat}Shall you ever see Tartarus in all its terrifying glory, true to all the tales you heard? No. For that is but a tale of the way it was. Our minds can conjure up such fantasies. 
+      """
+    }
+
+    {
+      Id = "CodexData_BiomeHouse_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your rightful home. Your father's, your mother's, your brother's. Not the Titan's. But, what is rightful is not always what is true.
+
+        {#CodexItalicFormat}Debased by the Titan's likeness and eccentricities, the House is his base of operations, a virtually impregnable fortress. But you know the way in, and have authority to enter that not even he can rescind.
+      """
+    }
+    {
+      Id = "CodexData_BiomeHouseRestored_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your rightful home. Your father's, your mother's, your brother's. It used to look much as it does at present, but not exactly, for the past can never be recovered. Not entirely.
+
+        {#CodexItalicFormat}Even as the real place undergoes interminable renovations, as your father calls them, you remain haunted by the vision of the way it was within the Titan's grip. Not just haunted; driven.
+      """
+    }
+    {
+      Id = "CodexData_BiomePalace_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Your mountain family's stronghold, nestled amongst the tallest, most glorious peaks, and protected by both physical and magickal devices. It is practically a vault, so irreplaceable are its contents.
+
+        {#CodexItalicFormat}Can you imagine yourself there, minding your every gesture and turn of phrase? It may be beautiful but it is complicated there, whilst simplicity is more to your liking.
+      """
+    }
+
+    {
+      Id = "CodexData_BiomeChaos_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The infinite abyss from which the first creations sprang is, for the most part, indistinguishable from the consciousness on whose whim those acts of creation occurred.
+
+        {#CodexItalicFormat}To call it a place would not be exactly right, for one cannot travel there by worldly means. The only conceivable way to reach to that most-ancient place is to somehow draw the notice of the void, and heed its call.
+      """
+    }
+    {
+      Id = "CodexData_BiomeN_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The city of Ephyra once stood in solemn praise of your mother and father. Now it is ransacked.
+
+        {#CodexItalicFormat}You cannot survive up there, anyhow, born as you were in the Underworld. Unless, of course, your theoretical incantation that would unbind a chthonic fate is manifest into reality.
+      """
+    }
+    {
+      Id = "CodexData_BiomeO_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}The witches of Thessaly had better learn to swim, given what Poseidon has done to the region.
+
+        {#CodexItalicFormat}This water channel cuts straight from Ephyra to the base of Mount Olympus. Convenient for a naval assault, but also convenient for you.
+      """
+    }
+    {
+      Id = "CodexData_BiomeP_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}You never thought that you would see Olympus with your own eyes, yet here we are. Do you suppose its best days are in the future, or in the past? Clearly they are not in the present.
+
+        {#CodexItalicFormat}The gods themselves take refuge at the summit, leaving their Automatons to fortify the cold chambers and frostbitten pathways ultimately leading there.
+      """
+    }
+    {
+      Id = "CodexData_BiomeQ_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Upon the highest peak of the Olympians' mountain stands a proud fortress concealing their seat of power. This line of defense was probably devised the first time the gods were almost overthrown, long before your time.
+
+        {#CodexItalicFormat}Now the fortress threatens to collapse, as it perhaps was always meant to do. And what of your family's pride? Surely that has also suffered heavy damage.
+      """
+    }
+    {
+      Id = "CodexData_BiomeQ_02"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Upon the highest peak of the Olympians' mountain stands a proud fortress concealing their seat of power. This line of defense was probably devised the first time the gods were almost overthrown, long before your time.
+
+        {#CodexItalicFormat}Ever since then, the fortress has held fast. But what of your family's pride? Surely that too has suffered heavy damage.
+      """
+    }
+    {
+      Id = "CodexData_BiomeB_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Most of the dead used to gather in the meadows of Asphodel. Then, the meadows all were set ablaze, after the burning River Phlegethon boiled over. After that, even the dead had to move on.
+
+        {#CodexItalicFormat}Who can say how Asphodel fares now? To us it is but a dream of a different time.
+      """
+    }
+    {
+      Id = "CodexData_BiomeC_01"
+      InheritFrom = "BaseCodexEntry"
+      DisplayName = """
+        {#CodexItalicFormat}Those who lived in glory, or perhaps merely died in glory, may be rewarded for it in the Underworld through eternal residence in this vaunted region.
+
+        {#CodexItalicFormat}In Elysium, glory is what matters most, as Shades spectate or participate in ostentatious contests in pursuit of superiority and perfection.
+      """
+    }
+
+  ]
+}

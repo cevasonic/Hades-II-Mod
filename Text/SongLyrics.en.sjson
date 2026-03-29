@@ -1,0 +1,1614 @@
+{
+  lang = "en"
+  Texts =
+  [
+    /* Iris songs */ 
+    /* /Music/IrisMusicScylla1_MC */
+    {
+      Id = "IrisMusicScylla1_MC_001"
+      DisplayName="{!Icons.Music}Come to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_002"
+      DisplayName="{!Icons.Music}Rest your head{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_003"
+      DisplayName="{!Icons.Music}Warm within{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_004"
+      DisplayName="{!Icons.Music}Ocean's bed{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_005"
+      DisplayName="{!Icons.Music}Rock and sway your{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_006"
+      DisplayName="{!Icons.Music}Worries down{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_007"
+      DisplayName="{!Icons.Music}Ebb and flow{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_008"
+      DisplayName="{!Icons.Music}Fast and sound{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_009"
+      DisplayName="{!Icons.Music}Come friends{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_010"
+      DisplayName="{!Icons.Music}Don't be afraid{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_011"
+      DisplayName="{!Icons.Music}Come my dears{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_012"
+      DisplayName="{!Icons.Music}Pains wash away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_013"
+      DisplayName="{!Icons.Music}Stay with me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_014"
+      DisplayName="{!Icons.Music}Be at peace{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_015"
+      DisplayName="{!Icons.Music}Fears be still{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_016"
+      DisplayName="{!Icons.Music}Troubles cease{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_017"
+      DisplayName="{!Icons.Music}Hear my voice{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_018"
+      DisplayName="{!Icons.Music}Sweetly sing{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_019"
+      DisplayName="{!Icons.Music}Lullaby{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_020"
+      DisplayName="{!Icons.Music}Precious thing{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_021"
+      DisplayName="{!Icons.Music}Come friends{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_022"
+      DisplayName="{!Icons.Music}Don't be afraid{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_023"
+      DisplayName="{!Icons.Music}Come my dears{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_024"
+      DisplayName="{!Icons.Music}Pains wash away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_025"
+      DisplayName="{!Icons.Music}Away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_026"
+      DisplayName="{!Icons.Music}Come follow{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_027"
+      DisplayName="{!Icons.Music}Sounds of seashells{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_028"
+      DisplayName="{!Icons.Music}Pull the line{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_029"
+      DisplayName="{!Icons.Music}That leads to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_030"
+      DisplayName="{!Icons.Music}Give heed to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_031"
+      DisplayName="{!Icons.Music}Follow me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_032"
+      DisplayName="{!Icons.Music}Come to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_033"
+      DisplayName="{!Icons.Music}Come to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_034"
+      DisplayName="{!Icons.Music}Come to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_035"
+      DisplayName="{!Icons.Music}Come to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_036"
+      DisplayName="{!Icons.Music}Come{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_037"
+      DisplayName="{!Icons.Music}Come to me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_038"
+      DisplayName="{!Icons.Music}Close your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_039"
+      DisplayName="{!Icons.Music}Hear my song{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_040"
+      DisplayName="{!Icons.Music}Quickly now{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_041"
+      DisplayName="{!Icons.Music}Don't be long{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_042"
+      DisplayName="{!Icons.Music}Come friends{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_043"
+      DisplayName="{!Icons.Music}Don't be afraid{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_044"
+      DisplayName="{!Icons.Music}Come my dears{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_045"
+      DisplayName="{!Icons.Music}Pains wash away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_046"
+      DisplayName="{!Icons.Music}Away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_047"
+      DisplayName="{!Icons.Music}Away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_048"
+      DisplayName="{!Icons.Music}Fade{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_049"
+      DisplayName="{!Icons.Music}Away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_050"
+      DisplayName="{!Icons.Music}Come oh sailors{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_051"
+      DisplayName="{!Icons.Music}Hear my music{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_052"
+      DisplayName="{!Icons.Music}Echoing through sea and cove{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_053"
+      DisplayName="{!Icons.Music}Bring your hull into my harbor{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_054"
+      DisplayName="{!Icons.Music}Join the teeming wrecks below{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_055"
+      DisplayName="{!Icons.Music}Down down{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_056"
+      DisplayName="{!Icons.Music}King of bones with a coral crown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_057"
+      DisplayName="{!Icons.Music}Drown drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_058"
+      DisplayName="{!Icons.Music}Save your breath cause tonight you're gonna drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_059"
+      DisplayName="{!Icons.Music}Gods and witches{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_060"
+      DisplayName="{!Icons.Music}Cannot tame me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_061"
+      DisplayName="{!Icons.Music}Curses are my endless muse{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_062"
+      DisplayName="{!Icons.Music}All who hear me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_063"
+      DisplayName="{!Icons.Music}Prince or pauper{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_064"
+      DisplayName="{!Icons.Music}This shall be their final cruise{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_065"
+      DisplayName="{!Icons.Music}Down down{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_066"
+      DisplayName="{!Icons.Music}King of bones with a coral crown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_067"
+      DisplayName="{!Icons.Music}Drown drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_068"
+      DisplayName="{!Icons.Music}Save your breath cause tonight you're gonna drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_069"
+      DisplayName="{!Icons.Music}Oh{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_070"
+      DisplayName="{!Icons.Music}Come to me my tasty morsels{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_071"
+      DisplayName="{!Icons.Music}Always room for more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_072"
+      DisplayName="{!Icons.Music}More{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_073"
+      DisplayName="{!Icons.Music}More{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_074"
+      DisplayName="{!Icons.Music}Make yourself at home my darling{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_075"
+      DisplayName="{!Icons.Music}Take a dip and stay a while{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_076"
+      DisplayName="{!Icons.Music}Down down{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_077"
+      DisplayName="{!Icons.Music}King of bones with a coral crown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_078"
+      DisplayName="{!Icons.Music}Drown drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_079"
+      DisplayName="{!Icons.Music}Save your breath cause tonight you're gonna{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla1_MC_080"
+      DisplayName="{!Icons.Music}Drown{!Icons.Music}"
+    }
+    /* /Music/IrisMusicScylla2_MC */
+    {
+      Id = "IrisMusicScylla2_MC_001"
+      DisplayName="{!Icons.Music}Down{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_002"
+      DisplayName="{!Icons.Music}'Neath the ocean{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_003"
+      DisplayName="{!Icons.Music}A world alive{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_004"
+      DisplayName="{!Icons.Music}In constant motion{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_005"
+      DisplayName="{!Icons.Music}Blues and greens{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_006"
+      DisplayName="{!Icons.Music}In peaceful quiet{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_007"
+      DisplayName="{!Icons.Music}Leave us be{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_008"
+      DisplayName="{!Icons.Music}Don't stir the waters{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_009"
+      DisplayName="{!Icons.Music}Turn around and swim back to your shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_010"
+      DisplayName="{!Icons.Music}Sailor{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_011"
+      DisplayName="{!Icons.Music}Float away forever more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_012"
+      DisplayName="{!Icons.Music}From here{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_013"
+      DisplayName="{!Icons.Music}See{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_014"
+      DisplayName="{!Icons.Music}All around us{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_015"
+      DisplayName="{!Icons.Music}Creatures free{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_016"
+      DisplayName="{!Icons.Music}Nothing to ground us{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_017"
+      DisplayName="{!Icons.Music}Ebb and flow{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_018"
+      DisplayName="{!Icons.Music}With the currents{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_019"
+      DisplayName="{!Icons.Music}Leave us be{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_020"
+      DisplayName="{!Icons.Music}Don't stir the waters{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_021"
+      DisplayName="{!Icons.Music}Turn around and swim back to your shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_022"
+      DisplayName="{!Icons.Music}Sailor{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_023"
+      DisplayName="{!Icons.Music}Float away forever more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_024"
+      DisplayName="{!Icons.Music}From here{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_025"
+      DisplayName="{!Icons.Music}Turn around and swim back to your shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_026"
+      DisplayName="{!Icons.Music}Sailor{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_027"
+      DisplayName="{!Icons.Music}Float away forever more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_028"
+      DisplayName="{!Icons.Music}From here{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_029"
+      DisplayName="{!Icons.Music}Chrab and seamare{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_030"
+      DisplayName="{!Icons.Music}Shark and starfish{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_031"
+      DisplayName="{!Icons.Music}Bass and marlin{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_032"
+      DisplayName="{!Icons.Music}Gupp and sturgeon{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_033"
+      DisplayName="{!Icons.Music}Charp and scuffer{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_034"
+      DisplayName="{!Icons.Music}Whale and sawfish{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_035"
+      DisplayName="{!Icons.Music}Hippocampus{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_036"
+      DisplayName="{!Icons.Music}And Charybdis{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_037"
+      DisplayName="{!Icons.Music}All together{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_038"
+      DisplayName="{!Icons.Music}Live{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_039"
+      DisplayName="{!Icons.Music}Serene{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_040"
+      DisplayName="{!Icons.Music}Turn around and swim back to your shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_041"
+      DisplayName="{!Icons.Music}Sailor{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_042"
+      DisplayName="{!Icons.Music}Float away forever more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_043"
+      DisplayName="{!Icons.Music}From here{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_044"
+      DisplayName="{!Icons.Music}Turn around and swim back to your shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_045"
+      DisplayName="{!Icons.Music}Sailor{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_145"
+      DisplayName="{!Icons.Music}Float away forever more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_046"
+      DisplayName="{!Icons.Music}From here{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_047"
+      DisplayName="{!Icons.Music}You can't stay away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_147"
+      DisplayName="{!Icons.Music}Seems every day{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_048"
+      DisplayName="{!Icons.Music}You keep coming back here{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_049"
+      DisplayName="{!Icons.Music}Now it's plain to see{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_050"
+      DisplayName="{!Icons.Music}You want to be under the sea{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_051"
+      DisplayName="{!Icons.Music}With your favorite Sirens{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_052"
+      DisplayName="{!Icons.Music}You're so obsessed with me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_053"
+      DisplayName="{!Icons.Music}Not that I can blame you for it{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_054"
+      DisplayName="{!Icons.Music}I would be too if I were you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_055"
+      DisplayName="{!Icons.Music}Too bad you must die now{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_056"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_057"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_058"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_059"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_060"
+      DisplayName="{!Icons.Music}You you're such a mess{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_160"
+      DisplayName="{!Icons.Music}That little dress{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_061"
+      DisplayName="{!Icons.Music}Looks like it's from the garbage{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_062"
+      DisplayName="{!Icons.Music}Just like that hair{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_063"
+      DisplayName="{!Icons.Music}Don't mean to stare{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_163"
+      DisplayName="{!Icons.Music}Were you aware{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_064"
+      DisplayName="{!Icons.Music}Looks like something died there{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_065"
+      DisplayName="{!Icons.Music}That's why you're jealous of me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_066"
+      DisplayName="{!Icons.Music}Not that I can blame you for it{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_067"
+      DisplayName="{!Icons.Music}I would be too if I were you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_068"
+      DisplayName="{!Icons.Music}Too bad you must die now{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_069"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_070"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_071"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_072"
+      DisplayName="{!Icons.Music}Then drown you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_073"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_074"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_075"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_076"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_077"
+      DisplayName="{!Icons.Music}Pinched by a chrab, strangled by an octopus{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_078"
+      DisplayName="{!Icons.Music}Bitten by a shark and stung by a jellyfish{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_079"
+      DisplayName="{!Icons.Music}Poked by an urchin, stabbed by a marlin{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_080"
+      DisplayName="{!Icons.Music}Sawed by a sawfish and crushed by Charybdis and{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_081"
+      DisplayName="{!Icons.Music}Slapped by a bass, sliced by a sturgeon{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_082"
+      DisplayName="{!Icons.Music}Clobbered by a charp and stomped by Hippocampus and{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_083"
+      DisplayName="{!Icons.Music}Smacked by a knucklehead, poisoned by a scuffer and{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_084"
+      DisplayName="{!Icons.Music}Burned by a slavug{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_085"
+      DisplayName="{!Icons.Music}Swallowed by a whale{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_086"
+      DisplayName="{!Icons.Music}Drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_087"
+      DisplayName="{!Icons.Music}Drown{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_088"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_089"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_090"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_091"
+      DisplayName="{!Icons.Music}Then drown you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_092"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_093"
+      DisplayName="{!Icons.Music}Then drown you to death{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_094"
+      DisplayName="{!Icons.Music}I am gonna claw out your eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_095"
+      DisplayName="{!Icons.Music}Then drown you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla2_MC_096"
+      DisplayName="{!Icons.Music}To death{!Icons.Music}"
+    }
+    /* /Music/IrisMusicScylla3_MC */
+    {
+      Id = "IrisMusicScylla3_MC_001"
+      DisplayName="{!Icons.Music}Peaceful drifting from a distant shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_002"
+      DisplayName="{!Icons.Music}Sailing clear on through the night{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_003"
+      DisplayName="{!Icons.Music}Chart your course for wonders to explore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_004"
+      DisplayName="{!Icons.Music}Moon and stars for guiding light{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_005"
+      DisplayName="{!Icons.Music}Sails up{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_006"
+      DisplayName="{!Icons.Music}Onward go{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_007"
+      DisplayName="{!Icons.Music}Gliding free{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_008"
+      DisplayName="{!Icons.Music}There past the edge of the world{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_009"
+      DisplayName="{!Icons.Music}Lie the treasures of discovery{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_010"
+      DisplayName="{!Icons.Music}Borne on a faraway wind{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_011"
+      DisplayName="{!Icons.Music}Toward isles that have yet to be{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_012"
+      DisplayName="{!Icons.Music}To be named{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_013"
+      DisplayName="{!Icons.Music}Aim your prow against the brightest star{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_014"
+      DisplayName="{!Icons.Music}Lift your anchor and away{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_015"
+      DisplayName="{!Icons.Music}Chase horizons till they disappear{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_016"
+      DisplayName="{!Icons.Music}Aeolus hears when you pray{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_017"
+      DisplayName="{!Icons.Music}Sails up{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_018"
+      DisplayName="{!Icons.Music}Onward go{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_019"
+      DisplayName="{!Icons.Music}Gliding free{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_020"
+      DisplayName="{!Icons.Music}There past the edge of the world{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_021"
+      DisplayName="{!Icons.Music}Lie the treasures of discovery{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_022"
+      DisplayName="{!Icons.Music}Borne on a faraway wind{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_023"
+      DisplayName="{!Icons.Music}Toward isles that have yet to be{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_024"
+      DisplayName="{!Icons.Music}To be named{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_025"
+      DisplayName="{!Icons.Music}Hmm{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_026"
+      DisplayName="{!Icons.Music}Sail{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_027"
+      DisplayName="{!Icons.Music}Free{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_028"
+      DisplayName="{!Icons.Music}Find{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_029"
+      DisplayName="{!Icons.Music}Me{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_030"
+      DisplayName="{!Icons.Music}There past the edge of the world{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_031"
+      DisplayName="{!Icons.Music}Lie the treasures of discovery{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_032"
+      DisplayName="{!Icons.Music}Borne on a faraway wind{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_033"
+      DisplayName="{!Icons.Music}Toward isles that have yet to be{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_034"
+      DisplayName="{!Icons.Music}To be named{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_035"
+      DisplayName="{!Icons.Music}Look what washed right up onto our shore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_036"
+      DisplayName="{!Icons.Music}Lady you're all out of luck{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_037"
+      DisplayName="{!Icons.Music}Not enough you said you wanted more{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_038"
+      DisplayName="{!Icons.Music}Careful what you're wishing for{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_039"
+      DisplayName="{!Icons.Music}Whirlpool{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_040"
+      DisplayName="{!Icons.Music}Sucks you in{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_041"
+      DisplayName="{!Icons.Music}No way out{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_042"
+      DisplayName="{!Icons.Music}Damned if you do or you don't{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_043"
+      DisplayName="{!Icons.Music}Now we've got you in our tentacles{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_044"
+      DisplayName="{!Icons.Music}(Tentacles){!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_045"
+      DisplayName="{!Icons.Music}Too late there's no going back{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_145"
+      DisplayName="{!Icons.Music}And we're not taking any prisoners{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_046"
+      DisplayName="{!Icons.Music}(Prisoners){!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_047"
+      DisplayName="{!Icons.Music}Stuck{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_048"
+      DisplayName="{!Icons.Music}Between a rock and a hard place{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_049"
+      DisplayName="{!Icons.Music}High{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_050"
+      DisplayName="{!Icons.Music}Tide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_051"
+      DisplayName="{!Icons.Music}Maw{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_052"
+      DisplayName="{!Icons.Music}Wide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_053"
+      DisplayName="{!Icons.Music}Open wide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_054"
+      DisplayName="{!Icons.Music}Drift inside{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_055"
+      DisplayName="{!Icons.Music}You're surrounded{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_056"
+      DisplayName="{!Icons.Music}Now we've got you right where we want you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_057"
+      DisplayName="{!Icons.Music}Little rowboat in the storm{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_058"
+      DisplayName="{!Icons.Music}Big mistake for you to sail this way{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_059"
+      DisplayName="{!Icons.Music}No safe harbor here tonight{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_060"
+      DisplayName="{!Icons.Music}Riptide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_061"
+      DisplayName="{!Icons.Music}Sink or swim{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_062"
+      DisplayName="{!Icons.Music}No way out{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_063"
+      DisplayName="{!Icons.Music}Damned if you do or you don't{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_064"
+      DisplayName="{!Icons.Music}Now we've got you in our tentacles{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_065"
+      DisplayName="{!Icons.Music}(Tentacles){!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_066"
+      DisplayName="{!Icons.Music}Too late there's no going back{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_067"
+      DisplayName="{!Icons.Music}And we're not taking any prisoners{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_068"
+      DisplayName="{!Icons.Music}(Prisoners){!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_069"
+      DisplayName="{!Icons.Music}Stuck{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_070"
+      DisplayName="{!Icons.Music}Between a rock and a hard place{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_071"
+      DisplayName="{!Icons.Music}High{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_072"
+      DisplayName="{!Icons.Music}Tide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_073"
+      DisplayName="{!Icons.Music}Maw{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_074"
+      DisplayName="{!Icons.Music}Wide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_075"
+      DisplayName="{!Icons.Music}Open wide{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_076"
+      DisplayName="{!Icons.Music}Drift inside{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_077"
+      DisplayName="{!Icons.Music}You're surrounded{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_078"
+      DisplayName="{!Icons.Music}Damned if you do or you don't{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_079"
+      DisplayName="{!Icons.Music}Now we've got you in our tentacles{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_080"
+      DisplayName="{!Icons.Music}(Tentacles){!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_081"
+      DisplayName="{!Icons.Music}Too late there's no going back{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_082"
+      DisplayName="{!Icons.Music}And we're not taking any prisoners{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_083"
+      DisplayName="{!Icons.Music}(Prisoners){!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_084"
+      DisplayName="{!Icons.Music}Ahh{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_085"
+      DisplayName="{!Icons.Music}Ahh{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla3_MC_086"
+      DisplayName="{!Icons.Music}Ahh{!Icons.Music}"
+    }
+    /* /Music/IrisMusicScylla4_MC */
+    {
+      Id = "IrisMusicScylla4_MC_001"
+      DisplayName="{!Icons.Music}Diving for pearls hidden in the deep{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_002"
+      DisplayName="{!Icons.Music}Shipwrecks keep watch where the treasures sleep{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_003"
+      DisplayName="{!Icons.Music}Yours to keep{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_004"
+      DisplayName="{!Icons.Music}If only you survive the journey down{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_005"
+      DisplayName="{!Icons.Music}Waiting there{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_006"
+      DisplayName="{!Icons.Music}Feeding your temptation{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_007"
+      DisplayName="{!Icons.Music}Do you stay or do you dare?{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_008"
+      DisplayName="{!Icons.Music}Below the surface{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_009"
+      DisplayName="{!Icons.Music}Treasures agleam, calling you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_010"
+      DisplayName="{!Icons.Music}Down to the floor below{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_011"
+      DisplayName="{!Icons.Music}A shining bounty{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_012"
+      DisplayName="{!Icons.Music}Riches of dreams, glimmering{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_013"
+      DisplayName="{!Icons.Music}Dive in and downward go{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_014"
+      DisplayName="{!Icons.Music}Ohh{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_015"
+      DisplayName="{!Icons.Music}Visions of maids with their scales of green{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_016"
+      DisplayName="{!Icons.Music}Go for a swim and they'll be your queen{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_017"
+      DisplayName="{!Icons.Music}Caught between{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_018"
+      DisplayName="{!Icons.Music}Your journey and the bounty of the sea{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_019"
+      DisplayName="{!Icons.Music}You look at me with bewitching eyes{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_020"
+      DisplayName="{!Icons.Music}A red and a green give me butterflies{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_021"
+      DisplayName="{!Icons.Music}I can't disguise{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_022"
+      DisplayName="{!Icons.Music}The way I feel about you anymore{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_023"
+      DisplayName="{!Icons.Music}Do I dare{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_024"
+      DisplayName="{!Icons.Music}Open up and tell you{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_025"
+      DisplayName="{!Icons.Music}You're the one I've waited for{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_026"
+      DisplayName="{!Icons.Music}Your sweet love potion{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_027"
+      DisplayName="{!Icons.Music}I just can't resist{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_028"
+      DisplayName="{!Icons.Music}And I know{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_029"
+      DisplayName="{!Icons.Music}You've got me under your spell{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_030"
+      DisplayName="{!Icons.Music}Ohh well I{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_031"
+      DisplayName="{!Icons.Music}I'd cross the ocean{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_032"
+      DisplayName="{!Icons.Music}And I'd give you my pearl{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_033"
+      DisplayName="{!Icons.Music}I confess{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_034"
+      DisplayName="{!Icons.Music}You get me out of my shell{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_035"
+      DisplayName="{!Icons.Music}They call it a crush 'cause the pressure kills{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_036"
+      DisplayName="{!Icons.Music}Down in the deep, up to my gills{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_037"
+      DisplayName="{!Icons.Music}You give me chills{!Icons.Music}"
+    }
+    {
+      Id = "IrisMusicScylla4_MC_038"
+      DisplayName="{!Icons.Music}And now I've gotta spill what's in my heart{!Icons.Music}"
+    }
+    /* /Music/ArtemisSong_MC */
+    {
+      Id = "ArtemisSong_MC_001"
+      DisplayName="{!Icons.Music}Unseen{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_002"
+      DisplayName="{!Icons.Music}Hidden in the wild wood{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_003"
+      DisplayName="{!Icons.Music}Sheltered by the dark{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_004"
+      DisplayName="{!Icons.Music}The Silver Sisters wait{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_005"
+      DisplayName="{!Icons.Music}The Moon{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_006"
+      DisplayName="{!Icons.Music}Marks her passage silently{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_007"
+      DisplayName="{!Icons.Music}Watching with the Eye{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_008"
+      DisplayName="{!Icons.Music}Of Night above us all{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_009"
+      DisplayName="{!Icons.Music}Hiding in plain sight{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_010"
+      DisplayName="{!Icons.Music}Keeper of the night{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_011"
+      DisplayName="{!Icons.Music}Moonlight guide us home tonight{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_012"
+      DisplayName="{!Icons.Music}In shadow{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_013"
+      DisplayName="{!Icons.Music}All are one{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_014"
+      DisplayName="{!Icons.Music}Take shelter from the world above{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_015"
+      DisplayName="{!Icons.Music}In safety and in solitude{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_016"
+      DisplayName="{!Icons.Music}The Sisters wait{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_017"
+      DisplayName="{!Icons.Music}Shades{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_018"
+      DisplayName="{!Icons.Music}Lost and ever-wandering{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_019"
+      DisplayName="{!Icons.Music}Stranded after life{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_020"
+      DisplayName="{!Icons.Music}A crossroads in the gloom{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_021"
+      DisplayName="{!Icons.Music}The Moon{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_022"
+      DisplayName="{!Icons.Music}Lights your way through wild woods{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_023"
+      DisplayName="{!Icons.Music}Twisting through the dark{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_024"
+      DisplayName="{!Icons.Music}To find your refuge here{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_025"
+      DisplayName="{!Icons.Music}Be welcome here and safe{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_026"
+      DisplayName="{!Icons.Music}The Silver Sisters wait{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_027"
+      DisplayName="{!Icons.Music}Moonlight guide you home tonight{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_028"
+      DisplayName="{!Icons.Music}In shadow{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_029"
+      DisplayName="{!Icons.Music}All are one{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_030"
+      DisplayName="{!Icons.Music}Take shelter from the world above{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_031"
+      DisplayName="{!Icons.Music}In safety and in solitude{!Icons.Music}"
+    }
+    {
+      Id = "ArtemisSong_MC_032"
+      DisplayName="{!Icons.Music}The Sisters wait{!Icons.Music}"
+    }
+    /* /Music/ApolloSong */
+    {
+      Id = "ApolloSong_001"
+      DisplayName="{!Icons.Music}In troubled times{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_002"
+      DisplayName="{!Icons.Music}When the hordes beat at the gates{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_003"
+      DisplayName="{!Icons.Music}We steel ourselves{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_004"
+      DisplayName="{!Icons.Music}With the weavings of the Fates{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_005"
+      DisplayName="{!Icons.Music}Sworn to do our righteous duty{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_006"
+      DisplayName="{!Icons.Music}Ruling the heavens and the earth{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_007"
+      DisplayName="{!Icons.Music}The sun shall rise, and dawn will break{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_008"
+      DisplayName="{!Icons.Music}Our fated glory ours to take{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_009"
+      DisplayName="{!Icons.Music}Though perils come to test our will{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_010"
+      DisplayName="{!Icons.Music}Our noble home is standing, still{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_011"
+      DisplayName="{!Icons.Music}Weathering all storms with pride{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_012"
+      DisplayName="{!Icons.Music}From highest peak{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_013"
+      DisplayName="{!Icons.Music}To the deepest seas below{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_014"
+      DisplayName="{!Icons.Music}We tend the weak{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_015"
+      DisplayName="{!Icons.Music}So that mortal lives may grow{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_016"
+      DisplayName="{!Icons.Music}Fleeting flowers in the springtime{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_017"
+      DisplayName="{!Icons.Music}Craning to feel the morning light{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_018"
+      DisplayName="{!Icons.Music}The sun shall rise, and dawn will break{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_019"
+      DisplayName="{!Icons.Music}Our fated glory ours to take{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_020"
+      DisplayName="{!Icons.Music}Though perils come to test our will{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_021"
+      DisplayName="{!Icons.Music}Our noble home is standing, still{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_022"
+      DisplayName="{!Icons.Music}Weathering all storms with pride{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_023"
+      DisplayName="{!Icons.Music}Here above the clouds{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_024"
+      DisplayName="{!Icons.Music}We sing aloud the voice{!Icons.Music}"
+    }
+    {
+      Id = "ApolloSong_025"
+      DisplayName="{!Icons.Music}Of gods{!Icons.Music}"
+    }
+    /* /Music/IrisEndTheme */
+    {
+      Id = "IrisEndTheme_001"
+      DisplayName="{!Icons.Music}Before the dawn{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_001 B"
+      InheritFrom = "IrisEndTheme_001"
+    }
+    {
+      Id = "IrisEndTheme_002"
+      DisplayName="{!Icons.Music}Only dark shrouds the sky{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_002 B"
+      InheritFrom = "IrisEndTheme_002"
+    }
+    {
+      Id = "IrisEndTheme_003"
+      DisplayName="{!Icons.Music}In the east{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_003 B"
+      InheritFrom = "IrisEndTheme_003"
+    }
+    {
+      Id = "IrisEndTheme_004"
+      DisplayName="{!Icons.Music}When the sun begins to rise{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_004 B"
+      InheritFrom = "IrisEndTheme_004"
+    }
+    {
+      Id = "IrisEndTheme_005"
+      DisplayName="{!Icons.Music}Shadows stretch their gloomy figures{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_006"
+      DisplayName="{!Icons.Music}Shifting until the twilight comes{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_007"
+      DisplayName="{!Icons.Music}Now{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_008"
+      DisplayName="{!Icons.Music}Moonlight guides us, starry eyed{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_009"
+      DisplayName="{!Icons.Music}And seeing{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_010"
+      DisplayName="{!Icons.Music}All are one{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_011"
+      DisplayName="{!Icons.Music}The glowing moon and shining sun{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_012"
+      DisplayName="{!Icons.Music}The shadow and the light are two{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_013"
+      DisplayName="{!Icons.Music}Sides of a single golden coin{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_014"
+      DisplayName="{!Icons.Music}That's spinning round{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_015"
+      DisplayName="{!Icons.Music}After dusk{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_016"
+      DisplayName="{!Icons.Music}When the Moon starts her ride{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_017"
+      DisplayName="{!Icons.Music}Silver rays{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_018"
+      DisplayName="{!Icons.Music}To illuminate the night{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_019"
+      DisplayName="{!Icons.Music}Seas reflect her gleaming beauty{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_020"
+      DisplayName="{!Icons.Music}Carried along the changing tides{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_021"
+      DisplayName="{!Icons.Music}Then{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_022"
+      DisplayName="{!Icons.Music}Dawn arrives and just in time{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_023"
+      DisplayName="{!Icons.Music}Repeating{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_024"
+      DisplayName="{!Icons.Music}Fates still weaving{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_025"
+      DisplayName="{!Icons.Music}Interleaving{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_026"
+      DisplayName="{!Icons.Music}Fates still weaving, interleaving{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_027"
+      DisplayName="{!Icons.Music}Woven all together as we{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_028"
+      DisplayName="{!Icons.Music}That's spinning{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_029"
+      DisplayName="{!Icons.Music}Time moves past{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_030"
+      DisplayName="{!Icons.Music}The Fates' designs arrive at last{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_031"
+      DisplayName="{!Icons.Music}What came before has come and gone{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_032"
+      DisplayName="{!Icons.Music}The moments yet to come belong{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_033"
+      DisplayName="{!Icons.Music}To us, time{!Icons.Music}"
+    }
+    {
+      Id = "IrisEndTheme_034"
+      DisplayName="{!Icons.Music}Belongs to us{!Icons.Music}"
+    }
+  ]
+}
