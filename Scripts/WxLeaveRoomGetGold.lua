@@ -1,5 +1,6 @@
 Import "WxTestMod.lua"
 Import "WxEncounterRoom.lua"
+Import "WxButtonManager.lua"
 
 function GrantRandomGoldOnRoomExit(currentRun, door)
 
@@ -39,7 +40,7 @@ function GrantRandomGoldOnRoomExit(currentRun, door)
     --     Duration = 2.0,               -- Thời gian hiển thị
     -- })
     -- UpdateMoneyUI( true )
-    local nextMoney =  GetResourceAmount( "Money" ) or 0 + goldAmount
+    local nextMoney = (GetResourceAmount( "Money" ) or 0) + goldAmount
     MoneyGainPresentation(nextMoney,goldAmount)
     
 
