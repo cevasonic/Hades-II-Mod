@@ -1,6 +1,6 @@
-Import "WxTestMod.lua"
-Import "WxEncounterRoom.lua"
-Import "WxButtonManager.lua"
+require "WxTestMod.lua"
+require "WxEncounterRoom.lua"
+require "WxButtonManager.lua"
 
 function GrantRandomGoldOnRoomExit(currentRun, door)
 

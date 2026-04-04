@@ -1,3 +1,6 @@
+---@type fun(table: table): void
+ModifyTextBox = ModifyTextBox
+
 function HasAnyAspectUnlocked( weaponName )
 	for traitName, traitData in pairs( TraitSetData.Aspects ) do
 		if traitData.RequiredWeapon == weaponName and GameState.WorldUpgradesAdded[traitName] then

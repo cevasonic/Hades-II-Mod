@@ -107,6 +107,7 @@ Import "TradePresentation.lua"
 
 Import "WxWeaponUnusedActive.lua"
 Import "WxLeaveRoomGetGold.lua"
+Import "WxRoomDamageScale.lua"
 
 -- Iris
 
@@ -1739,6 +1740,11 @@ function SetupHeroObject( room, applyLuaUpgrades )
 	CheckPrevTraitsManaReserveShrineUpgrade( currentRun.Hero )
 	
 	RunEventsGeneric( HeroData.SetupEvents, hero, args )
+
+	--@Mod - ApplyRoomDamageBonus is used by the mod to apply the damage bonus from the "Harmonic Convergence" keepsake, which applies a damage bonus for the first 30 seconds of each biome. This is checked for and applied here to ensure it is applied before any combat starts in the room.
+	if ApplyRoomDamageBonus ~= nil then
+		ApplyRoomDamageBonus( hero )
+	end
 
 end
 

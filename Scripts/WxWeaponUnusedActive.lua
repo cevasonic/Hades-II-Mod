@@ -53,7 +53,9 @@ function RecordRunStats()
         table.insert( roomNames, room.Name )
     end
     table.insert( roomNames, CurrentRun.CurrentRoom.Name )
-    SendProgressionEvents({ Names = roomNames, CompletedRuns = GameState.CompletedRunsCache, ClearedUnderworldRuns = GameState.ClearedUnderworldRunsCache, ClearedSurfaceRuns = GameState.ClearedSurfaceRunsCache, Cleared = CurrentRun.Cleared, GameplayTime = GameState.GameplayTime, TotalTime = GameState.TotalTime })
+    if SendProgressionEvents then
+        SendProgressionEvents({ Names = roomNames, CompletedRuns = GameState.CompletedRunsCache, ClearedUnderworldRuns = GameState.ClearedUnderworldRunsCache, ClearedSurfaceRuns = GameState.ClearedSurfaceRunsCache, Cleared = CurrentRun.Cleared, GameplayTime = GameState.GameplayTime, TotalTime = GameState.TotalTime })
+    end
 
     -- 'cleared' means achieved a victory condition as opposed to dying 
     local runsCleared = 0
