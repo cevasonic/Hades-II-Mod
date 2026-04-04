@@ -1334,6 +1334,8 @@ function StartRoom( currentRun, currentRoom )
 
 	--@Mod
 	UpdateRoomCounterUI(currentRun)
+	UpdateRoomDamagePercentGrowth(currentRun.Hero)
+        
 end
 
 function SetupRoomArt( currentRun, currentRoom )
@@ -1711,6 +1713,17 @@ function SetupHeroObject( room, applyLuaUpgrades )
 	else
 		RemoveTrait( currentRun.Hero, "GodModeTrait" )
 	end
+
+	--@Mod Tăng Damage trực tiếp
+	if currentRun.Hero.OutgoingDamageModifiers == nil then
+		currentRun.Hero.OutgoingDamageModifiers = {}
+	end
+	table.insert( currentRun.Hero.OutgoingDamageModifiers, {
+		Name = "CustomDamageBoost",
+		GlobalMultiplier = 1.0,  -- Bắt đầu 100%, sẽ được tăng qua UpdateRoomDamagePercentGrowth
+	})
+
+	
 	-- Build all upgrades.
 	UpdateHeroTraitDictionary()
 	CheckActivatedTraits( CurrentRun.Hero, { SkipPresentation = true } )
@@ -1741,10 +1754,6 @@ function SetupHeroObject( room, applyLuaUpgrades )
 	
 	RunEventsGeneric( HeroData.SetupEvents, hero, args )
 
-	--@Mod - ApplyRoomDamageBonus is used by the mod to apply the damage bonus from the "Harmonic Convergence" keepsake, which applies a damage bonus for the first 30 seconds of each biome. This is checked for and applied here to ensure it is applied before any combat starts in the room.
-	if ApplyRoomDamageBonus ~= nil then
-		ApplyRoomDamageBonus( hero )
-	end
 
 end
 

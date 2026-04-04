@@ -463,6 +463,10 @@ Import "UpgradeLogic.lua"
 Import "RequirementsLogic.lua"
 Import "StoryResetLogic.lua"
 
+--@Mod
+Import "WxRoomDamageScale.lua"
+
+
 GlobalVoiceLines = GlobalVoiceLines or {}
 GlobalTextLines = GlobalTextLines or {}
 

@@ -1,42 +1,33 @@
-function UpdateRoomDamageBonus( currentRun )
-    if currentRun == nil then return end
-    
-    -- Mỗi lần qua room, tăng thêm 1% sát thương (0.01)
-    local bonusPerRoom = 0.01
-    currentRun.WxRoomDamageBonus = (currentRun.WxRoomDamageBonus or 0) + bonusPerRoom
-end
+function UpdateRoomDamagePercentGrowth( hero )
+    -- 1. Kiểm tra hero có OutgoingDamageModifiers không
+    if hero.OutgoingDamageModifiers == nil then return end
 
-function ApplyRoomDamageBonus( hero )
-    if CurrentRun == nil or CurrentRun.WxRoomDamageBonus == nil or CurrentRun.WxRoomDamageBonus <= 0 then
-        return
-    end
-
-    -- Đảm bảo danh sách modifier sát thương tồn tại
-    hero.OutgoingDamageModifiers = hero.OutgoingDamageModifiers or {}
-    
-    -- Xóa modifier cũ của Mod này để cập nhật giá trị mới (tránh cộng dồn lặp lại khi load room)
-    for i = #hero.OutgoingDamageModifiers, 1, -1 do
-        if hero.OutgoingDamageModifiers[i].Name == "WxRoomDamageBonus" then
-            table.remove(hero.OutgoingDamageModifiers, i)
+    -- 2. Tìm CustomDamageBoost modifier
+    local damageModifier = nil
+    for i, modifier in ipairs( hero.OutgoingDamageModifiers ) do
+        if modifier.Name == "CustomDamageBoost" then
+            damageModifier = modifier
+            break
         end
     end
+    if not damageModifier then return end
 
-    -- Thêm modifier sát thương tổng dựa trên số phòng đã qua
-    table.insert( hero.OutgoingDamageModifiers, 
-    {
-        Name = "WxRoomDamageBonus",
-        Multiplier = 1.0 + CurrentRun.WxRoomDamageBonus
+    -- 3. Tăng hệ số damage thêm 1% (0.01)
+    damageModifier.GlobalMultiplier = damageModifier.GlobalMultiplier + 0.01
+
+    -- 4. Hiển thị thông báo nhỏ trên đầu nhân vật
+
+    local damageShow = math.floor( (damageModifier.GlobalMultiplier - 1.0) * 100 )
+    if damageShow > 0 then
+        damageShow = "+" .. damageShow .. "%"
+    else
+        damageShow = "-" .. math.abs(damageShow) .. "%"
+    end
+    thread( PopOverheadText, {
+        TargetId = hero.ObjectId,
+        Amount = damageShow,
+        Text = "{$TempTextData.Amount}{!Icons.RandomLoot}",
+        Duration = 2.0,
+        Delay = 1
     })
-    
-    -- Sử dụng PreDelay để thông báo hiện ra chậm hơn một chút (ví dụ 1.5 giây)
-    -- giúp người chơi dễ chú ý hơn khi vừa load xong màn hình đen
-    thread( 
-        InCombatText, {
-            TargetId = CurrentRun.Hero.ObjectId,
-            Text = "{!Icons.UnderworldIcon}: " .. (CurrentRun.WxRoomDamageBonus * 100) .. "%",
-            Duration = 2.0,
-            PreDelay = 1.5,
-            ShadowScale = 1.5,
-        }
-    )
 end
