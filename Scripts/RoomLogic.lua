@@ -108,6 +108,7 @@ Import "TradePresentation.lua"
 Import "WxWeaponUnusedActive.lua"
 Import "WxLeaveRoomGetGold.lua"
 Import "WxRoomDamageScale.lua"
+Import "WxBoonControl.lua"
 
 -- Iris
 

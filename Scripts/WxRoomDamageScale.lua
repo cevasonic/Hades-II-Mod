@@ -12,8 +12,8 @@ function UpdateRoomDamagePercentGrowth( hero )
     end
     if not damageModifier then return end
 
-    -- 3. Tăng hệ số damage thêm 1% (0.01)
-    damageModifier.GlobalMultiplier = damageModifier.GlobalMultiplier + 0.01
+    -- 3. Tăng hệ số damage thêm 6% (0.06)
+    damageModifier.GlobalMultiplier = damageModifier.GlobalMultiplier + 0.06
 
     -- 4. Hiển thị thông báo nhỏ trên đầu nhân vật
 
