@@ -17,6 +17,9 @@ WxBoonByWeapon = {
     Dagger = {
         Default = {
             -- Dùng cho mọi Aspect nếu không ghi cụ thể
+            "Healthy Rebound",
+            "Light Smite",
+            "Static Shock",
         },
         Melinoe = {},
         Artemis = {},
@@ -32,7 +35,6 @@ WxBoonByWeapon = {
             "Electric Overload",
             "Light Smite",
             "Static Shock",
-            "Healthy Rebound",
             "Arctic Gale",
             "Trick Knives",
             "King Tide"
@@ -43,7 +45,11 @@ WxBoonByWeapon = {
     -- 💀 Đầu Lâu (Skull / Argent Skull)
     -- ========================
     Skull = {
-        Default = {},
+        Default = {
+            "Light Smite",
+            "Static Shock",
+            "Healthy Rebound",
+        },
         Melinoe = {
             "Heaven Strike",
             "Solar Ring",
@@ -51,9 +57,6 @@ WxBoonByWeapon = {
             "Flutter Flourish",
             "Nexus Rush",
             "Electric Overload",
-            "Light Smite",
-            "Static Shock",
-            "Healthy Rebound",
             "Arctic Gale",
             "Shocking Loss"
         },
@@ -66,9 +69,29 @@ WxBoonByWeapon = {
     -- 🧙‍♀️ Quyền Trượng (Staff / Witch's Staff)
     -- ========================
     Staff = {
-        Default = {},
+        Default = {
+            "Healthy Rebound",
+        },
         Melinoe = {},
-        Circe = {},
+        Circe = {
+            "Smolder Ring",
+            "Lucid Gain",
+            "Glowing Coal",
+            "Pyro Technique",
+            "Nexus Rush",
+            "Local Climate",
+            "Freezer Burn",
+            "Super Nova",
+            "Arctic Gale",
+            "Geyser Spout",
+            "Meat Grinder",
+            "Prominence Flare",
+            "Rousing Reception",
+            "Winner's Circle".
+            "Cut Above",
+            "Ocean Swell",
+            "Hostile Environment"
+        },
         Momus = {},
         Asclepius = {}
     },
@@ -89,7 +112,9 @@ WxBoonByWeapon = {
     -- ========================
     Axe = {
         Default = {
-            "Healthy Rebound"
+            "Healthy Rebound",
+            "Light Smite",
+            "Static Shock",
         },
         Melinoe = {},
         Charon = {
@@ -107,7 +132,6 @@ WxBoonByWeapon = {
             "Giga Cleaver",
             "Sudden Cleaver",
             "Super Nova"
-           
         },
         Thanatos = {},
         Nergal = {}

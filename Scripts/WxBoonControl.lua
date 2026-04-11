@@ -190,12 +190,12 @@ local function CreateForcedOption(traitName)
     if isSpecial then
         if specialType then option.Rarity = specialType end
     else
-        option.Rarity = "Epic"
+        option.Rarity = "Heroic"
     end
     return option
 end
 
--- 3. Hook vào Hàm SetTraitsOnLoot() để bảo đảm Kỹ năng ưu tiên luôn lên top và đạt hạng Epic
+-- 3. Hook vào Hàm SetTraitsOnLoot() để bảo đảm Kỹ năng ưu tiên luôn lên top và đạt hạng Heroic
 local original_SetTraitsOnLoot = SetTraitsOnLoot
 function SetTraitsOnLoot( lootData, args )
     original_SetTraitsOnLoot( lootData, args )

@@ -1,4 +1,3 @@
-Import "WxTestMod.lua"
 Import "WxEncounterRoom.lua"
 
 function GrantRandomGoldOnRoomExit(currentRun, door)
