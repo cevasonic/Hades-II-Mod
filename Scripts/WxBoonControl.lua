@@ -145,7 +145,7 @@ function ChooseRoomReward( run, room, rewardStoreName, previouslyChosenRewards, 
     CheckResetPending()
     
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
-        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) then
+        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) and (not TraitRequirements[traitName] or HasTraitRequirements(traitName)) then
             local forcedGodName = GetLootSourceName(traitName)
             if forcedGodName and not WxPendingGods[forcedGodName] then
                 if room ~= nil and room.Reward ~= nil then
@@ -176,7 +176,7 @@ function ChooseLoot( excludeLootNames, forceLootName )
     CheckResetPending()
     
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
-        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) then
+        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) and (not TraitRequirements[traitName] or HasTraitRequirements(traitName)) then
             local forcedGodName = GetLootSourceName(traitName)
             if forcedGodName and LootData[forcedGodName] and not WxPendingGods[forcedGodName] then
                 WxPendingGods[forcedGodName] = true
@@ -228,7 +228,7 @@ function SetTraitsOnLoot( lootData, args )
 
     local targetTraitsForThisGod = {}
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
-        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) and GetLootSourceName(traitName) == lootData.Name then
+        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) and (not TraitRequirements[traitName] or HasTraitRequirements(traitName)) and GetLootSourceName(traitName) == lootData.Name then
             table.insert(targetTraitsForThisGod, traitName)
         end
     end
