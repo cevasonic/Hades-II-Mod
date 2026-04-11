@@ -87,7 +87,7 @@ WxBoonByWeapon = {
             "Meat Grinder",
             "Prominence Flare",
             "Rousing Reception",
-            "Winner's Circle".
+            "Winner's Circle",
             "Cut Above",
             "Ocean Swell",
             "Hostile Environment"
