@@ -54,18 +54,40 @@ function GetResolvedBoonTargetTraits()
     if aspect == "Anubis" then aspect = "Momus" end
     -- Mod có thể mở rộng map nếu NSX thay đổi tên (vd: Nergal -> ...)
     
-    local activeTable = nil
+    local combinedTable = {}
+    local sourceKey = weaponName .. "_" .. aspect
+    
     if WxBoonByWeapon and WxBoonByWeapon[weaponName] then
-        activeTable = WxBoonByWeapon[weaponName][aspect] or WxBoonByWeapon[weaponName].Default
+        local defaultTable = WxBoonByWeapon[weaponName].Default
+        local aspectTable = WxBoonByWeapon[weaponName][aspect]
+        
+        local addedTraits = {}
+        if defaultTable and type(defaultTable) == "table" then
+            for _, v in ipairs(defaultTable) do
+                if not addedTraits[v] then
+                    table.insert(combinedTable, v)
+                    addedTraits[v] = true
+                end
+            end
+        end
+        
+        if aspectTable and type(aspectTable) == "table" then
+            for _, v in ipairs(aspectTable) do
+                if not addedTraits[v] then
+                    table.insert(combinedTable, v)
+                    addedTraits[v] = true
+                end
+            end
+        end
     end
     
-    if not activeTable or type(activeTable) ~= "table" or #activeTable == 0 then return {} end
+    if #combinedTable == 0 then return {} end
 
-    if _resolvedTraitsCache and _resolvedSourceTable == activeTable then return _resolvedTraitsCache end
-    _resolvedSourceTable = activeTable
+    if _resolvedTraitsCache and _resolvedSourceTable == sourceKey then return _resolvedTraitsCache end
+    _resolvedSourceTable = sourceKey
     _resolvedTraitsCache = {}
     
-    for _, targetName in ipairs(activeTable) do
+    for _, targetName in ipairs(combinedTable) do
         local found = false
         if TraitData and TraitData[targetName] then
             table.insert(_resolvedTraitsCache, targetName)
@@ -123,7 +145,7 @@ function ChooseRoomReward( run, room, rewardStoreName, previouslyChosenRewards, 
     CheckResetPending()
     
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
-        if not HeroHasTrait(traitName) then
+        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) then
             local forcedGodName = GetLootSourceName(traitName)
             if forcedGodName and not WxPendingGods[forcedGodName] then
                 if room ~= nil and room.Reward ~= nil then
@@ -154,7 +176,7 @@ function ChooseLoot( excludeLootNames, forceLootName )
     CheckResetPending()
     
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
-        if not HeroHasTrait(traitName) then
+        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) then
             local forcedGodName = GetLootSourceName(traitName)
             if forcedGodName and LootData[forcedGodName] and not WxPendingGods[forcedGodName] then
                 WxPendingGods[forcedGodName] = true
@@ -206,7 +228,7 @@ function SetTraitsOnLoot( lootData, args )
 
     local targetTraitsForThisGod = {}
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
-        if not HeroHasTrait(traitName) and GetLootSourceName(traitName) == lootData.Name then
+        if not HeroHasTrait(traitName) and TraitData[traitName] and IsTraitEligible(TraitData[traitName]) and GetLootSourceName(traitName) == lootData.Name then
             table.insert(targetTraitsForThisGod, traitName)
         end
     end

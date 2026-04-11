@@ -74,6 +74,7 @@ WxBoonByWeapon = {
         },
         Melinoe = {},
         Circe = {
+            "Heaven Strike",
             "Smolder Ring",
             "Lucid Gain",
             "Glowing Coal",
