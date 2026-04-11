@@ -46,9 +46,7 @@ WxBoonByWeapon = {
     -- ========================
     Skull = {
         Default = {
-            "Light Smite",
-            "Static Shock",
-            "Healthy Rebound",
+            
         },
         Melinoe = {
             "Heaven Strike",
@@ -58,7 +56,10 @@ WxBoonByWeapon = {
             "Nexus Rush",
             "Electric Overload",
             "Arctic Gale",
-            "Shocking Loss"
+            "Shocking Loss",
+            "Light Smite",
+            "Static Shock",
+            "Healthy Rebound",
         },
         Medea = {},
         Persephone = {},
@@ -75,19 +76,21 @@ WxBoonByWeapon = {
         Melinoe = {},
         Circe = {
             "Heaven Strike",
-            "Smolder Ring",
+            "Wave Flourish",
+            "Storm Ring",
             "Lucid Gain",
-            "Glowing Coal",
-            "Pyro Technique",
+            "Double Strike",
             "Nexus Rush",
-            "Local Climate",
-            "Freezer Burn",
-            "Super Nova",
+            "Lightning Lance",
+            "Static Shock",
+            "Electric Overload",
             "Arctic Gale",
+            "Shocking Loss",
+            "Local Climate",
+            "Chasm",
+            "Super Nova",
             "Geyser Spout",
             "Meat Grinder",
-            "Prominence Flare",
-            "Rousing Reception",
             "Winner's Circle",
             "Cut Above",
             "Ocean Swell",
@@ -103,7 +106,19 @@ WxBoonByWeapon = {
     Torch = {
         Default = {},
         Melinoe = {},
-        Moros = {},
+        Moros = {
+            "Heaven Strike",
+            "Healthy Rebound",
+            "Static Shock",
+            "Solar Ring",
+            "Cardio Gain",
+            "Flutter Flourish",
+            "Nexus Rush",
+            "Electric Overload",
+            "Arctic Gale",
+            "Shocking Loss",
+            "Light Smite",
+        },
         Eos = {},
         Supay = {}
     },
