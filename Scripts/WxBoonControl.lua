@@ -1,25 +1,71 @@
 -- WxBoonControl.lua
 -- Mục đích: Ghi đè chỉ định RNG Boon và Trait cho đến khi lấy đủ các kỹ năng cấu hình.
+Import "WxBoonByWeapon.lua"
 
-WxBoonTargetTraits = {
-    "Heaven Strike", -- Tên hiển thị trong game (Ví dụ: Đánh Thường của Zeus)
-    "Solar Ring", -- Hoặc tên ID hệ thống cũng được
-    "Cardio Gain",
-    "Flutter Flourish",
-    "Nexus Rush",
-    "Electric Overload",
-    "Light Smite",
-    "Static Shock",
-    "Healthy Rebound",
-    "Arctic Gale"
-}
+
 
 local _resolvedTraitsCache = nil
+local _resolvedSourceTable = nil
+
 function GetResolvedBoonTargetTraits()
-    if _resolvedTraitsCache then return _resolvedTraitsCache end
+    local weaponName = "Unknown"
+    local rawWeaponName = "WeaponStaffSwing"
+    if GetEquippedWeapon then
+        local w = GetEquippedWeapon()
+        if w then rawWeaponName = w end
+        local weaponMapping = {
+            WeaponStaffSwing = "Staff", WeaponDagger = "Dagger",
+            WeaponTorch = "Torch", WeaponAxe = "Axe", WeaponLob = "Skull",
+            WeaponSuit = "Coat"
+        }
+        weaponName = weaponMapping[rawWeaponName] or "Unknown"
+    elseif CurrentRun and CurrentRun.Hero and CurrentRun.Hero.Weapons then
+        for wId, _ in pairs(CurrentRun.Hero.Weapons) do
+            if string.match(wId, "Weapon") then
+                rawWeaponName = wId
+                break
+            end
+        end
+        local weaponMapping = {
+            WeaponStaffSwing = "Staff", WeaponDagger = "Dagger",
+            WeaponTorch = "Torch", WeaponAxe = "Axe", WeaponLob = "Skull",
+            WeaponSuit = "Coat"
+        }
+        weaponName = weaponMapping[rawWeaponName] or "Unknown"
+    end
+    
+    local aspect = "Melinoe"
+    if CurrentRun and CurrentRun.Hero and CurrentRun.Hero.TraitDictionary then
+        for traitName, _ in pairs(CurrentRun.Hero.TraitDictionary) do
+            local tData = TraitData and TraitData[traitName]
+            if tData and tData.InheritFrom then
+                for _, parent in pairs(tData.InheritFrom) do
+                    if parent == "WeaponEnchantmentTrait" then
+                        local model = tData.WeaponKitGrannyModel or ""
+                        local extracted = string.match(model, "_([a-zA-Z]+)_Mesh")
+                        if extracted then aspect = extracted end
+                    end
+                end
+            end
+        end
+    end
+    
+    -- Map lại các tên Internal Data cho đúng với hiển thị của Game
+    if aspect == "Anubis" then aspect = "Momus" end
+    -- Mod có thể mở rộng map nếu NSX thay đổi tên (vd: Nergal -> ...)
+    
+    local activeTable = nil
+    if WxBoonByWeapon and WxBoonByWeapon[weaponName] then
+        activeTable = WxBoonByWeapon[weaponName][aspect] or WxBoonByWeapon[weaponName].Default
+    end
+    
+    if not activeTable or type(activeTable) ~= "table" or #activeTable == 0 then return {} end
+
+    if _resolvedTraitsCache and _resolvedSourceTable == activeTable then return _resolvedTraitsCache end
+    _resolvedSourceTable = activeTable
     _resolvedTraitsCache = {}
     
-    for _, targetName in ipairs(WxBoonTargetTraits) do
+    for _, targetName in ipairs(activeTable) do
         local found = false
         if TraitData and TraitData[targetName] then
             table.insert(_resolvedTraitsCache, targetName)
@@ -41,16 +87,16 @@ end
 
 -- Tracker chống trùng lặp Boon khi xuất hiện nhiều phần thưởng trong 1 phòng
 WxPendingGods = WxPendingGods or {}
-WxPendingTraits = WxPendingTraits or {}
-WxCurrentDepth = WxCurrentDepth or 0
+WxLastPendingTime = WxLastPendingTime or 0
 
 local function CheckResetPending()
-    local depth = CurrentRun and CurrentRun.RunDepth or 0
-    if WxCurrentDepth ~= depth then
+    local now = 0
+    if GetTime then now = GetTime({}) else now = os.time() end
+    
+    if now - WxLastPendingTime > 1.5 then
         WxPendingGods = {}
-        WxPendingTraits = {}
-        WxCurrentDepth = depth
     end
+    WxLastPendingTime = now
 end
 
 local original_ChooseRoomReward = ChooseRoomReward
@@ -120,17 +166,44 @@ function ChooseLoot( excludeLootNames, forceLootName )
     return original_ChooseLoot( excludeLootNames, forceLootName )
 end
 
+local function CreateForcedOption(traitName)
+    local option = { ItemName = traitName, Type = "Trait" }
+    local isSpecial = false
+    local specialType = nil
+    local tData = TraitData and TraitData[traitName] or {}
+    
+    if tData.InheritFrom then
+        for _, parent in pairs(tData.InheritFrom) do
+            if parent == "SynergyTrait" then
+                isSpecial = true
+                specialType = "Duo"
+            elseif parent == "LegendaryTrait" then
+                isSpecial = true
+                specialType = "Legendary"
+            elseif parent == "UnityTrait" then
+                isSpecial = true
+                specialType = nil
+            end
+        end
+    end
+    
+    if isSpecial then
+        if specialType then option.Rarity = specialType end
+    else
+        option.Rarity = "Epic"
+    end
+    return option
+end
+
 -- 3. Hook vào Hàm SetTraitsOnLoot() để bảo đảm Kỹ năng ưu tiên luôn lên top và đạt hạng Epic
 local original_SetTraitsOnLoot = SetTraitsOnLoot
 function SetTraitsOnLoot( lootData, args )
-    -- Vẫn chạy hàm gốc để lấy base logic
     original_SetTraitsOnLoot( lootData, args )
     
     if lootData.UpgradeOptions == nil then
         lootData.UpgradeOptions = {}
     end
 
-    -- Lọc ra các Boon mục tiêu thuộc về vị Thần hiện tại
     local targetTraitsForThisGod = {}
     for _, traitName in ipairs(GetResolvedBoonTargetTraits()) do
         if not HeroHasTrait(traitName) and GetLootSourceName(traitName) == lootData.Name then
@@ -138,24 +211,26 @@ function SetTraitsOnLoot( lootData, args )
         end
     end
     
-    -- Trộn chúng vào UpgradeOptions an toàn
     for idx, traitName in ipairs(targetTraitsForThisGod) do
-        if idx > 3 then break end -- Game chỉ hỗ trợ tối đa 3 lựa chọn
+        if idx > 3 then break end
         
+        local targetOption = CreateForcedOption(traitName)
         local alreadyInOptions = false
+        
         for i, option in ipairs(lootData.UpgradeOptions) do
             if option.ItemName == traitName then
                 alreadyInOptions = true
-                lootData.UpgradeOptions[i].Rarity = "Epic"
+                if targetOption.Rarity then
+                    lootData.UpgradeOptions[i].Rarity = targetOption.Rarity
+                end
             end
         end
         
         if not alreadyInOptions then
-            -- Thay thế an toàn vào index tương ứng
             if lootData.UpgradeOptions[idx] then
-                lootData.UpgradeOptions[idx] = { ItemName = traitName, Type = "Trait", Rarity = "Epic" }
+                lootData.UpgradeOptions[idx] = targetOption
             else
-                table.insert(lootData.UpgradeOptions, { ItemName = traitName, Type = "Trait", Rarity = "Epic" })
+                table.insert(lootData.UpgradeOptions, targetOption)
             end
         end
     end
