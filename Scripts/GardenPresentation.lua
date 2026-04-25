@@ -91,23 +91,6 @@ function GardenPlotSetupPresentation( plot, args )
 	GardenPlotTimeUpdatePresentation( plot, args )
 end
 
-function GardenPlotTimeUpdateStartPresentation( args )
-	local plotIds = GetAllKeys( GameState.GardenPlots )
-	if not args.SkipCameraPan then
-		PanCamera({ Ids = plotIds, Duration = args.PanDuration or 1.5, EaseIn = 0.05, EaseOut = 0.03, Retarget = true, FromCurrentLocation = true })
-	end
-
-	-- PlaySound({ Name = "/Leftovers/World Sounds/MapZoomInShortHigh" })
-
-	wait( args.PanDuration or 1.5 )
-end
-
-function GardenPlotTimeTickPresentation( plot, args )
-	if not args.SkipSound then
-		PlaySound({ Name = "/Leftovers/SFX/PyreTickUp", plot.PlantId })
-	end
-end
-
 function GardenPlotTimeUpdatePresentation( plot, args )
 	local outcomeData = GardenData.Seeds[plot.SeedName].RandomOutcomes[plot.OutcomeKey]
 	if outcomeData == nil then

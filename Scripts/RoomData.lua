@@ -85,6 +85,17 @@
 			Queue = "Interrupt",
 			{
 				BreakIfPlayed = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "SessionMapState", "LastPauseMenuTakeoverCue" },
+						IsAny = { "/VO/Chronos_0576" },
+					},
+				},
+				{ Cue = "/VO/Chronos_0577", Text = "{#Emph}I {#Prev}am enjoying this." },
+			},
+			{
+				BreakIfPlayed = true,
 				RandomRemaining = true,
 				SuccessiveChanceToPlay = 0.75,
 				SuccessiveChanceToPlayAll = 0.33,
@@ -103,25 +114,9 @@
 				{ Cue = "/VO/Chronos_0574", Text = "We now resume the battle already in progress." },
 				{ Cue = "/VO/Chronos_0575", Text = "You only prolong your demise." },
 				{ Cue = "/VO/Chronos_0576", Text = "Are you {#Emph}enjoying {#Prev}this?" },
-				{ Cue = "/VO/Chronos_0577",
-					PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Chronos_0576" },
-						},
-					},
-					Text = "{#Emph}I {#Prev}am enjoying this." },
 				{ Cue = "/VO/Chronos_0562", Text = "{#Emph}Hahaha! {#Prev}No.",
 					GameStateRequirements =
 					{
-						{
-							PathFalse = { "CurrentRun", "SpeechRecord", "/VO/Chronos_0562_B" },
-						},
-						{
-							PathFalse = { "PrevRun", "SpeechRecord", "/VO/Chronos_0562_B" },
-						},
 						{
 							Path = { "GameState", "SpeechRecord" },
 							HasAll = {
@@ -137,12 +132,6 @@
 				{ Cue = "/VO/Chronos_0563", Text = "{#Emph}You {#Prev}do not control the flow of Time. Not {#Emph}here.",
 					GameStateRequirements =
 					{
-						{
-							PathFalse = { "CurrentRun", "SpeechRecord", "/VO/Chronos_0562_B" },
-						},
-						{
-							PathFalse = { "PrevRun", "SpeechRecord", "/VO/Chronos_0562_B" },
-						},
 						{
 							Path = { "GameState", "SpeechRecord" },
 							HasAll = {
@@ -492,44 +481,6 @@
 						}
 					},
 				},
-
-				--[[
-
-				{ Cue = "/VO/Chronos_0594_B", Text = "Again, with this foolishness...? Wait, what? Stuck! {#Emph}How?! {#Prev}Impossible...", PlayFirst = true, PlayOnce = true },
-				{ Cue = "/VO/Chronos_0597", Text = "{#Emph}Rnngghh..." },
-				{ Cue = "/VO/Chronos_0598", Text = "{#Emph}How...?", PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							PathTrue = { "GameState", "SpeechRecord", "/VO/Chronos_0594_B" },
-						},
-					}
-				},
-				{ Cue = "/VO/Chronos_0599", Text = "Such power...", PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							PathTrue = { "GameState", "SpeechRecord", "/VO/Chronos_0594_B" },
-						},
-					}
-				},
-				{ Cue = "/VO/Chronos_0600", Text = "If it must be...", PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							PathTrue = { "GameState", "SpeechRecord", "/VO/Chronos_0594_B" },
-						},
-					}
-				},
-				{ Cue = "/VO/Chronos_0586", Text = "Oh, {#Emph}fine. {#Prev}I shall allow it, I suppose..." },
-				{ Cue = "/VO/Chronos_0587", Text = "{#Emph}Rngh{#Prev}, oh very well." },
-				{ Cue = "/VO/Chronos_0588", Text = "I shall abide what doubtless is a necessary bathroom break." },
-				{ Cue = "/VO/Chronos_0589", Text = "You know what? Have it your way! {#Emph}Fine." },
-				{ Cue = "/VO/Chronos_0590", Text = "{#Emph}Eugh..." },
-				{ Cue = "/VO/Chronos_0591", Text = "Then let us wait..." },
-				{ Cue = "/VO/Chronos_0592", Text = "{#Emph}Again...?" },
-				{ Cue = "/VO/Chronos_0593", Text = "Fine..." },
-				]]--
 			},
 		},
 	},
@@ -606,7 +557,8 @@ RoomSetData.Base =
 				PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeMetaRewardStands" },
 			},
 			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
+				Path = { "CurrentRun" },
+				HasNone = { "ActiveBounty", "IsDreamRun" },
 			},
 			{
 				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
@@ -660,6 +612,9 @@ RoomSetData.Base =
 		AnomalyDoorChanceFirstInstance = 0.33,
 		AnomalyDoorRequirements =
 		{
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" },
+			},
 			{
 				PathFalse = { "CurrentRun", "BiomesReached", "Anomaly" },
 			},

@@ -18,6 +18,7 @@ OverwriteTableKeys( EncounterData,
 		EnterVoiceLines =
 		{
 			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+			{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
 			{
 				UsePlayerSource = true,
 				PreLineWait = 3.0,
@@ -49,11 +50,7 @@ OverwriteTableKeys( EncounterData,
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/MelinoeField_3532", Text = "Covered in magma now... the Vow of Rivals caused all this?" },
@@ -112,7 +109,28 @@ OverwriteTableKeys( EncounterData,
 				{ Cue = "/VO/MelinoeField_0926", Text = "You're very vigilant, I'll grant you that." },
 				{ Cue = "/VO/MelinoeField_0927", Text = "The guardian at the gates of hell..." },
 				{ Cue = "/VO/MelinoeField_0923", Text = "Heads up..." },
+				{ Cue = "/VO/MelinoeField_5569", Text = "Hello, imaginary vicious household pet!",
+					PlayFirst = true,
+					PreLineWait = 2.0,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5570", Text = "I ought to dream of better times with you...!",
+					PlayFirst = true,
+					PreLineWait = 2.0,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_4566", Text = "Well, boy! More playtime for you now?",
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -121,6 +139,7 @@ OverwriteTableKeys( EncounterData,
 					},
 				},
 				{ Cue = "/VO/MelinoeField_4567", Text = "I know you don't like cleanings, but it's time!",
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -137,6 +156,7 @@ OverwriteTableKeys( EncounterData,
 				},
 				{ Cue = "/VO/MelinoeField_4568", Text = "Hello again, Cerberus! Shall we?",
 					PlayFirst = true,
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -145,6 +165,7 @@ OverwriteTableKeys( EncounterData,
 					},
 				},
 				{ Cue = "/VO/MelinoeField_4569", Text = "Hi boy! Let's do our thing.",
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -153,6 +174,7 @@ OverwriteTableKeys( EncounterData,
 					},
 				},
 				{ Cue = "/VO/MelinoeField_4570", Text = "You've got a lot of energy for an old dog!",
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -161,6 +183,7 @@ OverwriteTableKeys( EncounterData,
 					},
 				},
 				{ Cue = "/VO/MelinoeField_4571", Text = "You like getting to roam free here, don't you?",
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -201,6 +224,7 @@ OverwriteTableKeys( EncounterData,
 				},
 				{ Cue = "/VO/MelinoeField_4184", Text = "Is this just playtime for you, boy?",
 					PlayFirst = true,
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -210,6 +234,7 @@ OverwriteTableKeys( EncounterData,
 				},
 				{ Cue = "/VO/MelinoeField_4566", Text = "Well, boy! More playtime for you now?",
 					PlayFirst = true,
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -220,7 +245,9 @@ OverwriteTableKeys( EncounterData,
 						},
 					},
 				},
-				{ Cue = "/VO/MelinoeField_4183", Text = "All right, boy! We'll do this {#Emph}just {#Prev}like before!", PlayFirst = true,
+				{ Cue = "/VO/MelinoeField_4183", Text = "All right, boy! We'll do this {#Emph}just {#Prev}like before!",
+					PlayFirst = true,
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -231,7 +258,9 @@ OverwriteTableKeys( EncounterData,
 						},
 					},
 				},
-				{ Cue = "/VO/MelinoeField_4185", Text = "Been playing in the mud again, boy?", PlayFirst = true,
+				{ Cue = "/VO/MelinoeField_4185", Text = "Been playing in the mud again, boy?",
+					PlayFirst = true,
+					PreLineWait = 2.0,
 					GameStateRequirements =
 					{
 						{
@@ -242,27 +271,20 @@ OverwriteTableKeys( EncounterData,
 						},
 					},
 				},
-				{ Cue = "/VO/MelinoeField_3536", Text = "I'll cool you off as soon as possible here, boy...", PlayFirst = true,
+				{ Cue = "/VO/MelinoeField_3536", Text = "I'll cool you off as soon as possible here, boy...",
+					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 3,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_3537", Text = "At least that magma's gone for now...", PlayFirst = true,
 					GameStateRequirements =
 					{
 						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = "<",
-							Value = 3,
-						},
-						{
 							PathTrue = { "GameState", "LastBossDifficultyRecord", "InfestedCerberus" },
 						},
+						NamedRequirementsFalse = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_1109", Text = "Cerberus, is that you?!", PlayFirst = true,
@@ -440,6 +462,9 @@ OverwriteTableKeys( EncounterData,
 				{ Cue = "/VO/MelinoeField_1115", Text = "He's running on pure instinct now...",
 					GameStateRequirements =
 					{
+						{
+							PathFalse = { "GameState", "ReachedTrueEnding" },
+						},						
 						{
 							PathTrue = { "GameState", "EnemyKills", "InfestedCerberus" }
 						},
@@ -692,15 +717,7 @@ OverwriteTableKeys( EncounterData,
 
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 4,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 
 		StartRoomUnthreadedEvents =
@@ -730,15 +747,7 @@ OverwriteTableKeys( EncounterData,
 
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 4,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 
@@ -783,6 +792,18 @@ OverwriteTableKeys( EncounterData,
 		GroupHealthBarTypes = { "Scylla", "SirenDrummer", "SirenKeytarist" },
 		GroupHealthBarRecordName = "Scylla",
 		HealthBarTextId = "Scylla_Full",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Scylla_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		DeathStinger = "/Music/IrisScyllaDeathStinger",
 		DeathExtraSounds = { "/SFX/ScyllaCrowdApplause1", "/SFX/ScyllaCrowdApplause2", "/SFX/ScyllaCrowdCrappyWoo3" },
@@ -809,6 +830,18 @@ OverwriteTableKeys( EncounterData,
 		GroupHealthBarTypes = { "Scylla", "SirenDrummer", "SirenKeytarist", "CharybdisTentacle2" },
 		GroupHealthBarRecordName = "Scylla",
 		HealthBarTextId = "Scylla_AltFight01",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Scylla_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		DeathStinger = "/Music/IrisScyllaDeathStinger",
 		DeathExtraSounds = { "/SFX/TheseusCrowdCheer" },
@@ -917,6 +950,7 @@ OverwriteTableKeys( EncounterData,
 	{
 		InheritFrom = { "BossEncounter" },
 		DelayedStart = true,
+
 		StartRoomUnthreadedEvents =
 		{
 			{ FunctionName = "ActivatePrePlaced", Args = { FractionMin = 1.0, FractionMax = 1.0, LegalTypes = { "Polyphemus", "Medea" }, IgnoreAI = true, SkipPresentation = true, } },
@@ -954,15 +988,7 @@ OverwriteTableKeys( EncounterData,
 
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 3,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		}
 	},
 
@@ -981,15 +1007,7 @@ OverwriteTableKeys( EncounterData,
 
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 3,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		}
 	},
 
@@ -1087,62 +1105,38 @@ OverwriteTableKeys( EncounterData,
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0114", Text = "{#TyphonFormat}CHRONOOOSSS...!",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0115", Text = "{#TyphonFormat}TIIITANNN...",
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0117", Text = "{#TyphonFormat}BOWWW...",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0116", Text = "{#TyphonFormat}MINE...!",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0118", Text = "{#TyphonFormat}YOUUUUUU...!",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0074", Text = "{#TyphonFormat}YOUUUUUU...!",
@@ -1236,7 +1230,7 @@ OverwriteTableKeys( EncounterData,
 					GameStateRequirements =
 					{
 						{
-							PathTrue = { "GameState", "ZeusPalacePostTrueEnding01" }
+							PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" }
 						},
 					},
 				},
@@ -1260,44 +1254,28 @@ OverwriteTableKeys( EncounterData,
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0120", Text = "{#TyphonFormat}WE... SHALL... RUUULE...",
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0121", Text = "{#TyphonFormat}YOUR... TIME... ENDSSS...",
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0123", Text = "{#TyphonFormat}IT... ISSS... TIIIIIME...",
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0013", Text = "{#TyphonFormat}YOU... HADESSS...",
@@ -1336,6 +1314,7 @@ OverwriteTableKeys( EncounterData,
 					},
 				},
 			},
+			{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
 			{
 				PlayOnce = true,
 				PlayOnceContext = "MelVsTyphonIntroVO04",
@@ -1485,6 +1464,68 @@ OverwriteTableKeys( EncounterData,
 				},
 			},
 			{
+				-- PlayOnce = true,
+				-- PlayOnceContext = "MelVsTyphonIntroVO",
+				RandomRemaining = true,
+				BreakIfPlayed = true,
+				UsePlayerSource = true,
+				-- PreLineWait = 1.0,
+				RecheckRequirementsPostWait = true,
+				SuccessiveChanceToPlay = 0.75,
+				SuccessiveChanceToPlayAll = 0.1,
+				PreLineWait = 1.7,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = ">=", Value = 0.2, },
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "MelFacingTyphonSpeech", Time = 45 },
+				},
+				TriggerCooldowns = { "MelWindReactionSpeech" },
+				TriggerCooldownsImmediately = true,
+
+				{ Cue = "/VO/MelinoeField_5352", Text = "You should not {#Emph}exist!",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TyphonDefeatedWithStormStop" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5353", Text = "You'll always be {#Emph}destroyed!",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TyphonDefeatedWithStormStop" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5596", Text = "If I can overcome my nightmares, why not {#Emph}you?",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5597", Text = "You're nothing but a bad dream here!",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+			},
+			{
 				UsePlayerSource = true,
 				-- PreLineWait = 1.0,
 				RecheckRequirementsPostWait = true,
@@ -1511,19 +1552,6 @@ OverwriteTableKeys( EncounterData,
 			},
 		},
 
-		GameStateRequirements =
-		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 4,
-				},
-			},
-		}
-
 	},
 	
 	BossTyphonHead02 =
@@ -1535,30 +1563,17 @@ OverwriteTableKeys( EncounterData,
 			{ FunctionName = "ActivatePrePlaced", Args = { FractionMin = 1.0, FractionMax = 1.0, LegalTypes = { "TyphonHead", "Chronos_TyphonFight" }, IgnoreAI = true, SkipPresentation = true, } },
 		},
 
-		GameStateRequirements =
-		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 4,
-				},
-			},
-		},
-
 		CapturePointMoveChance = 1,
 		CapturePointMoveSearchDistance = 1400,
 		CapturePointMoveSuccessWaitDuration = 1.0,
 		CapturePointTickDuration = 0.18,
-		
 	},
 
 	BossZagreus01 =
 	{
 		InheritFrom = { "BossEncounter" },
 		SkipExitReadyCheckpoint = true,
+		DeathMessage = "DeathByZagMessage",
 		DelayedStart = true,
 		SkipBossTraits = true,
 		StartRoomUnthreadedEvents =

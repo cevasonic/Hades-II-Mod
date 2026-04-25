@@ -91,7 +91,11 @@ function ScyllaSpotlightPresentation( flagData, scylla )
 	-- pause the game
 	AddSimSpeedChange( "ScyllaSpotlight", { Fraction = 0.1, LerpTime = 0.31, Priority = true } )
 
-	thread( InCombatText, targetId, "FeaturedArtist", 1.4, { ShadowScale = 0.66, OffsetY = -215, PreDelay = 0.2 } )
+	if CurrentRun.IsDreamRun then
+		thread( InCombatText, targetId, "FeaturedArtist_DreamRun", 1.4, { ShadowScale = 0.66, OffsetY = -215, PreDelay = 0.2 } )
+	else
+		thread( InCombatText, targetId, "FeaturedArtist", 1.4, { ShadowScale = 0.66, OffsetY = -215, PreDelay = 0.2 } )
+	end
 	PlaySound({ Name = "/SFX/PoseidonWrathWaveCrash", Id = targetId, Delay = 0.2 })
 	PlaySound({ Name = "/Leftovers/Menu Sounds/TextReveal3Distance", Id = targetId, Delay = 0.2 })
 
@@ -258,7 +262,7 @@ function RoomEntranceCrawlerMiniBoss( currentRun, currentRoom )
 	AngleTowardTarget({ Id = crawlerId , DestinationId = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/SFX/QuickSnap", Id = crawlerId })
 	thread( InCombatText, crawlerId, "Alerted", 0.45, { SkipShadow = true } )
-	CreateAnimation({ Name = "EliteUnitStatus2", DestinationId = crawlerId })
+	CreateAnimation({ Name = "CrawlerMinibossHighlight", DestinationId = crawlerId })
 	wait( 0.25 )
 	PlaySound({ Name = "/SFX/Enemy Sounds/Crawler/CrawlerMinibossRoar", Id = crawlerId })
 	SetAnimation({ Name = "Enemy_Crawler_RoarLoop", DestinationId = crawlerId })
@@ -290,6 +294,9 @@ function RoomEntranceCrawlerMiniBoss( currentRun, currentRoom )
 		wait( 2.0 )
 	end
 
+	CreateAnimation({ Name = "CrawlerMinibossTrailEmitter", DestinationId = crawlerId })
+	CreateAnimation({ Name = "CrawlerMinibossWaterTrailEmitter", DestinationId = crawlerId })
+
 	thread(SetupBoss, ActiveEnemies[crawlerId])
 
 	if GetNumShrineUpgrades( "MinibossCountShrineUpgrade" ) >= 1 then
@@ -311,6 +318,9 @@ function RoomEntranceBossBiomeG( currentRun, currentRoom, args )
 	SetAlpha({ Id = dropShadow, Fraction = 0.2, Duration = 0.01 })
 	SetScale({ Id = dropShadow, Fraction = 0.05, Duration = 0.01 })
 	SetSoundCueValue({ Names = { "Vocals" }, Id = AudioState.MusicId, Value = 0, Duration = 0.2 })
+	if CurrentRun.IsDreamRun then
+		StartBossRoomMusic()
+	end
 	wait(0.03)
 
 	SetAlpha({ Id = dropShadow, Fraction = 0.80, Duration = 0.8 })
@@ -345,7 +355,10 @@ function RoomEntranceBossBiomeG( currentRun, currentRoom, args )
 
 	SetAnimation({ DestinationId = args.ScyllaId, Name = "Enemy_Scylla_Intro_End" })
 
-	if not PlayVoiceLines( currentRoom.EnterVoiceLines or GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true ) then
+	if CurrentRun.IsDreamRun then
+		thread( PlayVoiceLines, currentRoom.EnterDreamVoiceLines or currentRoom.EnterVoiceLines or GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines] )
+		wait( args.DreamEnterWait or args.EnterWait or 1.8 )
+	elseif not PlayVoiceLines( currentRoom.EnterVoiceLines or GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true ) then
 		wait(1.5)
 	end
 
@@ -788,6 +801,7 @@ GlobalVoiceLines.UnSummonOdysseusVoiceLines =
 		},
 	},
 }
+
 function SummonOdysseus( source, args )
 	args = args or {}
 	local odysseus = DeepCopyTable( EnemyData.NPC_Odysseus_01 )
@@ -846,6 +860,76 @@ function UnSummonOdysseus( source, args )
 	Destroy({ Id = odysseusId })
 
 end
+
+function SetupScyllaFan( source )
+	LoadVoiceBanks( "Odysseus" )
+	-- minor hack to allow ObjectType to recognize the invisible target
+	ActiveEnemies[source.ObjectId] = source
+	source.AIThreadName = "ScyllaFanAIThread"
+end
+
+GlobalVoiceLines.ScyllaFanShowStartVoiceLines =
+{
+	-- BreakIfPlayed = true,
+	RandomRemaining = true,
+	PreLineWait = 0.67,
+	SuccessiveChanceToPlay = 0.2,
+	SuccessiveChanceToPlayAll = 0.5,
+	ObjectType = "ScyllaFanInvisibleTarget",
+	GameStateRequirements =
+	{
+		-- see ScyllaFanActive in RequirementsData
+		{
+			Path = { "CurrentRun", "TextLinesRecord" },
+			HasNone = { "ScyllaAboutAltFight01", "ScyllaAboutBallad01" },
+		},
+	},
+
+	{ Cue = "/VO/Odysseus_0743", Text = "Play {#Emph}Coral Crown!" },
+	{ Cue = "/VO/Odysseus_0744", Text = "Play {#Emph}I Am Gonna Claw!" },
+	{ Cue = "/VO/Odysseus_0747", Text = "Scylla, I love you!!" },
+	{ Cue = "/VO/Odysseus_0745", Text = "Play {#Emph}Rock and a Hard Place!",
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "TextLinesRecord", "ScyllaAboutAltFight01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Odysseus_0746", Text = "{#Emph}Get new material!",
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "SpeechRecord" },
+				HasAll = { "/VO/Odysseus_0743", "/VO/Odysseus_0744", "/VO/Odysseus_0745", "/VO/Odysseus_0747" },
+			},
+		},
+	},
+}
+GlobalVoiceLines.ScyllaFanShowEndVoiceLines =
+{
+	BreakIfPlayed = true,
+	RandomRemaining = true,
+	PreLineWait = 6.70,
+	SuccessiveChanceToPlay = 0.2,
+	SuccessiveChanceToPlayAll = 0.5,
+	ObjectType = "ScyllaFanInvisibleTarget",
+	SubtitleMinDistance = 2850,
+	GameStateRequirements =
+	{
+		-- see ScyllaFanActive in RequirementsData
+		{
+			Path = { "CurrentRun", "TextLinesRecord" },
+			HasNone = { "ScyllaAboutAltFight01", "ScyllaAboutBallad01" },
+		},
+	},
+
+	{ Cue = "/VO/Odysseus_0748", Text = "{#Emph}Haha{#Prev}, good show!", PlayFirst = true },
+	{ Cue = "/VO/Odysseus_0749", Text = "Good show!" },
+	{ Cue = "/VO/Odysseus_0750", Text = "Bravo!" },
+	{ Cue = "/VO/Odysseus_0751", Text = "Encore!" },
+	{ Cue = "/VO/Odysseus_0752", Text = "What that's it?" },
+}
 
 function ScyllaFinalStandPresentation()
 	CurrentRun.CurrentRoom.ZoomFraction = CurrentRun.CurrentRoom.ZoomFraction * 1.2
@@ -1013,7 +1097,7 @@ function ScyllaNewSongPresentation( source, args )
 	SetAnimation({ Name = "Enemy_Scylla_NewSong_Start", DestinationId = source.ObjectId })
 
 	CreateAnimation({ Name = "StageSpotlight", DestinationId = source.ObjectId, Group = "FX_Add_Top" })
-	PlaySound({ Name = "/Leftovers/SFX/LightOn", source.ObjectId })
+	PlaySound({ Name = "/Leftovers/SFX/LightOn", Id = source.ObjectId })
 
 	wait( 1, RoomThreadName )
 	
@@ -1041,4 +1125,11 @@ function ScyllaNewSongPresentation( source, args )
 	SetAnimation({ Name = "Enemy_Scylla_NewSong_End", DestinationId = source.ObjectId })
 	SetAnimation({ Name = "Enemy_SirenKeytar_NewSong_End", DestinationId = keytaristId })
 	SetPlayerVulnerable("ScyllaNewSongPresentation")
+end
+
+function ScyllaBossDreamRunIntro( source )
+	thread( PlayScyllaTauntAnim, source )
+	thread( ResetScyllaMusicStem, source )
+	SetAnimation({ Name = "MelinoeEquip", DestinationId = CurrentRun.Hero.ObjectId })
+	wait(0.5)
 end

@@ -131,7 +131,7 @@ function SelectNearbyUnlockedEntry()
 	local nearbyGenusName = nil
 	if nearbyId ~= nil then
 		if ActiveEnemies[nearbyId] ~= nil then
-			nearbyGenusName = ActiveEnemies[nearbyId].GenusName
+			nearbyGenusName = ActiveEnemies[nearbyId].CodexName or ActiveEnemies[nearbyId].GenusName
 		elseif MapState.ActiveObstacles[nearbyId] ~= nil then
 			nearbyGenusName = MapState.ActiveObstacles[nearbyId].GenusName
 		end
@@ -145,9 +145,6 @@ function SelectNearbyUnlockedEntry()
 				break
 			end
 		end
-	end
-	if OnlyBoonScreenOpen() and CurrentLootData then
-		nearbyName = CurrentLootData.Name
 	end
 	if nearbyName ~= nil then
 		for chapterName, chapterData in pairs( CodexData ) do
@@ -196,7 +193,7 @@ function OpenCodexScreen()
 		wait( 0.2 )
 	end
 
-	if not HasNewEntries() or ( OnlyBoonScreenOpen() and CurrentLootData ) then
+	if not HasNewEntries() then
 		SelectNearbyUnlockedEntry()
 	end
 
@@ -220,7 +217,6 @@ function OpenCodexScreen()
 	CodexOpenChapter( screen, components[selectedChapterName], { FirstOpen = true } )
 
 	screen.KeepOpen = true
-	screen.AllowInput = true
 	wait( 0.1 )
 	RemoveInputBlock({ Name = "OpenCodexScreen" })
 
@@ -294,7 +290,7 @@ function CodexScreenCreateChapters( screen )
 end
 
 function CodexPrevChapter( screen, button )
-	if IsScreenOpen("BoonInfoScreen") or not screen.AllowInput then
+	if IsScreenOpen("BoonInfoScreen") or screen.CloseTriggered then
 		return
 	end
 	
@@ -312,7 +308,7 @@ function CodexPrevChapter( screen, button )
 end
 
 function CodexNextChapter( screen, button )
-	if IsScreenOpen("BoonInfoScreen") or not screen.AllowInput then
+	if IsScreenOpen("BoonInfoScreen") or screen.CloseTriggered then
 		return
 	end
 	local nextChapterIndex = GetKey( screen.UnlockedChapterNames, CodexStatus.SelectedChapterName ) or 0
@@ -635,7 +631,7 @@ function CodexCloseEntry( screen, entryName )
 end
 
 function CloseCodexScreen( screen, button )
-	if not screen or not screen.AllowInput then
+	if not screen or screen.CloseTriggered then
 		return
 	end
 
@@ -643,8 +639,8 @@ function CloseCodexScreen( screen, button )
 	RemovePlayerImmuneToForce( "Codex" )
 	CurrentRun.Hero.UntargetableFlags.Codex = nil
 	
-	screen.AllowInput = false
 	screen.CloseTriggered = true
+	killTaggedThreads( "CodexScreenOpenedPresentation" )
 
 	SessionMapState.BlockInfoBanners = false
 
@@ -729,7 +725,12 @@ function CreateGiftTrack( screen, args )
 	local group = args.GroupName or screen.ComponentData.DefaultGroup
 	local questLogUnlocked = IsGameStateEligible( nil, { NamedRequirements = { "QuestLogUnlocked" } } )
 
-	local giftEvents = NarrativeData[entryName].GiftTextLinePriorities
+	local narrativeData = NarrativeData[entryName]
+	local giftEvents = narrativeData.GiftTextLinePriorities
+	local bonusGiftHeartEligible = false
+	if narrativeData.BonusGiftHeartRequirements ~= nil and IsGameStateEligible( nil, narrativeData.BonusGiftHeartRequirements ) then
+		bonusGiftHeartEligible = true
+	end
 
 	local locationX = screen.GiftTrackX + ScreenCenterNativeOffsetX
 	local locationY = screen.GiftTrackY + ScreenCenterNativeOffsetY
@@ -752,6 +753,8 @@ function CreateGiftTrack( screen, args )
 			local requirementsArgs = {}
 			if GameState.TextLinesRecord[giftEventData.Name] then
 				table.insert( completedEvents, giftEventData )
+			elseif giftEventData.AltEvent ~= nil and GameState.TextLinesRecord[giftEventData.AltEvent] then
+				-- don't show this event, we already had its alt
 			elseif giftEventData.GameStateRequirements ~= nil and not IsGameStateEligible( giftSource, giftEventData.GameStateRequirements, requirementsArgs ) then
 				table.insert( lockedEvents, { GiftEventData = giftEventData, RequirementsArgs = requirementsArgs } )
 			elseif giftEventData.AlwaysLocked then
@@ -893,6 +896,13 @@ function CreateGiftTrack( screen, args )
 		end
 	end
 
+	if bonusGiftHeartEligible then
+		local newIconId = CreateScreenComponent({ Name = "BlankObstacle", Group = group, X = locationX, Y = locationY, Animation = "RepeatableHeartIcon", Alpha = 0, AlphaTarget = 1.0, AlphaTargetDuration = 0.2 }).Id
+		Flash({ Id = newIconId, Speed = 0.8, MinFraction = 0.0, MaxFraction = 0.3, Color = Color.White })
+		table.insert( screen.Components.RelationshipIcons, newIconId )
+		locationX = locationX + screen.GiftTrackSpacingX
+	end
+
 	for i, lockedData in ipairs( lockedEvents ) do
 
 		local giftEventData = lockedData.GiftEventData
@@ -984,13 +994,7 @@ function CanOpenCodex()
 			return false
 		end
 	end
-	return ( not AreScreensActive() or OnlyBoonScreenOpen() ) and IsInputAllowed({})
-end
-
-function OnlyBoonScreenOpen()
-	local openScreens = TableLength(ActiveScreens)
-
-	return  (openScreens == 1 and AreScreensActive("BoonMenu")) or ( openScreens == 2 and AreScreensActive("BoonMenu") and AreScreensActive("Codex"))
+	return not AreScreensActive() and IsInputAllowed({})
 end
 
 function CalcNumCodexEntriesUnlocked()

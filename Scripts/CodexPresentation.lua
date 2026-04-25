@@ -122,7 +122,7 @@ end
 
 function CodexScreenOpenedPresentation( screen )
 
-	wait( 0.08 )
+	wait( 0.08, "CodexScreenOpenedPresentation" )
 
 	SetAlpha({ Id = screen.Components.Background.Id, Fraction = 1.0, Duration = 0.0 })
 

@@ -2,7 +2,7 @@ UnitSetData.BrokenHearted =
 {
 	BrokenHearted =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 
 		MaxHealth = 280,
 		HealthBarType = "Medium",

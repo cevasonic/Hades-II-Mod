@@ -204,6 +204,20 @@ OverwriteTableKeys( TraitData, {
 		{
 			"ChronosDamageStatDisplay",
 		},
+		DreamRunStatLines = 
+		{
+			"ChronosDamageStatDisplay_DreamRun",
+		},
+		CustomNameWithRequirements = 
+		{
+			GameStateRequirements = 
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				}
+			},
+			Name = "HadesPreDamageBoon_DreamRun"
+		},
 		ExtractValues =
 		{
 			{
@@ -246,6 +260,20 @@ OverwriteTableKeys( TraitData, {
 		StatLines =
 		{
 			"ChronosDebuffStatDisplay",
+		},
+		DreamRunStatLines = 
+		{
+			"ChronosDebuffStatDisplay_DreamRun",
+		},
+		CustomNameWithRequirements = 
+		{
+			GameStateRequirements = 
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				}
+			},
+			Name = "HadesChronosDebuffBoon_DreamRun"
 		},
 		ExtractValues =
 		{

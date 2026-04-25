@@ -73,10 +73,6 @@ function GetRandomEligibleTextLines( source, textLineSets, priorities, args )
 		return GetRandomValue( eligibleOneTimeConversations )
 	end
 
-	if source.RepeatableTextLinesPlayChance ~= nil and not RandomChance( source.RepeatableTextLinesPlayChance ) then
-		return nil
-	end
-
 	local randomConversation = nil
 	if IsEmpty( eligibleUnplayedConversations ) then
 		-- All lines played, start the record over
@@ -141,7 +137,9 @@ function OnPartnerConversationSet( unit, partnerUnit )
 	if unit.NextInteractLines.BlockDistanceTriggers ~= nil then
 		partnerUnit.NextInteractLines.BlockDistanceTriggers = unit.NextInteractLines.BlockDistanceTriggers
 	end
-	partnerUnit.CanReceiveGift = false
+	if not partnerUnit.AllowSpecialInteractInPartnerConversation then
+		partnerUnit.CanReceiveGift = false
+	end
 	if not unit.AllowSpecialInteractInPartnerConversation then
 		unit.CanReceiveGift = false
 	end
@@ -202,6 +200,7 @@ function PlayTextLines( source, textLines, args )
 	end
 
 	if PlayingTextLines then
+		DebugAssert({ Condition = false, Text = tostring(textLines.Name).." is attempting to play while another text line is still playing!", Owner = "Caleb" })
 		table.insert( QueuedTextLines, textLines )
 		return
 	end
@@ -248,6 +247,9 @@ function PlayTextLines( source, textLines, args )
 	screen.StartTime = _worldTime
 	screen.LastLineStartTime = _worldTime
 	OverwriteTableKeys( screen, args.ScreenArgs )
+	if textLines.SkipQuestStatusCheck then
+		screen.SkipQuestStatusCheck = true
+	end
 	ModifySubtitles({ SuppressLyrics = true })
 	OnScreenOpened( screen )
 	
@@ -283,7 +285,7 @@ function PlayTextLines( source, textLines, args )
 	OnScreenCloseFinished( screen )
 	ModifySubtitles({ SuppressLyrics = false })
 	FinishedTextLinesPresentation( source, textLines )
-	if not source.TextLinesIgnoreQuests then
+	if not source.TextLinesIgnoreQuests and not textLines.SkipQuestStatusCheck then
 		if not screen.SkipQuestStatusCheck then
 			thread( CheckQuestStatus )
 		end
@@ -305,14 +307,6 @@ function PlayTextLines( source, textLines, args )
 		StopStatusAnimation( source, StatusAnimations.WantsToTalk )
 	end
 
-	if textLines.RoomRequiredInteractionFalse then
-		MapState.RoomRequiredObjects[source.ObjectId] = nil
-	end
-
-	if textLines.CompleteObjective then
-		thread(MarkObjectiveComplete, textLines.CompleteObjective)
-	end
-
 	ShowCombatUI( "PlayTextLines" )
 
 	waitUnmodified( textLines.EndWait )
@@ -324,23 +318,6 @@ function PlayTextLines( source, textLines, args )
 	args.PlayOnceLine = textLines.PlayOnce
 	--DebugPrint({ Text = "args.PlayOnceLine = "..tostring(args.PlayOnceLine) })
 
-	if textLines.EndCue ~= nil and (textLines.EndCueCooldownName == nil or CheckCooldown( textLines.EndCueCooldownName, textLines.EndCueCooldownTime ) ) then
-		-- These EndCue lines should not repeat per run
-		if not CurrentRun.SpeechRecord[textLines.EndCue] then
-			-- EndCue always plays from the player
-			local source = CurrentRun.Hero
-			if textLines.EndCueSourceName ~= nil then
-				local typeIds = GetIdsByType({ Name = textLines.EndCueSourceName })
-				local objectId = typeIds[1]
-				source = ActiveEnemies[objectId]
-				if source == nil then
-					source = {}
-					source.ObjectId = objectId
-				end
-			end
-			thread( PlayVoiceLines, { Cue = textLines.EndCue }, nil, source, args )
-		end
-	end
 	if textLines.EndVoiceLines ~= nil then
 		thread( PlayEndVoiceLines, textLines.EndVoiceLines, source, args )
 	end
@@ -467,31 +444,42 @@ function PlayTextLine( screen, textLines, prevLine, parentLine, source, args )
 				parentLine = line
 				local eligibleUnplayedLines = {}
 				local allEligibleLines = {}
+				local playFirstLine = nil
 				for k, subLine in ipairs( line ) do
-					if IsTextLineEligible( CurrentRun, source, subLine, prevLine, line ) then
+					if GameState.LastPlayedRandomLines[subLine.Cue] then
+						GameState.LastPlayedRandomLines[subLine.Cue] = nil -- Block last played line once
+					elseif IsTextLineEligible( CurrentRun, source, subLine, prevLine, line ) then
 						table.insert( allEligibleLines, subLine )
-						if not GameState.PlayedRandomTextLines[subLine.Text] then
+						if subLine.PlayFirst and not GameState.SpeechRecord[subLine.Cue] then
+							playFirstLine = subLine
+							--DebugPrint({ Text = "PlayFirst: "..playFirstLine.Cue })
+							break
+						end
+						if not GameState.PlayedRandomTextLines[subLine.Cue] then
 							table.insert( eligibleUnplayedLines, subLine )
 						end
 					end
 				end
 				if not IsEmpty( allEligibleLines ) then
-					if IsEmpty( eligibleUnplayedLines ) then
+					if playFirstLine ~= nil then
+						playLine = playFirstLine
+					elseif IsEmpty( eligibleUnplayedLines ) then
 						-- All lines played, start the record over
 						for k, subLine in ipairs( line ) do
-							GameState.PlayedRandomTextLines[subLine.Text] = nil
+							GameState.PlayedRandomTextLines[subLine.Cue] = nil
 						end
 						playLine = GetRandomValue( allEligibleLines )
 					else
 						playLine = GetRandomValue( eligibleUnplayedLines )
 					end
-					GameState.PlayedRandomTextLines[playLine.Text] = true
+					GameState.PlayedRandomTextLines[playLine.Cue] = true
+					GameState.LastPlayedRandomLines[playLine.Cue] = true
 				end
 			end
 
 			waitUnmodified( line.InterSceneWaitTime )
 
-			if playLine.Text ~= nil then
+			if playLine.Text ~= nil or playLine.SkipDialogue then
 
 				waitUnmodified( 0.1 )
 				StopStatusAnimation( source, source.StatusAnimation or textLines.StatusAnimation or StatusAnimations.WantsToTalk )
@@ -607,8 +595,8 @@ function IsTextLineEligible( currentRun, source, line, prevLine, parentLine, arg
 					args.FirstFailedRequirement = "Partner doesn't exist"
 					return false
 				end
-				if partner.NextInteractLines ~= nil and partner.NextInteractLines.PlayOnce and partner.NextInteractLines.Name ~= line.Name then
-					args.FirstFailedRequirement = "Partner is already busy with a non-repeatable conversation"
+				if partner.NextInteractLines ~= nil and partner.NextInteractLines.Name ~= line.Name then
+					args.FirstFailedRequirement = "Partner is already busy with a conversation"
 					return false
 				end
 				if NeedsUseableOff( partner ) then
@@ -696,16 +684,18 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 
 	local speakerName = line.SpeakerNameplateId or line.Speaker or source.Speaker or source.Name	
 	
-	-- Always prioritize line data over source data
-	local lineHistoryName = line.LineHistoryName or line.SpeakerNameplateId or line.Speaker or source.LineHistoryName or source.Speaker or source.Name
-	local speakerSource = EnemyData[speakerName] or LootData[speakerName]
-	local speakerSourceSubtitleColor = nil
-	if speakerSource ~= nil then
-		speakerSourceSubtitleColor = speakerSource.NarrativeFadeInColor or speakerSource.SubtitleColor
+	if not line.SkipDialogue then
+		-- Always prioritize line data over source data
+		local lineHistoryName = line.LineHistoryName or line.SpeakerNameplateId or line.Speaker or source.LineHistoryName or source.Speaker or source.Name
+		local speakerSource = EnemyData[speakerName] or LootData[speakerName]
+		local speakerSourceSubtitleColor = nil
+		if speakerSource ~= nil then
+			speakerSourceSubtitleColor = speakerSource.NarrativeFadeInColor or speakerSource.SubtitleColor
+		end
+		local lineHistorySubtitleColor = line.SubtitleColor or speakerSourceSubtitleColor or source.NarrativeFadeInColor or source.SubtitleColor
+		table.insert( CurrentRun.LineHistory, { SpeakerName = lineHistoryName, SourceName = source.Name, Text = text, RawText = rawText,
+			SubtitleColor = lineHistorySubtitleColor } )
 	end
-	local lineHistorySubtitleColor = line.SubtitleColor or speakerSourceSubtitleColor or source.NarrativeFadeInColor or source.SubtitleColor
-	table.insert( CurrentRun.LineHistory, { SpeakerName = lineHistoryName, SourceName = source.Name, Text = text, RawText = rawText,
-		SubtitleColor = lineHistorySubtitleColor } )
 
 	local portrait = line.Portrait or source.Portrait
 	if source.PortraitSwapMap ~= nil then
@@ -714,8 +704,11 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 
 	local speakerLabelOffsetY = line.SpeakerLabelOffsetY or source.SpeakerLabelOffsetY or 5
 
-	for id, v in pairs( AudioState.ActiveSpeechIds ) do
-		StopSound({ Id = id, Duration = 0.15 })
+	if not line.SkipDialogue then
+		for id, v in pairs( AudioState.ActiveSpeechIds ) do
+			StopSound({ Id = id, Duration = 0.15 })
+		end
+		TableClear( AudioState.ActiveSpeechIds )
 	end
 
 	StopStatusAnimation( source, StatusAnimations.WantsToTalk )
@@ -763,19 +756,20 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 			screen.CurrentContextArt = line.NarrativeContextArt
 			SetAnimation({ DestinationId = screen.ContextArtId, Name = screen.CurrentContextArt.."_In" })
 		end
-		local prevPortrait = screen.CurrentPortrait
-		screen.CurrentPortrait = portrait
+		if not line.SkipDialogue then
+			screen.CurrentPortrait = portrait
 
-		if source.PortraitOverrides ~= nil or screen.LastPortraitHadOverrides then
-			local overrides = source.PortraitOverrides or { OffsetX = 0, OffsetY = 0, Scale = 1.0 }
-			Teleport({ Id = screen.PortraitId, OffsetX = portraitAnchorX + overrides.OffsetX, OffsetY = portraitAnchorY + overrides.OffsetY })
-			SetScale({ Id = screen.PortraitId, Fraction = overrides.Scale })
-		end
-		screen.LastPortraitHadOverrides = (source.PortraitOverrides ~= nil)
+			if source.PortraitOverrides ~= nil or screen.LastPortraitHadOverrides then
+				local overrides = source.PortraitOverrides or { OffsetX = 0, OffsetY = 0, Scale = 1.0 }
+				Teleport({ Id = screen.PortraitId, OffsetX = portraitAnchorX + overrides.OffsetX, OffsetY = portraitAnchorY + overrides.OffsetY })
+				SetScale({ Id = screen.PortraitId, Fraction = overrides.Scale })
+			end
+			screen.LastPortraitHadOverrides = (source.PortraitOverrides ~= nil)
 
-		SetAnimation({ DestinationId = screen.PortraitId, Name = screen.CurrentPortrait })
-		if source.OnPortraitSetFunctionName ~= nil then
-			CallFunctionName( source.OnPortraitSetFunctionName, source, source.OnPortraitSetFunctionArgs, screen, line )
+			SetAnimation({ DestinationId = screen.PortraitId, Name = screen.CurrentPortrait })
+			if source.OnPortraitSetFunctionName ~= nil then
+				CallFunctionName( source.OnPortraitSetFunctionName, source, source.OnPortraitSetFunctionArgs, screen, line )
+			end
 		end
 		narrationBoxOffsetX = 198
 		if screen.DialogueGlowBackgroundId == nil then
@@ -818,33 +812,35 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 			screen.NameplateDescriptionId = nil
 		end
 
-		if screen.NameplateId == nil then
-			screen.NameplateId = CreateScreenObstacle({ Name = "BlankObstacle", X = ScreenCenterX - 12, Y = ScreenCenterY + 103, Group = args.Group or screen.DefaultGroup })
-		end
-		if screen.NameplateDescriptionId == nil then
-			screen.NameplateDescriptionId = CreateScreenObstacle({ Name = "BlankObstacle", X = ScreenCenterX - 8, Y = ScreenCenterY + 146, Group = args.Group or screen.DefaultGroup })
-		end
+		if not line.SkipDialogue then
+			if screen.NameplateId == nil then
+				screen.NameplateId = CreateScreenObstacle({ Name = "BlankObstacle", X = ScreenCenterX - 12, Y = ScreenCenterY + 103, Group = args.Group or screen.DefaultGroup })
+			end
+			if screen.NameplateDescriptionId == nil then
+				screen.NameplateDescriptionId = CreateScreenObstacle({ Name = "BlankObstacle", X = ScreenCenterX - 8, Y = ScreenCenterY + 146, Group = args.Group or screen.DefaultGroup })
+			end
 
-		CreateTextBox({
-			Id = screen.NameplateId,
-			Text = speakerName,
-			FontSize = 32,
-			OffsetY = speakerLabelOffsetY + GetLocalizedValue( 0, screen.ComponentData.SpeakerDisplayName.LangOffsetY ),
-			Font = "CaesarDressing",
-			Color = source.NameplateSpeakerNameColor or Color.DialogueSpeakerName,
-			ShadowBlur = 1, ShadowColor = {0,0,0,0}, ShadowOffset={0, 3},
-			Justification = "CENTER",
-		})
+			CreateTextBox({
+				Id = screen.NameplateId,
+				Text = speakerName,
+				FontSize = 32,
+				OffsetY = speakerLabelOffsetY + GetLocalizedValue( 0, screen.ComponentData.SpeakerDisplayName.LangOffsetY ),
+				Font = "CaesarDressing",
+				Color = source.NameplateSpeakerNameColor or Color.DialogueSpeakerName,
+				ShadowBlur = 1, ShadowColor = {0,0,0,0}, ShadowOffset={0, 3},
+				Justification = "CENTER",
+			})
 
-		CreateTextBox({
-			Id = screen.NameplateDescriptionId,
-			Text = speakerName,
-			FontSize = 22,
-			OffsetY = 3 + GetLocalizedValue( 0, screen.ComponentData.SpeakerDescription.angOffsetY ),
-			Font = "P22UndergroundSCMedium",
-			Color = source.NameplateDescriptionColor or {120, 220, 180, 192},
-			UseDescription = true,
-		})
+			CreateTextBox({
+				Id = screen.NameplateDescriptionId,
+				Text = speakerName,
+				FontSize = 22,
+				OffsetY = 3 + GetLocalizedValue( 0, screen.ComponentData.SpeakerDescription.angOffsetY ),
+				Font = "P22UndergroundSCMedium",
+				Color = source.NameplateDescriptionColor or {120, 220, 180, 192},
+				UseDescription = true,
+			})
+		end
 
 	else
 		-- Narration
@@ -942,7 +938,7 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 		GameState.SpeechRecord[cue] = (GameState.SpeechRecord[cue] or 0) + 1
 		CurrentRun.SpeechRecord[cue] = (CurrentRun.SpeechRecord[cue] or 0) + 1
 	end
-	if not line.AutoAdvance and not line.IgnoreContinueArrow and not GetConfigOptionValue({ Name = "AutoAdvanceNarration" }) then
+	if not line.AutoAdvance and not line.IgnoreContinueArrow and not line.SkipDialogue and not GetConfigOptionValue({ Name = "AutoAdvanceNarration" }) then
 		thread( ShowContinueArrow, screen, source, cue )
 	end
 
@@ -983,7 +979,9 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 	end
 
 	local notifyName = nil
-	if IsEmpty( choiceMap ) then
+	if line.SkipDialogue then
+		-- proceed immediately
+	elseif IsEmpty( choiceMap ) then
 		notifyName = "NarrativeLineNextInput"
 		NotifyOnControlPressed({ Names = advanceControls, Notify = notifyName })
 		waitUntil( notifyName )
@@ -1011,12 +1009,14 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 	killTaggedThreads( NarrativeThreadName )
 	killWaitUntilThreads( cue )
 
+	--[[
 	GameState.TextLinePanelCount[parentLine.Name] = (GameState.TextLinePanelCount[parentLine.Name] or 0) + 1
 	local listenEndTime = _worldTime
 	local listenElapsedTime = listenEndTime - listenStartTime
 	if listenElapsedTime < NarrativeConstantData.ListenSkipThreshold then
 		GameState.TextLinePanelSkipCount[parentLine.Name] = (GameState.TextLinePanelSkipCount[parentLine.Name] or 0) + 1
 	end
+	]]
 
 	if nextLine ~= nil and nextLine.Append then
 		-- Do nothing
@@ -1051,7 +1051,9 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 		end
 	end
 
-	waitUnmodified(0.15)
+	if not line.SkipDialogue then
+		waitUnmodified(0.15)
+	end
 	if nextLine ~= nil and nextLine.Append then
 		-- Do nothing
 	else
@@ -1062,6 +1064,7 @@ function DisplayTextLine( screen, source, line, parentLine, nextLine, args )
 	end
 
 	StopSound({ Id = speechId, Duration = 0.15 })
+	AudioState.ActiveSpeechIds[speechId] = nil
 
 	if selectedChoice ~= nil then
 		PlaySound({ Name = "/SFX/Menu Sounds/IrisMenuBack" })
@@ -1082,48 +1085,11 @@ function PlayFirstEligibleTextLines( source, textLineSets )
 	end
 
 	for textLinesName, textLines in pairs( textLineSets ) do
-		local playedSomething = PlayTextLines( source, textLines )
-		if playedSomething then
+		if IsTextLineEligible( CurrentRun, source, textLines ) then
+			PlayTextLines( source, textLines, { IgnoreRequirements = true } )
 			return
 		end
 	end
-
-end
-
-function PlayRandomRemainingTextLines( source, textLineSets )
-
-	if textLineSets == nil then
-		return false
-	end
-
-	local eligibleUnplayedLines = {}
-	local allEligibleLines = {}
-	for textLinesName, textLines in pairs( textLineSets ) do
-		if IsTextLineEligible( CurrentRun, source, textLines ) then
-			table.insert( allEligibleLines, textLines )
-			if not GameState.PlayedRandomTextLines[textLinesName] then
-				table.insert( eligibleUnplayedLines, textLines )
-			end
-		end
-	end
-
-	if IsEmpty( allEligibleLines ) then
-		return false
-	end
-
-	local randomLines = nil
-	if IsEmpty( eligibleUnplayedLines ) then
-		-- All lines played, start the record over
-		for textLinesName, textLines in pairs( textLineSets ) do
-			GameState.PlayedRandomTextLines[textLinesName] = nil
-		end
-		randomLines = GetRandomValue( allEligibleLines )
-	else
-		randomLines = GetRandomValue( eligibleUnplayedLines )
-	end
-	GameState.PlayedRandomTextLines[randomLines.Name] = true
-	PlayTextLines( source, randomLines )
-	return true
 
 end
 
@@ -1157,4 +1123,8 @@ function GetLastRunTextLinesOccured( textLinesName )
 		end
 	end
 	return -1
+end
+
+function SetupBossIntroTextLines( source, args )
+	source.QueuedBossIntroTextLines = GetRandomEligibleTextLines( source, source.BossIntroTextLineSets, GetNarrativeDataValue( source, "BossIntroTextLinePriorities" ) )
 end

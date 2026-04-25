@@ -12,6 +12,7 @@
 	"CapMaxHealth",
 	"TotalManaRecovered",
 	"DoorHealReserve",
+	"BoonConversionUses",
 }
 
 TraitSetData.Keepsakes =
@@ -2471,8 +2472,18 @@ TraitSetData.Keepsakes =
 				{
 					{ Name = "KeepsakeGiverSpeechPlayedRecently", Time = 90 },
 				},
-				{ Cue = "/VO/PersephoneKeepsake_0030", Text = "{#Emph}Daughter!" },
-				{ Cue = "/VO/PersephoneKeepsake_0032", Text = "{#Emph}Melinoë." },
+				{ Cue = "/VO/PersephoneKeepsake_0030", Text = "{#Emph}Daughter!",
+					Cooldowns =
+					{
+						{ Name = "PersephoneSpokeRecently", Time = 8 }
+					},
+				},
+				{ Cue = "/VO/PersephoneKeepsake_0032", Text = "{#Emph}Melinoë.",
+					Cooldowns =
+					{
+						{ Name = "PersephoneSpokeRecently", Time = 8 }
+					},
+				},
 				{ Cue = "/VO/HadesKeepsake_0374", Text = "{#Emph}Daughter.", Source = { LineHistoryName = "NPC_Hades_02", SubtitleColor = Color.HadesVoice }, },
 				{ Cue = "/VO/HadesKeepsake_0375", Text = "{#Emph}My daughter.", Source = { LineHistoryName = "NPC_Hades_02", SubtitleColor = Color.HadesVoice }, },
 			},

@@ -545,6 +545,9 @@ function MouseOverMetaUpgrade( button, screenFirstOpen )
 end
 
 function MouseOffMetaUpgrade( button )
+	if button == nil then
+		return
+	end
 	if button.Screen.ZoomInProgress or not button.Screen.KeepOpen then 
 		return
 	end
@@ -1056,7 +1059,11 @@ function MetaUpgradeCardAction( screen, button )
 		if HasResources( metaUpgradeData.ResourceCost ) then
 			screen.ChangeMade = true
 			for resourceName, resourceCost in pairs( metaUpgradeData.ResourceCost ) do
-				SpendResource( resourceName, resourceCost, metaUpgradeName, { TargetId = components["ResourceIconBacking"..resourceName].Id, UseScreenLocation = true, TextOffsetY = 11, TextAnchorOffsetY = -50, SkipQuestStatusCheck = true } )
+				local targetId = components.MetaUpgradeResourceCostBacking.Id
+				if components["ResourceIconBacking"..resourceName] then
+					targetId = components["ResourceIconBacking"..resourceName].Id
+				end
+				SpendResource( resourceName, resourceCost, metaUpgradeName, { TargetId = targetId, UseScreenLocation = true, TextOffsetY = 11, TextAnchorOffsetY = -50, SkipQuestStatusCheck = true } )
 			end
 			UnlockMetaUpgradeCardPresentation( screen, selectedButton, metaUpgradeData )
 			zoomOutDelay = 1
@@ -1374,6 +1381,8 @@ function UpdateMetaUpgradeCardInteractionText( screen, button )
 		components.SelectButton.Visible = false
 	end
 
+	screen.PrevUseMouseCache = screen.UseMouseCache
+	screen.UseMouseCache = GetConfigOptionValue({ Name = "UseMouse" })
 	if MetaUpgradeCardScreenCanSwapLayoutArt( screen ) then
 		ModifyTextBox({ Id = components.PinButton.Id, Text = components.PinButton.AltTexts[1] })
 		SetAlpha({ Id = components.PinButton.Id, Fraction = 1.0, Duration = 0.2 })
@@ -1471,7 +1480,7 @@ function CloseMetaUpgradeCardScreen( screen, args )
 		thread( CloseMetaUpgradeCardScreenPresentation, screen )
 	end
 	RecordMetaUpgradeChanges( screen )
-	UpdateEscapeDoorForLimitGraspShrineUpgrade( nil, { EscapeDoorIds = { 420947, 555784 } } )
+	UpdateEscapeDoorForLimitGraspShrineUpgrade( nil, { EscapeDoorIds = { 420947, 555784, 780651 } } )
 	for metaUpgradeName, data in pairs( SessionState.MetaUpgradeChanges.CardData) do
 		if data.Equipped and MetaUpgradeCardData[ metaUpgradeName ].TraitName then
 			local cardMultiplier = 1
@@ -1806,9 +1815,13 @@ function MetaUpgradeCardScreenPrevLayout( screen, button )
 	MetaUpgradeCardScreenLayoutChangeIn( screen, button )
 end
 
-function MetaUpgradeCardScreenCanSwapLayoutArt( screen )
+function MetaUpgradeCardScreenCanSwapLayoutArt( screen, args )
+	args = args or {}
 	if GameState.WorldUpgradesAdded.Cosmetic_CardDeck01 then
 		if not GetConfigOptionValue({ Name = "UseMouse" }) or screen.LastMouseOverLayout ~= nil then
+			return true
+		end
+		if args.CheckUseMouseCache and not screen.PrevUseMouseCache then
 			return true
 		end
 	end
@@ -1817,8 +1830,7 @@ end
 
 function MetaUpgradeCardScreenPinItem( screen, button )
 	
-	
-	if MetaUpgradeCardScreenCanSwapLayoutArt( screen ) then
+	if MetaUpgradeCardScreenCanSwapLayoutArt( screen, { CheckUseMouseCache = true } ) then
 		MetaUpgradeCardScreenLayoutSetSwapOpen( screen, button )
 		return
 	end
@@ -1861,6 +1873,7 @@ function MetaUpgradeCardScreenLayoutSetSwapOpen( screen, button )
 		return
 	end
 	HideTopMenuScreenTooltips({ })
+	MouseOffMetaUpgrade( screen.SelectedButton )
 	GameState.ScreensViewed.LayoutSetSwap = true
 	screen.SwappingLayoutArtIndex = screen.LastMouseOverLayout or GameState.CurrentMetaUpgradeLayout
 	SetAlpha({ Id = screen.Components.LayoutArtSwapBackground.Id, Fraction = screen.LayoutSetArtOptionsBackgroundOpacity, Duration = 0.2 })

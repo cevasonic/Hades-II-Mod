@@ -45,6 +45,22 @@
 		NarrativeContextArtFlippable = false,
 		BlockedLootInteractionText = "UseLootLocked",
 
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					PreserveUseText = true,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		DuoPickupTextLinesRequirements =
 		{
@@ -701,7 +717,7 @@ GlobalVoiceLines.GenericLootGrantedVoiceLines =
 	{
 		{
 			Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-			IsNone = { "MiniBossTreant", "Shop", "ArtemisCombatIntro", "ArtemisCombatF", "ArtemisCombatG", "ArtemisCombatN", "HeraclesCombatN", "HealthRestore" },
+			IsNone = { "MiniBossTreant", "Shop", "ArtemisCombatIntro", "ArtemisCombatF", "ArtemisCombatG", "ArtemisCombatN", "HeraclesCombatN", "HealthRestore", "DevotionTestF", "DevotionTestG", "DevotionTestH", "DevotionTestI", "DevotionTestN", "DevotionTestO", "DevotionTestP" },
 		},
 		{
 			Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
@@ -1084,7 +1100,7 @@ RewardStoreData =
 					Value = 5,
 				},
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = "<=",
 					Value = 1,
 				},
@@ -1100,7 +1116,7 @@ RewardStoreData =
 					Value = 5,
 				},
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = "<=",
 					Value = 1,
 				},
@@ -1135,7 +1151,7 @@ RewardStoreData =
 					},
 				},
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1169,7 +1185,7 @@ RewardStoreData =
 					},
 				},
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1195,7 +1211,7 @@ RewardStoreData =
 					Value = 100,
 				},
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1221,7 +1237,7 @@ RewardStoreData =
 					Value = 100,
 				},
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1234,7 +1250,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = "<=",
 					Value = 1,
 				},
@@ -1245,7 +1261,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = "<=",
 					Value = 1,
 				},
@@ -1256,7 +1272,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = "<=",
 					Value = 1,
 				},
@@ -1267,7 +1283,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = "<=",
 					Value = 1,
 				},
@@ -1279,7 +1295,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1308,7 +1324,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1337,7 +1353,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1366,7 +1382,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1395,7 +1411,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1416,7 +1432,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1437,7 +1453,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1458,7 +1474,7 @@ RewardStoreData =
 			GameStateRequirements =
 			{
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},
@@ -1675,7 +1691,7 @@ RewardStoreData =
 			{
 				NamedRequirements = { "TalentLegal", },
 				{
-					Path = { "CurrentRun", "ClearedBiomes" },
+					Path = { "CurrentRun", "EnteredBiomes" },
 					Comparison = ">",
 					Value = 1,
 				},

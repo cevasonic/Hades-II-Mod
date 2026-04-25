@@ -11,7 +11,7 @@ UnitSetData.Crawler =
 		ActivateFx = "EnemyPreSpawnTerrainTiny",
 		ActivateFx2 = "EnemyPreSpawnStandingTiny",
 		SpawnFx = "CrawlerHighlight",
-		StopAnimationsOnDeath = { "CrawlerHighlight", "CrawlerHighlightGlow", "CrawlerHighlight_Add" },
+		StopAnimationsOnDeath = { "CrawlerHighlight", "CrawlerHighlightGlow", "CrawlerHighlight_Add", },
 
 		DamagedFxStyles =
 		{
@@ -89,7 +89,7 @@ UnitSetData.Crawler =
 	
 	CrawlerMiniboss =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy", },
+		InheritFrom = { "BaseBossEnemy", "BaseGEnemy", "BaseVulnerableEnemy", },
 		GenusName = "Crawler",
 		IsBoss = false,
 		BlockRaiseDead = true,
@@ -100,6 +100,7 @@ UnitSetData.Crawler =
 		EffectVfxScale= 0.5,
 		PolymorphScaleOverride = 0.5,
 		OnDeathFunctionName = "CrawlerMiniBossKillPresentation",
+		StopAnimationsOnDeath = { "CrawlerHighlight", "CrawlerHighlightGlow", "CrawlerHighlight_Add", "CrawlerMinibossHighlight", "CrawlerMinibossHighlightB", "CrawlerMinibossTrailEmitter", },
 		OnDeathFunctionArgs =
 		{
 			Message = "CrawlerDefeatedMessage",
@@ -131,19 +132,71 @@ UnitSetData.Crawler =
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "OdysseusAboutVerminMiniboss01", "OdysseusAboutVerminMiniboss01_B" },
-					}
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				TextId = "CrawlerMiniboss_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},
 		AltDeathMessageTextIds =
 		{
-			{ TextId = "CrawlerDefeatedMessageAlt",
+			{
+				TextId = "CrawlerDefeatedMessageAlt",
 				GameStateRequirements =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "OdysseusAboutVerminMiniboss01", "OdysseusAboutVerminMiniboss01_B" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					}
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TinyVerminDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},
@@ -174,7 +227,7 @@ UnitSetData.Crawler =
 		{
 			"CrawlerRush_Miniboss",
 			"CrawlerMinibossSlam",
-			"CrawlerMinibossSummon", 
+			"CrawlerMinibossSummon",
 			-- "CrawlerBurrow_Miniboss" -- removed for now
 		},
 
@@ -192,12 +245,20 @@ UnitSetData.Crawler =
 			},
 		},
 
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
+
 		OnKillVoiceLines =
 		{
 			Cooldowns =
 			{
 				{ Name = "BossVanquishedSpeech", Time = 60 },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
 				BreakIfPlayed = true,
@@ -236,7 +297,7 @@ UnitSetData.Crawler =
 
 	Crawler_Shadow =
 	{
-		InheritFrom = { "Shadow", "BaseVulnerableEnemy", },
+		InheritFrom = { "Shadow", "BaseGEnemy", "BaseVulnerableEnemy", },
 		GenusName = "Crawler",
 
 		StartAggroed = true,

@@ -2,7 +2,7 @@ UnitSetData.Lycanthrope =
 {
 	Lycanthrope =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 890,
 		HealthBarOffsetY = -240,

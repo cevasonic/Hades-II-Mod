@@ -2,7 +2,7 @@ UnitSetData.Polyphemus =
 {
 	Polyphemus =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseNEnemy", "BaseVulnerableEnemy"},
 		Portrait = "Portrait_Cyclops_Default_01",
 		Groups = { "NPCs", "GroundEnemies" },
 		SubtitleColor = Color.PolyphemusVoice,
@@ -25,7 +25,12 @@ UnitSetData.Polyphemus =
 		OnDeathFunctionName = "GenericBossKillPresentation",
 		OnDeathFunctionArgs =
 		{
-			Message = "CyclopsDefeatedMessage", CameraPanTime = 1.5, StartSound = "/Leftovers/Menu Sounds/EmoteShocked", BatsAfterDeath = false, FlashRed = true, AddInterBiomeTimerBlock = true,
+			Message = "CyclopsDefeatedMessage",
+			CameraPanTime = 1.5,
+			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
+			FlashRed = true,
+			AddInterBiomeTimerBlock = true,
+			IsBiomeBoss = true,
 			DeathFlashOffsetY = -200,
 			--ShiftDistance = 300,
 			--ShiftTowardId = 50063,
@@ -38,11 +43,72 @@ UnitSetData.Polyphemus =
 			{
 				FunctionName = "WipeSpawnsOnKill",
 			},
+			{
+				FunctionName = "RecordBossKillerName",
+			},
 		},
-		
-		BossDifficultyShrineRequiredCount = 1,
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.83,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.8,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.1,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 3.3,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.75,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 6,
+					SpeedMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.37,
+				},
+			},
+		},
+
 		SetupEvents =
 		{
+			{
+				FunctionName = "SetupBossIntroTextLines",
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 			{
 				FunctionName = "GenericPresentation",
 				Args =
@@ -56,11 +122,7 @@ UnitSetData.Polyphemus =
 				},
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					}
+					NamedRequirements = { "BossDifficultyActive" },
 				}
 			},
 
@@ -69,17 +131,81 @@ UnitSetData.Polyphemus =
 				Args =
 				{
 					MaxHealth = 10200,
+					DreamBiomeData =
+					{
+						[1] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.83,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 0.8,
+							},
+						},
+						[2] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 1.5,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.1,
+							},
+						},
+						[3] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 3.3,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.75,
+							},
+						},
+						[4] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 6,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 2.37,
+							},
+						},
+					},
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/PolyphemusDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
 				},
 				GameStateRequirements =
 				{
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 1,
-						},
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
@@ -128,17 +254,50 @@ UnitSetData.Polyphemus =
 		HealthBarOffsetY = -275,
 		AltHealthBarTextIds =
 		{
-			{ TextId = "Cyclops_AltFight01",
+			{
+				TextId = "Cyclops_AltFight01",
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				TextId = "Cyclops_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
+				},
+			},
+			{
+				TextId = "Cyclops_DreamRun02",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 			},
 		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
 		IgnoreInvincibubbleOnHit = true,
 
 		DefaultAIData =
@@ -789,14 +948,10 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						Path = { "GameState", "SpeechRecord" },
 						HasAll = { "/VO/MelinoeField_3740" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Medea_0510", Text = "{#Emph}Return to shadow, now!" },
@@ -811,6 +966,7 @@ UnitSetData.Polyphemus =
 			{
 				{ Name = "BossVanquishedSpeech", Time = 60 },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
 			{ GlobalVoiceLines = "SeleneVictoryVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
@@ -822,11 +978,7 @@ UnitSetData.Polyphemus =
 				UsePlayerSource = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/MelinoeField_3740", Text = "Where'd Lady Medea go..." },
@@ -859,17 +1011,34 @@ UnitSetData.Polyphemus =
 				{ Cue = "/VO/Melinoe_1109", Text = "That'll show him." },
 				{ Cue = "/VO/MelinoeField_1723", Text = "Don't stand in my way." },
 				{ Cue = "/VO/MelinoeField_1726", Text = "...Eat {#Emph}that.", PreLineWait = 7.4 },
+				{ Cue = "/VO/MelinoeField_5582", Text = "How is it that you're sleeping even here...?",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5583", Text = "Deepest sleeper I have ever met.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_5582" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_3741", Text = "Lady Medea's gone...", PlayFirst = true,
 					GameStateRequirements =
 					{
 						{
 							PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_3740" },
 						},
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 1,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_1724", Text = "Fast asleep again...",
@@ -952,16 +1121,12 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "RoomsEntered", "N_Story01" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight01_B" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0192",
 					Source = "NPC_Medea_01",
@@ -995,16 +1160,12 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathFalse = { "GameState", "RoomsEntered", "N_Story01" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight01" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0192",
 					Source = "NPC_Medea_01",
@@ -1038,11 +1199,7 @@ UnitSetData.Polyphemus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0194",
 					Source = "NPC_Medea_01",
@@ -1070,17 +1227,13 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "PolyphemusAboutAltFight01", "PolyphemusAboutAltFight01_B"  },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0476",
 					Text = "Where'd that one witch go, and all the bodies, {#Emph}huh? {#Prev}And just as I was starting to like the new aroma around here..." },
@@ -1102,13 +1255,9 @@ UnitSetData.Polyphemus =
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight03" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0478",
 					Text = "You fixed it, meat! This witch is back, there's bodies everywhere! I've had it good. But you're about to get it {#Emph}bad." },
@@ -1131,13 +1280,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight04" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0480",
 					Text = "Even with all the extra bodies here, I can always sniff you out. You're on my turf, and you'll address me as {#Emph}Lord Polyphemus {#Prev}from now on." },
@@ -1161,13 +1306,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight05" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0482",
 					Text = "...I'm telling ya, it feels funny. Itches maybe, burns a little, I don't know. You sure it's gonna help me with my sleep?" },
@@ -1188,13 +1329,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight06" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0484",
 					Emote = "PortraitEmoteDepressed",
@@ -1224,13 +1361,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight07" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0487",
 					Emote = "PortraitEmoteDepressed",
@@ -1260,13 +1393,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight08" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0490",
 					Text = "{#Emph}<Inhale> Yeah{#Prev}, you know I think that might have done the trick! 'Cause I can smell every last corpse a couple fields away. You're all right, witch! What'd you even {#Emph}give {#Prev}me?" },
@@ -1295,13 +1424,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight09" }
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0205",
 					Source = "NPC_Medea_01",
@@ -1323,11 +1448,7 @@ UnitSetData.Polyphemus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0206",
 					Source = "NPC_Medea_01",
@@ -1351,11 +1472,7 @@ UnitSetData.Polyphemus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0210",
 					Source = "NPC_Medea_01",
@@ -1374,11 +1491,7 @@ UnitSetData.Polyphemus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0509",
 					PreLineThreadedFunctionName = "PlayPolyphemusTauntAnim",
@@ -1393,14 +1506,10 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						FunctionName = "RequiredHealthFraction",
 						FunctionArgs = { Comparison = "<=", Value = 0.33, },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0211",
 					Source = "NPC_Medea_01",
@@ -1427,11 +1536,7 @@ UnitSetData.Polyphemus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0213",
 					Source = "NPC_Medea_01",
@@ -1458,11 +1563,6 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						Path = { "GameState", "LastBossHealthBarRecord", "Polyphemus" },
 						Comparison = "<=",
 						Value = 0,
@@ -1470,6 +1570,7 @@ UnitSetData.Polyphemus =
 					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0215",
 					Source = "NPC_Medea_01",
@@ -1497,13 +1598,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "CurrentRun", "UseRecord", "NPC_Medea_01" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0217",
 					Source = "NPC_Medea_01",
@@ -1539,13 +1636,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0208",
 					Source = "NPC_Medea_01",
@@ -1569,13 +1662,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0197",
 					Source = "NPC_Medea_01",
@@ -1912,6 +2001,9 @@ UnitSetData.Polyphemus =
 					},
 				},
 
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpOdysseus" },
+
 				{ Cue = "/VO/Polyphemus_0515",
 					Text = "Hey meat, smells to me like you brought those Knuckle Bones again. Nobody really gave you those, huh?" },
 
@@ -2068,13 +2160,9 @@ UnitSetData.Polyphemus =
 						PathTrue = { "CurrentRun", "UseRecord", "NPC_Medea_01" }
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 1,
-					},
-					{
 						PathFalse = { "GameState", "TextLinesRecord", "PolyphemusAboutAltFight01" }
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Polyphemus_0136",
 					Text = "Somethin' {#Emph}nasty {#Prev}in the air tonight. And it's not just {#Emph}you {#Prev}or the stink from town. Must be that witch up to no good. You palling up with her?" },
@@ -2479,7 +2567,7 @@ UnitSetData.Polyphemus =
 						Value = 0,
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "PolyphemusLostAgainstHim01" },
+						PathTrue = { "GameState", "TextLinesRecord", "PolyphemusLostAgainstHim01" },
 					},
 				},
 				{ Cue = "/VO/Polyphemus_0117",
@@ -2840,6 +2928,66 @@ UnitSetData.Polyphemus =
 					PreLineFunctionName = "StartBossRoomMusic",
 					Text = "What are you, an oracle or somethin'? If they try and put the town back together, great. More meat for me whenever I want! You'll have to do for now." },
 			},
+
+			PolyphemusAboutTimePassing01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EnemyKills", "Polyphemus" },
+						Comparison = ">=",
+						Value = 10,
+					},
+					{
+						SumPrevRuns = 5,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered" },
+						TableValuesToCount = { "N_Boss01", "N_Boss02" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				{ Cue = "/VO/Polyphemus_0544",
+					Text = "Hey, where you been? My sheep started getting all restless here these past couple of nights. Guess they've gotten used to having you around." },
+
+				{ Cue = "/VO/MelinoeField_5276", UsePlayerSource = true,
+					Text = "That's very considerate of them, though I had other business to take care of, else I would have paid them a visit. Could you arrange for me to meet {#Emph}them {#Prev}but not {#Emph}you?" },
+
+				{ Cue = "/VO/Polyphemus_0545",
+					PreLineThreadedFunctionName = "PlayPolyphemusTauntAnim",
+					PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "{#Emph}Nah. {#Prev}My sheep and I are what you call a {#Emph}package deal. {#Prev}The kind of deal I figured you wouldn't pass up for too long." },
+			},
+
+			PolyphemusAboutDreamRuns01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 4,
+						IgnoreCurrentRun = true,
+						Path = { "IsDreamRun" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				{ Cue = "/VO/Polyphemus_0546",
+					Text = "Finally! Been so long since last I tried to eat ya that the sheep were starting to think you left us high and dry out here. Where'd you go anyways?" },
+
+				{ Cue = "/VO/MelinoeField_5277", UsePlayerSource = true,
+					Text = "Would you believe it if I told you I've been delving deep into my dreams? You end up fast asleep a lot, so you must know a thing or two of dreaming at this point." },
+
+				{ Cue = "/VO/Polyphemus_0547",
+					PreLineThreadedFunctionName = "PlayPolyphemusTauntAnim",
+					PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Ah, {#Emph}yeah. {#Prev}Although my dreams are pretty simple nowadays. Eating a good meal, taking a good nap, stuff like that. Come to think, I'm living the dream right now, aren't I?" },
+			},
+
 			PolyphemusAboutSayingLittle01 =
 			{
 				PlayOnce = true,
@@ -3257,13 +3405,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "LobCloseAttackAspect" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0603",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3280,13 +3424,9 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "LobGunAspect" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0604",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3303,15 +3443,11 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						Path = { "GameState", "GamePhase", },
 						Comparison = "==",
 						Value = 1,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0605",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3326,11 +3462,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0606",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3345,11 +3477,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0607",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3364,11 +3492,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0370",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3381,11 +3505,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0351",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3398,11 +3518,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0352",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3415,11 +3531,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0353",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3434,11 +3546,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0354",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3454,11 +3562,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0355",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3471,11 +3575,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0356",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3490,11 +3590,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0357",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3509,15 +3605,11 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						Path = { "GameState", "SpentShrinePointsCache" },
 						Comparison = ">=",
 						Value = 16,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0358",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3530,11 +3622,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0359",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3547,11 +3635,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0360",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3566,11 +3650,6 @@ UnitSetData.Polyphemus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
 					{
@@ -3578,6 +3657,7 @@ UnitSetData.Polyphemus =
 						Comparison = ">",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0361",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3591,11 +3671,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0362",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3610,11 +3686,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0363",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3629,11 +3701,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0364",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3646,11 +3714,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0365",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3665,11 +3729,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0366",
 					PreLineWait = 0.35,
@@ -3685,11 +3745,7 @@ UnitSetData.Polyphemus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Medea_0367",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3757,12 +3813,57 @@ UnitSetData.Polyphemus =
 				},
 			},
 		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/PolyphemusDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 	},	
 }
 
 -- Global Polyphemus Lines
 GlobalVoiceLines.PolyphemusGreetingLines =
 {
+	{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
+	{
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunPolyphemusIntroVO",
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 1.4,
+		UsePlayerSource = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_5579", Text = "Don't know why I'd ever dream of {#Emph}you...!", PlayFirst = true },
+		{ Cue = "/VO/MelinoeField_5580", Text = "You're not the only one who needs a good night's sleep!" },
+	},
 	{
 		PlayOnce = true,
 		PlayOnceContext = "PolyphemusMedeaIntroVO",
@@ -3776,13 +3877,9 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 				HasAny = { "PolyphemusAboutAltFight01", "PolyphemusAboutAltFight01_B" },
 			},
 			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 1,
-			},
-			{
 				PathTrue = { "SessionMapState", "MedeaAlreadyPresent" },
 			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		{ Cue = "/VO/Polyphemus_0510", Text = "...Look I only had a {#Emph}couple {#Prev}here and there...",
@@ -3790,15 +3887,28 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathTrue = { "SessionMapState", "MedeaAlreadyPresent" },
+				},
+				NamedRequirements = { "BossDifficultyActive" },
+			},
+		},
+	},
+	{
+		BreakIfPlayed = true,
+		PreLineWait = 1.0,
+		PostLineWait = 0.0,
+		ObjectType = "Polyphemus",
+		GameStateRequirements =
+		{
+			{
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs =
+				{
+					IsAny = { "PolyphemusAboutAltFight05" },
 				},
 			},
 		},
+		{ Cue = "/VO/Polyphemus_0201", Text = "{#Emph}<Sniff> Ah..." },
 	},
 	{
 		BreakIfPlayed = true,
@@ -3808,6 +3918,7 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 		SuccessiveChanceToPlayAll = 0.33,
 		ObjectType = "Medea",
 		PreLineAnim = "Medea_Salute",
+		IgnorePreLineAnimInDreamRuns = true,
 		GameStateRequirements =
 		{
 			--
@@ -3865,7 +3976,7 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 		RandomRemaining = true,
 		PreLineWait = 1.3,
 		SuccessiveChanceToPlay = 0.1,
-		UsePlayerSource = true,			
+		UsePlayerSource = true,
 		GameStateRequirements =
 		{
 			{
@@ -3879,6 +3990,57 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 				Comparison = "~=",
 				Value = 1,
 			}
+		},
+
+		{ Cue = "/VO/MelinoeField_5579", Text = "Don't know why I'd ever dream of {#Emph}you...!",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/MelinoeField_5579" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
+				},
+			},
+		},
+		{ Cue = "/VO/MelinoeField_5580", Text = "You're not the only one who needs a good night's sleep!",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/MelinoeField_5580" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
+				},
+			},
+		},
+		{ Cue = "/VO/MelinoeField_5581", Text = "If I can beat you here, we both sleep well!",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/MelinoeField_5581" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
+				},
+				{
+					Path = { "CurrentRun", "EnteredBiomes" },
+					Comparison = "==",
+					Value = 4,
+				},
+			},
 		},
 		{ Cue = "/VO/MelinoeField_0529", Text = "Polyphemus!", PlayFirst = true },
 		{ Cue = "/VO/MelinoeField_0530", Text = "Polyphemus..." },
@@ -3934,107 +4096,71 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 		{ Cue = "/VO/Polyphemus_0511", Text = "...Think I {#Emph}smell {#Prev}her...",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0512", Text = "...We'll pick this up later...",
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathTrue = { "SessionMapState", "MedeaAlreadyPresent" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0513", Text = "...Let me get back to you...",
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathTrue = { "SessionMapState", "MedeaAlreadyPresent" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0467", Text = "Oh, somethin's up...",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0469", Text = "What a night...",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0470", Text = "More witches?",
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutShrine02" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0471", Text = "More witches.",
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutShrine02" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0472", Text = "Two witches now...",
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathTrue = { "GameState", "TextLinesRecord", "PolyphemusAboutShrine02" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0473", Text = "More company.",
 			PlayFirst = true,
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Polyphemus_0358", Text = "Finally back.",
@@ -4053,6 +4179,9 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 					CountPathTrue = true,
 					Comparison = "==",
 					Value = 0,
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 			}
 		},
@@ -4074,6 +4203,9 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 					Comparison = "==",
 					Value = 0,
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			}
 		},
 		{ Cue = "/VO/Polyphemus_0360", Text = "{#Emph}Aw{#Prev}, I missed ya.",
@@ -4094,6 +4226,9 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 					Comparison = "==",
 					Value = 0,
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			}
 		},
 		{ Cue = "/VO/Polyphemus_0200", Text = "Nap time already?",
@@ -4108,6 +4243,9 @@ GlobalVoiceLines.PolyphemusGreetingLines =
 					Path = { "GameState", "LastBossHealthBarRecord", "Polyphemus" },
 					Comparison = "<=",
 					Value = 0,
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 			},
 		},

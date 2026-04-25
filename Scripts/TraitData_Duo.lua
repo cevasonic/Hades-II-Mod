@@ -1449,7 +1449,7 @@ OverwriteTableKeys( TraitData, {
 		},
 		AddOutgoingDamageModifiers = 
 		{
-			ValidProjectiles = { "ProjectileAresSwordWake", "ProjectileAresSwordCast", "ProjectileAresSwordEx" },
+			ValidProjectiles = { "ProjectileAresSwordWake", "ProjectileAresSwordCast", "ProjectileAresSwordEx", "ProjectileAresSwordGenerated" },
 			ValidBaseDamageAddition = 25,
 			ReportValues = { ReportedDamageAddition = "ValidBaseDamageAddition"}
 		},

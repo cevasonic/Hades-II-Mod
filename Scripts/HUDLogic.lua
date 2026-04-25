@@ -148,6 +148,9 @@ function HideResourceUIs( args )
 end
 
 function RecreateLifePips()
+	if SessionMapState.HubBountyLoadPresentation or SessionMapState.HubDreamLoadPresentation then
+		return
+	end
 	if not IsEmpty( ScreenAnchors.LifePipIds ) then
 		Destroy({ Ids = ScreenAnchors.LifePipIds })
 	end
@@ -1681,6 +1684,8 @@ function GetTraitTooltip( trait, args )
 		return trait.CustomTrayText
 	elseif trait.CustomName then
 		return trait.CustomName
+	elseif trait.CustomNameWithRequirements and IsGameStateEligible(trait, trait.CustomNameWithRequirements.GameStateRequirements) then
+		return trait.CustomNameWithRequirements.Name
 	elseif trait.CustomNameWithWeaponName and CurrentRun.Hero.Weapons[trait.CustomNameWithWeaponName.WeaponName] then
 		return trait.CustomNameWithWeaponName.Name
 	elseif not args.CheckingOverrides and not IsTraitActive( trait ) then
@@ -1841,6 +1846,7 @@ function UpdateTraitSummary( args )
 	local metaUpgradeCount = HUDScreen.Components.MetaUpgradeCount
 	local shrinePointCount = HUDScreen.Components.ShrinePointCount
 	local bountyActive = HUDScreen.Components.BountyActive
+	local dreamActive = HUDScreen.Components.DreamActive
 
 	if not args.Show then
 		if not ConfigOptionCache.ShowUIAnimations or not ShowingCombatUI then
@@ -1848,6 +1854,7 @@ function UpdateTraitSummary( args )
 			SetAlpha({ Id = metaUpgradeCount.Id, Fraction = 0, Duration = 0.2 })	
 			SetAlpha({ Id = shrinePointCount.Id, Fraction = 0, Duration = 0.2 })
 			SetAlpha({ Id = bountyActive.Id, Fraction = 0, Duration = 0.2 })
+			SetAlpha({ Id = dreamActive.Id, Fraction = 0, Duration = 0.2 })
 			return
 		end
 
@@ -1856,6 +1863,7 @@ function UpdateTraitSummary( args )
 			SetAlpha({ Id = metaUpgradeCount.Id, Fraction = 0, Duration = 0.2 })
 			SetAlpha({ Id = shrinePointCount.Id, Fraction = 0, Duration = 0.2 })
 			SetAlpha({ Id = bountyActive.Id, Fraction = 0, Duration = 0.2 })
+			SetAlpha({ Id = dreamActive.Id, Fraction = 0, Duration = 0.2 })
 			return
 		end
 	end
@@ -1875,6 +1883,13 @@ function UpdateTraitSummary( args )
 		if not showingShrinePoints then
 			bountyActive.OffsetX = shrinePointCount.X - bountyActive.X
 			Teleport({ Id = bountyActive.Id, OffsetX = bountyActive.X + bountyActive.OffsetX, OffsetY = bountyActive.Y })
+		end
+	end
+	if CurrentRun.IsDreamRun and CurrentHubRoom == nil then
+		SetAlpha({ Id = dreamActive.Id, Fraction = ConfigOptionCache.HUDOpacity, Duration = 0.2 })
+		if not showingShrinePoints then
+			dreamActive.OffsetX = shrinePointCount.X - dreamActive.X + dreamActive.NoFearPaddingX
+			Teleport({ Id = dreamActive.Id, OffsetX = dreamActive.X + dreamActive.OffsetX, OffsetY = dreamActive.Y })
 		end
 	end
 

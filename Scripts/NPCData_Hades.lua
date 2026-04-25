@@ -25,6 +25,7 @@ UnitSetData.NPC_Hades =
 		{
 			SkipInteractAnim = true,
 			SkipSound = true,
+			SkipBoonInteractPresentation = true,
 			ResetUseText = true,
 			PreserveContextArt = true,
 		},
@@ -32,6 +33,7 @@ UnitSetData.NPC_Hades =
 		SpeakerName = "Hades",
 		LightingColor = { 255, 0, 0, 255 },
 		LootColor = { 242, 49, 46, 255 },
+		UseNarrativeContextArt = true,
 		UpgradeScreenOpenSound = "/SFX/Enemy Sounds/Hades/HadesSummonPresentation3",
 		UpgradeSelectedSound = "/SFX/Menu Sounds/KeepsakeHadesSigil2",
 		MenuTitle = "UpgradeChoiceMenu_Hades",
@@ -75,6 +77,9 @@ UnitSetData.NPC_Hades =
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun", },
+					},
 				},
 				FunctionName = "GenericPresentation",
 				Args =
@@ -103,7 +108,39 @@ UnitSetData.NPC_Hades =
 						Hades_Blessing_Short = "Hades_Unchained_Blessing_Short",
 					},
 				},
-			}
+			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/HadesChainedDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		UpgradeMenuOpenVoiceLines =
@@ -212,8 +249,25 @@ UnitSetData.NPC_Hades =
 					{ Name = "MelinoeSaluteSpeech", Time = 4 },
 				},
 
-				{ Cue = "/VO/MelinoeField_1566", Text = "Be well, Lord Father." },
 				{ Cue = "/VO/MelinoeField_1567", Text = "In shadow, I serve!" },
+				{ Cue = "/VO/Melinoe_5066", Text = "So glad to see you.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "ReachedTrueEnding" }
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_1566", Text = "Be well, Lord Father.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							FunctionName = "RequiredAlive",
+							FunctionArgs = { Units = { "NPC_Persephone_01" }, Alive = false },
+						},
+					},
+				},
 				{ Cue = "/VO/Melinoe_5165", Text = "Hail, Lord Father!",
 					PlayFirst = true,
 					GameStateRequirements =
@@ -237,16 +291,6 @@ UnitSetData.NPC_Hades =
 					},
 				},
 				{ Cue = "/VO/Melinoe_5065", Text = "Thank you for being here.",
-					PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							FunctionName = "RequiredAlive",
-							FunctionArgs = { Units = { "NPC_Persephone_01" } },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_5066", Text = "So glad to see you.",
 					GameStateRequirements =
 					{
 						{
@@ -269,9 +313,10 @@ UnitSetData.NPC_Hades =
 			{
 				{
 					RandomRemaining = true,
-					PreLineWait = 0.28,
+					PreLineWait = 0.25,
 					-- PreLineAnim = "Persephone_Greet_Start",
 					ObjectType = "NPC_Persephone_01",
+					BreakIfPlayed = true,
 
 					{ Cue = "/VO/Persephone_0050", Text = "You too, my baby girl.",
 						GameStateRequirements =
@@ -289,6 +334,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_5065" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0052", Text = "Oh, Daughter...",
@@ -298,6 +344,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_5066" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0053", Text = "You take care too.",
@@ -316,6 +363,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_5066", "/VO/Melinoe_5067" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0055", Text = "Hello!",
@@ -325,6 +373,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0056", Text = "The old one at least.",
@@ -334,6 +383,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_1700" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0057", Text = "Oh, thank you.",
@@ -343,6 +393,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0058", Text = "We could use it.",
@@ -352,6 +403,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_1704" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 					{ Cue = "/VO/Persephone_0059", Text = "We'll need it.",
@@ -361,6 +413,7 @@ UnitSetData.NPC_Hades =
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_1705" },
 							},
+							ChanceToPlay = 0.5,
 						},
 					},
 				},
@@ -381,6 +434,15 @@ UnitSetData.NPC_Hades =
 							{
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699" },
+							},
+						},
+					},
+					{ Cue = "/VO/Hades_0345", Text = "Greetings.",
+						GameStateRequirements =
+						{
+							{
+								Path = { "LastLinePlayed" },
+								IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699", "/VO/Melinoe_5165" },
 							},
 						},
 					},
@@ -417,7 +479,7 @@ UnitSetData.NPC_Hades =
 						{
 							{
 								Path = { "LastLinePlayed" },
-								IsAny = { "/VO/MelinoeField_1566", "/VO/MelinoeField_1566", "/VO/Melinoe_1709", "/VO/Melinoe_1700", "/VO/Melinoe_1704" },
+								IsAny = { "/VO/Melinoe_5066", "/VO/MelinoeField_1566", "/VO/Melinoe_5165", "/VO/Melinoe_1709", "/VO/Melinoe_1700", "/VO/Melinoe_1704" },
 							},
 						},
 					},
@@ -429,6 +491,42 @@ UnitSetData.NPC_Hades =
 							{
 								Path = { "LastLinePlayed" },
 								IsAny = { "/VO/MelinoeField_1567" },
+							},
+						},
+					},
+					{ Cue = "/VO/Hades_0346", Text = "Get him.",
+						GameStateRequirements =
+						{
+							{
+								Path = { "LastLinePlayed" },
+								IsAny = { "/VO/Melinoe_1700" },
+							},
+						},
+					},
+					{ Cue = "/VO/Hades_0347", Text = "Leave no trace.",
+						GameStateRequirements =
+						{
+							{
+								Path = { "LastLinePlayed" },
+								IsAny = { "/VO/Melinoe_1700" },
+							},
+						},
+					},
+					{ Cue = "/VO/Hades_0348", Text = "Through our renovations, yes.",
+						GameStateRequirements =
+						{
+							{
+								Path = { "LastLinePlayed" },
+								IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
+							},
+						},
+					},
+					{ Cue = "/VO/Hades_0349", Text = "Even here.",
+						GameStateRequirements =
+						{
+							{
+								Path = { "LastLinePlayed" },
+								IsAny = { "/VO/Melinoe_1704" },
 							},
 						},
 					},
@@ -450,7 +548,7 @@ UnitSetData.NPC_Hades =
 						{
 							{
 								Path = { "LastLinePlayed" },
-								IsAny = { "/VO/MelinoeField_1566", "/VO/MelinoeField_1566" },
+								IsAny = { "/VO/MelinoeField_1566", "/VO/Melinoe_5165" },
 							},
 						},
 					},
@@ -459,7 +557,7 @@ UnitSetData.NPC_Hades =
 						{
 							{
 								Path = { "LastLinePlayed" },
-								IsAny = { "/VO/MelinoeField_1566", "/VO/MelinoeField_1566" },
+								IsAny = { "/VO/MelinoeField_1566" },
 							},
 						},
 					},
@@ -537,7 +635,6 @@ UnitSetData.NPC_Hades =
 						},
 					},
 				},
-				
 			},
 		},
 
@@ -766,7 +863,6 @@ UnitSetData.NPC_Hades =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					Force = true,
 					{
 						PathTrue = { "GameState", "RoomsEntered", "I_Boss01" },
 					},
@@ -870,7 +966,8 @@ UnitSetData.NPC_Hades =
 					},
 					{
 						SumPrevRuns = 3,
-						Path = { "RoomsEntered", "N_Opening01" },
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
 						Comparison = ">=",
 						Value = 1,
 					},
@@ -1064,7 +1161,6 @@ UnitSetData.NPC_Hades =
 					Text = "He shall seek vengeance with a renewed zeal. This entire plot of his is driven by the same impulse. Then, kill him if you must. At least... his many deaths ought keep him occupied." },
 			},
 
-			-- add alt below
 			HadesAboutChronosNightmare01 =
 			{
 				PlayOnce = true,
@@ -1072,11 +1168,11 @@ UnitSetData.NPC_Hades =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "ChronosNightmare01", "MorosAboutFates02" }
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ChronosNightmare01", "MorosAboutFates02" }
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -1736,7 +1832,8 @@ UnitSetData.NPC_Hades =
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "HadesAboutSisyphus01" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "HadesAboutSisyphus01", "HadesAboutSisyphus01_B" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "HadesAboutBouldy01" },
@@ -1849,16 +1946,6 @@ UnitSetData.NPC_Hades =
 					{
 						PathFalse = { "GameState", "ReachedTrueEnding" }
 					},
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "HadesAboutChronosNightmare01" },
-					},
-					{
-						Path = { "CurrentRun", "Hero", "LastStands" },
-						UseLength = true,
-						Comparison = ">=",
-						Value = 1,
-					},	
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
@@ -1944,6 +2031,49 @@ UnitSetData.NPC_Hades =
 					Portrait = "Portrait_Hades_Chained_02",
 					Text = "The painting, it survived?! The Witch, she must have taken it... and such a risk, for such a thing. Know that your mother's radiance... cannot be captured. No matter the artist's skill." },
 			},
+
+			HadesAboutHeracles01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "HeraclesFieldAboutUnderworld01" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Ids = { 506405 }, },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+
+				{ Cue = "/VO/MelinoeField_4160", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Father, wanted to ask about your nephew Heracles. In my run-ins with him, he had mentioned something about visiting you and Cerberus here in the Underworld..." },
+
+				{ Cue = "/VO/Hades_0297",
+					PreLineAnim = "Hades_Brooding",
+					Emote = "PortraitEmoteFiredUp",
+					Text = "{#Emph}Bah{#Prev}, Heracles! He hauled Cerberus bodily up to the surface, did he tell you that? Not by his choice, he claimed, but still! I could not believe my eyes when he hoisted that dog." },
+
+				{ Cue = "/VO/MelinoeField_4161", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					EndSound = "/VO/CerberusBarks",
+					Text = "You permitted it to happen? Was Cerberus all right?" },
+
+				{ Cue = "/VO/Hades_0298",
+					Text = "Look at him, of course he was all right. And I permitted that brute only because what he did ought have been impossible! Apparently the incident remains a source of pride." },
+			},
+
 			HadesAboutFamily01 =
 			{
 				PlayOnce = true,
@@ -2243,7 +2373,7 @@ UnitSetData.NPC_Hades =
 					UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "Everything is more or less all right, Father. It's good to see you in this chamber in far better spirits than before, though... why return to such a place? I'd have thought you'd rather be just about anywhere else." },
 
 				{ Cue = "/VO/Hades_0216",
@@ -2262,15 +2392,23 @@ UnitSetData.NPC_Hades =
 					PostLineFunctionName = "ResourceGiftedInEventPresentation",
 					PostLineFunctionArgs = { ResourceName = "DeathAreaPoints", SoundName = "/Leftovers/Menu Sounds/TalismanPowderDownLEGENDARY", GiftWaitTime = 0 },
 
-					Text = "Well I shall do my small part then, in the retracing of your steps. Provided I may be of service still." },
+					Text = "Well I shall do my small part then, in the retracing of your steps. Provided I may be of service still. Here." },
 
 				EndVoiceLines =
 				{
 					{
 						PreLineWait = 0.7,
 						UsePlayerSource = true,
+						AllowTalkOverTextLines = true,
 
 						{ Cue = "/VO/MelinoeField_5008", Text = "Soot from the House..." },
+					},
+					{
+						PreLineWait = 0.42,
+						ObjectType = "NPC_Hades_Field_01",
+						AllowTalkOverTextLines = true,
+
+						{ Cue = "/VO/Hades_0064", Text = "Indeed. May it be of use." },
 					},
 				},
 			},
@@ -2437,6 +2575,59 @@ UnitSetData.NPC_Hades =
 					Text = "If not for {#Emph}my {#Prev}sake, then for {#Emph}yours! {#Prev}These grounds ought to be as you always liked. But we shall tolerate my father's taste a while longer, if we must.... Apologies, Melinoë! {#Emph}Erm{#Prev}, here." },
 			},
 
+			HadesWithPersephoneAboutTimePassing01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						SumPrevRuns = 5,
+						IgnoreCurrentRun = true,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 4,
+					},
+					{
+						SumPrevRuns = 5,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "I_Story01" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Hades_0299",
+					Text = "At last you return, Daughter. I was once accustomed to your absence, but more recently less so." },
+
+				{ Cue = "/VO/Persephone_0023",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "What your father means is, now that we see you more often, it's never enough. Though don't come visiting on our account! We know you're being pulled in a lot of different directions lately." },
+
+				{ Cue = "/VO/MelinoeField_4162",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Well it's really only the two, but yes. These past nights I've been traveling toward Olympus more. Have you been able to stay in touch with the others throughout all this?" },
+
+				{ Cue = "/VO/Hades_0300",
+					PreLineAnim = "Hades_Brooding",
+					Text = "We are in contact with Olympus, yes. They have their own matters to resolve as we have ours, but... we have agreed to redouble our efforts to maintain clearer communication channels from now on." },
+			},
+
 			HadesWithPersephoneAboutLegions01 =
 			{
 				Partner = "NPC_Persephone_01",
@@ -2548,6 +2739,13 @@ UnitSetData.NPC_Hades =
 					PostLineAnimTarget = 731286,
 
 					Text = "I asked your father to prioritize the renovation of this chamber, if this is to be the place where we meet up now and again. And do you know what he said?" },
+
+				{ Cue = "/VO/MelinoeField_4973",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "{#Emph}Erm{#Prev}, was it along the lines of {#Emph}Yes, my Queen, I ought to honor your request at once?" },
 
 				{ Cue = "/VO/Hades_0372",
 					PreLineAnim = "Hades_Brooding",
@@ -3044,6 +3242,178 @@ UnitSetData.NPC_Hades =
 					Text = "I always wondered to what extent we are who we are down to the core, or whether it's our surroundings and upbringing that shapes us. The truth may lie somewhere in the middle." },
 			},
 
+			HadesWithPersephoneAboutUnderworld01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Persephone_0081",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "You've kept so busy, and even still things are bound to be a mess like this for I don't know how long. More than a mortal lifetime, I should think... several, perhaps." },
+
+				{ Cue = "/VO/MelinoeField_4458",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "Restoring the entire Underworld to working order and undoing all the damage Chronos caused doesn't seem like a quick process. But I like easing it along." },
+
+				{ Cue = "/VO/Persephone_0082",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "And have we mentioned we appreciate the help? Go on, Hades, give her your best." },
+			},
+			HadesWithPersephoneAboutUnderworld02 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Persephone_0099",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "Such a strange route you're taking through the Underworld. By now you've likely spent more time in Oceanus or the Mourning Fields than I have..." },
+
+				{ Cue = "/VO/MelinoeField_4470",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "The direct path down to Tartarus was unavailable so now we're sticking to the one that works. I've gotten rather used to it, and the various unpleasantness along the way." },
+
+				{ Cue = "/VO/Persephone_0100",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "We'll have to keep an eye on some of those places, won't we, Hades? Never a dull moment around here." },
+			},
+
+			HadesWithPersephoneAboutBacklog01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Persephone_0093",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "Hades won't speak of it in polite company, but we have quite the administrative backlog to work through. The number of mortals that perished since we lost the House, compounded by the consequences of the war... it's terrible." },
+
+				{ Cue = "/VO/MelinoeField_4466",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "All those Shades need to be processed, judged, and placed... and in some cases located. How are you ever going to do all that?" },
+
+				{ Cue = "/VO/Persephone_0094",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "We'll get through it in due time. Chip away as Daedalus might with one of his more elaborate works. And for now, there's plenty of room in Asphodel for Shades looking for a place to stay." },
+			},
+
+			HadesWithPersephoneAboutOlympus01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HadesWithPersephoneAboutDemeter01" }
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/MelinoeField_4468",
+					UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "Mother, aren't you expected on Olympus sometime soon? I've been traveling there recently... though, you must have a more efficient means than mine." },
+
+				{ Cue = "/VO/Persephone_0097",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "My means was with the aid of Hermes, during times when all the surface wasn't still beset with dangerous remnants of a recent war. And, no... for now, my travels are postponed. We all agreed to wait until things finally settle down." },
+
+				{ Cue = "/VO/MelinoeField_4469",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "But that might be such a long way's off... there are times this renovation effort seems like it may take forever." },
+
+				{ Cue = "/VO/Persephone_0098",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "We're goddesses and gods; we're patient, or at least, we're supposed to be. Your grandmother Demeter and I shall find other ways to stay in touch for now." },
+			},
+
 			HadesWithPersephoneAboutBlessings01 =
 			{
 				Partner = "NPC_Persephone_01",
@@ -3157,6 +3527,73 @@ UnitSetData.NPC_Hades =
 					PostLineAnim = "Persephone_DismissB_End",
 					PostLineAnimTarget = 731286,
 					Text = "Poms are said to have that effect. One could eat just a handful of their seeds and never want to leave the Underworld again!" },
+			},
+			HadesWithPersephoneAboutKeepsake02 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HadesWithPersephoneAboutKeepsake01" },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "LastAwardTrait" },
+								IsAny = { "HadesAndPersephoneKeepsake" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "Hero", "TraitDictionary" },
+								HasAny =
+								{
+									"HadesLifestealBoon",
+									"HadesCastProjectileBoon",
+									"HadesPreDamageBoon",
+									"HadesChronosDebuffBoon",
+									"HadesInvisibilityRetaliateBoon",
+									"HadesDeathDefianceDamageBoon",
+									"HadesManaUrnBoon",
+								},
+							},
+						},
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Persephone_0157",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "I'm glad that little Pom we gave you is coming in handy. The pomegranate didn't always grow here in the Underworld... back when I arrived, it was rather gloomier down here." },
+
+				{ Cue = "/VO/MelinoeField_5225",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Truly? What I've seen of the surface has felt rather gloomier than here. Though I suppose I've only seen a little war-torn bit of it. Do you ever miss being up there?" },
+
+				{ Cue = "/VO/Persephone_0158",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Calculating_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Persephone_Queen_01", WaitTime = 7 },
+
+					Text = "I miss things about it every now and then. But the Underworld has become my home, as it has your father's. And now your brother's and your own... which turns out to be a fine reason to keep looking after it!" },
 			},
 			HadesWithPersephoneAboutPersephoneAspect01 =
 			{
@@ -3351,6 +3788,103 @@ UnitSetData.NPC_Hades =
 					Text = "I'm glad. Your Grandmother Demeter and I, we had our difficulties now and then, but it's been better since I moved down here. My grand conclusion from it all is simply that children need their space... as hard as it is to let them go." },
 			},
 
+			HadesWithPersephoneAboutHecate01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/MelinoeField_4462",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					Text = "How has your relationship been with the Witch of the Crossroads, Mother? She thinks so highly of you and Father, that much I know." },
+
+				{ Cue = "/VO/Persephone_0089",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "Hecate was the best handmaiden a Queen could ask for, other than her reticence. We knew she plied her trade in shadow, but with us she was nothing if not dependable." },
+
+				{ Cue = "/VO/MelinoeField_4463",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "You say she was your handmaiden... that's no longer going to be the case, is it?" },
+
+				{ Cue = "/VO/Persephone_0090",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_DismissA_Start",
+					PreLineAnimTarget = 731286,
+					PostLineAnim = "Persephone_DismissB_End",
+					PostLineAnimTarget = 731286,
+					Text = "I can find other handmaidens. But there is only the one Witch of the Crossroads, and from everything we gather, she needs you as much as you need her. We're counting on her more than ever, you could say." },
+			},
+
+			HadesWithPersephoneLowHealth01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = "<=", Value = 0.33, },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Persephone_0085",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Persephone_Queen_FiredUp_01", WaitTime = 1.2 },
+
+					Emote = "PortraitEmoteSurprise",
+
+					Text = "Oh, you're hurt... Melinoë, whoever did this to you, once Tartarus is fully restored, we may have to reserve a special spot for them." },
+
+				{ Cue = "/VO/MelinoeField_4460",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "It's all right, Mother... all part of the process recently. These superficial injuries will all be gone by tomorrow night. Perhaps sooner if I'm fortunate." },
+
+				{ Cue = "/VO/Persephone_0086",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_DismissA_Start",
+					PreLineAnimTarget = 731286,
+					PostLineAnim = "Persephone_DismissB_End",
+					PostLineAnimTarget = 731286,
+					Text = "All part of the process, then... retracing your steps just like you did to liberate us in the first place. It's all so strange..." },
+			},
+
 			HadesWithPersephonePostEpilogue01 =
 			{
 				Partner = "NPC_Persephone_01",
@@ -3470,6 +4004,48 @@ UnitSetData.NPC_Hades =
 					PreLineAnimTarget = 731286,
 					Emote = "PortraitEmoteCheerful",
 					Text = "{#Emph}Hahah{#Prev}, well. I think we can find a way to get the occasional message through the veil, right, Hades? Hecate shall always have our gratitude. She saved our little daughter, after all." },
+			},
+			HadesWithPersephoneAboutSayingLittle01 =
+			{
+				Partner = "NPC_Persephone_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				InteractDistance = 300,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll =
+						{
+							"HadesWithPersephoneGift06",
+						},
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesPersephoneGreeting,
+
+				{ Cue = "/VO/Persephone_0101",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Apprehensive_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "{#Emph}Ah{#Prev}, we've been so busy, lately, Daughter, that we've hardly had much time to see you here...!" },
+
+				{ Cue = "/VO/MelinoeField_4471",
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "That's all right, Mother, no need for the both of you to go out of your way. It can be just a quick hello from time to time." },
+
+				{ Cue = "/VO/Persephone_0102",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_Greet_Full",
+					PreLineAnimTarget = 731286,
+					Text = "That may be a while as we get our business sorted out. But let's please stay in touch as time permits." },
 			},
 
 			-- Repeatable
@@ -3766,42 +4342,7 @@ UnitSetData.NPC_Hades =
 				{ Cue = "/VO/Hades_0321",
 					Text = "What my father did to Tartarus is a disgrace we shall correct in time..." },
 			},
-			HadesPostTrueEndingChat04 =
-			{
-				UseableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						PathTrue = { "GameState", "ReachedTrueEnding" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Persephone_01" } },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
-				{ Cue = "/VO/Hades_0327",
-					Text = "If there is something more that we can do to facilitate your efforts, merely ask." },
-			},
-			HadesPostTrueEndingChat05 =
-			{
-				UseableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						PathTrue = { "GameState", "ReachedTrueEnding" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Persephone_01" } },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
-				{ Cue = "/VO/Hades_0330",
-					Text = "We trust that the Witch of the Crossroads and the rest are lately doing well?" },
-			},
+			-- 04 and 05 are now HadesWithPersephone chats
 			HadesPostTrueEndingChat06 =
 			{
 				UseableOffSource = true,
@@ -3846,6 +4387,7 @@ UnitSetData.NPC_Hades =
 			},
 			HadesPostTrueEndingChat09 =
 			{
+				PlayFirst = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
@@ -3854,16 +4396,23 @@ UnitSetData.NPC_Hades =
 					},
 					{
 						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+						FunctionArgs = { Units = { "NPC_Persephone_01" }, Alive = false },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" },
+					},
+					{
+						PathTrue = { "PrevRun", "BiomesReached", "N" }
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
-				{ Cue = "/VO/Hades_0318",
-					Text = "Matters in the House are well in hand. We trust that all is likewise well with you." },
+				{ Cue = "/VO/Hades_0332",
+					Text = "I would bear witness to your victories if I could, though shall be there in spirit." },
 			},
 			HadesPostTrueEndingChat10 =
 			{
+				PlayFirst = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
@@ -3878,6 +4427,98 @@ UnitSetData.NPC_Hades =
 				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
 				{ Cue = "/VO/Hades_0324",
 					Text = "Your work has drawn you to the surface more and more, so it is good to see you here." },
+			},
+			HadesPostTrueEndingChat11 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Ids = { 506405 }, },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0317",
+					EndSound = "/VO/CerberusBarks",
+					Text = "Cerberus was practically unable to sit still as you approached." },
+			},
+			HadesPostTrueEndingChat12 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0319",
+					Text = "Your brother sends you his regards. He must be somewhere near the surface now." },
+			},
+			HadesPostTrueEndingChat13 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Ids = { 506405 }, },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0323",
+					EndSound = "/VO/CerberusBarks",
+					Text = "Cerberus was quite insistent that you would soon arrive, and sure enough." },
+			},
+			HadesPostTrueEndingChat14 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 24,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0325",
+					Text = "Such suffocating darkness here... almost akin to how it used to be." },
+			},
+			HadesPostTrueEndingChat15 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 22,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0326",
+					Text = "My father's remnant forces all seem very riled up... as long as this is your doing." },
 			},
 
 			HadesWithPersephonePostTrueEndingChat01 =
@@ -3898,12 +4539,12 @@ UnitSetData.NPC_Hades =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
 
-				{ Cue = "/VO/Persephone_0061",
+				{ Cue = "/VO/Persephone_0060",
 					Speaker = "NPC_Persephone_01",
 					Portrait = "Portrait_Persephone_Queen_01",
 					PreLineAnim = "Persephone_Greet_Full",
 					PreLineAnimTarget = 731286,
-					Text = "You must have been an adorable little girl, but you're not so bad right now." },
+					Text = "Perhaps we're growing strong as a family through all this. Wouldn't that be nice?" },
 			},
 			HadesWithPersephonePostTrueEndingChat02 =
 			{
@@ -3959,7 +4600,277 @@ UnitSetData.NPC_Hades =
 					PostLineAnimTarget = 731286,
 					Text = "Go show that possibility of Chronos whose side of the family is really in charge here." },
 			},
+			HadesWithPersephonePostTrueEndingChat04 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0327",
+					Text = "If there is something more that we can do to facilitate your efforts, merely ask." },
+			},
+			HadesWithPersephonePostTrueEndingChat05 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0330",
+					Text = "We trust that the Witch of the Crossroads and the rest are lately doing well?" },
+			},
+			HadesWithPersephonePostTrueEndingChat06 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0318",
+					Text = "Matters in the House are well in hand. We trust that all is likewise well with you." },
+			},
+			HadesWithPersephonePostTrueEndingChat07 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0314",
+					Text = "We shall always be grateful for what you've done, Daughter." },
+			},
+			HadesWithPersephonePostTrueEndingChat08 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "RoomsEntered", "I_Story01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0315",
+					Text = "Your mother and I expected your arrival, and wish to give you our regards." },
+			},
+			HadesWithPersephonePostTrueEndingChat09 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0322",
+					Text = "Much is to be done throughout the House, but we occasionally need to step away." },
+			},
+			HadesWithPersephonePostTrueEndingChat10 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0329",
+					Text = "It is a welcome break from our conventional routine to visit with you here." },
+			},
+			HadesWithPersephonePostTrueEndingChat11 =
+			{
+				PlayFirst = true,
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "Cleared" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 2,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+				{ Cue = "/VO/Hades_0333",
+					Text = "We commend not merely your efforts, Daughter, but the consistency of your results." },
+			},
+			HadesWithPersephonePostTrueEndingChat12 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
 
+				{ Cue = "/VO/Persephone_0004",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_FiredUp_01",
+					PreLineAnim = "Persephone_DismissA_Start",
+					PreLineAnimTarget = 731286,
+					PostLineAnim = "Persephone_DismissB_End",
+					PostLineAnimTarget = 731286,
+					Text = "Your brother wanted me to say {#Emph}hey there {#Prev}for him when next I saw you." },
+			},
+			HadesWithPersephonePostTrueEndingChat13 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+
+				{ Cue = "/VO/Persephone_0005",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "The House is coming along well enough, though I am glad to get away." },
+			},
+			HadesWithPersephonePostTrueEndingChat14 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+
+				{ Cue = "/VO/Persephone_0006",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_01",
+					PreLineAnim = "Persephone_DismissQuick_Start",
+					PreLineAnimTarget = 731286,
+					Text = "I know you're all grown up already but you'll always be my baby girl." },
+			},
+			HadesWithPersephonePostTrueEndingChat15 =
+			{
+				Partner = "NPC_Persephone_01",
+				UseableOffSource = true,
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Persephone_01" } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HadesGreeting,
+
+				{ Cue = "/VO/Persephone_0063",
+					Speaker = "NPC_Persephone_01",
+					Portrait = "Portrait_Persephone_Queen_Calculating_01",
+					PreLineAnim = "Persephone_DismissA_Start",
+					PreLineAnimTarget = 731286,
+					PostLineAnim = "Persephone_DismissB_End",
+					PostLineAnimTarget = 731286,
+					Text = "Hades, I don't know if these are blessings so much as curses against your father..." },
+			},
 		},
 
 		GiftTextLineSets =
@@ -4126,7 +5037,7 @@ UnitSetData.NPC_Hades =
 				{
 					{
 						PreLineWait = 0.42,
-						ObjectTypes = { "NPC_Hades_01", "NPC_Hades_02" },
+						ObjectType = "NPC_Hades_Field_01",
 
 						{ Cue = "/VO/Hades_0221", Text = "...Perhaps so." },
 					},
@@ -4354,6 +5265,7 @@ UnitSetData.NPC_Hades =
 			Cooldowns =
 			{
 				{ Name = "HadesSpokeRecently", Time = 12 },
+				{ Name = "HadesOrPersephoneSpokeRecently", Time = 6 },
 			},
 			{
 				RandomRemaining = true,
@@ -4884,6 +5796,35 @@ UnitSetData.NPC_Hades =
 			},
 		},
 
+		OnHitVoiceLines =
+		{
+			Cooldowns =
+			{
+				{ Name = "PersephoneSpokeRecently", Time = 8 },
+				{ Name = "HadesOrPersephoneSpokeRecently", Time = 6 },
+			},
+			{
+				RandomRemaining = true,
+				BreakIfPlayed = true,
+				PreLineWait = 0.25,
+				ObjectType = "NPC_Persephone_01",
+				PreLineAnim = "Persephone_DismissQuick_Start",
+				GameStateRequirements =
+				{
+					{
+						PathFromArgs = true,
+						Path = { "SourceProjectile", },
+						IsNone = { "FrogFamiliarLand", "CatFamiliarPounce" },
+					},
+				},
+
+				{ Cue = "/VO/Persephone_0128", Text = "Easy there." },
+				{ Cue = "/VO/Persephone_0129", Text = "Were you always this feisty?", PlayFirst = true },
+				{ Cue = "/VO/Persephone_0130", Text = "How like your brother." },
+				{ Cue = "/VO/Persephone_0131", Text = "Come now." },
+			},
+		},
+
 		InteractTextLineSets =
 		{
 			PersephoneTrueEnding01 =
@@ -5058,6 +5999,14 @@ UnitSetData.NPC_Hades =
 				UseableOffSource = true,
 				CopyDataFromPartner = true,
 			},
+			HadesWithPersephoneAboutTimePassing01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				StatusAnimation = false,
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
 			HadesWithPersephoneAboutLegions01 =
 			{
 				Partner = "NPC_Hades_Field_01",
@@ -5099,6 +6048,14 @@ UnitSetData.NPC_Hades =
 				CopyDataFromPartner = true,
 			},
 			HadesWithPersephoneAboutKeepsake01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephoneAboutKeepsake02 =
 			{
 				Partner = "NPC_Hades_Field_01",
 				PlayOnce = true,
@@ -5165,7 +6122,55 @@ UnitSetData.NPC_Hades =
 				UseableOffSource = true,
 				CopyDataFromPartner = true,
 			},
+			HadesWithPersephoneAboutUnderworld01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephoneAboutUnderworld02 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephoneAboutBacklog01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
 			HadesWithPersephoneAboutDemeter01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephoneAboutOlympus01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephoneAboutHecate01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephoneLowHealth01 =
 			{
 				Partner = "NPC_Hades_Field_01",
 				PlayOnce = true,
@@ -5197,6 +6202,14 @@ UnitSetData.NPC_Hades =
 				UseableOffSource = true,
 				CopyDataFromPartner = true,
 			},
+			HadesWithPersephoneAboutSayingLittle01 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				PlayOnce = true,
+				-- StatusAnimation = false, -- persephone speaks first
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
 
 			-- repeatable
 			HadesWithPersephonePostTrueEndingChat01 =
@@ -5217,7 +6230,78 @@ UnitSetData.NPC_Hades =
 				UseableOffSource = true,
 				CopyDataFromPartner = true,
 			},
-
+			HadesWithPersephonePostTrueEndingChat04 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat05 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat06 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat07 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat08 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat09 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat10 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat11 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat12 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat13 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat14 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
+			HadesWithPersephonePostTrueEndingChat15 =
+			{
+				Partner = "NPC_Hades_Field_01",
+				UseableOffSource = true,
+				CopyDataFromPartner = true,
+			},
 		},
 	},
 
@@ -5253,6 +6337,42 @@ UnitSetData.NPC_Hades =
 				{
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					BlockInteract = true,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CerberusDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
@@ -5545,6 +6665,23 @@ UnitSetData.NPC_Hades =
 		GiftText = "GiftBouldyUseText",
 		LoadPackages = { "Bouldy", },
 
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					BlockInteract = true,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
 		InteractTextLineSets =
 		{
 			BouldyFirstMeeting =
@@ -5595,8 +6732,7 @@ UnitSetData.NPC_Hades =
 		{
 			RandomRemaining = true,
 			BreakIfPlayed = true,
-			PreLineWait = 0.25,
-			ChanceToPlay = 0.75,
+			PreLineWait = 0.3,
 			ObjectType = "NPC_Hades_Field_01",
 			GameStateRequirements =
 			{
@@ -5604,6 +6740,7 @@ UnitSetData.NPC_Hades =
 					FunctionName = "RequiredAlive",
 					FunctionArgs = { Ids = { 506405 }, Alive = false },
 				},
+				ChanceToPlay = 0.75,
 			},
 			Cooldowns =
 			{
@@ -5620,6 +6757,128 @@ UnitSetData.NPC_Hades =
 }
 
 -- Global Hades Lines
+GlobalVoiceLines.HadesDreamRunGreetingVoiceLines =
+{
+	{
+		-- BreakIfPlayed = true,
+		PreLineWait = 2.0,
+		UsePlayerSource = true,
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunHadesIntroVO",
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "ReachedTrueEnding" },
+			},
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun", },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_5648", Text = "Memories of Father still in chains..." },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.66,
+		-- SuccessiveChanceToPlay = 0.75,
+		ObjectType = "NPC_Hades_Field_01",
+		PreLineAnim = "Hades_Hello",
+		SkipCooldownCheckIfNonePlayed = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+		Cooldowns =
+		{
+			-- { Name = "HadesSpokeRecently", Time = 1.5 },
+		},
+
+		{ Cue = "/VO/Hades_0081", Text = "{#Emph}Hrrnn?", PlayFirst = true, BreakIfPlayed = true },
+		{ Cue = "/VO/Hades_0074", Text = "It's you...", PlayFirst = true, },
+		{ Cue = "/VO/Hades_0075", Text = "Daughter..." },
+		{ Cue = "/VO/Hades_0076", Text = "Daughter...?" },
+		{ Cue = "/VO/Hades_0077", Text = "Melinoë..." },
+		{ Cue = "/VO/Hades_0078", Text = "Melinoë...?" },
+		{ Cue = "/VO/Hades_0079", Text = "Is that you...?" },
+		{ Cue = "/VO/Hades_0080", Text = "Back again?" },
+		{ Cue = "/VO/Hades_0082", Text = "Wha...?" },
+		{ Cue = "/VO/Hades_0083", Text = "Greetings..." },
+		{ Cue = "/VO/Hades_0187", Text = "Returned..." },
+		{ Cue = "/VO/Hades_0190", Text = "Who... {#Emph}ah." },
+		{ Cue = "/VO/Hades_0073", Text = "Who goes? ...You.",
+			PlayFirst = true, BreakIfPlayed = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Hades_0081" },
+				},
+			},
+		},
+		{ Cue = "/VO/Hades_0204", Text = "Heel, Cerberus...!",
+			PreLineFunctionName = "CerberusReaction",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					FunctionName = "RequiredAlive",
+					FunctionArgs = { Ids = { 506405 } },
+				},
+				{
+					Path = { "GameState", "EquippedFamiliar" },
+					IsAny = { "HoundFamiliar" },
+				},
+			},
+		},
+		{ Cue = "/VO/Hades_0188", Text = "Back again...?",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "PrevRun", "RoomsEntered", "I_Story01" }
+				}
+			}
+		},
+		{ Cue = "/VO/Hades_0189", Text = "Back already...?",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "PrevRun", "RoomsEntered", "I_Story01" }
+				}
+			}
+		},
+		{ Cue = "/VO/Hades_0084", Text = "Cerberus, look who it is...",
+			GameStateRequirements =
+			{
+				{
+					FunctionName = "RequiredAlive",
+					FunctionArgs = { Ids =  { 506405 }, },
+				},
+			},
+		},
+		{ Cue = "/VO/Hades_0150", Text = "Cerberus... look who it is.",
+			GameStateRequirements =
+			{
+				{
+					FunctionName = "RequiredAlive",
+					FunctionArgs = { Ids =  { 506405 }, },
+				},
+			},
+		},
+		{ Cue = "/VO/Hades_0151", Text = "She's back already, Cerberus...",
+			GameStateRequirements =
+			{
+				{
+					FunctionName = "RequiredAlive",
+					FunctionArgs = { Ids =  { 506405 }, },
+				},
+			},
+		},
+	},
+}
+
+
 GlobalVoiceLines.HadesCurseVoiceLines =
 {
 	{
@@ -5855,6 +7114,10 @@ GlobalVoiceLines.PersephoneGreetingVoiceLines =
 				--
 			},
 		},
+		Cooldowns =
+		{
+			{ Name = "HadesOrPersephoneSpokeRecently", Time = 4 },
+		},
 
 		{ Cue = "/VO/Persephone_0030", Text = "Daughter!" },
 		{ Cue = "/VO/Persephone_0031", Text = "Melinoë!" },
@@ -5867,6 +7130,46 @@ GlobalVoiceLines.PersephoneGreetingVoiceLines =
 		{ Cue = "/VO/Persephone_0038", Text = "Hades, {#Emph}look!", PlayFirst = true },
 		{ Cue = "/VO/Persephone_0039", Text = "Hello, Daughter!" },
 	},
+}
+GlobalVoiceLines.PersephoneGatherReactionVoiceLines =
+{
+	{
+		RandomRemaining = true,
+		BreakIfPlayed = true,
+		PreLineWait = 0.65,
+		SuccessiveChanceToPlayAll = 0.33,
+		ObjectType = "NPC_Persephone_01",
+		Cooldowns =
+		{
+			{ Name = "PersephoneSpokeRecently", Time = 8 },
+		},
+
+		{ Cue = "/VO/Persephone_0108", Text = "That's all yours." },
+		{ Cue = "/VO/Persephone_0109", Text = "We'll need all-new flooring..." },
+		{ Cue = "/VO/Persephone_0110", Text = "Something you can use?" },
+		{ Cue = "/VO/Persephone_0111", Text = "Life grows even here.", PlayFirst = true },
+		{ Cue = "/VO/Persephone_0112", Text = "Little plantlings..." },
+	},
+}
+GlobalVoiceLines.PersephoneExorcismReactionVoiceLines =
+{
+	RandomRemaining = true,
+	BreakIfPlayed = true,
+	PreLineWait = 0.65,
+	SuccessiveChanceToPlay = 0.5,
+	SuccessiveChanceToPlayAll = 0.25,
+	ObjectType = "NPC_Persephone_01",
+	PreLineAnim = "Persephone_DismissQuick_Start",
+	Cooldowns =
+	{
+		{ Name = "PersephoneSpokeRecently", Time = 4 },
+	},
+
+	{ Cue = "/VO/Persephone_0113", Text = "Recruiting even here?" },
+	{ Cue = "/VO/Persephone_0114", Text = "Off to your domain." },
+	{ Cue = "/VO/Persephone_0115", Text = "Recruited to your ranks." },
+	{ Cue = "/VO/Persephone_0116", Text = "That one looked lost." },
+	{ Cue = "/VO/Persephone_0117", Text = "That one can go!", PlayFirst = true },
 }
 GlobalVoiceLines.HadesZagreusChattingLines =
 {
@@ -5909,6 +7212,111 @@ GlobalVoiceLines.HadesZagreusGreeting =
 		PreLineFunctionName = "StopHadesFlashbackSpeech",
 
 		{ Cue = "/VO/Zagreus_0433", Text = "Oh, hello!" },
+	},
+}
+GlobalVoiceLines.HadesReRollReactionVoiceLines =
+{
+	BreakIfPlayed = true,
+	RandomRemaining = true,
+	PreLineWait = 0.65,
+	ObjectType = "NPC_Hades_Field_01",
+	GameStateRequirements =
+	{
+		{
+			Path = { "CurrentLootData", "Name" },
+			IsAny = { "NPC_Hades_Field_01" },
+		},
+	},
+	Cooldowns =
+	{
+		{ Name = "HadesOfferSpeech", Time = 30 },
+	},
+
+	{ Cue = "/VO/Hades_0416", Text = "{#Emph}Urgh{#Prev}, what else...", PlayFirst = true,
+		GameStateRequirements =
+		{
+			{
+				PathFalse = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+	{ Cue = "/VO/Hades_0417", Text = "{#Emph}<Scoff>",
+		GameStateRequirements =
+		{
+			{
+				PathFalse = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+	{ Cue = "/VO/Hades_0418", Text = "Must be something...",
+		GameStateRequirements =
+		{
+			{
+				PathFalse = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+	{ Cue = "/VO/Hades_0419", Text = "Then, something else...",
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+	{ Cue = "/VO/Hades_0420", Text = "Very well...",
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+	{ Cue = "/VO/Hades_0421", Text = "Granted...",
+		PlayFirst = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+	{ Cue = "/VO/Hades_0422", Text = "Then here...",
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "ReachedTrueEnding" },
+			},
+		}
+	},
+}
+
+GlobalVoiceLines.HadesAndPersephoneKeepsakeVoiceLines =
+{
+	{
+		RandomRemaining = true,
+		PreLineWait = 0.5,
+		Source = { LineHistoryName = "NPC_Persephone_01", SubtitleColor = Color.PersephoneVoice },
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "ReachedTrueEnding" }
+			},
+		},
+		Cooldowns =
+		{
+			{ Name = "PersephoneSpokeRecently", Time = 8 },
+			{ Name = "KeepsakeGiverSpeechPlayedRecently", Time = 8 },
+		},
+
+		{ Cue = "/VO/Persephone_0161", Text = "{#Emph}From us!", PlayFirst = true },
+		{ Cue = "/VO/Persephone_0162", Text = "{#Emph}Bless you, Daughter." },
+		{ Cue = "/VO/Persephone_0163", Text = "{#Emph}We're with you." },
+		{ Cue = "/VO/Persephone_0164", Text = "{#Emph}Our blessings." },
+		{ Cue = "/VO/Persephone_0165", Text = "{#Emph}Have a good evening!" },
+		{ Cue = "/VO/Persephone_0166", Text = "{#Emph}There you go!" },
+		{ Cue = "/VO/Persephone_0167", Text = "{#Emph}This is for you." },
+		{ Cue = "/VO/Persephone_0168", Text = "{#Emph}For the road ahead." },
 	},
 }
 

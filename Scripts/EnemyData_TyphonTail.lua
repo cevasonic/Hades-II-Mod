@@ -2,7 +2,7 @@ UnitSetData.TyphonTail =
 {
 	TyphonTail =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseBossEnemy", "BaseQEnemy", "BaseVulnerableEnemy" },
 		Material = "Organic",
 		IsBoss = false,
 		ImmuneToPolymorph = true,
@@ -26,6 +26,81 @@ UnitSetData.TyphonTail =
 		},
 
 		StopAnimationsOnDeath = { "EnemyBurrowExitHugeDrill" },
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.2,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.275,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.62,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.87,
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonTailDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		MaxHealth = 25000,
 		AISetupDelay = 0.5,
@@ -74,11 +149,36 @@ UnitSetData.TyphonTail =
 		},
 		AltHealthBarTextIds =
 		{
-			{ TextId = "TyphonTail_Alt",
+			{
+				TextId = "TyphonTail_Alt",
 				GameStateRequirements =
 				{
 					{
 						PathFalse = { "GameState", "RoomsEntered", "Q_Boss01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				TextId = "TyphonTail_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					}
 				},
 			},
@@ -93,6 +193,7 @@ UnitSetData.TyphonTail =
 	TyphonTail_Incursion =
 	{
 		GenusName = "TyphonTail",
+		InheritFrom	= { "BaseQEnemy" },
 		Groups = { "EnemyTeam", "FlyingEnemies" },
 		RunHistoryPortrait = "Codex_Portrait_TyphonTail",
 		CannotDieFromDamage = true,
@@ -104,6 +205,38 @@ UnitSetData.TyphonTail =
 		AngleMax = 360,
 		
 		ExitAnimation = "Enemy_TyphonTail_Retreat",
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonTailDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 
 		OutgoingDamageModifiers =
 		{

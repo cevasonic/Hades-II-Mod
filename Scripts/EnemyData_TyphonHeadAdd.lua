@@ -2,7 +2,7 @@ UnitSetData.TyphonHeadAdd =
 {
 	TyphonHeadAdd =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseQEnemy", "BaseVulnerableEnemy" },
 		GenusName = "TyphonHead",
 		RunHistoryKilledByName = "TyphonHead",
 
@@ -28,6 +28,81 @@ UnitSetData.TyphonHeadAdd =
 		{
 			Default = "Enemy_TyphonHeadAdd_HitStun",
 			Heavy = "Enemy_TyphonHeadAdd_HitStun_Heavy",
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.125,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.2,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.62,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.87,
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonHeadAddDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		AIOptions =

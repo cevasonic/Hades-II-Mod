@@ -3,7 +3,7 @@ UnitSetData.Brawler =
 	-- tough Terminator-like foe that bursts like an explosive grape
 	Brawler =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 
 		UseActivatePresentation = true,
 		ActivateAnimation = "Enemy_Brawler_Spawn",

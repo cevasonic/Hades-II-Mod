@@ -15,6 +15,11 @@ function CreateDoorRewardPreview( exitDoor, chosenRewardType, chosenLootName, in
 		return
 	end
 
+	if room.ForceBoonChosenTrait ~= nil and not room.ForceBoonChosenTraitPresentationTriggered then
+		thread( ForceBoonChosenPresentation, room.ForceBoonChosenTrait )
+		room.ForceBoonChosenTraitPresentationTriggered = true
+	end
+
 	chosenRewardType = chosenRewardType or room.ChosenRewardType
 	chosenLootName = chosenLootName or room.ForceLootName
 
@@ -376,9 +381,9 @@ function RemoveRoomRewardPreviews()
 	end
 end
 
-function ForceBoonChosenPresentation( trait, lootData )
-	thread( InCombatText, CurrentRun.Hero.ObjectId, "ForceBoonKeepsakeActivated", 2.0, { PreDelay = 1.0, LuaKey = "TempTextData", LuaValue = trait } )
-	wait( 1.0 )
+function ForceBoonChosenPresentation( trait )
+	thread( InCombatText, CurrentRun.Hero.ObjectId, "ForceBoonKeepsakeActivated", 2.0, { PreDelay = 0.2, LuaKey = "TempTextData", LuaValue = trait } )
+	wait( 0.2 )
 	local existingTraitData = GetExistingUITrait( trait )
 	if existingTraitData ~= nil then
 		CreateAnimation({ Name = "ActiveTraitFlash", DestinationId = existingTraitData.TraitActiveOverlay })

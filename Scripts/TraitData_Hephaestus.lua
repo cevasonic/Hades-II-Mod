@@ -81,6 +81,11 @@ OverwriteTableKeys( TraitData, {
 				DecimalPlaces = 1,
 			},
 			{
+				Key = "ReportedCooldown",
+				ExtractAs = "UnmodifiedCooldown",
+				DecimalPlaces = 1,
+			},
+			{
 				Key = "ReportedMultiplier",
 				ExtractAs = "Damage",
 				Format = "MultiplyByBase",
@@ -432,6 +437,16 @@ OverwriteTableKeys( TraitData, {
 				ProjectileName = "ProjectileAxeNergalFastDash",
 				ProjectileProperty = "DetonateFx",
 				ChangeValue = "AxeNovaNergal_Hephaestus",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
+			
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Hephaestus",
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
@@ -886,6 +901,11 @@ OverwriteTableKeys( TraitData, {
 					Key = "ReportedCooldown",
 					ExtractAs = "Cooldown",
 					Format = "SpeedModifiedDuration",
+				DecimalPlaces = 1,
+			},
+			{
+				Key = "ReportedCooldown",
+				ExtractAs = "UnmodifiedCooldown",
 				DecimalPlaces = 1,
 			},
 			{
@@ -1527,9 +1547,15 @@ OverwriteTableKeys( TraitData, {
 		ExtractValues =
 		{
 			{
-					Key = "ReportedCooldown",
-					ExtractAs = "Cooldown",
-					Format = "SpeedModifiedDuration",
+				Key = "ReportedCooldown",
+				ExtractAs = "Cooldown",
+				Format = "SpeedModifiedDuration",
+				DecimalPlaces = 1,
+			},
+			{
+				Key = "ReportedCooldown",
+				ExtractAs = "UnmodifiedCooldown",
+				DecimalPlaces = 1,
 			},
 			{
 				Key = "ReportedMultiplier",

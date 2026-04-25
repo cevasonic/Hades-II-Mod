@@ -1,5 +1,4 @@
 function ExtraDoorEncounterStartPresentation( eventSource, args )
-	local survivalEncounter = eventSource
 
 	AdjustColorGrading({ Name = colorGrade or "Alert", Duration = 0 })
 	ScreenAnchors.FullscreenAlertFxAnchor = CreateScreenObstacle({ Name = "BlankObstacle", Group = "Scripting", X = ScreenCenterX, Y = ScreenCenterY })
@@ -50,7 +49,7 @@ function PerfectClearEncounterStartPresentation( eventSource )
 
 	thread( PlayVoiceLines, GlobalVoiceLines.PerfectClearEncounterInitiatedLines, true )
 
-	SurvivalEncounterStartPresentation( encounter, "PerfectClear", "FullscreenAlertColorDark", "PerfectClearAboutToStartVoiceLines", "PerfectClearEncounterStartVoiceLines" )
+	SurvivalEncounterStartPresentation( encounter, { ColorGrade = "PerfectClear", ColorFx = "FullscreenAlertColorDark" } )
 
 end
 
@@ -73,7 +72,7 @@ function EliteEncounterStartPresentation( eventSource )
 
 	thread( PlayVoiceLines, GlobalVoiceLines.EliteEncounterInitiatedLines, true )
 
-	SurvivalEncounterStartPresentation( encounter, "PerfectClear", "FullscreenAlertColorDark", "PerfectClearAboutToStartVoiceLines", "PerfectClearEncounterStartVoiceLines" )
+	SurvivalEncounterStartPresentation( encounter, { ColorGrade = "PerfectClear", ColorFx = "FullscreenAlertColorDark" } )
 end
 
 function EliteChallengeSpawnPresentation( unit )
@@ -179,7 +178,7 @@ function ChallengeEncounterEndPresentation( eventSource )
 	StopSound({ Id = AudioState.EliteEncounterMusicId, Duration = 0.5 })
 	AudioState.EliteEncounterMusicId = nil
 
-	thread( ResumeMusic, { Duration = 0.2, Delay = 5.0 } )
+	thread( ResumeMusic, { Duration = 0.8, Delay = 5.0 } )
 end
 
 function HadesSpeakingPresentation( eventSource, args )
@@ -187,10 +186,10 @@ function HadesSpeakingPresentation( eventSource, args )
 	wait( args.StartDelay or 1.0, RoomThreadName )
 	eventSource.LineHistoryName = eventSource.LineHistoryName or args.LineHistoryName
 	eventSource.SubtitleColor = eventSource.SubtitleColor or args.SubtitleColor or Color.ChronosVoice
-	PlayVoiceLines( args.VoiceLines, false, eventSource, { OnPlayedSomethingFunctionName = "DoHadesSpeakingPresentation", OnPlayedSomethingFunctionArgs = args } )
+	PlayVoiceLines( args.VoiceLines, false, eventSource, { OnPlayedSomethingFunctionName = "DoHadesSpeakingPresentation", OnPlayedSomethingFunctionArgs = args, IgnoreMute = args.IgnoreMute } )
 end
 
-function DoHadesSpeakingPresentation( eventSource, args )
+function DoHadesSpeakingPresentation( eventSource, line, args )
 
 	if args.RequireNonPlayerSource and eventSource == CurrentRun.Hero then
 		return
@@ -199,7 +198,7 @@ function DoHadesSpeakingPresentation( eventSource, args )
 		AdjustColorGrading({ Name = args.ColorGrade or "Alert", Duration = 0 })
 	end
 	if args.UseSurvivalPresentation then
-		thread( SurvivalEncounterStartPresentation )
+		thread( SurvivalEncounterStartPresentation, nil, { UpdateMusicStems = true } )
 	end
 
 	ScreenAnchors.FullscreenAlertFxAnchor = CreateScreenObstacle({ Name = "BlankObstacle", Group = "Scripting", X = ScreenCenterX, Y = ScreenCenterY })
@@ -236,8 +235,9 @@ function DoHadesSpeakingPresentation( eventSource, args )
 		})
 	end
 
-	if args.OverlayAnim then
-		SetAnimation({ Name = args.OverlayAnim, DestinationId = hadesOverlay })
+	local overlayAnim = line.OverlayAnim or args.OverlayAnim
+	if overlayAnim ~= nil then
+		SetAnimation({ Name = overlayAnim, DestinationId = hadesOverlay })
 	end
 	if not CurrentRun.CurrentRoom.BlockHadesOverlay then
 		SetAlpha({ Id = hadesOverlay, Fraction = 1.0, Duration = 0 })
@@ -262,11 +262,6 @@ function DoHadesSpeakingPresentation( eventSource, args )
 	wait( args.PortraitDuration or 1.0, RoomThreadName )
 	Destroy({ Id = hadesOverlay })
 	Destroy({ Ids = { fullscreenAlertColorFx, fullscreenAlertDisplacementFx } })
-end
-
-
-function ArachneRewardFoundPresentation( encounter )
-	thread( PlayVoiceLines, GlobalVoiceLines.CocoonRewardFoundVoiceLines, true )
 end
 
 function ArtemisPreSpawnPresentation( eventSource, args )
@@ -326,8 +321,10 @@ function ArtemisAppearancePresentation( artemis )
 	SetAlpha({ Id = artemis.ObjectId, Fraction = 1.0, Duration = 0 })
 	SetAnimation({ Name = "Artemis_Appear", DestinationId = artemis.ObjectId })
 
-	local textLines = GetRandomEligibleTextLines( artemis, artemis.InteractTextLineSets, GetNarrativeDataValue( artemis, "InteractTextLinePriorities" ) )
-	SetNextInteractLines( artemis, textLines )
+	if not CurrentRun.IsDreamRun then
+		local textLines = GetRandomEligibleTextLines( artemis, artemis.InteractTextLineSets, GetNarrativeDataValue( artemis, "InteractTextLinePriorities" ) )
+		SetNextInteractLines( artemis, textLines )
+	end
 
 	wait( 1.0, RoomThreadName )	
 
@@ -371,6 +368,8 @@ function ArtemisFirstAppearancePresentation( artemis )
 	SetPlayerVulnerable( "ArtemisAppearancePresentation" )
 	LockCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 1.25 })
 	PlaySound({ Name = "/Leftovers/World Sounds/MapZoomSlow" })
+
+	SetNextInteractLines( artemis, artemis.InteractTextLineSets.ArtemisFirstMeeting )
 
 	Move({ Id = ScreenAnchors.LetterBoxTop, Angle = 90, Distance = 150, EaseIn = 0.99, EaseOut = 1.0, Duration = 1.15 })
 	Move({ Id = ScreenAnchors.LetterBoxBottom, Angle = 270, Distance = 150, EaseIn = 0.99, EaseOut = 1.0, Duration = 1.15 })
@@ -623,10 +622,11 @@ function DevotionTestPresentation( source, args )
 	ShowCombatUI("Devotion")
 end
 
-function SurvivalEncounterStartPresentation( eventSource, colorGrade, colorFx, playerGlobalVoiceLines, opponentGlobalVoiceLines )
+function SurvivalEncounterStartPresentation( eventSource, args )
 	eventSource = eventSource or {}
+	args = args or {}
 
-	AdjustColorGrading({ Name = colorGrade or "Alert", Duration = 0 })
+	AdjustColorGrading({ Name = args.ColorGrade or "Alert", Duration = 0 })
 	ScreenAnchors.FullscreenAlertFxAnchor = CreateScreenObstacle({ Name = "BlankObstacle", Group = "Scripting", X = ScreenCenterX, Y = ScreenCenterY })
 
 	local fullscreenAlertDisplacementFx = SpawnObstacle({ Name = "FullscreenAlertDisplace", Group = "FX_Displacement", DestinationId = ScreenAnchors.FullscreenAlertFxAnchor})
@@ -634,7 +634,7 @@ function SurvivalEncounterStartPresentation( eventSource, colorGrade, colorFx, p
 	SetScaleY({ Id = fullscreenAlertDisplacementFx, Fraction = ScreenScaleY, Duration = 0 })
 	DrawScreenRelative({ Id = fullscreenAlertDisplacementFx })
 
-	local fullscreenAlertColorFx = SpawnObstacle({ Name = colorFx or "FullscreenAlertColor", Group = "FX_Standing_Top", DestinationId = ScreenAnchors.FullscreenAlertFxAnchor})
+	local fullscreenAlertColorFx = SpawnObstacle({ Name = args.ColorFx or "FullscreenAlertColor", Group = "FX_Standing_Top", DestinationId = ScreenAnchors.FullscreenAlertFxAnchor})
 	DrawScreenRelative({ Id = fullscreenAlertColorFx })
 
 	PlaySound({ Name = "/Leftovers/World Sounds/ThunderHuge" })
@@ -650,8 +650,10 @@ function SurvivalEncounterStartPresentation( eventSource, colorGrade, colorFx, p
 
 	wait( 1.0, RoomThreadName )
 
-	local activeStemTable = { "Guitar", "Bass", "Drums" }
-	SetSoundCueValue({ Names = activeStemTable, Id = AudioState.MusicId, Value = 1, Duration = 0.75 })
+	if args.UpdateMusicStems then
+		local activeStemTable = { "Guitar", "Bass", "Drums" }
+		SetSoundCueValue({ Names = activeStemTable, Id = AudioState.MusicId, Value = 1, Duration = 0.75 })
+	end
 
 	AdjustColorGrading({ Name = "Off", Duration = 0.45 })
 	BloomRequestEnd({ SourceName = "SurvivalEncounterStartPresentation", Duration = 0.45 })
@@ -691,28 +693,6 @@ function HeroicStandPulse( remainingPulses )
 	end
 end
 
-function SurvivalObjectivePresentation( survivalEncounter )
-	local playedHurryLines = false
-
-	while survivalEncounter.RemainingTime > 0 and not survivalEncounter.TimeIsUp and not survivalEncounter.Completed do
-		if survivalEncounter.RemainingTime <= 10 then
-			if not playedHurryLines and survivalEncounter.TimeExpiringGlobalVoiceLines ~= nil then
-				thread( PlayVoiceLines, GlobalVoiceLines[survivalEncounter.TimeExpiringGlobalVoiceLines], true )
-				playedHurryLines = true
-			end
-
-			UpdateObjective( survivalEncounter.EncounterType, "RemainingSeconds", math.ceil(survivalEncounter.RemainingTime), {Pulse = true } )
-			PlaySound({ Name = "/Leftovers/SFX/FieldReviveSFX" })
-			wait( 1.0, RoomThreadName )
-		else
-			UpdateObjective( survivalEncounter.EncounterType, "RemainingSeconds", math.ceil(survivalEncounter.RemainingTime))
-			PlaySound({ Name = "/Leftovers/SFX/PowerToggleNew" })
-			wait( 1.0, RoomThreadName )
-		end
-	end
-	UpdateObjective( survivalEncounter.EncounterType, "RemainingSeconds", 1)
-end
-
 function CapturePointEncounterStartPresentation( encounter, capturePointSwitch )
 
 	SetAnimation({ Name = "MelinoeBoonInteractPowerUp", DestinationId = CurrentRun.Hero.ObjectId, AnimationSpeed = 0.5 })
@@ -731,7 +711,7 @@ function CapturePointEncounterStartPresentation( encounter, capturePointSwitch )
 
 	thread( HadesSpeakingPresentation, {}, { SubtitleColor = Color.ChronosVoice, BlockColorGrade = true, OverlayAnim = "ChronosOverlay", VoiceLines = { GlobalVoiceLines = "AnomalyCombatBeginsVoiceLines" }, StartSound = "/SFX/TimeSlowStart", StartDelay = 3 } )
 
-	SurvivalEncounterStartPresentation( encounter, 0 )
+	SurvivalEncounterStartPresentation( encounter, { ColorGrade = "Off" } )
 	Destroy({ Id = capturePointSwitch.ObjectId })
 
 end
@@ -1234,6 +1214,7 @@ function HeraclesSpawnPresentation( )
 
 	-- after arrival
 
+	killWaitUntilThreads( "ReattachCameraOnInput" )
 	PanCamera({ Ids = heracles.ObjectId, Duration = 1.5, EaseIn = 0.05, EaseOut = 0.03 })
 	PlaySound({ Name = "/Leftovers/World Sounds/MapZoomSlow" })
 	PlaySound({ Name = "/Leftovers/SFX/GoalScoredNEW" })
@@ -1253,13 +1234,14 @@ function HeraclesSpawnPresentation( )
 
 	wait( 0.5, RoomThreadName )
 
-	ProcessTextLines( heracles, heracles.BossIntroTextLineSets )
-
 	RemoveInputBlock({ Name = "HeraclesSpawnPresentation" })
 	SetPlayerVulnerable( "HeraclesSpawnPresentation" )
 
-	local textLines = GetRandomEligibleTextLines( heracles, heracles.BossIntroTextLineSets, GetNarrativeDataValue( heracles, "BossIntroTextLinePriorities" ) )
-	PlayTextLines( heracles, textLines )
+	if not CurrentRun.IsDreamRun then
+		ProcessTextLines( heracles, heracles.BossIntroTextLineSets )
+		local textLines = GetRandomEligibleTextLines( heracles, heracles.BossIntroTextLineSets, GetNarrativeDataValue( heracles, "BossIntroTextLinePriorities" ) )
+		PlayTextLines( heracles, textLines )
+	end
 
 	SetSoundCueValue({ Names = { "Keys" }, Id = AudioState.SecretMusicId, Value = 1 })
 	SetSoundCueValue({ Names = { "Drums" }, Id = AudioState.SecretMusicId, Value = 1 })
@@ -1341,6 +1323,10 @@ function HeraclesExit( source, args )
 			end
 			return
 		end
+	end
+
+	if args.MuteSpeaker then
+		heracles.Mute = true
 	end
 
 	UseableOff({ Id = heracles.ObjectId })
@@ -1452,7 +1438,11 @@ function AthenaSpawnPresentation(encounter, args)
 	IgnoreGravity({ Id = athena.ObjectId })
 	thread( PlayVoiceLines, athena.EncounterStartVoiceLines, nil, athena )
 
-	UseableOff({ Id = athena.ObjectId })
+	if CurrentRun.CurrentRoom.SpawnedRewardCageIndicators then
+		CreateScreenEdgeIndicator( athena, { AnimName = athena.ScreenEdgeIcon } )
+	end
+
+	AddInteractBlock( athena, "SpawnPresentation" )
 
 	PlaySound({ Name = "/SFX/AthenaBoonChoice" })
 
@@ -1521,13 +1511,22 @@ function AthenaSpawnPresentation(encounter, args)
 	ExpireProjectiles({ ExcludeNames = WeaponSets.ExpireProjectileExcludeProjectileNames, BlockSpawns = true })
 
 	PlaySound({ Name = "/SFX/AthenaWrathHolyShield", Id = athena.ObjectId })
-	ProcessTextLines( athena, athena.InteractTextLineSets )
+	if not CurrentRun.IsDreamRun then
+		ProcessTextLines( athena, athena.InteractTextLineSets )
+	end
 	thread( PlayVoiceLines, athena.EncounterEndVoiceLines, nil, athena )
+	
+	if SessionMapState.LaserSpellDown then
+		LaserHoldClear()
+		SetAnimation({ DestinationId = CurrentRun.Hero.ObjectId, Name = "Melinoe_ForwardCast_End"})
+	end
 
 	wait( 0.7, RoomThreadName )
 
-	CheckAvailableTextLines( athena )
-	SetAvailableUseText( athena )
+	if not CurrentRun.IsDreamRun then
+		CheckAvailableTextLines( athena )
+		SetAvailableUseText( athena )
+	end
 
 	ShowCombatUI("AthenaIntro")
 
@@ -1538,7 +1537,7 @@ function AthenaSpawnPresentation(encounter, args)
 
 	wait( 0.3, RoomThreadName )
 
-	UseableOn({ Id = athena.ObjectId })
+	RemoveInteractBlock( athena, "SpawnPresentation" )
 end
 
 function AthenaExitPresentation( source, args )
@@ -1637,10 +1636,12 @@ function NemesisSpawnPresentation( eventSource, nemesis )
 	SetPlayerVulnerable( "NemesisSpawnPresentation" )
 	RemovePlayerImmuneToForce( "NemesisSpawnPresentation" )
 	
-	ProcessTextLines( nemesis, nemesis.CombatIntroTextLineSets )
-	nemesis.TextLinesUseWeaponIdle = true
-	local textLines = GetRandomEligibleTextLines( nemesis, nemesis.CombatIntroTextLineSets, GetNarrativeDataValue( nemesis, "CombatIntroTextLinePriorities" ) )
-	PlayTextLines( nemesis, textLines )
+	if not CurrentRun.IsDreamRun then
+		ProcessTextLines( nemesis, nemesis.CombatIntroTextLineSets )
+		nemesis.TextLinesUseWeaponIdle = true
+		local textLines = GetRandomEligibleTextLines( nemesis, nemesis.CombatIntroTextLineSets, GetNarrativeDataValue( nemesis, "CombatIntroTextLinePriorities" ) )
+		PlayTextLines( nemesis, textLines )
+	end
 
 end
 
@@ -1668,6 +1669,7 @@ function NemesisSpawnPresentationFields( eventSource )
 	if not IsEmpty( SessionMapState.SkipEncounterIds ) then
 		thread( SkipEncounterEndPresentation )
 	end
+	SessionMapState.BlockFieldsEnemiesSpottedVoiceLines = true
 
 	wait( 1.0, RoomThreadName )
 
@@ -1687,7 +1689,7 @@ function NemesisSpawnPresentationFields( eventSource )
 	ShakeScreen({ Speed = 500, Distance = 4, FalloffSpeed = 1000, Duration = 1.5 })
 
 	AddInputBlock({ Name = "NemesisSpawnPresentation" })
-
+	EndAutoSprint({ Halt = true, EndWeapon = true })
 	if ActiveScreens.TraitTrayScreen ~= nil then
 		TraitTrayScreenClose( ActiveScreens.TraitTrayScreen )
 	end
@@ -1714,10 +1716,12 @@ function NemesisSpawnPresentationFields( eventSource )
 
 	RemoveInputBlock({ Name = "NemesisSpawnPresentation" })
 
-	ProcessTextLines( nemesis, nemesis.CombatIntroTextLineSets )
-	nemesis.TextLinesUseWeaponIdle = true
-	local textLines = GetRandomEligibleTextLines( nemesis, nemesis.CombatIntroTextLineSets, GetNarrativeDataValue( nemesis, "CombatIntroTextLinePriorities" ) )
-	PlayTextLines( nemesis, textLines )
+	if not CurrentRun.IsDreamRun then
+		ProcessTextLines( nemesis, nemesis.CombatIntroTextLineSets )
+		nemesis.TextLinesUseWeaponIdle = true
+		local textLines = GetRandomEligibleTextLines( nemesis, nemesis.CombatIntroTextLineSets, GetNarrativeDataValue( nemesis, "CombatIntroTextLinePriorities" ) )
+		PlayTextLines( nemesis, textLines )
+	end
 	
 	SetPlayerVulnerable( "NemesisSpawnPresentation" )
 	RemovePlayerImmuneToForce( "NemesisSpawnPresentation" )
@@ -1817,10 +1821,11 @@ function NemesisEncounterStartPresentation( eventSource )
 	local encounter = eventSource
 	local nemesis = ActiveEnemies[encounter.NemesisId]
 
+	killWaitUntilThreads( "ReattachCameraOnInput" )
+
 	CallFunctionName(encounter.SpawnPresentationFunction or "NemesisSpawnPresentation", encounter, nemesis)
 	SetupAI( nemesis )
 
-	CurrentRun.CurrentRoom.CancelReattachCameraOnInput = true
 	LockCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 1.25 })
 	PlaySound({ Name = "/Leftovers/World Sounds/MapZoomSlow" })
 	SetSoundCueValue({ Names = { "Drums" }, Id = AudioState.SecretMusicId, Value = 1 })
@@ -1903,6 +1908,7 @@ function NemesisTeleportExitPresentation( nemesis, args )
 	nemesis.SpecialInteractFunctionName = nil
 	nemesis.CanReceiveGift = false
 	nemesis.Mute = true
+	nemesis.FieldsRewardFinderIgnores = true
 	RemoveScreenEdgeIndicator( nemesis )
 
 	SetAnimation({ Name = "Nemesis_Hub_Exit", DestinationId = nemesis.ObjectId })
@@ -1986,4 +1992,6 @@ function HeraclesBountySpawnPresentation( unit, bountyCount )
 
 	unit.StopAnimationsOnDeath = unit.StopAnimationsOnDeath or {}
 	table.insert(unit.StopAnimationsOnDeath, encounterData.HeraclesBountyAttachedAnimation)
+	unit.StopAnimationsOnHeroKill = unit.StopAnimationsOnHeroKill or {}
+	table.insert(unit.StopAnimationsOnHeroKill, encounterData.HeraclesBountyAttachedAnimation)
 end

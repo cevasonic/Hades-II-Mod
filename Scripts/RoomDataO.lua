@@ -6,6 +6,7 @@ RoomSetData.O =
 		RichPresence = "#RichPresence_O",
 		Icon = "GUI\\Screens\\BountyBoard\\Biome_Ships",
 		ResultText = "RunHistoryScreenResult_Thessaly",
+		DreamResultText = "RunHistoryScreenResult_Thessaly_Dream",
 
 		LegalEncounters = EncounterSets.OEncountersDefault,
 		DevotionEncounters = {"DevotionTestO"},
@@ -322,8 +323,10 @@ RoomSetData.O =
 		EntranceDirection = "Right",
 		FlipHorizontalChance = 0,
 
-		-- LocationText = "BiomeO",
+		LocationText = "Location_BiomeO",
+		DreamLocationText = "Location_BiomeO_Dream",
 		SaveProfileLocationText = "BiomeO_Short",
+		DreamSaveProfileLocationText = "BiomeO_Short_DreamRun",
 		
 		NarrativeContextArt = "DialogueBackground_Thessaly",
 		NarrativeContextArtFlippable = false,
@@ -359,6 +362,14 @@ RoomSetData.O =
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeO_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -369,6 +380,14 @@ RoomSetData.O =
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
+				},
+			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeO_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
 				},
 			},
 		},
@@ -412,9 +431,9 @@ RoomSetData.O =
 		LegalEncounters = { "Empty" },
 
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.83,
 		IntroSequenceDuration = 0.7,
 		Starting = true,
-		NoReward = true,
 		NoReroll = true,
 		SkipLastKillPresentation = true,
 		HideRewardPreview = true,
@@ -425,6 +444,22 @@ RoomSetData.O =
 		FlipHorizontalChance = 0.0,
 
 		Ambience = "/Leftovers/Ambience/CalmBoatWaterAmbience",
+
+		ForcedRewardStore = "RunProgress",
+		IneligibleRewards = RewardSets.OpeningRoomBans,
+		SpawnRewardOnId = 40055,
+		DisableRewardMagnetisim = true,
+		RewardGameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				Path = { "CurrentRun", "EnteredBiomes" },
+				Comparison = "==",
+				Value = 0,
+			},
+		},
 
 		HarvestPointChances = { 0.02, },
 		ShovelPointChance = 0.02,
@@ -468,7 +503,8 @@ RoomSetData.O =
 						Value = 1,
 					},
 					{
-						PathFalse = { "CurrentRun", "ActiveBounty" },
+						Path = { "CurrentRun" },
+						HasNone = { "ActiveBounty", "IsDreamRun" },
 					},
 				},
 				Args =
@@ -591,10 +627,11 @@ RoomSetData.O =
 			{
 				TriggerGroup = "BannerTarget",
 				WithinDistance = 1000,
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeO",
+					DreamText = "Location_BiomeO_Dream",
 					AnimationName = "InfoBannerThessalyIn",
 					AnimationOutName = "InfoBannerThessalyOut",
 					Delay = 2.0,
@@ -676,9 +713,8 @@ RoomSetData.O =
 
 		EnterVoiceLines =
 		{
-			[1] = { GlobalVoiceLines = "StartPackagedBountyRunVoiceLines" },
-			[2] = { GlobalVoiceLines = "BiomeStateChangeStartVoiceLines" },
-			[3] =
+			{ GlobalVoiceLines = "StartPackagedBountyRunVoiceLines" },
+			{ GlobalVoiceLines = "BiomeStateChangeStartVoiceLines" },
 			{
 				RandomRemaining = true,
 				PreLineWait = 2.65,
@@ -686,6 +722,14 @@ RoomSetData.O =
 
 				{ Cue = "/VO/Melinoe_0804", Text = "A harbor...", PlayFirst = true, PlayOnce = true, PlayOnceContext = "ShipsFirstEntranceVO" },
 				{ Cue = "/VO/Melinoe_0805", Text = "The docks..." },
+				{ Cue = "/VO/MelinoeField_4580", Text = "Now onward to the Rift...", PlayOnce = true, PlayOnceContext = "ShipsFirstEntranceVO",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "RoomsEntered", "P_Intro" },
+						},
+					},
+				},
 				-- { Cue = "/VO/Melinoe_1461", Text = "Almost there...", PlayFirst = true },
 			},
 		},
@@ -703,6 +747,7 @@ RoomSetData.O =
 		StartUnthreadedEvents = EncounterSets.ShopRoomEvents,
 		NoReroll = true,
 		ZoomFraction = 0.855,
+		ZoomFractionAlt = 0.91,
 
 		IntroPanDuration = 2,
 		IntroSequenceDuration = 2,
@@ -806,6 +851,8 @@ RoomSetData.O =
 
 		ForceAtBiomeDepthMin = 7,
 		ForceAtBiomeDepthMax = 7,
+
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
 
 		IntroPanDuration = 2,
 		IntroSequenceDuration = 2.0,
@@ -935,6 +982,7 @@ RoomSetData.O =
 			},
 
 		},
+		ZoomFractionAlt = 0.91,
 
 
 	},
@@ -944,15 +992,7 @@ RoomSetData.O =
 		InheritFrom = { "BaseO" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 2,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 
 		SpeakerName = { "Selene" },
@@ -967,10 +1007,55 @@ RoomSetData.O =
 
 		HasFishingPoint = true,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "O_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantODriftwood" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantODriftwood" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "O_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantOMandrakeSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantOMandrakeSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "O_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "OreOIron" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreOIron" },
+			},
+		},
+
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
 		LegalEncounters = { "BossEris01", },
 		ForcedReward = "MixerOBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		NoReroll = true,
 
 		Ambience = "/Leftovers/Ambience/GentleWavesBeachAmbience2D",
@@ -979,10 +1064,11 @@ RoomSetData.O =
 		},
 
 		EntranceFunctionName = "RoomEntranceBossShips",
-		EntranceFunctionArgs = { BossId = 558020, BossIntroAnimation = "Enemy_Eris_Intro", },
+		EntranceFunctionArgs = { BossId = 558020, BossIntroAnimation = "Enemy_Eris_Intro", DreamBossIntroAnimation = "Enemy_Eris_Intro_NoChain", DreamIntroSequenceDuration = 0.5, DreamIntroPanDuration = 0.9 },
 		IntroSequenceDuration = 2.3,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.87,
 
 		UnthreadedEvents =
 		{
@@ -994,6 +1080,7 @@ RoomSetData.O =
 					SetupBossIds = { 558020 },
 					SkipAngleTowardTarget = true,
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "ErisBossDreamRunIntro",
 				},
 			},
 		},
@@ -1042,7 +1129,9 @@ RoomSetData.O =
 				},
 				GameStateRequirements =
 				{
-					-- None
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				}
 			},
 		},
@@ -1118,15 +1207,7 @@ RoomSetData.O =
 		InheritFrom = { "BaseO" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 2,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		SpeakerName = { "Selene" },
@@ -1141,10 +1222,55 @@ RoomSetData.O =
 
 		HasFishingPoint = true,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "O_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantODriftwood" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantODriftwood" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "O_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantOMandrakeSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantOMandrakeSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "O_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "OreOIron" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreOIron" },
+			},
+		},
+
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
-		LegalEncounters = { "BossEris02", },
+		LegalEncounters = { "BossEris02" },
 		ForcedReward = "MixerOBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		NoReroll = true,
 
 		Ambience = "/Leftovers/Ambience/GentleWavesBeachAmbience2D",
@@ -1157,10 +1283,11 @@ RoomSetData.O =
 		},
 
 		EntranceFunctionName = "RoomEntranceBossShips",
-		EntranceFunctionArgs = { BossId = 744503, BossIntroAnimation = "Enemy_Eris_Intro", },
+		EntranceFunctionArgs = { BossId = 744503, BossIntroAnimation = "Enemy_Eris_Intro", DreamBossIntroAnimation = "Enemy_Eris_Intro_NoChain", DreamIntroSequenceDuration = 0.5, DreamIntroPanDuration = 0.9 },
 		IntroSequenceDuration = 2.3,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.78,
 		ZeusManaSpawnPoints = { 744610, 744615, 744609, 744616, 744608, 744617, 744607, 744618, },
 		UnthreadedEvents =
 		{
@@ -1172,6 +1299,7 @@ RoomSetData.O =
 					SetupBossIds = { 744503 },
 					SkipAngleTowardTarget = true,
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "ErisBossDreamRunIntro",
 				},
 			},
 		},
@@ -1215,7 +1343,9 @@ RoomSetData.O =
 				},
 				GameStateRequirements =
 				{
-					-- None
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				}
 			},
 		},
@@ -1306,6 +1436,7 @@ RoomSetData.O =
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.93,
 		ReverbValue = 1.0,
 		GlobalEcho = 0.0,
 
@@ -1487,11 +1618,26 @@ RoomSetData.O =
 			{
 				PathFalse = { "CurrentRun", "RoomsEntered", "O_MiniBoss02" },
 			},
-		},	
+		},
+
+		AlwaysForceRequirements =
+		{
+			{
+				Path = { "CurrentRun", "BiomeDepthCache" },
+				Comparison = "==",
+				Value = 3,
+			},
+			{
+				Path = { "GameState", "EncountersOccurredCache", "MiniBossCharybdis" },
+				Comparison = "<",
+				Value = 1,
+			},
+		},
 
 		LegalEncounters = { "MiniBossCharybdis" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.60,
+		ZoomFractionAlt = 0.72,
 
 		IntroSequenceDuration = 3.0,
 		IntroPanDuration = 1.0,
@@ -1626,7 +1772,12 @@ RoomSetData.O =
 			{
 				PathFalse = { "CurrentRun", "RoomsEntered", "O_MiniBoss01" },
 			},
-		},	
+			{
+				Path = { "GameState", "EncountersCompletedCache", "MiniBossCharybdis" },
+				Comparison = ">=",
+				Value = 1,
+			},
+		},
 
 		LegalEncounters = { "MiniBossCaptain" },
 		FlipHorizontalChance = 0.0,
@@ -1718,6 +1869,7 @@ RoomSetData.O =
 			},
 
 		},
+		ZoomFractionAlt = 0.86,
 
 	},
 
@@ -1828,6 +1980,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat02 =
@@ -1864,6 +2017,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat03 =
@@ -1900,6 +2054,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	O_Combat04 =
@@ -1943,6 +2098,7 @@ RoomSetData.O =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	O_Combat05 =
@@ -1979,6 +2135,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat06 =
@@ -2015,12 +2172,14 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat07 =
 	{
 		InheritFrom = { "O_CombatDataSmall", "BaseO" },
 		ZoomFraction = 0.86,
+		ZoomFractionAlt = 0.92,
 
 		WrappingData =
 		{
@@ -2095,6 +2254,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	O_Combat09 =
@@ -2131,6 +2291,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	O_Combat10 =
@@ -2165,6 +2326,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	O_Combat11 =
@@ -2208,6 +2370,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat12 =
@@ -2242,6 +2405,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat13 =
@@ -2293,6 +2457,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat14 =
@@ -2329,6 +2494,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Combat15 =
@@ -2376,6 +2542,7 @@ RoomSetData.O =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	O_Devotion01 =
@@ -2468,6 +2635,7 @@ RoomSetData.O =
 			},
 
 		},
+		ZoomFractionAlt = 0.95,
 
 	},
 
@@ -2562,6 +2730,7 @@ RoomSetData.O =
 			},
 
 		},
+		ZoomFractionAlt = 0.90,
 
 	},
 
@@ -2659,6 +2828,7 @@ RoomSetData.O =
 		},
 
 		ZoomFraction = 0.68,
+		ZoomFractionAlt = 0.74,
 		CameraZoomWeights =
 		{
 			[772430] = 1.00,
@@ -2784,6 +2954,7 @@ RoomSetData.O =
 						VoiceLines =
 						{
 							UsePlayerSource = true,
+							RandomRemaining = true,
 							GameStateRequirements =
 							{
 								{
@@ -2870,6 +3041,8 @@ RoomSetData.O =
 								PreLineWait = 0.4,
 								UsePlayerSource = true,
 								RequiredMinElapsedTime = 3,
+								TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
 								{ Cue = "/VO/MelinoeField_1846", Text = "It feels so safe and peaceful here..." },
 							},
 						},

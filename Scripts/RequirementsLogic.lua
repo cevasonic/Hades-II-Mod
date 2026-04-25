@@ -11,9 +11,9 @@ function IsGameStateEligible( source, requirements, args )
 	args = args or {}
 	source = source or { Name = "Unknown" }
 
-	--if verboseLogging and requirements == nil then
-		--DebugAssert({ Condition = false, Text = "IsGameStateEligible called with no requirements on "..tostring(source.Name), Owner = "Gavin" })
-	--end
+	if verboseLogging and requirements == nil then
+		DebugAssert({ Condition = false, Text = "IsGameStateEligible called with no requirements on "..tostring(source.Name), Owner = "Gavin" })
+	end
 
 	if IsEmpty( requirements ) then
 		return true
@@ -71,7 +71,6 @@ function IsGameStateEligible( source, requirements, args )
 
 	-- Generic state value checks
 
-	--[[
 	if verboseLogging then
 		for key, value in pairs( DebugData.LegalGenericRequirementKeys ) do
 			if requirements[key] then
@@ -84,11 +83,9 @@ function IsGameStateEligible( source, requirements, args )
 			end
 		end
 	end
-	]]
 
 	for requirementIndex, requirement in ipairs( requirements ) do
 
-		--[[
 		if verboseLogging then
 			for key, value in pairs( requirement ) do
 				if not DebugData.LegalGenericRequirementKeys[key] then
@@ -96,7 +93,6 @@ function IsGameStateEligible( source, requirements, args )
 				end
 			end
 		end
-		]]
 
 		local expectedKeys = 1
 		local valueToCheck = _G
@@ -110,29 +106,22 @@ function IsGameStateEligible( source, requirements, args )
 			expectedKeys = expectedKeys + 1
 		end
 
-		--[[
 		if verboseLogging and args.ExclusiveTestIndex ~= nil and requirementIndex ~= args.ExclusiveTestIndex then
 			-- Continue
-		else
-		]]
-		if requirement.FunctionName ~= nil then
+		elseif requirement.FunctionName ~= nil then
 			if not CallFunctionName( requirement.FunctionName, source, requirement.FunctionArgs, args ) then
 				args.FirstFailedRequirement = requirement.FunctionName
 				return false
 			end
 		elseif requirement.PathFalse ~= nil then
-			--[[
 			if verboseLogging and TableLength( requirement ) > expectedKeys then
 				DebugPrintTable( requirement, true )
 				DebugAssert({ Condition = false, Text = "Using PathFalse with other keys on "..tostring(source.Name), Owner = "Greg", })
 			end
-			]]
 			for j, subTable in ipairs( requirement.PathFalse ) do
-				--[[
 				if verboseLogging and type(valueToCheck) == "string" then
 					DebugAssert({ Condition = false, Text = "Using string "..valueToCheck.." inside PathFalse on "..tostring(source.Name), Owner = "Gavin", })
 				end
-				]]
 				valueToCheck = valueToCheck[subTable]
 				if valueToCheck == nil then
 					break
@@ -159,18 +148,14 @@ function IsGameStateEligible( source, requirements, args )
 				return false
 			end
 		elseif requirement.PathTrue ~= nil then
-			--[[
 			if verboseLogging and TableLength( requirement ) > expectedKeys then
 				DebugPrintTable( requirement, true )
 				DebugAssert({ Condition = false, Text = "Using PathTrue with other keys on "..tostring(source.Name), Owner = "Greg", })
 			end
-			]]
 			for j, subTable in ipairs( requirement.PathTrue ) do
-				--[[
 				if verboseLogging and type(valueToCheck) == "string" then
 					DebugAssert({ Condition = false, Text = "Using string "..valueToCheck.." inside PathTrue on "..tostring(source.Name), Owner = "Gavin", })
 				end
-				]]
 				valueToCheck = valueToCheck[subTable]
 				if (not valueToCheck) or valueToCheck == 0 then
 					if verboseLogging then
@@ -328,7 +313,7 @@ function IsGameStateEligible( source, requirements, args )
 						valueToCheck = valueToCheck[subTable]
 						if valueToCheck == nil then
 							if verboseLogging and k == 1 and not requirement.CountPathTrue and requirement.ValuesToCount == nil then
-								DebugAssert({ Condition = false, Text = "First key \""..subTable.."\" on SumPrevRooms is nil on "..tostring(source.Name), Owner = "Gavin", })
+								DebugAssert({ Condition = false, Text = "First key \""..subTable.."\" on SumPrevRooms is nil on "..tostring(source.Name), Owner = "Caleb", })
 							end
 							break
 						end
@@ -366,7 +351,7 @@ function IsGameStateEligible( source, requirements, args )
 
 			if requirement.SumPrevRuns ~= nil then
 				if verboseLogging and requirement.SumPrevRuns >= 10 then
-					DebugAssert({ Condition = false, Text = "SumPrevRuns ("..requirement.SumPrevRuns..") cannot exceed 10 on "..tostring(source.Name), Owner = "Gavin", })
+					DebugAssert({ Condition = false, Text = "SumPrevRuns ("..requirement.SumPrevRuns..") cannot exceed 10 on "..tostring(source.Name), Owner = "Caleb", })
 				end
 				local prevRunSum = 0
 				--DebugPrint({ Text = "Summing previous runs" })
@@ -391,8 +376,8 @@ function IsGameStateEligible( source, requirements, args )
 					for k, subTable in ipairs( requirement.Path ) do
 						valueToCheck = valueToCheck[subTable]
 						if valueToCheck == nil then
-							if verboseLogging and k == 1 and subTable ~= "Cleared" and subTable ~= "ActiveBounty" and subTable ~= "UsedStoryReset" then
-								DebugAssert({ Condition = false, Text = "First key ("..subTable..") on SumPrevRuns is nil on "..tostring(source.Name), Owner = "Gavin", })
+							if verboseLogging and k == 1 and subTable ~= "Cleared" and subTable ~= "ActiveBounty" and subTable ~= "UsedStoryReset" and subTable ~= "IsDreamRun" then
+								DebugAssert({ Condition = false, Text = "First key ("..subTable..") on SumPrevRuns is nil on "..tostring(source.Name), Owner = "Caleb", })
 							end
 							break
 						end
@@ -618,13 +603,11 @@ function IsGameStateEligible( source, requirements, args )
 				DebugAssert({ Condition = false, Text = "Requirement missing Value on "..tostring(source.Name), Owner = "Greg" })
 			end
 		else
-			--[[
 			if verboseLogging then
 				if requirement.HasNone ~= nil or requirement.HasAny ~= nil or requirement.HasAll ~= nil or requirement.IsNone ~= nil  or requirement.IsAny ~= nil then
 					DebugAssert({ Condition = false, Text = "Missing Path for requirement on "..GetTableString(source), Owner = "Greg", })
 				end
 			end
-			]]
 		end
 
 	end
@@ -644,6 +627,10 @@ function RequiredQueuedTextLine( source, args )
 					anyTrue = true
 					break
 				end
+				if unit.QueuedBossIntroTextLines ~= nil and unit.QueuedBossIntroTextLines.Name == textLineSet then
+					anyTrue = true
+					break
+				end
 			end
 		end
 		if not anyTrue then
@@ -653,6 +640,9 @@ function RequiredQueuedTextLine( source, args )
 		for unitId, unit in pairs( ShallowCopyTable( ActiveEnemies ) ) do
 			for k, textLineSet in pairs( args.IsNone ) do
 				if unit.NextInteractLines ~= nil and unit.NextInteractLines.Name == textLineSet then
+					return false
+				end
+				if unit.QueuedBossIntroTextLines ~= nil and unit.QueuedBossIntroTextLines.Name == textLineSet then
 					return false
 				end
 			end
@@ -829,11 +819,6 @@ end
 function RequiredHealthFraction( source, args )
 	local currentHealthFraction = CurrentRun.Hero.Health / CurrentRun.Hero.MaxHealth
 	return DoComparison( currentHealthFraction, args.Comparison, args.Value )
-end
-
-function RequiredShrineLevel( source, args )
-	local numShrineUpgrades = GetNumShrineUpgrades( args.ShrineUpgradeName )
-	return DoComparison( numShrineUpgrades, args.Comparison, args.Value )
 end
 
 function DoComparison( value1, comparison, value2 )
@@ -1193,4 +1178,16 @@ function RequiredMinRoomsSinceEvent( source, args )
 	end
 
 	return true
+end
+
+function RequiredNoneAlive(source, args)
+	local noneAlive = true
+	for id, requiredKill in pairs(RequiredKillEnemies) do
+		if Contains(args.Names, requiredKill.Name) then
+			noneAlive = false
+		end
+	end
+	if noneAlive then
+		return true
+	end
 end

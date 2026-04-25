@@ -254,6 +254,26 @@
 					Source = "AphroditeUpgrade",
 					Text = "Your preoccupations are my passions, Lord Ares! What would drive someone to lose themselves entirely to feeling? I would like to know {#Emph}every {#Prev}last possible reason." },
 			},
+			AresWithAphrodite02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredTraitNameInRoom",
+						FunctionArgs = { Name = "BloodManaBurstBoon" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Ares_0202",
+					Text = "I was just speaking with fair Aphrodite here about how much she's learned of war during the many conflicts we have overcome. Few would admit that there is beauty in the act." },
+				{ Cue = "/VO/Aphrodite_0216",
+					PortraitExitWait = 0.35,
+					PreLineFunctionName = "BoonInteractPresentation", PreLineWait = 0.5,
+					Source = "AphroditeUpgrade",
+					Emote = "PortraitEmoteAffection",
+					Text = "Oh, definitely {#Emph}yes{#Prev}, my lord! The gleaming weaponry and chariots, the ranks of men prepared to die, and just the glory of it all! Besides, there can't be beauty without ugliness!" },
+			},
 
 			AresWithHephaestus01 =
 			{
@@ -511,6 +531,33 @@
 				{ Cue = "/VO/Ares_0136",
 					Text = "I thought that I might find you there tonight. Whilst the Titan Chronos reels from your recent victory, his forces on the surface must be shaken, and more vulnerable to attack." },
 			},
+			AresUnderworldRunCleared04 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "AresUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "PrevRun", "RoomsEntered" },
+						HasAny = { "I_Boss01" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Ares_0139",
+					Text = "In war, we must be unpredictable. The Titan Chronos likely is expecting you to strike at him again, whilst you direct your efforts toward our mountain here. A clever ploy." },
+			},
+
 			AresSurfaceRunCleared01 =
 			{
 				PlayOnce = true,
@@ -757,6 +804,27 @@
 				{ Cue = "/VO/Ares_0146",
 					Text = "My father's blessing is most-powerful indeed. The strength to vanquish Typhon himself! Although this circumstance in which we find ourselves has still-greater demands, and I stand ready to provide." },
 			},
+			AresAboutZeus03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "AresUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "ZeusUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Ares_0147",
+					Text = "The thunderous might of Lord Zeus is already yours; what need have you of my comparatively pitiable strength? Although perhaps such differences are not as great as once they were..." },
+			},
 
 			AresAboutHera01 =
 			{
@@ -778,6 +846,27 @@
 
 				{ Cue = "/VO/Ares_0065",
 					Text = "My dear mother the Queen is careful not to show any member of the family undue favor, not even the children to whom she gave birth... I like to think that my propensity to be objective comes from her." },
+			},
+			AresAboutHera02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "AresUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Ares_0148",
+					Text = "My mother Queen Hera sees war as altogether distasteful, and often tries to distance herself from it. But not this latest one! I scarce recall when last we were together for so long." },
 			},
 
 			AresAboutPoseidon01 =
@@ -1467,7 +1556,7 @@
 						Path = { "BiomesReached", "N" },
 						CountPathTrue = true,
 						Comparison = ">=",
-						Value = 4,
+						Value = 3,
 					},
 					{
 						PathTrue = { "CurrentRun", "BiomesReached", "G" },
@@ -1583,7 +1672,6 @@
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
 				{ Cue = "/VO/Ares_0074",
-					Portrait = "Portrait_Ares_Displeased_01",
 					Text = "Do you detect a certain fear that hangs in the air this night, my kin? I suspect yes; perhaps you are its very source... a goddess not merely of the Underworld, but of nightmares themselves." },
 			},
 
@@ -1603,7 +1691,6 @@
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
 				{ Cue = "/VO/Ares_0071",
-					Portrait = "Portrait_Ares_Displeased_01",
 					Text = "There is a stir of something different in the air tonight... you feel it too, yes? The sense of great and ancient possibility. Let us bring it into being through sheer force." },
 			},
 			AresAboutPackageBounty02 =
@@ -3330,22 +3417,6 @@
 			PlayFromTarget = true,
 
 			{ Cue = "/VO/MelinoeField_2963", Text = "This I accept from you, my lord." },
-		},
-
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
 		},
 
 		FullSuperActivatedVoiceLines =

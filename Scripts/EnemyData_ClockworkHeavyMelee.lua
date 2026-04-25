@@ -2,7 +2,7 @@ UnitSetData.ClockworkHeavyMelee =
 {
 	ClockworkHeavyMelee =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 1650,
 		HealthBarOffsetY = -250,

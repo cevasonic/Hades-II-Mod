@@ -3,7 +3,7 @@ UnitSetData.Mudman =
 
 	Mudman =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 		IntroEncounterName = "MudmanIntro",
 		MaxHealth = 330,
 		HealthBarOffsetY = -250,
@@ -173,7 +173,7 @@ UnitSetData.Mudman =
 
 	Mudman2 =
 	{
-		InheritFrom = { "Mudman_Elite" },
+		InheritFrom = { "BaseQEnemy", "Mudman_Elite" },
 		GenusName = "Mudman_Elite",
 		Health = 2650,
 		HealthBuffer = 2650,
@@ -201,6 +201,11 @@ UnitSetData.Mudman =
 		},
 
 		ActiveCapWeight = 1.25,
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 		GeneratorData =
 		{
 			DifficultyRating = 150,
@@ -210,7 +215,7 @@ UnitSetData.Mudman =
 
 	MudmanEye =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 		RunHistoryKilledByName = "Mudman",
 		MaxHealth = 20,
 		HealthBarOffsetY = -60,
@@ -281,11 +286,15 @@ UnitSetData.Mudman =
 
 	MudmanEye2 =
 	{
-		InheritFrom = { "MudmanEye_Elite" },
+		InheritFrom = { "BaseQEnemy", "MudmanEye_Elite" },
 		GenusName = "MudmanEye_Elite",
 		Health = 500,
 		HealthBuffer = 500,
 
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 		GeneratorData =
 		{
 			DifficultyRating = 5,

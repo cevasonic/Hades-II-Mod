@@ -370,11 +370,11 @@ SpellDisplayData =
 
 		"TransformCastDamageTalent",
 		"TransformLastStandRechargeTalent",
-		"TransformSpecialCritTalent",
 		"TransformAttackSpeedTalent",
-
-		"TransformPrimaryTalent",
 		"TransformSpecialTalent",
+		
+		"TransformSpecialCritTalent",
+		"TransformPrimaryTalent",
 		"TransformExCastTalent",
 		"TransformAphroditeTalent",
 
@@ -393,6 +393,16 @@ SpellDisplayData =
 
 		-- special talent
 		"OlympianSpellCountTalent",
+	},
+
+	SummonOutline =
+	{
+		R = Color.AlliedOutline[1],
+		G = Color.AlliedOutline[2],
+		B = Color.AlliedOutline[3],
+		Opacity = 0.8,
+		Thickness = 2,
+		Threshold = 0.6,
 	},
 }
 

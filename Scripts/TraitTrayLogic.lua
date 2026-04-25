@@ -11,6 +11,8 @@ OnControlPressed{ "AdvancedTooltip",
 			return
 		end
 
+		UnblockCombatUI( "AutoHide" )
+
 		if IsEmpty( ActiveScreens ) then
 			if not IsEmpty( MapState.CombatUIHide ) or not IsInputAllowed({}) then
 				-- If no screen is open, controlled entirely by input status
@@ -61,6 +63,7 @@ function OpenTraitTrayScreen( args )
 	screen.HideBounty = args.HideBounty
 	if screen.HideBounty then
 		SetAlpha({ Id = HUDScreen.Components.BountyActive.Id, Fraction = 0 })
+		SetAlpha({ Id = HUDScreen.Components.DreamActive.Id, Fraction = 0 })
 	end
 
 	if args.HideBackgroundTint then
@@ -226,11 +229,19 @@ function TraitTrayScreenSetupTabs( screen, data )
 	end
 
 	if not screen.HideBounty then
+		-- Bounty
 		Move({ Id = HUDScreen.Components.BountyActive.Id, Distance = screen.BountyIconShiftX - HUDScreen.Components.BountyActive.OffsetX, Angle = 0, Duration = 0.2, EaseIn = 0.0, EaseOut = 1.0 })
 		if CurrentRun.ActiveBounty and CurrentHubRoom == nil then
 			SetAlpha({ Id = HUDScreen.Components.BountyActive.Id, Fraction = 1.0, Duration = 0.2 })
 		end
 		ModifyTextBox({ Id = HUDScreen.Components.BountyActive.Id, FadeTarget = 1.0, FadeDuration = 0.2 })
+
+		-- Dream
+		Move({ Id = HUDScreen.Components.DreamActive.Id, Distance = screen.BountyIconShiftX - HUDScreen.Components.DreamActive.OffsetX, Angle = 0, Duration = 0.2, EaseIn = 0.0, EaseOut = 1.0 })
+		if CurrentRun.IsDreamRun and CurrentHubRoom == nil then
+			SetAlpha({ Id = HUDScreen.Components.DreamActive.Id, Fraction = 1.0, Duration = 0.2 })
+		end
+		ModifyTextBox({ Id = HUDScreen.Components.DreamActive.Id, Text = "Location_DreamBiomeOrder" })
 	end
 
 end
@@ -908,13 +919,24 @@ function TraitTrayScreenClose( screen, button, args )
 			end
 		end
 	end
+	
+	-- Bounty
 	if not screen.HideBounty then
 		Move({ Id = HUDScreen.Components.BountyActive.Id, Distance = screen.BountyIconShiftX - HUDScreen.Components.BountyActive.OffsetX, Angle = 180, Duration = 0.2, EaseIn = 0.0, EaseOut = 1.0 })
-		if CurrentRun.ActiveBounty and CurrentHubRoom == nil then
-			SetAlpha({ Id = HUDScreen.Components.BountyActive.Id, Fraction = ConfigOptionCache.HUDOpacity, Duration = 0.2 })
-		end
-		ModifyTextBox({ Id = HUDScreen.Components.BountyActive.Id, FadeTarget = 0.0, FadeDuration = 0.2 })
 	end
+	if CurrentRun.ActiveBounty and CurrentHubRoom == nil then
+		SetAlpha({ Id = HUDScreen.Components.BountyActive.Id, Fraction = ConfigOptionCache.HUDOpacity, Duration = 0.2 })
+	end
+	ModifyTextBox({ Id = HUDScreen.Components.BountyActive.Id, FadeTarget = 0.0, FadeDuration = 0.2 })
+
+	-- Dream
+	if not screen.HideBounty then
+		Move({ Id = HUDScreen.Components.DreamActive.Id, Distance = screen.BountyIconShiftX - HUDScreen.Components.DreamActive.OffsetX, Angle = 180, Duration = 0.2, EaseIn = 0.0, EaseOut = 1.0 })
+	end
+	if CurrentRun.IsDreamRun and CurrentHubRoom == nil then
+		SetAlpha({ Id = HUDScreen.Components.DreamActive.Id, Fraction = ConfigOptionCache.HUDOpacity, Duration = 0.2 })
+	end
+	ModifyTextBox({ Id = HUDScreen.Components.DreamActive.Id, Text = "HUD_DreamRegion" })
 
 	local ids = GetAllIds( screen.Components )
 	table.insert( ids, screen.HoverFrame )
@@ -1467,6 +1489,9 @@ function SetTraitTrayDetails( args )
 	end
 
 	local name = GetTraitTooltip( traitData, { ForTraitTray = forTraitTray } )
+	if traitData.UsePluralizedForm then
+		name = GetPluralizedForm( name, traitData.ChangeValue )
+	end
 	if traitData.ChaosData then
 		local blessingData = traitData.ChaosData
 		local extractedData = GetExtractData( blessingData )
@@ -1562,6 +1587,9 @@ function SetTraitTrayDetails( args )
 			if forTraitTray and traitData.CustomStatLinesWithShrineUpgrade.TrayStatLines then
 				targetStatLines = traitData.CustomStatLinesWithShrineUpgrade.TrayStatLines 
 			end		
+		end
+		if traitData.DreamRunStatLines ~= nil and CurrentRun and CurrentRun.IsDreamRun then
+			targetStatLines = traitData.DreamRunStatLines
 		end
 
 		if not IsEmpty( targetStatLines ) then

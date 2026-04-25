@@ -3,7 +3,7 @@ UnitSetData.Captain =
 
 	Captain =
 	{
-		InheritFrom = { "Elite", "BaseVulnerableEnemy" },
+		InheritFrom = { "Elite", "BaseOEnemy", "BaseVulnerableEnemy" },
 		RunHistoryKilledByName = "Captain",
 		
 		BlockRespawnShrineUpgrade = true,
@@ -92,7 +92,7 @@ UnitSetData.Captain =
 
 	Captain_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "Captain" },
+		InheritFrom = { "SuperElite", "BaseQEnemy", "Captain" },
 		GenusName = "Captain",
 		BlockRaiseDead = false,
 
@@ -109,6 +109,11 @@ UnitSetData.Captain =
 		WeaponOptions =
 		{
 			"CaptainPistol_Shadow",
+		},
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
 		},
 	},
 }

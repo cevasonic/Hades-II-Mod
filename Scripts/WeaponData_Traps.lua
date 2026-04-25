@@ -876,6 +876,7 @@ WeaponSetData =
 			PostAttackDuration = 0.0,
 
 			SaveProjectileId = true,
+			TargetSelf = true,
 		},
 	},
 
@@ -1096,7 +1097,6 @@ WeaponSetData =
 			PostAttackAnimation = "ZeusStatueDepleted",
 
 			FireFromSelf = true,
-			FireAsPlayerProjectile = true,
 			FireFromTarget = true,
 			SkipCanAttack = true,
 		},
@@ -1128,7 +1128,6 @@ WeaponSetData =
 			PreAttackDuration = 0.5,
 			PostAttackAnimation = "HestiaStatueDepleted",
 
-			FireAsPlayerProjectile = true,
 			FireProjectileAtSelf = true,
 			FireFromTarget = true,
 			SkipCanAttack = true,
@@ -1164,7 +1163,6 @@ WeaponSetData =
 			PostAttackAnimation = "PoseidonStatueDepleted",
 			
 			FireProjectileTowardTarget = true,
-			FireAsPlayerProjectile = true,
 			SkipCanAttack = true,
 		},
 
@@ -1197,7 +1195,6 @@ WeaponSetData =
 			PostAttackAnimation = "DemeterStatueDepleted",
 
 			FireProjectileTowardTarget = true,
-			FireAsPlayerProjectile = true,
 			SkipCanAttack = true,
 		},
 
@@ -1224,7 +1221,7 @@ WeaponSetData =
 			PreAttackEndShake = true,
 			PreAttackDuration = 0.2,
 			FireDuration = 0.0,
-			PostAttackDuration = 0.0,
+			PostAttackDuration = 0.1,
 
 			PreAttackAnimation = "TyphonMinePreFire",
 			FireAnimation = "TyphonMineFire",

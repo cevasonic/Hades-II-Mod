@@ -3,7 +3,7 @@ UnitSetData.FishmanMelee =
 	
 	FishmanMelee =
 	{
-		InheritFrom = { "OceanusUnitData", "BaseVulnerableEnemy" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "BaseVulnerableEnemy" },
 
 		ActivateAnimation = "Enemy_FishmanMelee_Spawn",
 		ActivateFx = "WaterUnitSurfaceLarge",
@@ -102,7 +102,7 @@ UnitSetData.FishmanMelee =
 
 	FishmanMelee2 =
 	{
-		InheritFrom = { "Elite", "FishmanMelee" },
+		InheritFrom = { "Elite", "BaseQEnemy", "FishmanMelee" },
 		GenusName = "FishmanMelee_Elite",
 		MaxHealth = 2600,
 		HealthBuffer = 2600,
@@ -129,6 +129,11 @@ UnitSetData.FishmanMelee =
 			{
 				"Fishman2Impale_Ally"
 			},
+		},
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
 		},
 
 		GeneratorData =

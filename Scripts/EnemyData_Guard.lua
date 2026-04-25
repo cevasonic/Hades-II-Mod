@@ -4,7 +4,7 @@ UnitSetData.Guard =
 	-- Short-Aggro crawler, lashes out violently if approached
 	Guard =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 
 		ActivateFx = "EnemyPreSpawnTerrainMedium",
 		ActivateFx2 = "EnemyPreSpawnStandingMedium",
@@ -20,6 +20,8 @@ UnitSetData.Guard =
 		IsAggroedSound = "/SFX/Enemy Sounds/Guard/EmoteAlerted",
 		DeathSound = "/SFX/Enemy Sounds/Guard/EmoteDying",
 		Material = "Bone",
+
+		HealthBarType = "Small",
 
 		PreferredSpawnPoint = "EnemyPointMelee",
 
@@ -114,7 +116,7 @@ UnitSetData.Guard =
 
 	Guard2 =
 	{
-		InheritFrom = { "OceanusUnitData", "Guard" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "Guard" },
 		DeathFx = "EnemyDeathFxIris",
 		DamagedFxStyles =
 		{
@@ -125,6 +127,8 @@ UnitSetData.Guard =
 		IntroEncounterName = "FishmanIntro",
 		IsAggroedSound = "/SFX/Enemy Sounds/Guard/EmoteTaunting",
 		MaxHealth = 190,
+
+		HealthBarType = "Medium",
 
 		AIAggroRange = 800,
 

@@ -22,6 +22,9 @@ UnitSetData.NPC_Heracles =
 		ThemeMusic = "/Music/IrisMusicHeraclesTheme_MC",
 		TurnInPlaceAnimation = "Heracles_Hub_Turn",
 		PreEventFunctionName = "AngleNPCToHero",
+		PreBathAnimationName = "Heracles_Hub_Greet",
+		BathEnterSound1 = "/Leftovers/SFX/BigFishSplash",
+		BathEnterSound2 = "/Leftovers/World Sounds/BigSplash",
 
 		EffectBlocks = { "RavenFamiliarMark", "ChillStatueEffect" },
 		ExcludeFromDamageDealtRecord = true,
@@ -32,6 +35,31 @@ UnitSetData.NPC_Heracles =
 		SetupEvents =
 		{
 			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					RequiredRoomInteraction = false,
+				},
+				GameStateRequirements =
+				{
+					-- for HeraclesFirstMeeting
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "N_Hub" },
+					},
+				},
+			},
+			{
+				FunctionName = "SetupHeraclesForBathHouse",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "P_Story01" },
+					},
+				},
+			},
+			{
 				FunctionName = "GenericPresentation",
 				Args = { CreateAnimation = "OlympusColdBreathEmitterLarge", },
 				GameStateRequirements =
@@ -39,6 +67,55 @@ UnitSetData.NPC_Heracles =
 					{
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsAny = { "P" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "P_Story01" },
+					},
+				},
+			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "HeraclesDream_Mesh",
+					SetAnimation = "Heracles_Hub_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
@@ -160,6 +237,7 @@ UnitSetData.NPC_Heracles =
 				},
 				{ Cue = "/VO/Heracles_0427", Text = "I know my path.",
 					PlayFirst = true,
+					PreLineWait = 0.25,
 					GameStateRequirements =
 					{
 						{
@@ -180,6 +258,7 @@ UnitSetData.NPC_Heracles =
 				},
 				{ Cue = "/VO/Heracles_0429", Text = "Towards what?",
 					PlayFirst = true,
+					PreLineWait = 0.25,
 					GameStateRequirements =
 					{
 						{
@@ -211,7 +290,6 @@ UnitSetData.NPC_Heracles =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
-				RoomRequiredInteractionFalse = true,
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
@@ -261,9 +339,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesFirstMeeting" },
 					},
 				},
@@ -286,15 +361,8 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
 					},
 				},
 				{ Cue = "/VO/Heracles_0233",
@@ -307,7 +375,7 @@ UnitSetData.NPC_Heracles =
 					Text = "Sure it would. We understand each other, then. Now to the bloodletting at hand." },
 			},
 
-			HeraclesPreEncounterAboutTrueEnding01 =
+			HeraclesPreEncounterAboutArtemis01 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
@@ -315,8 +383,87 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "N" },
 					},
+					{
+						Path = { "CurrentRun", "EncountersOccurredCache" },
+						HasAny = { "ArtemisCombatN", "ArtemisCombatN2" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0268",
+					PostLineFunctionName = "StartHeraclesEncounterMusic",
+					Text = "Mistook you for the goddess of the hunt, stalking about these streets. Let's see if you can pick your targets off as well as she." },
+			},
+
+			HeraclesPreEncounterAboutAxe01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "AxePerfectCriticalAspect", "AxeRallyAspect" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0245",
+					PostLineFunctionName = "StartHeraclesEncounterMusic",
+					Text = "Isn't that axe a little big for you, sister? Though I laud the effort. We'll soon see if you can put it to the proper use." },
+			},
+			HeraclesPreEncounterAboutThanatosAspect01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxePerfectCriticalAspect" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0248",
+					PostLineFunctionName = "StartHeraclesEncounterMusic",
+					Text = "You wield a scythe much like the one carried by Death himself. Here, we shall have to take his place." },
+			},
+			HeraclesPreEncounterAboutNergalAspect01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxeRallyAspect" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0250",
+					PostLineFunctionName = "StartHeraclesEncounterMusic",
+					Text = "Not often I'm envious of another's weaponry, but that is a thing of beauty you have there. Show me what it can do." },
+			},
+
+			HeraclesPreEncounterAboutTrueEnding01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
@@ -334,13 +481,11 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift03" },
 					},
 					{
 						SumPrevRuns = 6,
+						IgnoreCurrentRun = true,
 						Path = { "SpawnRecord", "NPC_Heracles_01" },
 						Comparison = "<=",
 						Value = 0,
@@ -436,19 +581,7 @@ UnitSetData.NPC_Heracles =
 					PostLineFunctionName = "StartHeraclesEncounterMusic",
 					Text = "We get to know each other, you'll live to regret it. Happens all the time." },
 			},
-			HeraclesMiscStart12 =
-			{
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
-						HasNone = { "/VO/Heracles_0047" },
-					},
-				},
-				{ Cue = "/VO/Heracles_0035",
-					PostLineFunctionName = "StartHeraclesEncounterMusic",
-					Text = "You think you know me, sister. But you don't." },
-			},
+			-- moved to BathHouseRepeatable
 			HeraclesMiscStart13 =
 			{
 				{ Cue = "/VO/Heracles_0040",
@@ -884,16 +1017,7 @@ UnitSetData.NPC_Heracles =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-				},
+
 				{ Cue = "/VO/Heracles_0007",
 					Text = "You live. By my good graces, granted, but... first I've seen somebody stand against the filth that's overtaken this accursed town." },
 				{ Cue = "/VO/MelinoeField_0231", UsePlayerSource = true,
@@ -909,16 +1033,7 @@ UnitSetData.NPC_Heracles =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-				},
+
 				{ Cue = "/VO/Heracles_0009",
 					Text = "I know what you are. You bloody witches. One foreign word... one finger-wagging gesture directed at me... and I'll squeeze you till you pop." },
 				{ Cue = "/VO/MelinoeField_0232", UsePlayerSource = true,
@@ -965,13 +1080,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasNone = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
 					},
@@ -999,9 +1107,6 @@ UnitSetData.NPC_Heracles =
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsAny = { "P" },
 					},
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 				},
 				{ Cue = "/VO/Heracles_0241",
 					PreLineThreadedFunctionName = "PlayCharacterAnim",
@@ -1023,9 +1128,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						PathTrue = { "CurrentRun", "UseRecord", "HeraUpgrade" }
 					},
 				},
@@ -1040,15 +1142,119 @@ UnitSetData.NPC_Heracles =
 					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
 					Text = "{#Emph}Family. {#Prev}It figures that her grace the Queen presides over the entire concept. Marriage, birthing, and the like. Curses, in a charitable form." },
 			},
-			HeraclesFieldAboutFamily01 =
+			HeraclesFieldAboutArtemis01 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HeraclesPreEncounterAboutArtemis01", "HeraclesGift04" },
 					},
+				},
+				{ Cue = "/VO/Heracles_0269",
+					PreLineWait = 0.35,
+					Text = "You fight both up close and from afar. Seems inefficient. Choose one or the other and master it. Don't get fancy." },
+				{ Cue = "/VO/MelinoeField_3991", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "One can excel at each. The goddess Artemis may favor her bow, but she's as ruthless as you up close, believe me." },
+				{ Cue = "/VO/Heracles_0270",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "Once captured one of her woodland pets and learned that the hard way, so you don't have to persuade me. Fine. Think you're as good as she is, suit yourself." },
+			},
+			HeraclesFieldAboutCerberus01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HeraclesGift07", "HeraclesFieldAboutUnderworld01" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0356",
+					PreLineWait = 0.35,
+					Text = "How is that dog of yours if he resides still underneath the earth? I grew somewhat partial to him as beasts go." },
+
+				{ Cue = "/VO/MelinoeField_4020", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "You mean Cerberus? I never knew him growing up but see him rather often recently. He's been active, and doing very well. I can't believe he didn't snap your head off back then..." },
+
+				{ Cue = "/VO/Heracles_0357",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "Oh, he tried. And using all three maws. And he was {#Emph}heavy. {#Prev}When next you ascend Olympus, thank the Fates you're not encumbered with the Hound of Hell." },
+			},
+			HeraclesFieldAboutUnderworld01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift06" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0264",
+					Text = "You must be rather comfortable up here. This land has become near as dismal as the one from which you hail." },
+
+				{ Cue = "/VO/MelinoeField_4012", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "How would you even know what all the Underworld is like? It couldn't be more different. Stop by sometime and see." },
+
+				{ Cue = "/VO/Heracles_0265",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "Already had my fill. Ask your father sometime about when last I visited. If you ever see him or his dog ever again." },
+			},
+			HeraclesFieldAboutUnderworld02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HadesAboutHeracles01" },
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4013", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You really have been to the Underworld before... and dragged my family's dog all the way to the surface, with my father's consent?" },
+
+				{ Cue = "/VO/Heracles_0266",
+					Text = "Your father didn't think I had it in me. Another of the many gods who failed to take me at my word. But fear not, I let the dog return. He's fortunate he's not a cat." },
+
+				{ Cue = "/VO/MelinoeField_4014", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Unbelievable. Then why didn't Olympus send you in after Chronos if you have that sort of experience?" },
+
+				{ Cue = "/VO/Heracles_0267",
+					PreLineAnim = "Heracles_Hub_Greet", -- slow flex
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "They've been on the defensive. They probably don't think I could do it. And they may not trust me. Who knows why else." },
+			},
+
+			HeraclesFieldAboutFamily01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift02" },
 					},
@@ -1071,9 +1277,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift04" },
 					},
@@ -1100,9 +1303,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsAny = { "N" },
@@ -1147,9 +1347,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "IcarusAboutHeracles01", "HeraclesGift07", "IcarusGift08" },
 					},
@@ -1181,9 +1378,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "IcarusAboutHeracles02" },
 					},
@@ -1206,15 +1400,12 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HeraclesGift03" },
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "HeraclesGift03", "MorosPostTrueEnding02" },
+						HasAny = { "HermesAboutFates01", "TrueEndingFinale01" },
 					},
 					NamedRequirementsFalse = { "ReachedEpilogue" },
 				},
@@ -1230,6 +1421,16 @@ UnitSetData.NPC_Heracles =
 				{ Cue = "/VO/Heracles_0353",
 					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
 					Text = "Certainly if not for them I wouldn't be here. Well now they know what it's like... getting strung about with no say in the matter. The Fates be damned! Justice is all we need." },
+
+				PrePortraitExitFunctionName = "QueueQuestProgressUpdate",
+				PrePortraitExitFunctionArgs =
+				{
+					QuestName = "QuestRescueFatesProgress",
+					GameStateRequirements =
+					{
+						NamedRequirements = { "TrueFatesQuestUnlocked" },
+					},
+				},
 			},
 
 			HeraclesFieldAboutPolyphemus01 =
@@ -1238,13 +1439,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsAny = { "N" },
@@ -1271,13 +1465,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
-					{
 						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
@@ -1301,13 +1488,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Hub" },
-					},
-					{
 						Path = { "PrevRun", "ResourcesSpent", "Money" },
 						Comparison = ">=",
 						Value = 200,
@@ -1325,6 +1505,7 @@ UnitSetData.NPC_Heracles =
 
 				{ Cue = "/VO/Heracles_0184",
 					Text = "I've had occasion to visit your realm in the past. The Boatman is my supplier. And evidently yours as well... buying up all the merchandise." },
+
 				EndVoiceLines =
 				{
 					{
@@ -1332,6 +1513,14 @@ UnitSetData.NPC_Heracles =
 						UsePlayerSource = true,
 						RequiredMinElapsedTime = 3,
 						{ Cue = "/VO/MelinoeField_0485", Text = "I've not exactly been discreet..." },
+					},
+				},
+				EndEvents =
+				{
+					{
+						FunctionName = "HeraclesExit",
+						Threaded = true,
+						Args = { WaitTime = 3.0, SkipIfStillInteractable = true, },
 					},
 				},
 			},
@@ -1342,9 +1531,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						SumPrevRuns = 2,
 						Path = { "RoomsEntered" },
@@ -1376,9 +1562,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusFirstMeeting" }
 					},
 					{
@@ -1407,15 +1590,64 @@ UnitSetData.NPC_Heracles =
 					Text = "My orders come directly from the King and Queen. If you've any concerns with how I'm carrying out my work, just go complain to them." },
 			},
 
-			HeraclesFieldAboutTyphon01 =
+			HeraclesFieldAboutDionysus01 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "DionysusAboutHeracles01", "HeraclesGift07" }
 					},
+					{
+						SumPrevRuns = 5,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					OrRequirements =
+					{
+						{
+							{
+								PathTrue = { "GameState", "ReachedTrueEnding" }
+							},
+						},
+						{
+							{
+								PathFalse = { "GameState", "WorldUpgradesAdded", "WorldUpgradeStormStop" }
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4016", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I can't believe I'm asking, but would you be interested in attending an exclusive feast with Lord Dionysus and his close associates? There's plenty to drink, a sizable bath..." },
+
+				{ Cue = "/VO/Heracles_0273",
+					PreLineAnim = "Heracles_Hub_Greet",
+					Text = "What do you mean, {#Emph}there's a sizeable bath? {#Prev}All he ever talked about was the drink. Where shall it be, and when?" },
+
+				{ Cue = "/VO/MelinoeField_4017", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "{#Emph}Where {#Prev}is difficult for me to explain but in one of the mountain's interior chambers. And as for {#Emph}when{#Prev}, I think it's ongoing without an end in sight." },
+
+				{ Cue = "/VO/Heracles_0274",
+					PreLineAnim = "Heracles_Hub_Granting",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "Well you make a compelling offer, witch. A feast that's dragged on for gods-know-how-long and you don't know how to get there. I'll give it some serious consideration." },
+			},
+
+			HeraclesFieldAboutTyphon01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
 					{
 						PathFalse = { "GameState", "TyphonDefeatedWithStormStop" },
 					},
@@ -1443,9 +1675,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						PathFalse = { "GameState", "TyphonDefeatedWithStormStop" },
 					},
@@ -1491,9 +1720,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
 					},
@@ -1523,20 +1749,7 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
-						PathTrue = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
-					},
-					{
-						Path = { "GameState", "LastBossHealthBarRecord", "Prometheus" },
-						Comparison = "<=",
-						Value = 0,
-					},
-					{
-						Path = { "GameState", "LastBossHealthBarRecord", "Heracles" },
-						Comparison = "<=",
-						Value = 0,
+						PathTrue = { "GameState", "EncountersCompletedCache", "BossPrometheus02" },
 					},
 				},
 				{ Cue = "/VO/Heracles_0295",
@@ -1601,9 +1814,6 @@ UnitSetData.NPC_Heracles =
 						Comparison = ">=",
 						Value = 1,
 					},
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 				},
 				{ Cue = "/VO/Heracles_0237",
 					PreLineThreadedFunctionName = "PlayCharacterAnim",
@@ -1620,15 +1830,98 @@ UnitSetData.NPC_Heracles =
 					Text = "That I do. But I don't like combatants disappearing on me. Stay where I can see you, or stay out of the way." },
 			},
 
-			HeraclesFieldAboutBlood01 =
+			HeraclesFieldAboutExpectations01 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
+						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HeraclesBathHouse01" },
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4959", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You're not the only one who had high expectations to live up to, Heracles. I'm Princess of the Underworld. My father and mother were taken by Chronos, and I was raised to slay him. Repeatedly told it was imperative, but near impossible." },
+
+				{ Cue = "/VO/Heracles_0321",
+					PreLineAnim = "Heracles_Hub_Granting",
+					Text = "Didn't ask for your life story, but sure. The Fates had big plans for you. It'd be a lot of pressure were the outcome not already preordained." },
+
+				{ Cue = "/VO/MelinoeField_4960", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "And what of your various victories? You've had to fight for your every achievement, and bitterly. None of those were preordained?" },
+
+				{ Cue = "/VO/Heracles_0322",
+					PreLineAnim = "Heracles_Hub_Greet",
+					Text = "We don't know what is preordained or not, and can ill-afford taking any chances. But whichever burdens you've been carrying do nothing to alleviate mine." },
+
+				{ Cue = "/VO/MelinoeField_4961", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Your struggles are unchanged knowing you're not alone?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.42,
+						ObjectType = "NPC_Heracles_01",
+						{ Cue = "/VO/Heracles_0280", Text = "The way it always was." },
+					},
+				},
+				EndEvents =
+				{
+					{
+						FunctionName = "HeraclesExit",
+						Threaded = true,
+						Args = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					},
+				}
+			},
+			HeraclesFieldAboutPerfection01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HeraclesBathHouse02" },
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4962", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You're known as perhaps the perfect warrior, Heracles, yet don't seem too caught up in that pursuit. You fight savagely, with brute force rather than finesse. You want results." },
+
+				{ Cue = "/VO/Heracles_0324",
+					PreLineWait = 0.35,
+					PreLineAnim = "Heracles_Hub_Brooding",
+					Text = "I do. So what. Perfection {#Emph}is {#Prev}a result. And why don't you stay out of my psyche, witch? I don't need you in my head any more than in my presence." },
+
+				{ Cue = "/VO/MelinoeField_4963", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I just want to understand the things you've said... because I don't want to end up like you, filled with regret despite my excellence. Your greatness is lost only on {#Emph}you." },
+
+				{ Cue = "/VO/Heracles_0325",
+					PreLineAnim = "Heracles_Hub_Greet",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, MuteSpeaker = true },
+					Text = "You don't have to worry, sister. You'll never end up like me. Because you'll never {#Emph}be {#Prev}like me. No one ever has, or shall." },
+			},
+
+			HeraclesFieldAboutBlood01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
 					{
 						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "PlayerTookDamage" },
 					},
@@ -1653,9 +1946,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "CurrentRun", "Hero", "TraitDictionary" },
 						HasAny = { "DecayingBoostKeepsake" },
 					},					
@@ -1672,6 +1962,35 @@ UnitSetData.NPC_Heracles =
 					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
 					Text = "Simple, sister: I don't want it anymore. Neither the Fang nor the glory. Take my work for all I care; there's always more." },
 			},
+			HeraclesFieldAboutKeepsake02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "DecayingBoostKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "DecayingBoostKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0328",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Heracles_Hub_Granting", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "That Lion Fang still giving you results? Great strength that fades with time... like the experience of being mortal." },
+
+				{ Cue = "/VO/MelinoeField_4015", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "To feel one's body beginning to give way to decrepitude... fortunately, your Fang recovers all its potency each night." },
+
+				{ Cue = "/VO/Heracles_0329",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "Unlike the lion from which it came. They said it sprang from the moon, can you believe that rubbish? But it was a noble beast..." },
+			},
 
 			HeraclesFieldAboutMagick01 =
 			{
@@ -1679,9 +1998,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						PathTrue = { "CurrentRun", "UseRecord", "SpellDrop" }
 					},
@@ -1706,9 +2022,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "WeaponsUnlocked" },
 						CountOf = GameData.AllWeaponAspects,
 						Comparison = ">=",
@@ -1732,6 +2045,104 @@ UnitSetData.NPC_Heracles =
 					Text = "No. Tread this path long enough, you'll find that any weapon can do the job. At that point, there's no real choice. Though I still carry all these other arms just to put on a show." },
 			},
 
+			HeraclesFieldAboutAxe01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "AxePerfectCriticalAspect", "AxeRallyAspect" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0246",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Heracles_Hub_Granting", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Why does a witch go learning to hoist a weapon such as that? You have your tricksy spells, yet bloody your hands." },
+
+				{ Cue = "/VO/MelinoeField_3986", UsePlayerSource = true,
+					Text = "I needed to gain endurance as well as avoid becoming overly dependent on magick, which can be physically exhausting." },
+
+				{ Cue = "/VO/Heracles_0247",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "{#Emph}Magick can be physically exhausting. {#Prev}You're an odd one, sister. But you've an eye for weaponry at least." },
+			},
+			HeraclesFieldAboutThanatosAspect01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxePerfectCriticalAspect" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0249",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Heracles_Hub_Granting", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Where did you get that scythe of yours, sister? You don't seem like much of a farmer, though neither did Thanatos." },
+
+				{ Cue = "/VO/MelinoeField_3987", UsePlayerSource = true,
+					Text = "Would you believe me if I told you that his mother was letting me borrow it for a little while?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.65,
+						ObjectType = "NPC_Heracles_01",
+						{ Cue = "/VO/Heracles_0103_C", Text = "No." },
+					},
+				},
+				EndEvents =
+				{
+					{
+						FunctionName = "HeraclesExit",
+						Threaded = true,
+						Args = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					},
+				}
+			},
+			HeraclesFieldAboutNergalAspect01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxeRallyAspect" },
+					},
+				},
+				{ Cue = "/VO/Heracles_0251",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Heracles_Hub_Granting", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "That stone club of yours... {#Emph}that {#Prev}is a worthy killing instrument. I'd wrest it from your grip, but it's probably bound to you." },
+
+				{ Cue = "/VO/MelinoeField_3988", UsePlayerSource = true,
+					Text = "You're wise to restrain yourself, as the Rock Lion Mace answers to me. Not quite as supple as your own club... olive-wood, is it?" },
+
+				{ Cue = "/VO/Heracles_0252",
+					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					Text = "Aren't you the wellspring of experience? Knowing your clubs as well as your trees. I like mine better than yours anyway." },
+			},
+
 			HeraclesFieldAboutTimePassing01 =
 			{
 				PlayOnce = true,
@@ -1739,14 +2150,12 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "HeraclesPreEncounterAboutTimePassing01" },
 					},
 					{
 						SumPrevRuns = 6,
+						IgnoreCurrentRun = true,
 						Path = { "SpawnRecord", "NPC_Heracles_01" },
 						Comparison = "<=",
 						Value = 0,
@@ -1759,7 +2168,6 @@ UnitSetData.NPC_Heracles =
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "I don't know what I'm supposed to say to that except I hadn't given you much thought lately either. Is there anyone you {#Emph}do {#Prev}regularly think about?" },
 				{ Cue = "/VO/Heracles_0283",
-					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
 					Text = "I think mainly of the bodies I have crushed beneath my club and feet. You're welcome to join them, at any point." },
 				EndVoiceLines =
 				{
@@ -1770,6 +2178,14 @@ UnitSetData.NPC_Heracles =
 						{ Cue = "/VO/MelinoeField_3996", Text = "No thank you, that's all right." },
 					},
 				},
+				EndEvents =
+				{
+					{
+						FunctionName = "HeraclesExit",
+						Threaded = true,
+						Args = { WaitTime = 3.0, SkipIfStillInteractable = true, },
+					},
+				},
 			},
 
 			HeraclesFieldAboutTrueEnding01 =
@@ -1778,9 +2194,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
@@ -1809,7 +2222,7 @@ UnitSetData.NPC_Heracles =
 					{
 						PreLineWait = 0.38,
 						ObjectType = "NPC_Heracles_01",
-						{ Cue = "/VO/Heracles_0280", Text = "The way it always was." },
+						{ Cue = "/VO/Heracles_0280_B", Text = "The way it always was." },
 					},
 				},
 				EndEvents =
@@ -1827,9 +2240,6 @@ UnitSetData.NPC_Heracles =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
@@ -1873,9 +2283,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusAboutEpilogue01" },
 					},
 				},
@@ -1906,9 +2313,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "HeraclesFieldAboutEpilogue01", "HeraclesGift06" },
 					},
@@ -1933,9 +2337,6 @@ UnitSetData.NPC_Heracles =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" },
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift07" },
 					},
 				},
@@ -1952,131 +2353,6 @@ UnitSetData.NPC_Heracles =
 					PostLineThreadedFunctionName = "HeraclesExit", PostLineFunctionArgs = { WaitTime = 3.0, SkipIfStillInteractable = true, },
 					Text = "Speaking never was my specialty. And as you may have surmised, I'm more the sort to focus on my strengths." },
 			},
-
-			-- Repeatable Shop
-			HeraclesMiscChat01 =
-			{
-				PlayFirst = true,
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsAny = { "Shop" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Charon_01" }, },
-					},
-				},
-				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
-				{ Cue = "/VO/Heracles_0033",
-					Text = "If you're starved for conversation, you'll have better fortune with the Boatman there." },
-			},
-			HeraclesMiscChat04 =
-			{
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsAny = { "Shop" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Charon_01" }, },
-					},
-				},
-				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
-				{ Cue = "/VO/Heracles_0036",
-					Text = "You never saw me, I never saw you. Scoot." },
-			},
-			HeraclesMiscChat05 =
-			{
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsAny = { "Shop" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Charon_01" }, },
-					},
-				},
-				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
-				{ Cue = "/VO/Heracles_0037",
-					Text = "Save it for somebody who cares, sister." },
-			},
-			HeraclesMiscChat06 =
-			{
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsAny = { "Shop" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Charon_01" }, },
-					},
-				},
-				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
-				{ Cue = "/VO/Heracles_0038",
-					Text = "Whatever you're about to say to me, don't." },
-			},
-			HeraclesMiscChat07 =
-			{
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsAny = { "Shop" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Charon_01" }, },
-					},
-				},
-				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
-				{ Cue = "/VO/Heracles_0039",
-					Text = "I look like I want to have ourselves a chat?" },
-			},
-			HeraclesMiscChat08 =
-			{
-				PlayFirst = true,
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsAny = { "Shop" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "NPC_Charon_01" }, },
-					},
-				},
-				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
-				{ Cue = "/VO/Heracles_0358",
-					Text = "{#Emph}Urgh. {#Prev}You just made me lose count of all my blasted coin." },
-			},
-
 		},
 
 		GiftTextLineSets =
@@ -2213,7 +2489,7 @@ UnitSetData.NPC_Heracles =
 					},
 				},
 				{ Cue = "/VO/Heracles_0290",
-					Text = "My favor, in exchange for {#Emph}drink? {#Prev}No. You waste your resources and time; {#Emph}my {#Prev}time as well. You'll get a share of spoils if you earn your kills, but nothing more. " },
+					Text = "My favor, in exchange for drink? No. You waste your resources and time; my time as well. You'll get a share of spoils if you earn your kills, but nothing more. " },
 				{ Cue = "/VO/MelinoeField_3773", UsePlayerSource = true,
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
@@ -2384,7 +2660,7 @@ UnitSetData.NPC_Heracles =
 					{
 						PreLineWait = 0.4,
 						UsePlayerSource = true,
-						{ Cue = "/VO/Melinoe_0055", Text = "Until then." },
+						{ Cue = "/VO/Melinoe_0055_C", Text = "Until then." },
 					},
 				},
 				EndEvents =
@@ -2396,6 +2672,494 @@ UnitSetData.NPC_Heracles =
 					},
 				}
 			},
+
+			-- hot springs
+			HeraclesBathHouse01 =
+			{
+				PlayOnce = true,
+				SkipPreEventFunction = true,
+				-- OnGiftTrack = true,
+				SkipContextArt = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				DoNotFlipContextArt = true,
+				-- UnfilledIcon = "EmptyHeartWithSaltsIcon",
+				-- FilledIcon = "FilledHeartWithSaltsIcon",
+				-- HintId = "Codex_HotSpringsGiftHint",
+				-- LockedHintId = "Codex_LockedActivityHint",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "P_Story01" },
+					},
+				},
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				EndWait = 0.5,
+				{ Cue = "/VO/MelinoeField_4942", UsePlayerSource = true,
+					ExitPortraitImmediately = true,
+					Text = "I have these purifying salts here, sir. You're welcome to make use of them, especially if you help form a perimeter..." },
+
+				{ Cue = "/VO/Heracles_0162_B",
+					PreLineWait = 1.0,
+					PreLineAnim = "Heracles_Hub_Granting",
+					PortraitExitAnimation = "Portrait_Heracles_Default_01_Exit",
+					PostLineRemoveContextArt = true,
+					Text = "...Very well." },
+
+				{ Cue = "/VO/Heracles_0305",
+					PreLineFunctionName = "DionysusBathHouseStartPresentation",
+					NarrativeContextArt = "DialogueBackground_Bathhouse",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+					Text = "Keep your distance from me, witch. My club is readily at hand. The Satyrs and the Nymphs likewise were warned." },
+
+				{ Cue = "/VO/MelinoeField_4948", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					PreLineWait = 0.5,
+					Text = "Oh I don't plan on moving from this spot, except to leave reluctantly. I shouldn't be doing this, but I'm cold and tired." },
+
+				{ Cue = "/VO/Heracles_0306",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+					Text = "Cold and tired... now we're speaking the same language. How did you learn of such a place? Even the other gods don't know of it." },
+
+				{ Cue = "/VO/MelinoeField_4949", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "We have a hot spring much like this where I am from. Well... the atmosphere is very different, and there are far fewer in attendance typically." },
+
+				{ Cue = "/VO/Heracles_0307",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+					Text = "Not what I meant. Why are you {#Emph}here? {#Prev}You don't strike me as the... {#Emph}drinking-feasting sort." },
+
+				{ Cue = "/VO/MelinoeField_4950", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "You're one to talk. Although you did mention having a drinking contest with Lord Dionysus at some point. I don't know why he lets me in. But I like passing through." },
+
+				{ Cue = "/VO/Heracles_0308",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+					PostLineFunctionName = "BathHouseQuipPresentation",
+					PostLineThreadedFunctionName = "TimePassesPresentation",
+					PostLineThreadedFunctionArgs = { TimeTicks = 12, SkipTimePassageOccurred = true },
+
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					PostLineRemoveContextArt = true,
+					Text = "{#Emph}Hm. {#Prev}Bathing with Satyrs for a change, instead of slaughtering them. Anything to break up the routine...." },
+
+				{ Cue = "/VO/MelinoeField_4951", UsePlayerSource = true,
+					PreLineFunctionName = "DionysusBathHouseEndPresentation",
+					PreLineWait = 0.2,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+
+					Emote = "PortraitEmoteSparkly",
+					Portrait = "Portrait_Mel_Hesitant_01",
+					Text = "Well...! I feel refreshed and yet uncomfortable. Bye, sir." },
+			},
+			HeraclesBathHouse02 =
+			{
+				PlayOnce = true,
+				SkipPreEventFunction = true,
+				-- OnGiftTrack = true,
+				SkipContextArt = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				DoNotFlipContextArt = true,
+				-- UnfilledIcon = "EmptyHeartWithSaltsIcon",
+				-- FilledIcon = "FilledHeartWithSaltsIcon",
+				-- HintId = "Codex_HotSpringsGiftHint",
+				-- LockedHintId = "Codex_LockedActivityHint",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "P_Story01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HeraclesBathHouse01" },
+					},
+				},
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				EndWait = 0.5,
+				{ Cue = "/VO/MelinoeField_4952", UsePlayerSource = true,
+					ExitPortraitImmediately = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					Text = "I was going to take a quick dip once this pool is sufficiently purified if you'd like to as well, sir." },
+
+				{ Cue = "/VO/Heracles_0160",
+					PreLineWait = 1.0,
+					PreLineAnim = "Heracles_Hub_Granting",
+					PortraitExitAnimation = "Portrait_Heracles_Default_01_Exit",
+					PostLineRemoveContextArt = true,
+					Text = "...Aye." },
+
+				{ Cue = "/VO/Heracles_0310",
+					PreLineFunctionName = "DionysusBathHouseStartPresentation",
+					NarrativeContextArt = "DialogueBackground_Bathhouse",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+					Text = "Dionysus understands something the other gods do not. Do you know what it is, sister?" },
+
+				{ Cue = "/VO/MelinoeField_4955", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					PreLineWait = 0.5,
+					Text = "You don't mean something simple like debauchery, do you?" },
+
+				{ Cue = "/VO/Heracles_0311",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+					Text = "He understands perfection cannot be attained. The rest keep striving for it, demanding it from one another, claiming to have it themselves. All a farce." },
+
+				{ Cue = "/VO/MelinoeField_4956", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "You're one of the greatest warriors that ever lived. I don't believe you haven't pursued perfection. I've pursued it... I never feel good enough but that hasn't stopped me." },
+
+				{ Cue = "/VO/Heracles_0312",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+					Text = "I never said I've not pursued it. My claim is, the pursuit is meaningless... heading for a destination that can never be reached. All because others expect it of you." },
+
+				{ Cue = "/VO/MelinoeField_4957", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "You also don't seem the sort to be overly concerned with what others think of you. Except perhaps this mountain's Queen and King." },
+
+				{ Cue = "/VO/Heracles_0313",
+					Portrait = "Portrait_Heracles_Bath_01",
+					PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+					PostLineFunctionName = "BathHouseQuipPresentation",
+					PostLineThreadedFunctionName = "TimePassesPresentation",
+					PostLineThreadedFunctionArgs = { TimeTicks = 12, SkipTimePassageOccurred = true },
+
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					PostLineRemoveContextArt = true,
+					Text = "Why am I even speaking to you? Only Atlas himself knows what it's like... bearing the weight of the world." },
+
+				{ Cue = "/VO/MelinoeField_4958", UsePlayerSource = true,
+					PreLineFunctionName = "DionysusBathHouseEndPresentation",
+					PreLineWait = 0.2,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+
+					Emote = "PortraitEmoteSparkly",
+					Portrait = "Portrait_Mel_Proud_01",
+					Text = "Well this was pleasant for the most part. Take care, sir." },
+			},
+
+			HeraclesBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				SkipContextArt = true,
+				UseableOffSource = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "P_Story01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HeraclesBathHouse02" },
+					},
+				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/MelinoeField_4953",
+						PostLineRemoveContextArt = true,
+						UsePlayerSource = true,
+						ExitPortraitImmediately = true,
+						Text = "Seems like there's room enough..." },
+
+					{ Cue = "/VO/MelinoeField_4954",
+						PostLineRemoveContextArt = true,
+						UsePlayerSource = true,
+						ExitPortraitImmediately = true,
+						Text = "I'll just purify these waters first..." },
+
+					{ Cue = "/VO/MelinoeField_4945",
+						PostLineRemoveContextArt = true,
+						UsePlayerSource = true,
+						ExitPortraitImmediately = true,
+						Text = "Carry on, everyone, don't mind me..." },
+
+					{ Cue = "/VO/MelinoeField_4944",
+						PostLineRemoveContextArt = true,
+						UsePlayerSource = true,
+						ExitPortraitImmediately = true,
+						Text = "Just a brief soak..." },
+				},
+
+				-- Heracles in the bath
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Heracles_0315",
+						PreLineFunctionName = "DionysusBathHouseStartPresentation",
+						NarrativeContextArt = "DialogueBackground_Bathhouse",
+						Portrait = "Portrait_Heracles_Bath_01",
+						PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+						Text = "...What do you think you're looking at?" },
+
+					{ Cue = "/VO/Heracles_0316",
+						PreLineFunctionName = "DionysusBathHouseStartPresentation",
+						NarrativeContextArt = "DialogueBackground_Bathhouse",
+						Portrait = "Portrait_Heracles_Bath_01",
+						PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+						Text = "...I am attempting to recover here..." },
+
+					{ Cue = "/VO/Heracles_0317",
+						PreLineFunctionName = "DionysusBathHouseStartPresentation",
+						NarrativeContextArt = "DialogueBackground_Bathhouse",
+						Portrait = "Portrait_Heracles_Bath_01",
+						PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+						Text = "...Do I appear as though I'm in the mood for chat?" },
+
+					{ Cue = "/VO/Heracles_0318",
+						PreLineFunctionName = "DionysusBathHouseStartPresentation",
+						NarrativeContextArt = "DialogueBackground_Bathhouse",
+						Portrait = "Portrait_Heracles_Bath_01",
+						PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+						Text = "...These aches of mine are stubborn, but they'll burn off..." },
+
+					{ Cue = "/VO/Heracles_0319",
+						PreLineFunctionName = "DionysusBathHouseStartPresentation",
+						NarrativeContextArt = "DialogueBackground_Bathhouse",
+						Portrait = "Portrait_Heracles_Bath_01",
+						PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+						Text = "...Don't get any closer to me, witch." },
+
+					{ Cue = "/VO/Heracles_0320",
+						PreLineFunctionName = "DionysusBathHouseStartPresentation",
+						NarrativeContextArt = "DialogueBackground_Bathhouse",
+						Portrait = "Portrait_Heracles_Bath_01",
+						PortraitExitAnimation = "Portrait_Heracles_Bath_01_Exit",
+
+						Text = "...At least the blasted water's finally purified again." },
+				},
+
+				-- Mel in the bath
+				[3] = 
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/MelinoeField_5354",
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+								HasAny = { "/VO/Heracles_0315" },
+							},
+						},
+						UsePlayerSource = true,
+						PreLineWait = 0.5,
+						Portrait = "Portrait_Mel_Bath_01",
+						PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 6, SkipTimePassageOccurred = true },
+
+						PostLineRemoveContextArt = true,
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						Text = "...The waters, nothing more..." },
+
+					{ Cue = "/VO/MelinoeField_5355",
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+								HasAny = { "/VO/Heracles_0316" },
+							},
+						},
+						UsePlayerSource = true,
+						PreLineWait = 0.5,
+						Portrait = "Portrait_Mel_Bath_01",
+						PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 6, SkipTimePassageOccurred = true },
+						PostLineRemoveContextArt = true,
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						Text = "...Likewise. Still a bit of a climb left..." },
+
+					{ Cue = "/VO/MelinoeField_5356",
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+								HasAny = { "/VO/Heracles_0317" },
+							},
+						},
+						UsePlayerSource = true,
+						PreLineWait = 0.5,
+						Portrait = "Portrait_Mel_Bath_01",
+						PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 6, SkipTimePassageOccurred = true },
+						PostLineRemoveContextArt = true,
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						Text = "...Not in a talking mood either." },
+
+					{ Cue = "/VO/MelinoeField_5357",
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+								HasAny = { "/VO/Heracles_0318" },
+							},
+						},
+						UsePlayerSource = true,
+						PreLineWait = 0.5,
+						Portrait = "Portrait_Mel_Bath_01",
+						PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 6, SkipTimePassageOccurred = true },
+						PostLineRemoveContextArt = true,
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						Text = "...They always do." },
+
+					{ Cue = "/VO/MelinoeField_5358",
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+								HasAny = { "/VO/Heracles_0319" },
+							},
+						},
+						UsePlayerSource = true,
+						PreLineWait = 0.5,
+						Portrait = "Portrait_Mel_Bath_01",
+						PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 6, SkipTimePassageOccurred = true },
+						PostLineRemoveContextArt = true,
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						Text = "...Oh I'm staying right here." },
+
+					{ Cue = "/VO/MelinoeField_5359",
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+								HasAny = { "/VO/Heracles_0320" },
+							},
+						},
+						UsePlayerSource = true,
+						PreLineWait = 0.5,
+						Portrait = "Portrait_Mel_Bath_01",
+						PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 6, SkipTimePassageOccurred = true },
+						PostLineRemoveContextArt = true,
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						Text = "...These Salts work wonders." },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Heracles_0036",
+						PlayFirst = true,
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "DionysusBathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "You never saw me, I never saw you. Scoot." },
+
+					{ Cue = "/VO/Heracles_0035",
+						PlayFirst = true,
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "DionysusBathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "You think you know me, sister. But you don't." },
+
+					{ Cue = "/VO/Heracles_0038",
+						PlayFirst = true,
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "DionysusBathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Whatever you're about to say to me, don't." },
+
+					{ Cue = "/VO/Heracles_0133",
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "DionysusBathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "You never saw me." },
+
+					{ Cue = "/VO/Heracles_0579",
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "DionysusBathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Been a pleasure." },
+
+					{ Cue = "/VO/Heracles_0581",
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "DionysusBathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostDionysusBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Till next we meet." },
+				},
+			},
+
 		},
 
 		GiftGivenVoiceLines =
@@ -2433,6 +3197,24 @@ UnitSetData.NPC_Heracles =
 		{
 			{
 				RandomRemaining = true,
+				UsePlayerSource = true,
+				-- BreakIfPlayed = true,
+				PreLineWait = 0.75,
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunHeraclesFieldIntroVO",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				{ Cue = "/VO/MelinoeField_5660", Text = "Laboring even in my sleep...", PlayFirst = true },
+				{ Cue = "/VO/MelinoeField_5661", Text = "No rest for Heracles even in dream..." },
+			},
+			{
+				RandomRemaining = true,
 				BreakIfPlayed = true,
 				PreLineWait = 0.75,
 				SuccessiveChanceToPlayAll = 0.25,
@@ -2445,6 +3227,10 @@ UnitSetData.NPC_Heracles =
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesCombat01" },
+					},
+					{
+						Path = { "CurrentRun", "SpeechRecord" },
+						HasNone = { "/VO/MelinoeField_5660", "/VO/MelinoeField_5661" },
 					},
 				},
 
@@ -2647,7 +3433,7 @@ UnitSetData.NPC_Heracles =
 					GameStateRequirements =
 					{
 						{
-							PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift02" },
+							PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift06" },
 						},
 					},
 				},
@@ -2655,7 +3441,7 @@ UnitSetData.NPC_Heracles =
 					GameStateRequirements =
 					{
 						{
-							PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift02" },
+							PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift05" },
 						},
 					},
 				},
@@ -2812,148 +3598,7 @@ UnitSetData.NPC_Heracles =
 		},
 		LastStandReactionVoiceLines =
 		{
-			RandomRemaining = true,
-			BreakIfPlayed = true,
-			PreLineWait = 0.3,
-			SuccessiveChanceToPlay = 0.85,
-			Cooldowns =
-			{
-				{ Name = "HeraclesAnyQuipSpeech", Time = 6 },
-				{ Name = "HeraclesLastStandSpeech", Time = 40 },
-			},
-
-			{ Cue = "/VO/Heracles_0095", Text = "Still on your feet?" },
-			{ Cue = "/VO/Heracles_0096", Text = "Not finished yet?", PlayFirst = true },
-			{ Cue = "/VO/Heracles_0097", Text = "Not dead yet huh..." },
-			{ Cue = "/VO/Heracles_0516", Text = "Careless." },
-			{ Cue = "/VO/Heracles_0094", Text = "You still alive?",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0515", Text = "Be more careful.",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0517", Text = "Stand back...!",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0518", Text = "Blundering witch...",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0519", Text = "You'll die yet...!",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0520", Text = "Bleeding, witch?",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0521", Text = "Resisted that...",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0522", Text = "Go {#Emph}down{#Prev}, blast you...",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0523", Text = "Not finished...?",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-				},
-			},
-			{ Cue = "/VO/Heracles_0524", Text = "She's angry...",
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-					{
-						PathFalse = { "CurrentRun", "EnemyKills", "Prometheus" },
-					},
-				},
-			},
+			{ GlobalVoiceLines = "HeraclesLastStandReactionVoiceLines" },
 		},
 		
 		KillingEnemyVoiceLines =
@@ -3156,7 +3801,7 @@ UnitSetData.NPC_Heracles =
 						PathEmpty = { "RequiredKillEnemies" },
 					},
 					{
-						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "Completed" }
+						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "InProgress" }
 					},
 					{
 						PathFromArgs = true,
@@ -3321,6 +3966,202 @@ UnitSetData.NPC_Heracles =
 	},
 }
 
+VariantSetData.NPC_Heracles_01 =
+{
+	HeraclesShopping =
+	{
+		NarrativeDataName = "NPC_Heracles_01",
+		InteractTextLinePriorities = "ShoppingPriorities",
+		InteractTextLineSets =
+		{
+			-- Repeatable Shop
+			HeraclesMiscChat01 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01" }, },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
+				{ Cue = "/VO/Heracles_0033",
+					Text = "If you're starved for conversation, you'll have better fortune with the Boatman there." },
+			},
+			-- moved to BathHouseRepeatable
+			HeraclesMiscChat05 =
+			{
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01" }, },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
+				{ Cue = "/VO/Heracles_0037",
+					Text = "Save it for somebody who cares, sister." },
+			},
+			-- moved to BathHouseRepeatable
+			HeraclesMiscChat07 =
+			{
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01" }, },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
+				{ Cue = "/VO/Heracles_0039",
+					Text = "I look like I want to have ourselves a chat?" },
+			},
+			HeraclesMiscChat08 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01" }, },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
+				{ Cue = "/VO/Heracles_0358",
+					Text = "{#Emph}Urgh. {#Prev}You just made me lose count of all my blasted coin." },
+			},
+			HeraclesMiscChat09 =
+			{
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01" }, },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
+				{ Cue = "/VO/Heracles_0359",
+					Text = "The Boatman cannot be negotiated with at all, it seems." },
+			},
+			HeraclesMiscChat10 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift07" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01" }, },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Heracles",
+				{ Cue = "/VO/Heracles_0360",
+					Text = "Not even a hello for his returning customers from that one." },
+			},
+		},
+	},
+
+	HeraclesBathHouse =
+	{
+		NarrativeDataName = "NPC_Heracles_01",
+
+		RequiredRoomInteraction = false,
+		TurnInPlaceAnimation = "nil",
+
+		InteractTextLinePriorities = "BathHousePriorities",
+		InteractTextLineSets =
+		{
+			HeraclesHotSpringsChat01 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				SkipPreEventFunction = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HeraclesConsideringBathing,
+
+				{ Cue = "/VO/Heracles_0299",
+					Text = "Oh, it's you. Either get in or get out." },
+			},
+			HeraclesHotSpringsChat02 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				SkipPreEventFunction = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HeraclesConsideringBathing,
+
+				{ Cue = "/VO/Heracles_0300",
+					Text = "Fear not, sister. We are at rest here rather than at work." },
+			},
+			HeraclesHotSpringsChat03 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				SkipPreEventFunction = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HeraclesConsideringBathing,
+
+				{ Cue = "/VO/Heracles_0301",
+					Text = "No need for killing at the moment here, sister..." },
+			},
+			HeraclesHotSpringsChat04 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				SkipPreEventFunction = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HeraclesConsideringBathing,
+
+				{ Cue = "/VO/Heracles_0302",
+					Text = "How long since these waters were last purified...?" },
+			},
+			HeraclesHotSpringsChat05 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				SkipPreEventFunction = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HeraclesConsideringBathing,
+
+				{ Cue = "/VO/Heracles_0303",
+					Text = "Look wine-god, you've another guest..." },
+			},
+			HeraclesHotSpringsChat06 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				SkipPreEventFunction = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HeraclesConsideringBathing,
+
+				{ Cue = "/VO/Heracles_0304",
+					Text = "Touch me again, Satyr, and by the gods I'll... {#Emph}urgh..." },
+			},
+		},
+	},
+}
+
 -- Global Heracles Lines
 GlobalVoiceLines.HeraclesBoonReactionVoiceLines =
 {
@@ -3447,6 +4288,179 @@ GlobalVoiceLines.HeraclesExorcismReactionVoiceLines =
 	{ Cue = "/VO/Heracles_0616", Text = "Leave the dead to rot...", PlayFirst = true },
 }
 
+GlobalVoiceLines.HeraclesAttemptedExitVoiceLines =
+{
+	BreakIfPlayed = true,
+	RandomRemaining = true,
+	PlayOnceFromTableThisRun = true,
+	PreLineWait = 0.35,
+	ObjectTypes = { "NPC_Heracles_01", "Heracles" },
+	Cooldowns =
+	{
+		{ Name = "HeraclesAnyQuipSpeech", Time = 6 },
+	},
+
+	{ Cue = "/VO/Heracles_0417", Text = "Stand and fight!",
+		GameStateRequirements =
+		{
+			{
+				PathNotEmpty = { "RequiredKillEnemies" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0418", Text = "No retreating!",
+		GameStateRequirements =
+		{
+			{
+				PathNotEmpty = { "RequiredKillEnemies" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0419", Text = "We're on the job, sister!",
+		GameStateRequirements =
+		{
+			{
+				PathNotEmpty = { "RequiredKillEnemies" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0420", Text = "This isn't over!",
+		GameStateRequirements =
+		{
+			{
+				PathNotEmpty = { "RequiredKillEnemies" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0421", Text = "Here.",
+		GameStateRequirements =
+		{
+			{
+				PathEmpty = { "RequiredKillEnemies" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0422", Text = "Come.",
+		GameStateRequirements =
+		{
+			{
+				PathEmpty = { "RequiredKillEnemies" },
+			},
+		},
+	},
+}
+
+GlobalVoiceLines.HeraclesLastStandReactionVoiceLines =
+{
+	RandomRemaining = true,
+	BreakIfPlayed = true,
+	PreLineWait = 0.3,
+	SuccessiveChanceToPlay = 0.85,
+	Cooldowns =
+	{
+		{ Name = "HeraclesAnyQuipSpeech", Time = 6 },
+		{ Name = "HeraclesLastStandSpeech", Time = 40 },
+	},
+
+	{ Cue = "/VO/Heracles_0095", Text = "Still on your feet?" },
+	{ Cue = "/VO/Heracles_0096", Text = "Not finished yet?", PlayFirst = true },
+	{ Cue = "/VO/Heracles_0097", Text = "Not dead yet huh..." },
+	{ Cue = "/VO/Heracles_0516", Text = "Careless." },
+	{ Cue = "/VO/Heracles_0094", Text = "You still alive?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsNone = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0515", Text = "Be more careful.",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsNone = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0517", Text = "Stand back...!",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsNone = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0518", Text = "Blundering witch...",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0519", Text = "You'll die yet...!",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0520", Text = "Bleeding, witch?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0521", Text = "Resisted that...",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0522", Text = "Go {#Emph}down{#Prev}, blast you...",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0523", Text = "Not finished...?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+		},
+	},
+	{ Cue = "/VO/Heracles_0524", Text = "She's angry...",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "P_Boss01" },
+			},
+			{
+				PathFalse = { "CurrentRun", "EnemyKills", "Prometheus" },
+			},
+		},
+	},
+}
+
 GlobalVoiceLines.HeraclesTagInLines =
 {
 	PlayOnceFromTableThisRun = true,
@@ -3505,3 +4519,4 @@ GlobalVoiceLines.PrometheusKnockedOutLines =
 },
 
 OverwriteTableKeys( EnemyData, UnitSetData.NPC_Heracles )
+OverwriteTableKeys( NPCVariantData, VariantSetData.NPC_Heracles_01 )

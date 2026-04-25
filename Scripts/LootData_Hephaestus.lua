@@ -175,6 +175,26 @@ LootSetData.Hephaestus =
 					Source = "HeraUpgrade",
 					Text = "My son Hephaestus need only prove he can exude the {#Emph}confidence {#Prev}befitting a god, rather than whatever it is that he exudes instead. He's made himself useful at least, yes?" },
 			},
+			HephaestusWithHera02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredTraitNameInRoom",
+						FunctionArgs = { Name = "ManaShieldBoon" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0239",
+					Text = "Witchie, I am meeting right now with none other than the Queen herself! And she is saying she would like a word. And I am saying {#Emph}yes Mum, anything you say, go right ahead." },
+				{ Cue = "/VO/Hera_0286",
+					PortraitExitWait = 0.35,
+					PreLineFunctionName = "BoonInteractPresentation", PreLineWait = 0.5,
+					Source = "HeraUpgrade",
+					Emote = "PortraitEmoteCheerful",
+					Text = "You see, my dear? One of the wondrous things about having some children of your own is seeing how obsequious they can become! Go on, Hephaestus. Give her our best." },
+			},
 
 			HephaestusWithPoseidon01 =
 			{
@@ -260,6 +280,26 @@ LootSetData.Hephaestus =
 					Source = "AphroditeUpgrade",
 					Emote = "PortraitEmoteAffection",
 					Text = "Why, thank you, dear! We each have so much love to give. And the beauty of it is, the more we give, the more we {#Emph}have! {#Prev}To think that such a {#Emph}precious {#Prev}thing can have a limitless supply!" },
+			},
+			HephaestusWithAphrodite02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredTraitNameInRoom",
+						FunctionArgs = { Name = "SlamManaBurstBoon" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0131",
+					Text = "If I'm supposed to be so good with my hammer, then how come I've yet to make a suit of armor worthy of Aphrodite, eh? Least I got her to pick up a shield. Oi Aphy, you trying something on, or what?" },
+				{ Cue = "/VO/Aphrodite_0212",
+					PortraitExitWait = 0.35,
+					PreLineFunctionName = "BoonInteractPresentation", PreLineWait = 0.5,
+					Source = "AphroditeUpgrade",
+					Emote = "PortraitEmoteAffection",
+					Text = "Oh Hephaestus, how you worry about me! But I don't like to be weighed down, and would much rather keep my options open than commit to any of these lovely specimens. Why not try our Underworld companion on for size?" },
 			},
 
 			HephaestusWithHestia01 =
@@ -515,6 +555,31 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0154",
 					Text = "Where do you think you're off to, {#Emph}eh? {#Prev}Best not head out against {#Emph}impossible {#Prev}odds whilst unprepared, so here! Let's get you suited up right quick." },
 			},
+
+			HephaestusRunStartUnderworld01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+					{
+						PathTrue = { "PrevRun", "BiomesReached", "P" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0283",
+					Text = "Off to tell your mum and dad the latest after paying us a visit here? Well, may you clobber anybody in your warpath, witchie! 'Specially if it's some other bad Chronos or whatever it is you're doing down there now." },
+			},
 			HephaestusRunStartSurface01 =
 			{
 				PlayOnce = true,
@@ -529,6 +594,35 @@ LootSetData.Hephaestus =
 
 				{ Cue = "/VO/Hephaestus_0155",
 					Text = "Off to pay us all a visit then, or try? Reckon you're liable to get into a {#Emph}tussle {#Prev}or two on the way, but... I can offer a {#Emph}complete {#Prev}protection plan against that sort of thing!" },
+			},
+			HephaestusRunStartSurface02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 2,
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0284",
+					Text = "It's good to have you back up top, witchie, because things on the mountain are a little touchy still. Or are we keeping it that way on purpose? Either way, doesn't bother me." },
 			},
 
 			-- story events
@@ -560,7 +654,13 @@ LootSetData.Hephaestus =
 						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
 					},
 					{
-						PathTrue = { "PrevRun", "RoomsEntered", "Q_Story01" },
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "Q_Story01" },
+						Comparison = ">=",
+						Value = 1,
 					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
@@ -568,6 +668,35 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0257",
 					
 					Text = "Heard you talked to mum and dad, face to face! Not even {#Emph}I {#Prev}get to do that much. Must have been right nervous meeting 'em. Or mayhap not considering what you did to get there." },
+			},
+			HephaestusAboutPalace02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ZeusPalacePostTrueEnding01" }
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered" },
+						TableValuesToCount = { "Q_Boss01", "Q_Boss02" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0264",
+					
+					Text = "Not letting you back in the Palace, {#Emph}eh? {#Prev}Don't take it personal, it's just our bloody pride! Mum and dad aren't keen on taking guests till everything is {#Emph}perfect{#Prev}, but... it never really is." },
 			},
 
 			HephaestusAboutForge01 =
@@ -611,6 +740,82 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0254",
 					
 					Text = "For all the times you've been in the area, not seen my forge but once, have you, witchie? That's by design. It's like a bloody vault in here, too many valuables. Including me! Sorry I missed you, mind." },
+			},
+
+			HephaestusAboutLastResort01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						-- PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "ZeusPalaceMeeting04", "ZeusPalaceMeeting04_B" },
+					},
+					{
+						SumPrevRuns = 8,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "ZeusPalaceMeeting04", "ZeusPalaceMeeting04_B" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0269",
+					Portrait = "Portrait_Hephaestus_Displeased_01",
+					Text = "My mum or dad mentioned our last resort, did they? The way some of my Boons go {#Emph}clang{#Prev}, imagine that but bigger by, oh... let's just say {#Emph}a lot. {#Prev}Not keen to ever use it, mind, as then my forge would go {#Emph}kaboom!" },
+			},
+			HephaestusAboutLastResort02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "ZeusPalaceMeeting04", "ZeusPalaceMeeting04_B" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HephaestusGift05" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0270",
+					Text = "I like making armaments fit for killing mayhap one, two, let's say up to fifteen at a time? But more than that at once takes all the sport away! Mum and Dad don't get it, they just want to kill 'em all. Ares kind of gets it, though." },
+			},
+			HephaestusAboutLastResort03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "ZeusPalaceMeeting04", "ZeusPalaceMeeting04_B" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HephaestusGift07", "HephaestusAboutLastResort02" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0271",
+					Text = "Keep a secret, witchie? The last resort my mum and dad asked me to build would never work. Our king and queen commissioned it to feel like they had everything in hand. I gave 'em that feeling, but... that's all I'll give 'em." },
 			},
 
 			HephaestusAboutCreation01 =
@@ -727,7 +932,7 @@ LootSetData.Hephaestus =
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt" },
+						HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
@@ -941,6 +1146,45 @@ LootSetData.Hephaestus =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hephaestus_0140",
 					Text = "While back, made your mum and dad bit of a housewarming gift, guess you could say. Scale model of Dad's palace here, for you Underworld lot to remember us by! That Chronos better not have scrapped the thing..." },
+			},
+			HephaestusAboutHouse02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Intro" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0210",
+					Text = "The Titan really nestled up right in your mum and dad's House, ain't that right? Now that's properly offensive... somehow more than sending all his armies after us!" },
+			},
+
+			HephaestusAboutUnderworld01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "G" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0211",
+					Text = "Time for more spelunking, {#Emph}eh{#Prev}, witchie? Going damn near to the bottom of the bloody earth! Must be good rocks and metals and such there. Your dad got all the hidden gems!" },
 			},
 
 			HephaestusAboutThessaly01 =
@@ -1362,7 +1606,7 @@ LootSetData.Hephaestus =
 						PathTrue = { "GameState", "TextLinesRecord", "HephaestusAboutWeapons02" },
 					},
 					{
-						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						Path = { "GameState", "WeaponsUnlocked" },
 						HasAll = GameData.AllWeaponAspects,
 					},
 				},
@@ -1396,6 +1640,32 @@ LootSetData.Hephaestus =
 					
 					Emote = "PortraitEmoteSurprise",
 					Text = "Now what is {#Emph}that {#Prev}you've got in hand there, let me see! Mayhap another Aspect of some sort, 'cept... {#Emph}augh{#Prev}, not seen anything like that before. I'm proper jealous now!" },
+			},
+			HephaestusAboutHiddenAspects02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HephaestusAboutHiddenAspects01" },
+					},
+					{
+						PathFalse = { "PrevRun", "TextLinesRecord", "HephaestusAboutHiddenAspects01" }
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = GameData.AllHiddenAspects,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0292",
+					
+					Emote = "PortraitEmoteSurprise",
+					Text = "{#Emph}Ohh {#Prev}now what is that you've got, witchie? If I know anything of weaponcraft then that is {#Emph}definitely {#Prev}not from around here. Must still be one of those Nocturnal Arms of yours. Go on, give us a show!" },
 			},
 
 			-- legendary
@@ -1570,6 +1840,34 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0143",
 					Text = "No telling how many cousins I got, but you're another, {#Emph}eh? {#Prev}You're getting special treatment only 'cause my mum and dad, they asked me real nice. Don't mind the extra work!" },
 			},
+			HephaestusAboutHadesAndPersephone01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HephaestusGift04", "HadesWithPersephoneGift02" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "I_Story01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0276",
+					Text = "Your mum and dad are both all right, ain't they? This Chronos business must be pretty tough for them, if they're anything like mine. Although they don't seem anything like mine last time I checked." },
+			},
 
 			HephaestusAboutHades01 =
 			{
@@ -1635,9 +1933,8 @@ LootSetData.Hephaestus =
 					{
 						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
 					},
-					-- borderline
 					{
-						-- PathFalse = { "GameState", "ReachedTrueEnding" },
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 
@@ -1646,6 +1943,31 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0047",
 					
 					Text = "While back, your brother came to us for help, what's his name... {#Emph}Zagreus? {#Prev}I wasn't having it. This family's problems would disappear overnight if we could just stop getting in each other's business! Felt bad sitting it out, though..." },
+			},
+			HephaestusAboutZagreus02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "C_Boss01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0267",
+					
+					Text = "You and Zagreus been getting on? Known my brother all my life... must be something that you're only just getting to know him now! Try not to fight too much. {#Emph}Heh{#Prev}, but then again, that's what brothers are for!" },
 			},
 
 			HephaestusAboutPolyphemus01 =
@@ -1769,6 +2091,32 @@ LootSetData.Hephaestus =
 
 				{ Cue = "/VO/Hephaestus_0191",
 					Text = "Ran into mighty Talos, didn't you? Big man all made of bronze. Swore up and down he'd be my best invention yet, but... still got a few kinks need sorting out. Don't bother going easy on him, got to take him apart anyhow..." },
+			},
+			HephaestusAboutTalos02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HephaestusAboutTalos01" },
+					},
+					{
+						SumPrevRuns = 2,
+						Path = { "RoomsEntered", "P_MiniBoss01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0282",
+					Text = "I tried to make it so that Talos would begin to learn as he encountered different combat situations and the like, but... I ain't seen much evidence that's doing any good. He's not been too much of a pain has he?" },
 			},
 
 			HephaestusAboutPandora01 =
@@ -2102,6 +2450,23 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0194",
 					Text = "You've not seen Dionysus, right? Probably just getting sloshed somewhere is all. Don't like when everybody's fighting... can you blame him?" },
 			},
+			HephaestusAboutDionysus02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0280",
+					Text = "Oi, there's no sign of Dionysus still? Must have been quite the feast he had if he's still nursing it away! {#Emph}Eh{#Prev}, some like working and some don't. What can you do?" },
+			},
 
 			HephaestusAboutSelene01 =
 			{
@@ -2201,6 +2566,93 @@ LootSetData.Hephaestus =
 
 				{ Cue = "/VO/Hephaestus_0245",
 					Text = "I can appreciate an armament of damn near any shape or size, but... ones shaped like that Moonstone Axe you got might be my favorite were I forced to choose at weaponpoint. Let's see what you can do with it, witchie!" },
+			},
+			HephaestusAboutPackageBounty01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "ActiveBounty" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0243",
+					Text = "Got a funny feeling something different's going on, as if... {#Emph}eh{#Prev}, I don't even know! Strange forces are afoot, witchie. Right stranger than the forces gathered here!" },
+			},
+			HephaestusAboutPackageBountyLateStart01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "ActiveBounty" },
+						IsAny = GameData.LateStartPackagedBounties,
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0244",
+					Emote = "PortraitEmoteSurprise",
+					Text = "Oi how'd you get there so damn quick, witchie? Mayhap some of your witchie stuff, but I've got something more reliable here just in case." },
+			},
+
+			HephaestusAboutShrine01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 8,
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.AboutShrineEvents,
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0246",
+					Text = "Something's been going on out there, the others saying it's a proper nasty night! Makes no difference in my forge, but... sounds like you are really in for it, witchie." },
+			},
+			HephaestusAboutShrine02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 16,
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.AboutShrineEvents,
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0247",
+					Text = "Well everybody's all worked up tonight! I've no idea why. Mayhap some witchie stuff only you know about? 'Cause even my Automatons have been behaving bad... worse than usual I mean!" },
 			},
 
 			HephaestusAboutKeepsake01 =
@@ -2302,6 +2754,32 @@ LootSetData.Hephaestus =
 
 				{ Cue = "/VO/Hephaestus_0150",
 					Text = "Feel any tremors, they are probably Uncle Poseidon shaking up the place. Though there {#Emph}are {#Prev}times it's me! When Earth herself gets angry with the state of things, I give 'er a good outlet to let off a little steam." },
+			},
+			HephaestusAboutAdamant01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						Path = { "GameState", "Resources", "OrePAdamant" },
+						Comparison = ">=",
+						Value = 12,
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "ResourcesGained", "OrePAdamant" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0275",
+					Text = "Stockpiling some of our Adamant, {#Emph}eh{#Prev}, witchie? Thought I might ask you give it back, but we've enough for now. And I reckon you'll put it to proper use. Good stuff, ain't it?" },
 			},
 
 			HephaestusAboutPractice01 =
@@ -2561,6 +3039,28 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0262",
 					Text = "So Grandpa Chronos keeps on lending us a hand! To deal with what he did to us, but still! I reckoned he'd be back to his old self by now, but... mayhap you scrambled him enough that it'll stick. {#Emph}Heh... {#Prev}think you could do that to my mum?" },
 			},
+			HephaestusPostTrueEnding04 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ZeusPalacePostTrueEnding01", "HephaestusPostTrueEnding01", "HephaestusPostTrueEnding02", }
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0265",
+					Text = "Thought I was due to catch a break once all the fighting and whatnot had simmered down, but no! The fighting must go on, which come to think is no surprise, I mean, it's us! We find a way!" },
+			},
+
 			HephaestusAboutSurfaceFoes01 =
 			{
 				PlayOnce = true,
@@ -2614,6 +3114,26 @@ LootSetData.Hephaestus =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hephaestus_0274",
 					Text = "Don't know what's such a big a deal with the Three Fates going on about a distant time. You're telling me that in the span of, I don't know, twenty-something mortal generations, things might change? {#Emph}Ach {#Prev}you don't say!" },
+			},
+
+			HephaestusAboutTime01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0266",
+					
+					Text = "Know what I learned in all this, witchie? {#Emph}No time like the present. {#Prev}Whatever happened in the distant past ain't my fault! Might be my problem though! As for what happens in the future, {#Emph}ach{#Prev}, I'll handle it then. Well, back to work!" },
 			},
 
 			HephaestusAboutSayingLittle01 =
@@ -3241,7 +3761,7 @@ LootSetData.Hephaestus =
 						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
 					},
 					{
-						SumPrevRuns = 2,
+						SumPrevRuns = 3,
 						Path = { "Cleared" },
 						CountPathTrue = true,
 						Comparison = ">=",
@@ -3292,7 +3812,103 @@ LootSetData.Hephaestus =
 					Emote = "PortraitEmoteSparkly",
 					Text = "Oi {#Emph}there's {#Prev}my favorite Moonstone Axe! Go cleave something in two for me, witchie." },
 			},
+			HephaestusChat41 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponStaffSwing" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "StaffSelfHitAspect", "StaffRaiseDeadAspect" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
+				{ Cue = "/VO/Hephaestus_0286",
+					Text = "Using the classic staff tonight? The kind I make can't shoot, but... yours is giving me ideas." },
+			},
+			HephaestusChat42 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponDagger" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "DaggerTripleAspect" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0287",
+					Text = "Brought out those blades for yet another go! I really like the curvy one!" },
+			},
+			HephaestusChat43 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponTorch" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0288",
+					Text = "Never thought of using torches for a weapon, but you really make it work!" },
+			},
+			HephaestusChat44 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponLob" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "LobCloseAttackAspect" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0290",
+					Text = "That skull is not exactly in my area of weapons expertise, but I can tell it works!" },
+			},
+			HephaestusChat45 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HephaestusUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponSuit" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hephaestus_0291",
+					Text = "I always like it when you use Xinth the Black Coat. Makes everything go {#Emph}boom!" },
+			},
 		},
 
 		BoughtTextLines =
@@ -3338,6 +3954,27 @@ LootSetData.Hephaestus =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hephaestus_0200",
 					Text = "Mayhap expecting someone else? Or just as likely not expecting anybody in particular, 'cause a blessing is a blessing, ain't that right?" },
+			},
+			HephaestusBlindBox03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFromSource = true,
+						PathTrue = { "WasRandomLoot" },
+					},
+					{
+						SumPrevRooms = 6,
+						Path = { "UseRecord", "HephaestusUpgrade" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0281",
+					Text = "We used to get our Boons to you this way all secret-like, but now we're thinking mayhap there's just something to you getting a surprise! Who doesn't like those? Besides me." },
 			},
 
 			HephaestusLootBought01 =
@@ -3524,8 +4161,8 @@ LootSetData.Hephaestus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "AphroditeUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "AphroditeUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hephaestus_0103",
@@ -3560,8 +4197,8 @@ LootSetData.Hephaestus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "AresUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "AresUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hephaestus_0220",
@@ -3577,8 +4214,8 @@ LootSetData.Hephaestus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "AphroditeUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "AphroditeUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hephaestus_0222",
@@ -3594,8 +4231,8 @@ LootSetData.Hephaestus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "ZeusUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "ZeusUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hephaestus_0223",
@@ -3611,8 +4248,8 @@ LootSetData.Hephaestus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "HeraUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "HeraUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hephaestus_0224",
@@ -3622,7 +4259,23 @@ LootSetData.Hephaestus =
 					PreLineWait = 1.0,
 					Text = "Mayhap I'll make me mum real proud if I act spiteful without proper cause!" },
 			},
-
+			HephaestusRejection15 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "AresUpgrade" },
+					},
+				},
+				{ Cue = "/VO/Hephaestus_0221",
+					Portrait = "Portrait_Hephaestus_Displeased_01",
+					PreLineFunctionName = "BoonInteractPresentation",
+					PreLineFunctionArgs = PresetEventArgs.RejectionBoonInteract,
+					PreLineWait = 1.0,
+					Text = "Next time, make Ares mad not me. He's the one wants an excuse to fight!" },
+			},
 		},
 		
 		RejectionVoiceLines =
@@ -3692,7 +4345,30 @@ LootSetData.Hephaestus =
 				{ Cue = "/VO/Hephaestus_0118",
 					Text = "{#Emph}Hrm{#Prev}, that there was not the most productive thing I did all day, but {#Emph}eh... this {#Prev}ought to make up." },
 			},
-
+			HephaestusMakeUp11 =
+			{
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0225",
+					Text = "Congratulations, witchie, you survived. And here is what you won." },
+			},
+			HephaestusMakeUp12 =
+			{
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0226",
+					Text = "Don't take these fights too personal, it happens up here all the bloody time." },
+			},
+			HephaestusMakeUp13 =
+			{
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0227",
+					Text = "All right, I count you settled up after all that. Time to get back to work!" },
+			},
+			HephaestusMakeUp14 =
+			{
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hephaestus_0228",
+					Text = "Don't let anybody know, but... I held off back there. 'Cause I ain't really mad." },
+			},
 		},
 
 		GiftTextLineSets =
@@ -3920,22 +4596,6 @@ LootSetData.Hephaestus =
 			PlayFromTarget = true,
 
 			{ Cue = "/VO/MelinoeField_0645", Text = "I'm in your debt for this, Hephaestus sir." },
-		},
-
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
 		},
 
 		FullSuperActivatedVoiceLines =

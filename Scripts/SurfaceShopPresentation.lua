@@ -5,16 +5,20 @@ end
 function SurfaceShopItemSameRoomPresentation( targetId )
 	local newTargetId = SpawnObstacle({ Name = "InvisibleTarget", DestinationId = targetId })
 	CreateAnimation({ Name = "ThanatosTeleport", DestinationId = newTargetId, Scale = 0.5 })
-	thread( PlayVoiceLines, GlobalVoiceLines.SpecialDeliveryVoiceLines, true )
-	HermesWipePresentation()
+	if not CurrentRun.IsDreamRun then
+		thread( PlayVoiceLines, GlobalVoiceLines.SpecialDeliveryVoiceLines, true )
+		HermesWipePresentation()
+	end
 	CreateAnimation({ Name = "HermesWings", DestinationId = CurrentRun.Hero.ObjectId })
 end
 
 function SurfaceShopItemPresentation( targetId )
 	local newTargetId = SpawnObstacle({ Name = "InvisibleTarget", DestinationId = targetId })
 	CreateAnimation({ Name = "ThanatosTeleport", DestinationId = newTargetId, Scale = 0.5 })
-	thread( PlayVoiceLines, GlobalVoiceLines.SpecialDeliveryVoiceLines, true )
-	HermesWipePresentation()
+	if not CurrentRun.IsDreamRun then
+		thread( PlayVoiceLines, GlobalVoiceLines.SpecialDeliveryVoiceLines, true )
+		HermesWipePresentation()
+	end
 	CreateAnimation({ Name = "HermesWings", DestinationId = CurrentRun.Hero.ObjectId })
 end
 

@@ -257,9 +257,15 @@ StoreData =
 					{ Name = "ArmorBoost", Weight = 1.0 },
 
 					-- Metas 4:2:1
-					{ Name = "MetaCardPointsCommonDrop", Weight = 1.44 },
-					{ Name = "MetaCurrencyDrop", Weight = 0.72 },
-					{ Name = "GiftDrop", Weight = 0.36, ReplaceRequirements = { NamedRequirements = { "GiftDropLootRequirements" }, } },
+					{ Name = "MetaCardPointsCommonDrop", Weight = 1.44, AdditionalRequirements = { { PathFalse = { "CurrentRun", "IsDreamRun" } } } },
+					{ Name = "MetaCurrencyDrop", Weight = 0.72, AdditionalRequirements = { { PathFalse = { "CurrentRun", "IsDreamRun" } } } },
+					{ Name = "GiftDrop", Weight = 0.36, ReplaceRequirements = { NamedRequirements = { "GiftDropLootRequirements" }, { PathFalse = { "CurrentRun", "IsDreamRun" } } } },
+
+					-- Elements
+					{ Name = "FireBoost", Weight = 1.0, AdditionalRequirements = { { PathTrue = { "CurrentRun", "IsDreamRun" } } } },
+					{ Name = "AirBoost", Weight = 1.0, AdditionalRequirements = { { PathTrue = { "CurrentRun", "IsDreamRun" } } } },
+					{ Name = "EarthBoost", Weight = 1.0, AdditionalRequirements = { { PathTrue = { "CurrentRun", "IsDreamRun" } } } },
+					{ Name = "WaterBoost", Weight = 1.0, AdditionalRequirements = { { PathTrue = { "CurrentRun", "IsDreamRun" } } } },
 				},
 			},
 			{
@@ -299,7 +305,7 @@ StoreData =
 						{
 							NamedRequirements = { "TalentLegal", },
 							{
-								Path = { "CurrentRun", "ClearedBiomes" },
+								Path = { "CurrentRun", "EnteredBiomes" },
 								Comparison = ">",
 								Value = 1,
 							},
@@ -319,11 +325,14 @@ StoreData =
 		{
 
 			{
+				WeightedList = true,
 				Offers = 1,
 				OptionsData =
 				{
-					{ Name = "BoostedRandomLoot", },
-					{ Name = "StackUpgradeBig", Cost = 300, },
+					{ Name = "RandomLoot", Weight = 2.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+
+					{ Name = "BoostedRandomLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "StackUpgradeBig", Weight = 1.0, Cost = 300, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
 				},
 			},
 			{
@@ -345,29 +354,51 @@ StoreData =
 				Offers = 1,
 				OptionsData =
 				{
-					{ Name = "HealBigDrop", Weight = 1.0 },
-					{ Name = "ArmorBigBoost", Weight = 0.75 },
-					--{ Name = "HitShieldBigDrop", Weight = 0.50 },
+					{ Name = "RoomRewardHealDrop", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+					{ Name = "ArmorBoost", Weight = 0.75, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+
+					{ Name = "HealBigDrop", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "ArmorBigBoost", Weight = 0.75, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+
 					{ Name = "LastStandDrop", Weight = 0.50, Cost = 200 },
 				},
 			},
 			{
+				WeightedList = true,
 				Offers = 1,
 				OptionsData =
 				{
+					{ 
+						Name = "WeaponUpgradeDrop", Weight = 2.5,
+						ReplaceRequirements = 
+						{ 
+							{
+								PathFalse = { "CurrentRun", "HubRewardLookup", "WeaponUpgrade" },
+							},
+							{
+								PathTrue = { "GameState", "UseRecord", "WeaponUpgrade" },
+							},
+							NamedRequirements = { "HammerLootRequirements", "InRunFirstHalf" },
+						},
+					},
+					{ Name = "RandomLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+					{ Name = "BlindBoxLoot", Weight = 0.5, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+
+
 					{
-						Name = "ShopHermesUpgrade", Cost = 500, UpgradeChance = 1.0, UpgradedCost = 500,
+						Name = "ShopHermesUpgrade", Weight = 1.0, Cost = 500, UpgradeChance = 1.0, UpgradedCost = 500,
 						ReplaceRequirements =
 						{
+							NamedRequirements = { "InRunSecondHalf" },
 							{
 								PathTrue = { "GameState", "TextLinesRecord", "HermesFirstPickUp" },
 							},
 						},
 					},
-					{ Name = "ChaosWeaponUpgrade", Cost = 650 },
-					{ Name = "BoostedRandomLoot", },
-					{ Name = "MaxHealthDropBig" },
-					{ Name = "MaxManaDropBig" },
+					{ Name = "ChaosWeaponUpgrade", Weight = 1.0, Cost = 650, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
+					{ Name = "BoostedRandomLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
+					{ Name = "MaxHealthDropBig", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
+					{ Name = "MaxManaDropBig", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
 				},
 			},
 			{
@@ -381,6 +412,9 @@ StoreData =
 						{
 							{
 								PathTrue = { "GameState", "LifetimeResourcesGained", "WeaponPointsRare" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun" },
 							}
 						},
 					},
@@ -391,18 +425,25 @@ StoreData =
 						{
 							{
 								PathTrue = { "GameState", "LifetimeResourcesGained", "CardUpgradePoints" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun" },
 							}
 						},
 					},
-					{ Name = "CharonPointsDrop",
+					{
+						Name = "CharonPointsDrop",
 						ReplaceRequirements =
 						{
 							{
 								PathTrue = { "GameState", "LifetimeResourcesGained", "CharonPoints" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun" },
 							}
 						},
 					},
-
+					{ Name = "ElementalBoost", ReplaceRequirements = { { PathTrue = { "CurrentRun", "IsDreamRun" }, } }, },
 				},
 			},
 		}
@@ -417,47 +458,82 @@ StoreData =
 				Offers = 2,
 				OptionsData =
 				{
-					{ Name = "RandomLoot", Weight = 3.0 },
-					{ Name = "BlindBoxLoot", Weight = 1.0 },
+					{ Name = "RandomLoot", Weight = 2.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+					{ Name = "BlindBoxLoot", Weight = 2.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+					{ Name = "StackUpgrade", Weight = 0.6, Cost = 100, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
 
-					{ Name = "BoostedRandomLoot",Weight = 1.0, },
-					{ Name = "StackUpgradeBig", Weight = 1.0, Cost = 300 },
+					{ Name = "BoostedRandomLoot",Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "StackUpgradeBig", Weight = 1.0, Cost = 300, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "RandomLoot", Weight = 3.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "BlindBoxLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
 
 					{ Name = "MaxHealthDrop", Weight = 0.3 },
 					{ Name = "MaxManaDrop", Weight = 0.3 },
-					-- { Name = "StackUpgrade", Weight = 0.3, Cost = 100, },
 					{ Name = "TalentDrop", Weight = 0.3 },
 					{ Name = "SpellDrop", ReplaceRequirements = { NamedRequirements = { "SpellDropRequirements" } }, Weight = 0.3 },
 				},
 			},
 			{
 				WeightedList = true,
-				Offers = 2,
+				Offers = 1,
 				OptionsData =
 				{
-					{ Name = "HealBigDrop", Weight = 1.0 },
-					{ Name = "ArmorBigBoost", Weight = 0.75 },
-					--{ Name = "HitShieldBigDrop", Weight = 0.50 },
+					{ Name = "RandomLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+
+					{ Name = "HealBigDrop", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "ArmorBigBoost", Weight = 0.75, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+
+					{ Name = "LastStandDrop", Weight = 0.50, Cost = 200, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+				},
+			},
+			{
+				WeightedList = true,
+				Offers = 1,
+				OptionsData =
+				{
+					{ Name = "RoomRewardHealDrop", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+					{ Name = "ArmorBoost", Weight = 0.75, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+
+					{ Name = "HealBigDrop", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+					{ Name = "ArmorBigBoost", Weight = 0.75, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } } },
+
 					{ Name = "LastStandDrop", Weight = 0.50, Cost = 200 },
 				},
 			},
 			{
+				WeightedList = true,
 				Offers = 1,
 				OptionsData =
 				{
+					{ 
+						Name = "WeaponUpgradeDrop", Weight = 2.5,
+						ReplaceRequirements = 
+						{ 
+							{
+								PathFalse = { "CurrentRun", "HubRewardLookup", "WeaponUpgrade" },
+							},
+							{
+								PathTrue = { "GameState", "UseRecord", "WeaponUpgrade" },
+							},
+							NamedRequirements = { "HammerLootRequirements", "InRunFirstHalf" },
+						},
+					},
+					{ Name = "RandomLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunFirstHalf" } } },
+
 					{
-						Name = "ShopHermesUpgrade", Cost = 500, UpgradeChance = 1.0, UpgradedCost = 500,
+						Name = "ShopHermesUpgrade", Weight = 1.0, Cost = 500, UpgradeChance = 1.0, UpgradedCost = 500,
 						ReplaceRequirements =
 						{
+							NamedRequirements = { "InRunSecondHalf" },
 							{
 								PathTrue = { "GameState", "TextLinesRecord", "HermesFirstPickUp" },
 							},
 						},
 					},
-					{ Name = "ChaosWeaponUpgrade", Cost = 650 },
-					{ Name = "BoostedRandomLoot", },
-					{ Name = "MaxHealthDropBig" },
-					{ Name = "MaxManaDropBig" },
+					{ Name = "ChaosWeaponUpgrade", Weight = 1.0, Cost = 650, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
+					{ Name = "BoostedRandomLoot", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
+					{ Name = "MaxHealthDropBig", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
+					{ Name = "MaxManaDropBig", Weight = 1.0, AdditionalRequirements = { NamedRequirements = { "InRunSecondHalf" } }, },
 				},
 			},
 			{
@@ -471,6 +547,9 @@ StoreData =
 						{
 							{
 								PathTrue = { "GameState", "LifetimeResourcesGained", "WeaponPointsRare" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun" },
 							}
 						},
 					},
@@ -481,6 +560,9 @@ StoreData =
 						{
 							{
 								PathTrue = { "GameState", "LifetimeResourcesGained", "CardUpgradePoints" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun" },
 							}
 						},
 					},
@@ -490,10 +572,13 @@ StoreData =
 						{
 							{
 								PathTrue = { "GameState", "LifetimeResourcesGained", "CharonPoints" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun" },
 							}
 						},
 					},
-
+					{ Name = "ElementalBoost", ReplaceRequirements = { { PathTrue = { "CurrentRun", "IsDreamRun" }, } }, },
 				},
 			},
 		}

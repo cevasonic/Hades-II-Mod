@@ -2,7 +2,7 @@ UnitSetData.Wringer =
 {
 	Wringer =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy" },
 		MaxHealth = 1000,
 
 		PreferredSpawnPoint = "EnemyPointMelee",

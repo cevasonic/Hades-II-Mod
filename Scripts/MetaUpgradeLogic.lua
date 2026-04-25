@@ -18,6 +18,11 @@ function InitializeMetaUpgradeState()
 			end
 		end
 		GameState.MetaUpgradeState[metaUpgradeName].Level = GameState.MetaUpgradeState[metaUpgradeName].Level or 1
+		local maxLevel = #initialData.UpgradeResourceCost + 1
+		if GameState.MetaUpgradeState[metaUpgradeName].Level > maxLevel then
+			-- Undo bad mod
+			GameState.MetaUpgradeState[metaUpgradeName].Level = maxLevel
+		end
 	end
 end
 
@@ -292,6 +297,7 @@ function WeaponCastFired( owner, weaponData, args, triggerArgs)
 	local projectileIds = { triggerArgs.ProjectileId }
 	local attachedProjectileIds = {}
 	local baseDuration = GetBaseDataValue({ Type = "Projectile", Name = "ProjectileCast", Property = "FuseStart" })
+	baseDuration = baseDuration * GetTotalHeroTraitValue("CastDurationMultiplier", {IsMultiplier = true })
 	-- TODO: Extracting this data from property changes and/or fired function args are foiled by the way that various boons change every variable separately
 	for i, traitArgs in pairs(GetHeroTraitValues("CastProjectileModifiers")) do
 		for _, projectileId in pairs( projectileIds ) do
@@ -302,6 +308,8 @@ function WeaponCastFired( owner, weaponData, args, triggerArgs)
 	SessionMapState.CastAttachedProjectiles[triggerArgs.ProjectileId] = attachedProjectileIds
 	SessionMapState.LastCastProjectileId = triggerArgs.ProjectileId
 	SessionMapState.LastCastProjectileVolley = triggerArgs.ProjectileVolley
+	SessionMapState.CastAttachTriggered = nil
+
 	if weaponData.Name == "WeaponCast" and weaponData.UnarmedCastCompleteGraphic then
 		thread(CheckCastCompleteGraphic, weaponData)
 	end
@@ -383,7 +391,7 @@ function StartCastSlow( projectileId, duration )
 		local ids = GetClosestIds({ ProjectileId = projectileId, Distance = radius, DestinationName = "EnemyTeam", IgnorePermanentlyInvulnerable = true, ScaleX = scaleX, ScaleY = scaleY, PreciseCollision = true })
 		for _, id in pairs( ids ) do
 			local victim = ActiveEnemies[id]
-			if victim ~= nil then
+			if victim ~= nil  and victim.ActivationFinished then
 				if victim.IgnoreCastSlow then
 					impactSlowDataProperties.Type = "TAG"
 					impactSlowDataProperties.HaltOnStart = false
@@ -401,6 +409,17 @@ function StartCastSlow( projectileId, duration )
 				ApplyEffect( impactGripEffect )
 				for i, data in ipairs( CurrentRun.Hero.HeroTraitValuesCache.OnCastEffectApplyFunction ) do
 					CallFunctionName( data.FunctionName, victim, data.FunctionArgs, projectileId )
+				end
+			end
+		end
+		if HeroHasTrait("HestiaCastBoon") then
+			if not IsEmpty( MapState.OilPuddleIds ) then
+				local validOilPuddleIds = GetClosestIds({ ProjectileId = projectileId, PreciseCollision = true, DestinationIds = MapState.OilPuddleIds, ScaleX = 1, ScaleY = 0.5, Distance = radius })
+				for _, ids in pairs(validOilPuddleIds) do
+					local puddle = ActiveEnemies[ids]
+					if puddle ~= nil then
+						thread( OilPuddleOnHit, puddle, { AttackerTable = CurrentRun.Hero, SourceWeapon = "WeaponCast", SourceProjectile = "ProjectileCast" })
+					end
 				end
 			end
 		end
@@ -562,6 +581,13 @@ end
 function UpgradeMetaUpgradeRerolls( oldTrait, newTrait )
 	local difference = newTrait.RerollCount - oldTrait.RerollCount
 	AddRerolls( newTrait.Name, { Amount = difference } )
+end
+
+function UpgradeMetaToRunUses( oldTrait, newTrait )
+	if CurrentRun.MetaConversionUses then
+		local trait = GetHeroTrait("MetaToRunMetaUpgrade")
+		trait.MetaConversionUses = newTrait.MetaConversionUses - CurrentRun.MetaConversionUses
+	end
 end
 
 function GrantMetaUpgradeCurrency( traitName, args )

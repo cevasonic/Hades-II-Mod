@@ -2,7 +2,7 @@ UnitSetData.BloodlessGrenadier =
 {
 	BloodlessGrenadier =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseGEnemy", "BaseVulnerableEnemy" },
 		Material = "Bone",
 
 		PreferredSpawnPoint = "EnemyPointRanged",

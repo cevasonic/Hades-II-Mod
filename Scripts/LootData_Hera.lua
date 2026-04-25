@@ -8,7 +8,7 @@ LootSetData.Hera =
 		{
 			{
 				Path = { "GameState", "TextLinesRecord" },
-				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt" },
+				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 			},
 			-- first appears in Opening rooms; additional requirements in RoomDataF/N ForcedRewards table
 		},
@@ -177,6 +177,9 @@ LootSetData.Hera =
 						FunctionName = "RequiredTraitNameInRoom",
 						FunctionArgs = { Name = "MoneyDamageBoon" },
 					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hera_0101",
@@ -268,6 +271,25 @@ LootSetData.Hera =
 					Source = "HephaestusUpgrade",
 					Text = "Not like you ever taught me proper manners, Mum. Fortunately, I did learn a couple things even without having a role model like you or Dad around to set me straight! Just {#Emph}watch{#Prev}. And witchie, too!" },
 			},
+			HeraWithHephaestus02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredTraitNameInRoom",
+						FunctionArgs = { Name = "ManaShieldBoon" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0285",
+					Text = "Why, {#Emph}this {#Prev}is a remarkable development, my dear! Hephaestus has emerged, however briefly from his forge. I asked my son to greet his cousin properly, but didn't think he would." },
+				{ Cue = "/VO/Hephaestus_0240",
+					PortraitExitWait = 0.35,
+					PreLineFunctionName = "BoonInteractPresentation", PreLineWait = 0.5,
+					Source = "HephaestusUpgrade",
+					Text = "{#Emph}Oh {#Prev}come on, Mum, you didn't think I'd end up doing much of anything. I know my best ain't always good enough, but then again, whose is? Now, can I get back to my work?" },
+			},
 
 			HeraWithHestia01 =
 			{
@@ -323,7 +345,16 @@ LootSetData.Hera =
 						IsNone = { "TestAllThings" },
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "HeraFirstPickUpAlt" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = {
+							-- "HeraFirstPickUp",
+							"HeraFirstPickUpAlt",
+							"HeraFirstPickUpPostPalace",
+							"HeraFirstPickUpPostPalaceAlt"
+						},
+					},
+					{
+						PathFalse = { "GameState", "RoomsEntered", "Q_Story01" },
 					},
 					{
 						PathTrue = { "CurrentRun", "BiomesReached", "F" },
@@ -355,7 +386,16 @@ LootSetData.Hera =
 						IsNone = { "TestAllThings" },
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "HeraFirstPickUp" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = {
+							"HeraFirstPickUp",
+							-- "HeraFirstPickUpAlt",
+							"HeraFirstPickUpPostPalace",
+							"HeraFirstPickUpPostPalaceAlt"
+						},
+					},
+					{
+						PathFalse = { "GameState", "RoomsEntered", "Q_Story01" },
 					},
 					{
 						PathTrue = { "CurrentRun", "BiomesReached", "N" },
@@ -375,6 +415,88 @@ LootSetData.Hera =
 					PortraitExitWait = 1.25,
 					PreContentSound = "/Leftovers/Menu Sounds/TextReveal2",
 					Text = "Pleased to make your acquaintance finally, my dear! Welcome to our world's surface, such as it is. I promised the family that once you demonstrated your resolve to us, then I'd take you under my wing... and, I {#Emph}always {#Prev}keep my vows." },
+			},
+
+			HeraFirstPickUpPostPalace =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name", },
+						IsNone = { "TestAllThings" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = {
+							"HeraFirstPickUp",
+							"HeraFirstPickUpAlt",
+							-- "HeraFirstPickUpPostPalace",
+							"HeraFirstPickUpPostPalaceAlt"
+						},
+					},
+					{
+						PathTrue = { "GameState", "RoomsEntered", "Q_Story01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_0170", UsePlayerSource = true,
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Mel_Intense_01", WaitTime = 2.2, PowerWordPresentation = true, PowerWordWaitTime = 3.7 },
+					-- PostLineAnim = "MelinoeInteractEquip", PostLineAnimTarget = "Hero",
+					PostLineFunctionName = "BoonInteractPresentation",
+					BoxAnimation = "DialogueSpeechBubble",
+					BoxExitAnimation = "DialogueSpeechBubbleOut",
+					UseRoomContextArt = true,
+					PostLineRemoveContextArt = true,
+					TextColor = Color.DialogueText,
+					Text = "The family stands united in our cause... {#Emph}In the name of Hades! Olympus, I accept this message!{#Prev}" },
+				{ Cue = "/VO/Hera_0295",
+					PortraitExitWait = 1.25,
+					NarrativeContextArt = "DialogueBackground_Olympus",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal2",
+					Text = "{#Emph}Ah{#Prev}, there she is! Already had enough of the surface, yes? {#Emph}Heh{#Prev}, well I promised the family that once you demonstrated your resolve to us, I'd take you under my wing. And I {#Emph}always {#Prev}keep my vows." },
+			},
+			HeraFirstPickUpPostPalaceAlt =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name", },
+						IsNone = { "TestAllThings" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = {
+							"HeraFirstPickUp",
+							"HeraFirstPickUpAlt",
+							"HeraFirstPickUpPostPalace",
+							-- "HeraFirstPickUpPostPalaceAlt"
+						},
+					},
+					{
+						PathTrue = { "GameState", "RoomsEntered", "Q_Story01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_0170", UsePlayerSource = true,
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 3.7 },
+					-- PostLineAnim = "MelinoeInteractEquip", PostLineAnimTarget = "Hero",
+					PostLineFunctionName = "BoonInteractPresentation",
+					BoxAnimation = "DialogueSpeechBubble",
+					BoxExitAnimation = "DialogueSpeechBubbleOut",
+					UseRoomContextArt = true,
+					PostLineRemoveContextArt = true,
+					TextColor = Color.DialogueText,
+					Text = "The family stands united in our cause... {#Emph}In the name of Hades! Olympus, I accept this message!" },
+				{ Cue = "/VO/Hera_0294",
+					PortraitExitWait = 1.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal2",
+					Text = "{#Emph}Ah{#Prev}, there you are, my dear! Welcome to our world's surface, such as it is. I promised the family that once you demonstrated your resolve to us, then I'd take you under my wing... and, I {#Emph}always {#Prev}keep my vows." },
 			},
 
 			-- low health
@@ -808,6 +930,24 @@ LootSetData.Hera =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hera_0275",
 					Text = "Do find a mate who pays you proper compliments, girl! My Lord Husband, why, he calls me {#Emph}ox-eyed Lady Hera {#Prev}now and then! Says I've the big, beautiful eyes of a large {#Emph}bovine{#Prev}, ever the romantic that he is!" },
+			},
+			HeraAboutCompliments02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HeraGift07" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0276",
+					Text = "I never used to wear the same gown for two successive nights, let alone this long. But now we've no such time for pageantry. I miss those outfits, shimmering like stars! {#Emph}White-armed Hera {#Prev}I was, ever since my wedding day... " },
 			},
 
 			HeraAboutEternity01 =
@@ -1441,6 +1581,12 @@ LootSetData.Hera =
 						},
 						{
 							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
 								Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01" },
 								IsAny = { "Choice_NemesisAccept" },
 							},
@@ -1463,6 +1609,7 @@ LootSetData.Hera =
 						CountOf =
 						{
 							"MorosBecomingCloser01",
+							"MorosBecomingCloser01_B",
 							"NemesisPostCombatBecomingCloser01",
 							"ErisBecomingCloser01",
 							"IcarusBecomingCloser01",
@@ -1608,7 +1755,6 @@ LootSetData.Hera =
 						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
 					},
 					{
-						-- borderline...
 						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 					{
@@ -1624,6 +1770,58 @@ LootSetData.Hera =
 					
 					Text = "We saw reports suggesting that you made it to the lowest depths! I thought perhaps you had prevailed... though, not yet, it seems. A sign of progress, nonetheless! Press on." },
 			},
+			HeraUnderworldRunCleared02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0194",
+					
+					Text = "Word here is you somehow got the old wretch last night! Splendid if so. You'd think {#Emph}Time itself {#Prev}would know when to get out of the younger generation's way. But if Chronos requires more convincing, so be it." },
+			},
+			HeraUnderworldRunCleared03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ZeusPalaceAboutTyphonDeath01" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0195",
+					
+					Text = "However satisfying it must be to cut Chronos down to size, it's not reason enough. No, you and that Witch of the Crossroads must be brewing up some greater plan..." },
+			},
+
 			-- misnomer, no longer about clears
 			HeraSurfaceRunCleared01 =
 			{
@@ -1670,6 +1868,25 @@ LootSetData.Hera =
 					
 					Text = "Something about this night feels very odd; and in my experience, such premonitions are {#Emph}never {#Prev}to be ignored. Perhaps the strange forces at work are merely due to your invocations! Just... do be careful, girl." },
 			},
+			HeraAboutPackageBounty02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "ActiveBounty" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0277",
+					Portrait = "Portrait_Hera_Displeased_01",
+					
+					Text = "I know something is going on tonight, but cannot say exactly what. Perhaps it's that Witch of the Crossroads, conjuring to our collective benefit. Or your own handiwork?" },
+			},
+
 			HeraAboutShrine01 =
 			{
 				PlayOnce = true,
@@ -2307,6 +2524,34 @@ LootSetData.Hera =
 					
 					Text = "We've wise Athena holding back the front but probably could use a score of others {#Emph}equally {#Prev}as capable. She has the Titan's raiders running scared, but... even she can't always stop them all." },
 			},
+			HeraAboutDionysus01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						SumPrevRuns = 2,
+						Path = { "UseRecord", "NPC_Dionysus_01" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0272",
+					
+					Text = "Expect no aid from Dionysus, who must be in a stupor somewhere, unless your idea of aid lies at the bottom of a drinking-cup. Though, come to think, that may not be the worst idea of late..." },
+			},
 
 			HeraAboutPolymorph01 =
 			{
@@ -2327,6 +2572,46 @@ LootSetData.Hera =
 				{ Cue = "/VO/Hera_0184",
 					
 					Text = "You know the Twilight Curse, oh I can tell. The power to change a form into another! A favorite of mine, and one small step removed from shapeshifting oneself. The possibilities are limitless, really." },
+			},
+			HeraAboutSummoning01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", },
+						HasAny = { "SpellSummonTrait" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0288",
+					
+					Text = "{#Emph}Ah{#Prev}, you know Night Bloom, of course. A means to raise the dead for a little while. Easier than raising live children, honestly... and significantly quicker, too." },
+			},
+			HeraAboutCurses01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HeraGift07", "EchoGift08" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0280",
+					
+					Text = "You're a witch. You must dabble in curses, yes? I've done a few of my own... one for this Nymph who talked too much, others for more-unspeakable acts. We must assert ourselves." },
 			},
 
 			HeraAboutBows01 =
@@ -2362,6 +2647,26 @@ LootSetData.Hera =
 				{ Cue = "/VO/Hera_0247",
 					Emote = "PortraitEmoteSurprise",
 					Text = "Why, if it isn't my Iridescent Fan, illuminated even in the night! The easier with which to spot you wheresoever you may be. Should you require my immediate assistance, merely wave it about a bit." },
+			},
+			HeraAboutKeepsake02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "ForceHeraBoonKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "ForceHeraBoonKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0248",
+					Text = "That Iridescent Fan I offered you has clearly been of more than decorative use! I had a feeling that you'd take to it, my dear. Never hesitate to give it a shake if you need me." },
 			},
 
 			HeraAboutHope01 =
@@ -2403,6 +2708,10 @@ LootSetData.Hera =
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalaceFirstMeeting" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" }
 					},
 				},
 
@@ -3064,6 +3373,170 @@ LootSetData.Hera =
 					
 					Text = "You have more royal bearing than I would have thought..." },
 			},
+			HeraChat32 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0185",
+					
+					Text = "Soon this whole matter shall be put to bed, but till then, we persevere." },
+			},
+			HeraChat33 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0186",
+					
+					Text = "For all your patience and commitment, I'd say you're ready to be wed!" },
+			},
+			HeraChat34 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0187",
+					
+					Text = "Our mountain's still an utter mess, if you don't mind having to clean up a bit." },
+			},
+			HeraChat35 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "ZeusPalacePostTrueEnding01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0188",
+					
+					Text = "The Palace necessarily remains off limits, though you're free to make the trip." },
+			},
+			HeraChat36 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0189",
+					
+					Text = "We still cannot get to your Underworld's depths, if you could keep an eye on things?" },
+			},
+			HeraChat37 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0190",
+					
+					Text = "Do go make certain your lord father and dear mother still are carrying on well." },
+			},
+			HeraChat38 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0191",
+					
+					Text = "Let us stay vigilant as we rebuild, lest we make the same missteps." },
+			},
+			HeraChat39 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0192",
+					
+					Text = "For all the family squabbles that we have, we mustn't let them get like this again." },
+			},
+			HeraChat40 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HeraUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hera_0193",
+					
+					Text = "Go on then, girl, and make all our enemies rue the day they were born." },
+			},
 
 		},
 
@@ -3111,6 +3584,29 @@ LootSetData.Hera =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hera_0253",
 					Text = "Admit it, girl! You would have taken any sort of blessing here and now, whether from {#Emph}me {#Prev}or any of my kin. Well as the Fates would have it, you're getting the very best." },
+			},
+			HeraBlindBox03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFromSource = true,
+						PathTrue = { "WasRandomLoot" },
+					},
+					{
+						SumPrevRooms = 6,
+						Path = { "UseRecord", "HeraUpgrade" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hera_0252",
+					Portrait = "Portrait_Hera_Displeased_01",
+					Emote = "PortraitEmoteDepressed",
+					Text = "To think that the blessings of the Queen of Olympus could be fetched from some unassuming sack! Whatever damage this mountain has sustained, our pride has suffered worse." },
 			},
 
 			HeraLootBought01 =
@@ -3302,8 +3798,8 @@ LootSetData.Hera =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "PoseidonUpgrade", "ApolloUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "PoseidonUpgrade", "ApolloUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hera_0118",
@@ -3319,8 +3815,8 @@ LootSetData.Hera =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "ZeusUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "ZeusUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hera_0119",
@@ -3336,8 +3832,8 @@ LootSetData.Hera =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "HephaestusUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "HephaestusUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hera_0120",
@@ -3353,8 +3849,8 @@ LootSetData.Hera =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "ZeusUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "ZeusUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hera_0254",
@@ -3370,8 +3866,8 @@ LootSetData.Hera =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "AresUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "AresUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hera_0255",
@@ -3387,8 +3883,8 @@ LootSetData.Hera =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "DemeterUpgrade", "HestiaUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "DemeterUpgrade", "HestiaUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Hera_0256",
@@ -3731,22 +4227,6 @@ LootSetData.Hera =
 			{ Cue = "/VO/MelinoeField_0644", Text = "You truly needn't have, Your Majesty." },
 		},
 
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
-		},
-
 		FullSuperActivatedVoiceLines =
 		{
 			Queue = "Interrupt",
@@ -3826,28 +4306,6 @@ LootSetData.Hera =
 
 				{ Cue = "/VO/Chronos_1255", Text = "That so-called {#Emph}Queen?!", PlayFirst = true },
 				{ Cue = "/VO/Chronos_1256", Text = "My son's beloved wife?" },
-			},
-			{
-				PlayOnceFromTableThisRun = true,
-				RandomRemaining = true,
-				ObjectTypes = { "Zagreus" },
-				PreLineWait = 0.35,
-				SuccessiveChanceToPlayAll = 0.33,
-				SkipCooldownCheckIfNonePlayed = true,
-				Cooldowns =
-				{
-					{ Name = "ZagreusSpokeRecently", Time = 6 },
-				},
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "C_Boss01" },
-					},
-				},
-
-				{ Cue = "/VO/Zagreus_0354", Text = "Was that the {#Emph}Queen?", PlayFirst = true },
-				{ Cue = "/VO/Zagreus_0355", Text = "Queen Hera...?" },
 			},
 		},
 

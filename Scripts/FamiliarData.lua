@@ -145,7 +145,8 @@ FamiliarData =
 
 		-- Gifting / Recruiting / Costuming
 		DefaultCostume = "FamiliarCostume_FrogDefault",
-		FamiliarShopGraphic = "FamiliarShopFrog",
+		FamiliarScreenAnimationName = "FamiliarScreenFrinosIn",
+		FamiliarScreenAnimationOutName = "FamiliarScreenFrinosOut",
 		GiftFunctionName = "FamiliarRecruitPresentation",
 		GiftFunctionArgs =
 		{
@@ -404,9 +405,20 @@ FamiliarData =
 					PreLineWait = 0.4,
 					GameStateRequirements =
 					{
+						OrRequirements =
 						{
-							Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
-							IsAny = { "Choice_MorosAccept" },
+							{
+								{
+									Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+									IsAny = { "Choice_MorosAccept" },
+								},
+							},
+							{
+								{
+									Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+									IsAny = { "Choice_MorosAccept" },
+								},
+							},
 						},
 					},
 
@@ -428,17 +440,22 @@ FamiliarData =
 				},
 				-- typhon destroyed
 				{
+					RandomRemaining = true,
 					BreakIfPlayed = true,
 					PreLineWait = 0.4,
-					{ Cue = "/VO/Melinoe_5196", Text = "He's gone, Frinos... the Father of All Monsters. Now but one major threat remains.",
-						GameStateRequirements =
+					GameStateRequirements =
+					{
 						{
-							{
-								Path = { "CurrentRun", "TextLinesRecord" },
-								HasAny = { "ZeusPalaceAboutTyphonDeath01" },
-							},
+							PathFalse = { "GameState", "ReachedTrueEnding" },
+						},
+						{
+							Path = { "CurrentRun", "TextLinesRecord" },
+							HasAny = { "ZeusPalaceAboutTyphonDeath01" },
 						},
 					},
+					{ Cue = "/VO/Melinoe_5196", Text = "He's gone, Frinos... the Father of All Monsters. Now but one major threat remains.",
+						PlayFirst = true },
+					{ Cue = "/VO/Melinoe_5775", Text = "Typhon is destroyed, Frinos...! Soon, I can end all this..." },
 				},
 				-- hecate missing
 				{
@@ -587,7 +604,7 @@ FamiliarData =
 								HasAny = { "ZagreusPastMeeting05" },
 							},
 							{
-								Path = { "CurrentRun", "TextLinesRecord" },
+								Path = { "GameState", "TextLinesRecord" },
 								HasAll = { "ZagreusPastMeeting04_2", "ZagreusPastMeeting04_3" },
 							},
 						},
@@ -611,17 +628,6 @@ FamiliarData =
 									"ZeusPalaceMeeting04",
 									"ZeusPalaceMeeting04_B",
 								},
-							},
-						},
-					},
-					{ Cue = "/VO/Melinoe_5775", Text = "Typhon is destroyed, Frinos...! Soon, I can end all this...",
-						GameStateRequirements =
-						{
-							{
-								PathFalse = { "GameState", "ReachedTrueEnding" },
-							},
-							{
-								PathTrue = { "CurrentRun", "TextLinesRecord", "ZeusPalaceAboutTyphonDeath01" },
 							},
 						},
 					},
@@ -664,7 +670,7 @@ FamiliarData =
 							PathTrue = { "GameState", "TextLinesRecord", "ZagreusPastMeeting05" },
 						},
 						{
-							Path = { "CurrentRun", "TextLinesRecord" },
+							Path = { "GameState", "TextLinesRecord" },
 							HasAll = { "ZagreusPastMeeting04_2", "ZagreusPastMeeting04_3" },
 						},
 						{
@@ -954,6 +960,7 @@ FamiliarData =
 					{ Cue = "/VO/Melinoe_5475", Text = "I shouldn't have lost to some Sea-Serpent, though that {#Emph}was {#Prev}a big one..." },
 				},
 				{
+					RandomRemaining = true,
 					BreakIfPlayed = true,
 					PreLineWait = 0.4,
 					SuccessiveChanceToPlayAll = 0.15,
@@ -1006,11 +1013,7 @@ FamiliarData =
 						PlayFirst = true,
 						GameStateRequirements =
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 2,
-							},
+							NamedRequirements = { "BossDifficultyWasActiveBeforeDeath" },
 						},
 					},
 				},
@@ -1087,11 +1090,7 @@ FamiliarData =
 						PlayFirst = true,
 						GameStateRequirements =
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 3,
-							},
+							NamedRequirements = { "BossDifficultyWasActiveBeforeDeath" },
 						},
 					},
 				},
@@ -1184,7 +1183,7 @@ FamiliarData =
 
 				-- lost to Polyphemus
 				{
-					-- RandomRemaining = true,
+					RandomRemaining = true,
 					BreakIfPlayed = true,
 					PreLineWait = 0.4,
 					SuccessiveChanceToPlayAll = 0.15,
@@ -1208,11 +1207,7 @@ FamiliarData =
 						PlayFirst = true,
 						GameStateRequirements =
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 1,
-							},
+							NamedRequirements = { "BossDifficultyWasActiveBeforeDeath" },
 						},
 					},
 				},
@@ -1351,11 +1346,7 @@ FamiliarData =
 						PlayFirst = true,
 						GameStateRequirements =
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 3,
-							},
+							NamedRequirements = { "BossDifficultyWasActiveBeforeDeath" },
 						},
 					},
 				},
@@ -1445,11 +1436,6 @@ FamiliarData =
 							{
 								PathTrue = { "CurrentRun", "RoomsEntered", "Q_Boss02" },
 							},
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 4,
-							},
 						},
 					},
 				},
@@ -1471,6 +1457,7 @@ FamiliarData =
 				},
 				-- lost to Zagreus
 				{
+					RandomRemaining = true,
 					BreakIfPlayed = true,
 					PreLineWait = 0.4,
 					SuccessiveChanceToPlay = 0.1,
@@ -1516,7 +1503,8 @@ FamiliarData =
 					GameStateRequirements =
 					{
 						{
-							SumPrevRuns = 4,
+							SumPrevRuns = 5,
+							IgnoreCurrentRun = true,
 							Path = { "SpecialInteractRecord", "FrogFamiliar" },
 							CountPathTrue = true,
 							Comparison = "<=",
@@ -1546,6 +1534,12 @@ FamiliarData =
 					BreakIfPlayed = true,
 					RandomRemaining = true,
 					--PreLineAnim = "MelTalkBrooding01",
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+					},
 
 					{ Cue = "/VO/Melinoe_5209", Text = "Thank you for always being here for me...",
 						GameStateRequirements =
@@ -1923,6 +1917,27 @@ FamiliarData =
 				GameStateRequirements =
 				{
 					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "MelinoeAnyQuipSpeech" },
+					{ Name = "UsedCatFamiliarRecently", Time = 400 },
+				},
+
+				{ Cue = "/VO/Melinoe_3974", Text = "Toula." },
+				{ Cue = "/VO/Melinoe_3975", Text = "Toula?", PlayFirst = true },
+			},
+			{
+				BreakIfPlayed = true,
+				RandomRemaining = true,
+				UsePlayerSource = true,
+				ChanceToPlay = 0.2,
+				PreLineWait = 0.15,
+				GameStateRequirements =
+				{
+					{
 						PathFalse = { "CurrentRun", "Hero", "IsDead" },
 					},
 					{
@@ -1940,62 +1955,11 @@ FamiliarData =
 					{ Name = "UsedCatFamiliarRecently", Time = 400 },
 				},
 
-				{ Cue = "/VO/Melinoe_3969", Text = "Toula!",
-					GameStateRequirements =
-					{
-						{
-							PathNotEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_3970", Text = "Go, Toula!",
-					GameStateRequirements =
-					{
-						{
-							PathNotEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_3971", Text = "Toula, {#Emph}now!",
-					GameStateRequirements =
-					{
-						{
-							PathNotEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_3972", Text = "Up, Toula!",
-					GameStateRequirements =
-					{
-						{
-							PathNotEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_3973", Text = "Come on, cat!",
-					GameStateRequirements =
-					{
-						{
-							PathNotEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_3974", Text = "Toula.",
-					GameStateRequirements =
-					{
-						{
-							PathEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
-				{ Cue = "/VO/Melinoe_3975", Text = "Toula?",
-					GameStateRequirements =
-					{
-						{
-							PathEmpty = { "RequiredKillEnemies" },
-						},
-					},
-				},
+				{ Cue = "/VO/Melinoe_3969", Text = "Toula!" },
+				{ Cue = "/VO/Melinoe_3970", Text = "Go, Toula!" },
+				{ Cue = "/VO/Melinoe_3971", Text = "Toula, {#Emph}now!" },
+				{ Cue = "/VO/Melinoe_3972", Text = "Up, Toula!" },
+				{ Cue = "/VO/Melinoe_3973", Text = "Come on, cat!" },
 				{ Cue = "/VO/Melinoe_3976", Text = "{#Emph}Tktktk!" },
 			},
 		},
@@ -2135,7 +2099,8 @@ FamiliarData =
 
 		-- Gifting / Recruiting / Costuming
 		DefaultCostume = "FamiliarCostume_CatDefault",
-		FamiliarShopGraphic = "FamiliarShopCat",
+		FamiliarScreenAnimationName = "FamiliarScreenToulaIn",
+		FamiliarScreenAnimationOutName = "FamiliarScreenToulaOut",
 		GiftFunctionName = "FamiliarRecruitPresentation",
 		GiftFunctionArgs =
 		{
@@ -2409,7 +2374,8 @@ FamiliarData =
 
 		-- Gifting / Recruiting / Costuming
 		DefaultCostume = "FamiliarCostume_RavenDefault",
-		FamiliarShopGraphic = "FamiliarShopRaven",
+		FamiliarScreenAnimationName = "FamiliarScreenRakiIn",
+		FamiliarScreenAnimationOutName = "FamiliarScreenRakiOut",
 		GiftFunctionName = "FamiliarRecruitPresentation",
 		GiftFunctionArgs =
 		{
@@ -2698,7 +2664,8 @@ FamiliarData =
 
 		-- Gifting / Recruiting / Costuming
 		DefaultCostume = "FamiliarCostume_HoundDefault",
-		FamiliarShopGraphic = "FamiliarShopHound",
+		FamiliarScreenAnimationName = "FamiliarScreenHecubaIn",
+		FamiliarScreenAnimationOutName = "FamiliarScreenHecubaOut",
 		GiftFunctionName = "FamiliarRecruitPresentation",
 		GiftFunctionArgs =
 		{
@@ -3082,7 +3049,8 @@ FamiliarData =
 
 		-- Gifting / Recruiting / Costuming
 		DefaultCostume = "FamiliarCostume_PolecatDefault",
-		FamiliarShopGraphic = "FamiliarShopPolecat",
+		FamiliarScreenAnimationName = "FamiliarScreenGaleIn",
+		FamiliarScreenAnimationOutName = "FamiliarScreenGaleOut",
 		GiftFunctionName = "FamiliarRecruitPresentation",
 		GiftFunctionArgs =
 		{
@@ -3376,6 +3344,7 @@ TraitSetData.Familiar =
 		EquipSound = "/SFX/Menu Sounds/KeepsakeSkellyTooth",
 		Icon = "FamiliarIcon_Cat",
 		FamiliarLastStandHealAmount = { BaseValue = 20, AsInt = true },
+		ReportedFamiliarLastStandAmount = 1, -- Display Only 
 		CirceStatLine = "LastStandStatDisplay1_Circe",
 		StatLines =
 		{
@@ -3400,6 +3369,11 @@ TraitSetData.Familiar =
 				Key = "FamiliarResourceBonusChance",
 				ExtractAs = "BonusChance",
 				Format = "TotalHeroTraitValuePercent",
+				SkipAutoExtract = true,
+			},
+			{
+				Key = "ReportedFamiliarLastStandAmount",
+				ExtractAs = "TooltipLastStandAmount",
 				SkipAutoExtract = true,
 			},
 		},

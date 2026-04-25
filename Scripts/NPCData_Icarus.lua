@@ -10,7 +10,7 @@
 		SubtitleColor = Color.IcarusVoice,
 		EmoteOffsetY = -300,
 		EmoteOffsetX = -30,
-		AnimOffsetZ = 50,
+		AnimOffsetZ = 30,
 		SpeakerName = "Icarus",
 		InvincibubbleScale = 1.2,
 		AlwaysShowInvulnerabubbleOnInvulnerableHit = true,
@@ -21,6 +21,7 @@
 		TurnInPlaceAnimation = "Icarus_Turn",
 		PreEventFunctionName = "AngleNPCToHero",
 		BecomingCloserFunctionName = "BecomingCloserIcarusPresentation",
+		BecomingCloserRepeatableFunctionName = "BecomingCloserIcarusRepeatablePresentation",
 
 		UpgradeScreenOpenSound = "/SFX/WeaponUpgradeHammerDrop2",
 		UpgradeSelectedSound = "/SFX/HammerBoonChoice",
@@ -33,6 +34,8 @@
 		{
 			"IcarusChoiceMenu_FlavorText01",
 		},
+		
+		EffectBlocks = { "RavenFamiliarMark", "OnHitStun" },
 
 		GoSomeplacePoint1 = 800387,
 		GoSomeplacePoint2 = 800388,
@@ -64,6 +67,64 @@
 								"IcarusBecomingCloser01"
 							},
 						},
+					},
+				},
+			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					ForceTextLines = "IcarusDreamRun",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "IcarusDream_Mesh",
+					SetAnimation = "Icarus_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
 					},
 				},
 			},
@@ -324,10 +385,6 @@
 			SuccessiveChanceToPlay = 0.5,
 			SuccessiveChanceToPlayAll = 0.25,
 			Source = { LineHistoryName = "NPC_Icarus_01", SubtitleColor = Color.IcarusVoice },
-			GameStateRequirements =
-			{
-				ChanceToPlay = 0.5,
-			},
 			Cooldowns =
 			{
 				{ Name = "IcarusKillStealSpeech", Time = 40 },
@@ -437,7 +494,8 @@
 						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "IcarusAboutFlying01_B" }
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "IcarusAboutFlying01_B", "IcarusHomeAboutFlying01", "IcarusHomeAboutFlying01_B" }
 					},
 				},
 
@@ -445,15 +503,15 @@
 					PreLineAnim = "Icarus_Explaining_Start",
 					PostLineAnim = "Icarus_Explaining_End",
 					Text = "Been flying for a while now! At first, it brought me back to the terror I felt as a kid. Those final moments... I wanted to put myself through them, again and again. Don't know why." },
-				{ Cue = "/VO/MelinoeField_2012", UsePlayerSource = true,
+				{ Cue = "/VO/Melinoe_5790", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Empathetic_01",
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "Icarus, you were young and you made a mistake. What's the use torturing yourself for it for all eternity? I thought you wanted to learn to fly to prove yourself to your father." },
 				{ Cue = "/VO/Icarus_0029",
 					PreLineAnim = "Icarus_Pensive_Start",
 					Text = "Come on, Meli. I'm never going to prove myself to him. But something happened as I kept trying to use my wings... I, I started to like it! Seeing from a different point of view." },
-				{ Cue = "/VO/MelinoeField_2013", UsePlayerSource = true,
+				{ Cue = "/VO/Melinoe_5791", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Pleased_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
@@ -475,7 +533,8 @@
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "IcarusAboutFlying01" }
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "IcarusAboutFlying01", "IcarusHomeAboutFlying01", "IcarusHomeAboutFlying01_B" }
 					},
 				},
 
@@ -483,15 +542,15 @@
 					PreLineAnim = "Icarus_Explaining_Start",
 					PostLineAnim = "Icarus_Explaining_End",
 					Text = "Been flying for a while now! At first, it brought me back to the terror I felt as a kid. Those final moments... I wanted to put myself through them, again and again. Don't know why." },
-				{ Cue = "/VO/MelinoeField_2012", UsePlayerSource = true,
+				{ Cue = "/VO/Melinoe_5790", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Empathetic_01",
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "Icarus, you were young and you made a mistake. What's the use torturing yourself for it for all eternity? I thought you wanted to learn to fly to prove yourself to your father." },
 				{ Cue = "/VO/Icarus_0029",
 					PreLineAnim = "Icarus_Pensive_Start",
 					Text = "Come on, Meli. I'm never going to prove myself to him. But something happened as I kept trying to use my wings... I, I started to like it! Seeing from a different point of view." },
-				{ Cue = "/VO/MelinoeField_2013_B", UsePlayerSource = true,
+				{ Cue = "/VO/Melinoe_5791_B", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Pleased_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
@@ -521,7 +580,9 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "IcarusAboutFlying01", "IcarusAboutFlying01_B" },
+						HasAny = {
+							"IcarusAboutFlying01",
+							"IcarusHomeAboutFlying01" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "IcarusAboutFlying02_B" },
@@ -570,7 +631,7 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "IcarusAboutFlying01", "IcarusAboutFlying01_B" },
+						HasAny = { "IcarusAboutFlying01", "IcarusAboutFlying01_B", "IcarusHomeAboutFlying01", "IcarusHomeAboutFlying01_B" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "IcarusAboutFlying02" },
@@ -1022,7 +1083,7 @@
 						},
 						{
 							{
-								PathTrue = { "GameState", "TextLinesRecord", "IcarusGift04" },
+								PathTrue = { "GameState", "TextLinesRecord", "IcarusGift03" },
 							},
 						},
 					},
@@ -1086,8 +1147,9 @@
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "IcarusAboutCrossroads01" }
+						HasAll = { "IcarusHomeFirstMeeting" }
 					},
+					NamedRequirementsFalse = { "OdysseusWandering" },
 				},
 
 				{ Cue = "/VO/MelinoeField_3636", UsePlayerSource = true,
@@ -1943,7 +2005,6 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.IcarusBenefitChoices,
 			},
 
-
 			IcarusAboutBecomingCloser01 =
 			{
 				PlayOnce = true,
@@ -2145,6 +2206,9 @@
 				PreEventFunctionName = "AngleNPCToHero",
 				GameStateRequirements =
 				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "IcarusHomePostTrueEnding01" },
 					},
@@ -2653,6 +2717,22 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.IcarusBenefitChoices,
 			},
 
+			IcarusDreamRun =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+
+				{ SkipDialogue = true, PostLineWait = 0, InputDelay = 0, BoxAnimation = "BlankObstacle", BoxExitAnimation = "Blank" },
+
+				PrePortraitExitFunctionName = "IcarusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.IcarusBenefitChoices,
+			},
+
 		},
 
 		GiftTextLineSets =
@@ -3134,12 +3214,7 @@
 						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
 					},
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "IcarusGift03" },
-					},
-					{
-						Path = { "GameState", "UseRecord", "AphroditeUpgrade" },
-						Comparison = ">=",
-						Value = 5,
+						PathTrue = { "GameState", "TextLinesRecord", "IcarusGift02" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -3252,7 +3327,7 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "IcarusGift06", "IcarusBathHouse01", "IcarusAboutMelinoe01" },
+						HasAll = { "IcarusGift06", "IcarusBathHouse01" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -3363,6 +3438,10 @@
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "IcarusGift10" },
+					},
+					NamedRequirementsFalse = { "OdysseusWandering" },
 				},
 				{ Cue = "/VO/Melinoe_4555", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Casual_01",
@@ -3374,6 +3453,167 @@
 					PostLineAnim = "Icarus_Flustered_End",
 					PostLineThreadedFunctionName = "GiftPointRareRefundPresentation",
 					Text = "You've no idea how much I want to, but I really can't right now... I told Master Odysseus I'd soon be heading out." },
+			},
+
+			IcarusBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "IcarusGift10" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "IcarusBathHouseRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0326",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "I'd love a visit to the springs with you again. Shall we?" },
+
+					{ Cue = "/VO/Icarus_0329",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Pleased_01",
+						PortraitExitAnimation = "Portrait_Icarus_Pleased_01_Exit",
+						Text = "The springs! Not many places in the Crossroads I'd rather be." },
+
+					{ Cue = "/VO/Icarus_0332",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "I'm more than happy to accompany you to the springs, Your Grace." },
+				},
+
+				-- Mel in the bath
+				[2] = HeroRepeatableTextLines.BathHouseIntroTextLines,
+
+				-- Icarus in the bath
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0327",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Bath_01",
+						PortraitExitAnimation = "Portrait_Icarus_Bath_01_Exit",
+						Text = "...Being here it's like I don't even have a care in the world." },
+
+					{ Cue = "/VO/Icarus_0330",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Bath_01",
+						PortraitExitAnimation = "Portrait_Icarus_Bath_01_Exit",
+						Text = "...Always so peaceful here, I never want to leave, you know?" },
+
+					{ Cue = "/VO/Icarus_0333",
+						GameStateRequirements =
+						{
+							{
+								Path = { "GameState", "GamePhase", },
+								Comparison = "~=",
+								Value = 5,
+							},
+						},
+
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Bath_01",
+						PortraitExitAnimation = "Portrait_Icarus_Bath_01_Exit",
+						Text = "...Beautiful night, isn't it? The way the moon shines down on everything..." },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0328",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+
+						Portrait = "Portrait_Icarus_Pleased_01",
+						PortraitExitAnimation = "Portrait_Icarus_Pleased_01_Exit",
+
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Was good to take a break and chat a bit, so cheers." },
+
+					{ Cue = "/VO/Icarus_0331",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+
+						Portrait = "Portrait_Icarus_Pleased_01",
+						PortraitExitAnimation = "Portrait_Icarus_Pleased_01_Exit",
+
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Had to call it a night sometime, but that was great." },
+
+					{ Cue = "/VO/Icarus_0334",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+
+						Portrait = "Portrait_Icarus_Pleased_01",
+						PortraitExitAnimation = "Portrait_Icarus_Pleased_01_Exit",
+
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Just what I needed... and we're both looking radiant, I'm sure." },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Icarus",
 			},
 
 			-- fishing
@@ -3496,6 +3736,9 @@
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "IcarusGift10" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_4556", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
@@ -3508,6 +3751,119 @@
 					PreLineWait = 0.35,
 					PostLineThreadedFunctionName = "GiftPointEpicRefundPresentation",
 					Text = "As much as I would like that, I can't stick around much longer here tonight. Some other time though, hey?" },
+			},
+
+			IcarusFishingRepeatable01 =
+			{
+				Cost =
+				{
+					GiftPointsEpic = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "IcarusGift10" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "IcarusFishingRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- start fishing
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0335",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "Still don't know how to fish too well, but if you're willing to instruct..." },
+
+					{ Cue = "/VO/Icarus_0337",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "If you've got the lures, I've got the patience to stand quietly." },
+
+					{ Cue = "/VO/Icarus_0339",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "Need a fishing partner, I'm your Shade. Now let me at 'em." },
+				},
+
+				-- end fishing
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0336",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Portrait = "Portrait_Icarus_Default_01",
+						Text = "...I'd a pleasant time back there. Cheers for inviting me along." },
+
+					{ Cue = "/VO/Icarus_0338",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "...So peaceful back there! Long as you're not a fish, I guess." },
+
+					{ Cue = "/VO/Icarus_0340",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						Portrait = "Portrait_Icarus_Unsure_01",
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "...We must have scared most of them off. Was that the goal?" },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Icarus",
 			},
 
 			-- taverna
@@ -3528,7 +3884,7 @@
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "IcarusBathHouse01", "IcarusGift05", "IcarusAboutDaedalus02" },
+						HasAll = { "IcarusBathHouse01", "IcarusGift05" },
 					},
 					{
 						PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -3558,6 +3914,7 @@
 				{ Cue = "/VO/Icarus_0236",
 					SkipContextArt = true,
 					PreLineFunctionName = "TavernaStartPresentation",
+					PreLineFunctionArgs = { CameraOffsetX = -200 },
 					PreLineWait = 0.35,
 					PreLineAnim = "Icarus_Pensive_Start",
 					Text = "...The other Shades are watching us, Meli. They admire you so much, and probably would wish I was dead if I wasn't already." },
@@ -3605,6 +3962,7 @@
 
 				{ Cue = "/VO/Icarus_0240",
 					PreLineFunctionName = "TavernaEndPresentation",
+					PreLineFunctionArgs = { ResetCameraOffset = true },
 					PreLineWait = 0.35,
 
 					PostLineThreadedFunctionName = "InCombatTextEvent",
@@ -3642,6 +4000,9 @@
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "IcarusGift10" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_4557", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Pleased_01",
@@ -3652,6 +4013,146 @@
 					PreLineAnim = "Icarus_Flustered_Start",
 					PostLineAnim = "Icarus_Flustered_End",
 					Text = "I would genuinely love to, though... we've had reports of a new fleet appearing in the Rift, and I'd best pay them a visit first." },
+			},
+
+			IcarusTavernaRepeatable01 =
+			{
+				Cost =
+				{
+					SuperGiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "IcarusGift10" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "IcarusTavernaRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before taverna
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0341",
+						PreLineAnim = "Icarus_Explaining_Start",
+						PostLineAnim = "Icarus_Explaining_End",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "Another taste of Ambrosia, with {#Emph}you? {#Prev}Right, race you there." },
+
+					{ Cue = "/VO/Icarus_0344",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "Long as you don't think it's too crowded at the taverna right now, sure." },
+
+					{ Cue = "/VO/Icarus_0347",
+						PreLineAnim = "Icarus_Pensive_Start",
+						PostLineAnim = "Icarus_Pensive_End",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "We celebrating something, hey? Though let's go even if we're not?" },
+				},
+
+				-- at taverna
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0342",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+						PreLineFunctionArgs = { CameraOffsetX = -200 },
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "...Hey think I know most of these other Shades by now. I like that one back there!" },
+
+					{ Cue = "/VO/Icarus_0345",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+						PreLineFunctionArgs = { CameraOffsetX = -200 },
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "...This stuff is really excellent, and somehow it tastes different every time." },
+
+					{ Cue = "/VO/Icarus_0348",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+						PreLineFunctionArgs = { CameraOffsetX = -200 },
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Icarus_Default_01",
+						PortraitExitAnimation = "Portrait_Icarus_Default_01_Exit",
+						Text = "...Tastes absolutely perfect. And they say we Shades can't taste a thing!" },
+				},
+
+				-- after taverna
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Icarus_0343",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "Enjoyed the bit of company. And seems like everybody's in good spirits, more or less." },
+
+					{ Cue = "/VO/Icarus_0346",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Portrait = "Portrait_Icarus_Pleased_01",
+
+						Text = "Feeling lighter than a feather after that. I'm glad we went!" },
+
+					{ Cue = "/VO/Icarus_0349",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "Nice seeing everyone back there, not to mention the drink." },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Icarus",
 			},
 
 			IcarusFieldGiftDecline01 =
@@ -3699,6 +4200,427 @@
 					},
 				},
 
+			},
+
+			IcarusBecomingCloserChat01 =
+			{
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				Cost =
+				{
+					IcarusPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
+						IsAny = { "Choice_IcarusAccept" },
+					},
+					NamedRequirements = { "NoRecentIcarusBecomingCloserEvent" },
+				},
+
+				{ Cue = "/VO/Melinoe_5950", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Hey, look what I found brewing in our cauldron over there. Care for a sip with me?" },
+
+				{ Cue = "/VO/Icarus_0373",
+					Portrait = "Portrait_Icarus_Pleased_01",
+					ExitPortraitImmediately = true,
+					PostLineRemoveContextArt = true,
+					PreLineAnim = "Icarus_Pensive_Start",
+					PostLineAnim = "Icarus_Pensive_End",
+
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10 },
+
+					Text = "Another draught? Well I'll just have to drink this down." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Icarus_0374",
+					SkipContextArt = true,
+					Portrait = "Portrait_Icarus_Flushed_01",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					PreLineWait = 0.25,
+
+					Text = "...Whenever I'm alive like that again, I want to be with you." },
+
+				{ Cue = "/VO/Melinoe_5661", UsePlayerSource = true,
+					SkipContextArt = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Fine by me...!" },
+
+				EndFunctionName = "IcarusHubExitPresentation",
+				EndFunctionArgs = { WaitTime = 2.5 },
+
+				EndGlobalVoiceLines = "MelIcarusSendOffVoiceLines",
+			},
+			IcarusBecomingCloserChat02 =
+			{
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				Cost =
+				{
+					IcarusPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
+						IsAny = { "Choice_IcarusAccept" },
+					},
+					NamedRequirements = { "NoRecentIcarusBecomingCloserEvent" },
+				},
+
+				{ Cue = "/VO/Melinoe_5952", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Got something for you here... well, for the both of us." },
+
+				{ Cue = "/VO/Icarus_0375",
+					Portrait = "Portrait_Icarus_Pleased_01",
+					ExitPortraitImmediately = true,
+					PostLineRemoveContextArt = true,
+					PreLineAnim = "Icarus_Pensive_Start",
+					PostLineAnim = "Icarus_Pensive_End",
+
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10 },
+
+					Text = "I want to feel alive again right now, and in your company." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Icarus_0376",
+					SkipContextArt = true,
+					Portrait = "Portrait_Icarus_Flushed_01",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					PreLineWait = 0.25,
+
+					Text = "...You're the best there ever was or ever will be, Meli." },
+
+				{ Cue = "/VO/Melinoe_5662", UsePlayerSource = true,
+					SkipContextArt = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You're not bad, either." },
+
+				EndFunctionName = "IcarusHubExitPresentation",
+				EndFunctionArgs = { WaitTime = 2.5 },
+
+				EndGlobalVoiceLines = "MelIcarusSendOffVoiceLines",
+			},
+			IcarusBecomingCloserChat03 =
+			{
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				Cost =
+				{
+					IcarusPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
+						IsAny = { "Choice_IcarusAccept" },
+					},
+					NamedRequirements = { "NoRecentIcarusBecomingCloserEvent" },
+				},
+
+				{ Cue = "/VO/Melinoe_5951", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Here's another Draught for whenever you desire... perhaps even now." },
+
+				{ Cue = "/VO/Icarus_0377",
+					Portrait = "Portrait_Icarus_Pleased_01",
+					ExitPortraitImmediately = true,
+					PostLineRemoveContextArt = true,
+					PreLineAnim = "Icarus_Pensive_Start",
+					PostLineAnim = "Icarus_Pensive_End",
+
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10 },
+
+					Text = "You know I couldn't think about anything else since last time, right?" },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Icarus_0378",
+					SkipContextArt = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Icarus_Flushed_01",
+					Text = "...I only wish those draughts of yours could last forever." },
+
+				{ Cue = "/VO/Melinoe_5663", UsePlayerSource = true,
+					SkipContextArt = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "They work well enough." },
+
+				EndFunctionName = "IcarusHubExitPresentation",
+				EndFunctionArgs = { WaitTime = 2.5 },
+
+				EndGlobalVoiceLines = "MelIcarusSendOffVoiceLines",
+			},
+			IcarusBecomingCloserChat04 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				Cost =
+				{
+					IcarusPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
+						IsAny = { "Choice_IcarusAccept" },
+					},
+					NamedRequirements = { "NoRecentIcarusBecomingCloserEvent" },
+				},
+
+				{ Cue = "/VO/Melinoe_5953", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Look what I brewed up. If you're not too busy... we could go back to the tent?" },
+
+				{ Cue = "/VO/Icarus_0379",
+					Portrait = "Portrait_Icarus_Pleased_01",
+					ExitPortraitImmediately = true,
+					PostLineRemoveContextArt = true,
+					PreLineAnim = "Icarus_Pensive_Start",
+					PostLineAnim = "Icarus_Pensive_End",
+
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10 },
+
+					Text = "You sure? I can practically feel my heart racing already..." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Icarus_0380",
+					SkipContextArt = true,
+					Portrait = "Portrait_Icarus_Flushed_01",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					PreLineWait = 0.25,
+					Text = "...Best night of my entire existence. Since last time." },
+
+				{ Cue = "/VO/Melinoe_5664", UsePlayerSource = true,
+					SkipContextArt = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Oh, come on." },
+
+				EndFunctionName = "IcarusHubExitPresentation",
+				EndFunctionArgs = { WaitTime = 2.5 },
+
+				EndGlobalVoiceLines = "MelIcarusSendOffVoiceLines",
+			},
+			IcarusBecomingCloserChat05 =
+			{
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				Cost =
+				{
+					IcarusPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
+						IsAny = { "Choice_IcarusAccept" },
+					},
+					NamedRequirements = { "NoRecentIcarusBecomingCloserEvent" },
+				},
+
+				{ Cue = "/VO/Melinoe_5954", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You could save this for whenever you want... though, if you're not too busy..." },
+
+				{ Cue = "/VO/Icarus_0381",
+					Portrait = "Portrait_Icarus_Pleased_01",
+					ExitPortraitImmediately = true,
+					PostLineRemoveContextArt = true,
+					PreLineAnim = "Icarus_Pensive_Start",
+					PostLineAnim = "Icarus_Pensive_End",
+
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10 },
+
+					Text = "I really should be taking off soon... but I'm also not insane." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Icarus_0382",
+					SkipContextArt = true,
+					Portrait = "Portrait_Icarus_Flushed_01",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					PreLineWait = 0.25,
+					Text = "...Each moment I can be with you is better than the last." },
+
+				{ Cue = "/VO/Melinoe_5665", UsePlayerSource = true,
+					SkipContextArt = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I'm glad..." },
+
+				EndFunctionName = "IcarusHubExitPresentation",
+				EndFunctionArgs = { WaitTime = 2.5 },
+
+				EndGlobalVoiceLines = "MelIcarusSendOffVoiceLines",
+			},
+			IcarusBecomingCloserChat06 =
+			{
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				Cost =
+				{
+					IcarusPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
+						IsAny = { "Choice_IcarusAccept" },
+					},
+					NamedRequirements = { "NoRecentIcarusBecomingCloserEvent" },
+				},
+
+				{ Cue = "/VO/Melinoe_5955", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Thought you might like to have another Ectoplasmic Draught. Perhaps with me." },
+
+				{ Cue = "/VO/Icarus_0383",
+					Portrait = "Portrait_Icarus_Pleased_01",
+					ExitPortraitImmediately = true,
+					PostLineRemoveContextArt = true,
+					PreLineAnim = "Icarus_Pensive_Start",
+					PostLineAnim = "Icarus_Pensive_End",
+
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10 },
+
+					Text = "You read my mind or stared into my soul. Whichever one." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Icarus_0384",
+					SkipContextArt = true,
+					Portrait = "Portrait_Icarus_Flushed_01",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					PreLineWait = 0.25,
+					Text = "{#Emph}...Erm{#Prev}, by the way... I really like what you've done to your tent." },
+
+				{ Cue = "/VO/Melinoe_5666", UsePlayerSource = true,
+					SkipContextArt = true,
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Nice, isn't it...?" },
+
+				EndFunctionName = "IcarusHubExitPresentation",
+				EndFunctionArgs = { WaitTime = 2.5 },
+
+				EndGlobalVoiceLines = "MelIcarusSendOffVoiceLines",
 			},
 		},
 
@@ -3763,6 +4685,22 @@
 
 		UpgradeMenuOpenVoiceLines =
 		{
+			{
+				BreakIfPlayed = true,
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunIcarusPostEncounterIntroVO",
+				UsePlayerSource = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				{ Cue = "/VO/MelinoeField_5663", Text = "I hope you know how much I care for you..." },
+			},
 			{
 				BreakIfPlayed = true,
 				PreLineWait = 0.75,
@@ -3928,6 +4866,22 @@
 				},			
 			},
 			{
+				UsePlayerSource = true,
+				BreakIfPlayed = true,
+				PreLineWait = 0.25,
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunIcarusFieldIntroVO",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				{ Cue = "/VO/MelinoeField_5662", Text = "Not surprised to see you in my dreams!" },
+			},
+			{
 				PlayOnce = true,
 				PlayOnceContext = "IcarusIntroReactionVO",
 				UsePlayerSource = true,
@@ -4046,6 +5000,22 @@
 						},
 					},
 				},
+			},
+			{
+				BreakIfPlayed = true,
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunIcarusPostEncounterIntroVO",
+				UsePlayerSource = true,
+				PreLineWait = 0.3,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				{ Cue = "/VO/MelinoeField_5663", Text = "I hope you know how much I care for you..." },
 			},
 			{
 				PreLineWait = 0.1,
@@ -4234,17 +5204,26 @@ VariantSetData.NPC_Icarus_01 =
 						HasAny = { "IcarusCombatO", "IcarusCombatO2", "IcarusCombatP", "IcarusCombatP2" },
 					},
 				},
-				-- been busy in the underworld
+				-- it's been a while
 				{
 					{
 						SumPrevRuns = 3,
-						-- IgnoreCurrentRun = true,
-						Path = { "BiomesReached", "F" },
-						CountPathTrue = true,
-						Comparison = ">=",
-						Value = 3,
+						Path = { "SpawnRecord", "NPC_Icarus_01" },
+						Comparison = "<=",
+						Value = 0,
 					},
-				}
+				},
+				-- on a full moon after becoming closer
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "IcarusBecomingCloser01" },
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 1,
+					},
+				},
 			},
 			-- not during these events
 			{
@@ -4870,17 +5849,17 @@ VariantSetData.NPC_Icarus_01 =
 				{ Cue = "/VO/Icarus_0454",
 					PreLineAnim = "Icarus_Flustered_Start",
 					PostLineAnim = "Icarus_Flustered_End",
-					Text = "All right I see your point, sorry. That was the mortal impulse to tell others how to live. But we rarely find our own sense of purpose, much less anyone else's. I wonder what you would have excelled at..." },
+					Text = "All right, I see your point, sorry. That was the mortal impulse to tell others how to live. But we rarely find our own sense of purpose, much less anyone else's. I wonder what you would have excelled at..." },
 
 				EndVoiceLines =
 				{
 					{
-						PreLineWait = 0.32,
+						PreLineWait = 0.38,
 						UsePlayerSource = true,
-						{ Cue = "/VO/Melinoe_4860", Text = "Arguing, perhaps? As lawyer or a judge." },
+						{ Cue = "/VO/Melinoe_5908", Text = "Beast mastery, perhaps..." },
 					},
 					{
-						PreLineWait = 0.33,
+						PreLineWait = 0.36,
 						ObjectType = "NPC_Icarus_01",
 						{ Cue = "/VO/Icarus_0455", Text = "...That's... terrifying." },
 					},
@@ -4936,6 +5915,109 @@ VariantSetData.NPC_Icarus_01 =
 						PreLineWait = 0.32,
 						UsePlayerSource = true,
 						{ Cue = "/VO/Melinoe_4852", Text = "Perhaps." },
+					},
+				},
+			},
+
+			IcarusHomeAboutFlying01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GiftableOffSource = true,
+				PostBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "IcarusAboutFlying01", "IcarusAboutFlying01_B", "IcarusHomeAboutFlying01_B" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.IcarusGreeting,
+
+				{ Cue = "/VO/Icarus_0028",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					Text = "Been flying for a while now! At first, it brought me back to the terror I felt as a kid. Those final moments... I wanted to put myself through them, again and again. Don't know why." },
+				{ Cue = "/VO/Melinoe_5790", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Icarus, you were young and you made a mistake. What's the use torturing yourself for it for all eternity? I thought you wanted to learn to fly to prove yourself to your father." },
+				{ Cue = "/VO/Icarus_0029",
+					PreLineAnim = "Icarus_Pensive_Start",
+					Text = "Come on, Meli. I'm never going to prove myself to him. But something happened as I kept trying to use my wings... I, I started to like it! Seeing from a different point of view." },
+				{ Cue = "/VO/Melinoe_5791", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Pleased_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You look so in your element up there! I always believed, if I could make you whole again, perhaps some night we'd learn to fly together. I still want to feel what it's like." },
+				{ Cue = "/VO/Icarus_0030",
+					PreLineAnim = "Icarus_Pensive_End",
+					PostLineThreadedFunctionName = "IcarusHubExitPresentation",
+					Text = "You've no idea know how much I wanted that too. But, it was something I had to do on my own. I'd offer to take you up with me now, but... yeah, Shades and goddesses don't mix." },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 1.0,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+						{ Cue = "/VO/Melinoe_1950", Text = "{#Emph}<Sigh>" },
+					},
+				},
+			},
+			IcarusHomeAboutFlying01_B =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GiftableOffSource = true,
+				PostBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "IcarusAboutFlying01", "IcarusAboutFlying01_B", "IcarusHomeAboutFlying01" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.IcarusGreeting,
+
+				{ Cue = "/VO/Icarus_0028",
+					PreLineAnim = "Icarus_Explaining_Start",
+					PostLineAnim = "Icarus_Explaining_End",
+					Text = "Been flying for a while now! At first, it brought me back to the terror I felt as a kid. Those final moments... I wanted to put myself through them, again and again. Don't know why." },
+				{ Cue = "/VO/Melinoe_5790", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Icarus, you were young and you made a mistake. What's the use torturing yourself for it for all eternity? I thought you wanted to learn to fly to prove yourself to your father." },
+				{ Cue = "/VO/Icarus_0029",
+					PreLineAnim = "Icarus_Pensive_Start",
+					Text = "Come on, Meli. I'm never going to prove myself to him. But something happened as I kept trying to use my wings... I, I started to like it! Seeing from a different point of view." },
+				{ Cue = "/VO/Melinoe_5791_B", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Pleased_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You look so in your element up there! I always believed, if I could make you whole again, perhaps some night we'd fly together..." },
+				{ Cue = "/VO/Icarus_0030",
+					PreLineAnim = "Icarus_Pensive_End",
+					PostLineThreadedFunctionName = "IcarusHubExitPresentation",
+					Text = "You've no idea know how much I wanted that too. But, it was something I had to do on my own. I'd offer to take you up with me now, but... yeah, Shades and goddesses don't mix." },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 1.0,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+						{ Cue = "/VO/Melinoe_1950", Text = "{#Emph}<Sigh>" },
 					},
 				},
 			},
@@ -5166,6 +6248,7 @@ VariantSetData.NPC_Icarus_01 =
 				UseableOffSource = true,
 				PreBlockSpecialInteract = true,
 				PostBlockSpecialInteract = true,
+				InitialGiftableOffSource = true,
 				GiftableOffSource = true,
 				StatusAnimation = "StatusIconWantsAffection",
 				GameStateRequirements =
@@ -5187,6 +6270,8 @@ VariantSetData.NPC_Icarus_01 =
 					},
 					]]--
 				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.IcarusGreeting,
 
 				{ Cue = "/VO/Melinoe_4574", UsePlayerSource = true,
 					PreLineWait = 0.35,
@@ -5488,11 +6573,11 @@ VariantSetData.NPC_Icarus_01 =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "IcarusHomeFirstMeeting" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "IcarusHomeFirstMeeting", "IcarusGift05", "ErisGift05" },
 					},
 				},
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				TeleportToId = 590426,
 				AngleTowardTargetId = 585573,
 				InteractDistance = 450,
@@ -5546,7 +6631,6 @@ VariantSetData.NPC_Icarus_01 =
 				},
 				-- StatusAnimation = false,
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 566613,
 				AngleTowardTargetId = 556921,
@@ -5715,7 +6799,7 @@ VariantSetData.NPC_Icarus_01 =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "IcarusHomeFirstMeeting", "IcarusAboutDaedalus02" },
+						HasAll = { "IcarusHomeFirstMeeting", "IcarusAboutDaedalus01" },
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -6063,60 +7147,6 @@ GlobalVoiceLines.IcarusExorcismReactionVoiceLines =
 	{ Cue = "/VO/Icarus_0517", Text = "Found us a smart one!", PlayFirst = true },
 	{ Cue = "/VO/Icarus_0518", Text = "A new recruit." },
 	{ Cue = "/VO/Icarus_0519", Text = "So {#Emph}that's {#Prev}how you do it." },
-}
-
-GlobalVoiceLines.IcarusFishCaughtReactionVoiceLines =
-{
-	BreakIfPlayed = true,
-	RandomRemaining = true,
-	PreLineWait = 0.85,
-	Queue = "Interrupt",
-	ObjectType = "NPC_Icarus_01",
-	AllowTalkOverTextLines = true,
-	GameStateRequirements =
-	{
-		OrRequirements =
-		{
-			{
-				{
-					Path = { "CurrentRun", "TextLinesRecord", },
-					HasAny = { "IcarusFishing01" },
-				},
-				{
-					PathTrue = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-			{
-				{
-					PathFalse = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-		},
-	},
-	Cooldowns =
-	{
-		{ Name = "IcarusAnyQuipSpeech", Time = 4 },
-	},
-
-	{ Cue = "/VO/Icarus_0220", Text = "Oh {#Emph}wow!" },
-	{ Cue = "/VO/Icarus_0221", Text = "Caught!" },
-	-- { Cue = "/VO/Icarus_0222", Text = "A bite!" },
-	{ Cue = "/VO/Icarus_0223", Text = "What {#Emph}is {#Prev}that thing?" },
-	{ Cue = "/VO/Icarus_0224", Text = "{#Emph}Nice {#Prev}one!", PlayFirst = true },
-	{ Cue = "/VO/Icarus_0225", Text = "Well done." },
-	{ Cue = "/VO/Icarus_0226", Text = "Sure is something..." },
-	{ Cue = "/VO/Icarus_0227", Text = "Victory!" },
-	{ Cue = "/VO/Icarus_0228", Text = "Success!" },
-}
-
-GlobalVoiceLines.IcarusReRollReactionVoiceLines =
-{
-	BreakIfPlayed = true,
-	RandomRemaining = true,
-	PreLineWait = 0.5,
-	ObjectType = "NPC_Icarus_01",
-
-	{ Cue = "/VO/Artemis_0371", Text = "How about these?", PlayFirst = true },
 }
 
 GlobalVoiceLines.IcarusDeathReactionVoiceLines =

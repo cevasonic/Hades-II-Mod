@@ -27,6 +27,8 @@ UnitSetData.NPC_Moros =
 
 		PreBathAnimationName = "Moros_Greet",
 		BecomingCloserFunctionName = "BecomingCloserMorosPresentation",
+		BecomingCloserRepeatableFunctionName = "BecomingCloserMorosRepeatablePresentation",
+
 		SpecialInteractFunctionName = "SpecialInteractSaluteInterrupt",
 		SpecialInteractGameStateRequirements =
 		{
@@ -61,7 +63,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1698_2", "/VO/Melinoe_1699_2" },
+							IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699" },
 						},
 					},
 				},
@@ -70,7 +72,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1698_2", "/VO/Melinoe_1699_2", "/VO/Melinoe_1879" },
+							IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699", "/VO/Melinoe_1879" },
 						},
 					},
 				},
@@ -79,7 +81,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1700_2" },
+							IsAny = { "/VO/Melinoe_1700" },
 						},
 					},
 				},
@@ -88,7 +90,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1700_2" },
+							IsAny = { "/VO/Melinoe_1700" },
 						},
 					},
 				},
@@ -97,7 +99,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1701_2", "/VO/Melinoe_1703_2" },
+							IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
 						},
 					},
 				},
@@ -106,7 +108,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1701_2", "/VO/Melinoe_1879" },
+							IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1879" },
 						},
 					},
 				},
@@ -115,7 +117,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1703_2" },
+							IsAny = { "/VO/Melinoe_1703" },
 						},
 					},
 				},
@@ -124,7 +126,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1704_2", "/VO/Melinoe_1705_2", "/VO/Melinoe_1709_2" },
+							IsAny = { "/VO/Melinoe_1704", "/VO/Melinoe_1705", "/VO/Melinoe_1709" },
 						},
 					},
 				},
@@ -133,7 +135,7 @@ UnitSetData.NPC_Moros =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1705_2" },
+							IsAny = { "/VO/Melinoe_1705" },
 						},
 					},
 				},
@@ -166,7 +168,11 @@ UnitSetData.NPC_Moros =
 				UsePlayerSource = true,
 				GameStateRequirements = 
 				{
-					NamedRequirements = { "FatesDiscovered" }
+					{
+						PathFromArgs = true,
+						Path = { "QueuedTextLinesName" },
+						IsAny = { "FatesEpilogue01" },
+					},
 				},
 
 				{ Cue = "/VO/MelinoeField_4072", Text = "This feeling... hello...? Lord Moros, is that you...? {#Emph}<Gasp>" },
@@ -185,27 +191,56 @@ UnitSetData.NPC_Moros =
 				GameStateRequirements = 
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "MorosTaverna02" },
+						PathFromArgs = true,
+						Path = { "QueuedTextLinesName" },
+						IsAny = { "MorosBecomingCloser01", "MorosBecomingCloser01_B" },
 					},
-					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred" },
 				},
 
 				{ Cue = "/VO/Moros_0404", Text = "Forgive me, Princess..." },
 			},
+			-- becomingcloserrepeatable
 			{
 				RandomRemaining = true,
 				BreakIfPlayed = true,
 				PreLineWait = 0.85,
 				GameStateRequirements = 
 				{
-					NamedRequirementsFalse = { "FatesDiscovered" }
+					{
+						PathFromArgs = true,
+						Path = { "QueuedTextLinesName" },
+						IsAny =
+						{
+							"MorosBecomingCloserChatFollowUp01",
+							"MorosBecomingCloserChatFollowUp02",
+							"MorosBecomingCloserChatFollowUp03",
+							"MorosBecomingCloserChatFollowUp04",
+							"MorosBecomingCloserChatFollowUp05",
+							"MorosBecomingCloserChatFollowUp06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred" },
 				},
+
+				{ Cue = "/VO/Moros_0557", Text = "Melinoë..." },
+				{ Cue = "/VO/Moros_0127", Text = "Found you at last." },
+				{ Cue = "/VO/Moros_0577", Text = "Princess...?" },
+				{ Cue = "/VO/Moros_0578", Text = "I found you." },
+				{ Cue = "/VO/Moros_0579", Text = "You found me." },
+				{ Cue = "/VO/Moros_0580", Text = "Wait, Princess..." },
+			},
+			{
+				RandomRemaining = true,
+				BreakIfPlayed = true,
+				PreLineWait = 0.85,
 
 				{ Cue = "/VO/Moros_0127", Text = "Found you at last.",
 					GameStateRequirements =
 					{
 						{
-							PathFalse = { "GameState", "TextLinesRecord", "MorosGrantsQuestLog" },
+							PathFromArgs = true,
+							Path = { "QueuedTextLinesName" },
+							IsAny = { "MorosGrantsQuestLog" },
 						},
 					},
 				},
@@ -213,7 +248,9 @@ UnitSetData.NPC_Moros =
 					GameStateRequirements =
 					{
 						{
-							PathTrue = { "GameState", "TextLinesRecord", "MorosGrantsQuestLog" },
+							PathFromArgs = true,
+							Path = { "QueuedTextLinesName" },
+							IsAny = { "MorosSecondAppearance" },
 						},
 					},
 				},
@@ -221,22 +258,32 @@ UnitSetData.NPC_Moros =
 					GameStateRequirements =
 					{
 						{
-							Path = { "CurrentRun", "Hero", "TraitDictionary" },
-							HasAny = { "SurfacePenalty" },
+							PathFromArgs = true,
+							Path = { "QueuedTextLinesName" },
+							IsAny = { "MorosGrantsSurfacePenaltyCure01" },
 						},
 					},
 				},
-				--[[
-				{ Cue = "/VO/Moros_0096", Text = "Princess!",
+				{ Cue = "/VO/Moros_0384", Text = "Forgive my rudeness here.",
 					GameStateRequirements =
 					{
 						{
-							Path = { "CurrentRun", "Hero", "TraitDictionary" },
-							HasAny = { "SurfacePenalty" },
+							PathFromArgs = true,
+							Path = { "QueuedTextLinesName" },
+							IsAny = { "MorosPostRunAboutMorosKeepsake01", "MorosPostRunAboutMorosKeepsake02" },
 						},
 					},
 				},
-				]]--
+				{ Cue = "/VO/Moros_0364", Text = "Beg pardon?",
+					GameStateRequirements =
+					{
+						{
+							PathFromArgs = true,
+							Path = { "QueuedTextLinesName" },
+							IsAny = { "MorosPostRunAboutMorosAspect01" },
+						},
+					},
+				},
 			},
 		},
 
@@ -358,7 +405,155 @@ UnitSetData.NPC_Moros =
 				},
 			},
 
+			MorosPostRunAboutMorosKeepsake01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun" },
+						HasNone = { "Cleared", "ActiveBounty", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "BlockDeathKeepsake" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeMorosUnlock" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "MorosPostRunAboutMorosKeepsake02" },
+					},
+					NamedRequirementsFalse = { "ReachedEpilogue", "TrueEndingCriticalPathEventOccurred", "TrueFatesQuestCanBeCompleted", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0385",
+					PreLineWait = 1.0,
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "I stalled your doom as long as I was able to, Princess. But it was not sufficient. Forgive me... the Engraved Pin I gave you has its limitations, I'm afraid." },
+
+				{ Cue = "/VO/MelinoeField_4026", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					Text = "I got farther than I would have without it, Lord Moros. So I'm grateful to you and to this power you've bestowed. I know I could have put it to better use." },
+
+				{ Cue = "/VO/Moros_0386",
+					-- PreLineAnim = "Moros_Salute",
+					Text = "I know the same. Perhaps the reason I am here is so that you might reach your destination with this Pin. Or discover that you don't require it. Now let us both return...",
+					PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+
+						{ Cue = "/VO/Melinoe_0055_B", Text = "Until then." },
+					},
+				},
+			},
+			MorosPostRunAboutMorosKeepsake02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun" },
+						HasNone = { "Cleared", "ActiveBounty", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "BlockDeathKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "BlockDeathKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeMorosUnlock" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "MorosPostRunAboutMorosKeepsake01", "MorosGift07" },
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "TrueFatesQuestCanBeCompleted", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0486",
+					PreLineWait = 1.0,
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "The Engraved Pin helped you withstand your foes for longer even than I thought it could. Your bond with it is strong... meaning, {#Emph}our {#Prev}bond. But it was not enough." },
+
+				{ Cue = "/VO/MelinoeField_4027", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					Text = "I think I'm supposed to be the one feeling frustrated right now, Lord Moros. This certainly isn't the Pin's fault." },
+
+				{ Cue = "/VO/Moros_0487",
+					-- PreLineAnim = "Moros_Salute",
+					Text = "Well, nevertheless. May I escort you back to the Crossroads at least? I know returning can be quite abrupt, but I can mitigate a bit of that.",
+					PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+
+						{ Cue = "/VO/MelinoeField_4028", Text = "Certainly. After you." },
+					},
+				},
+			},
+			MorosPostRunAboutMorosAspect01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun" },
+						HasNone = { "Cleared", "BountyCleared", "IsDreamRun" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "TorchDetonateAspect" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosAboutMorosAspect01", "MorosGift05" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeMorosUnlock" },
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "TrueFatesQuestCanBeCompleted", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0488",
+					PreLineWait = 1.0,
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "You were wielding what must have been the Flames of Ygnium but in a form I didn't know. I felt them... call to me. So I am here." },
+
+				{ Cue = "/VO/MelinoeField_4029", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					Text = "Lord Moros, you sensed the Aspect of the Arms of Night bearing your name. The Flames already recognize you, but... I think I mustn't give them to you yet." },
+
+				{ Cue = "/VO/Moros_0489",
+					-- PreLineAnim = "Moros_Salute",
+					Text = "Oh I don't want them... I've never had to fight in such a way. Seldom even used my pinpoint blade, thank the Fates. Though perhaps when all this is over, you can teach me how to use them. See you at the Crossroads, Princess.",
+					PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+
+						{ Cue = "/VO/MelinoeField_1919_B", Text = "See you at the Crossroads!" },
+					},
+				},
+			},
+
 			-- relationship
+			-- alt below
 			MorosBecomingCloser01 =
 			{
 				PlayOnce = true,
@@ -368,11 +563,15 @@ UnitSetData.NPC_Moros =
 				{
 					{
 						Path = { "CurrentRun" },
-						HasNone = { "Cleared", "BountyCleared" }
+						HasNone = { "Cleared", "ActiveBounty", "IsDreamRun" },
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "MorosTaverna02" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "MorosBecomingCloser01_B" },
 					},
 					-- sorry, no...
 					{
@@ -380,7 +579,7 @@ UnitSetData.NPC_Moros =
 						HasNone = { "CirceShrinkTrait", "CirceEnlargeTrait" },
 					},
 					NamedRequirements = { "NoRecentBecomingCloserEvent" },
-					NamedRequirementsFalse = { "StandardPackageBountyActive", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+					NamedRequirementsFalse = { "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
 					--[[
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -430,7 +629,7 @@ UnitSetData.NPC_Moros =
 						},
 					},
 					{
-						PreLineWait = 1.5,
+						PreLineWait = 0.2,
 						UsePlayerSource = true,
 						GameStateRequirements =
 						{
@@ -439,11 +638,19 @@ UnitSetData.NPC_Moros =
 								IsAny = { "Choice_MorosAccept" },
 							},
 						},
+						{ Cue = "/VO/MelinoeField_3824", Text = "...Then we stay." },
+					},
+					{
+						PreLineWait = 0.3,
+						Source = { LineHistoryName = "NPC_Moros_01", SubtitleColor = Color.MorosVoice },
+						GameStateRequirements =
 						{
-							PreLineWait = 0.4,
-							UsePlayerSource = true,
-							{ Cue = "/VO/MelinoeField_3738", Text = "{#Emph}<Sigh> {#Prev}Return to shadow, now..." },
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
 						},
+						{ Cue = "/VO/Moros_0156", Text = "Yes." },
 					},
 				},
 				{
@@ -514,33 +721,565 @@ UnitSetData.NPC_Moros =
 							{ Cue = "/VO/Moros_0411",
 								SkipContextArt = true,
 								Portrait = "Portrait_Moros_Flushed_01",
-								EndSecretMusic = true,
 
 								Text = "You have my word. As for your own sense of time, {#Emph}that {#Prev}I cannot change. So, as much as I would like remaining here with you eternally... we should probably be getting back." },
 
-							{ Cue = "/VO/Melinoe_4158", 
+							{ Cue = "/VO/MelinoeField_3823",
 								SkipContextArt = true,
 								UsePlayerSource = true,
+								EndSecretMusic = true,
 								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
-
-								-- no time passes at all...
-								-- PostLineThreadedFunctionName = "InCombatTextEvent",
-								-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
-
-								Text = "You're probably right.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
-							--[[
-							{ Cue = "",
-								SkipContextArt = true,
-								Portrait = "Portrait_Moros_Pleased_01",
-								Text = "Probably... but, my heart says we can stay a little longer. And my mind has no coherent arguments to the contrary." },
+								Text = "Probably... but my heart says we can stay a little longer. And my mind has no coherent arguments to the contrary." },
 
 							{ Cue = "/VO/Moros_0412",
-								UsePlayerSource = true,
-								Text = "On that you'll hear no arguments from me either." },
-							]]--
+								SkipContextArt = true,
+								Portrait = "Portrait_Moros_Flushed_01",
+								EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+								Text = "On that, you'll hear no arguments from me, either.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
 						},
 					},
 				},
+			},
+			-- alt in case of cleared run
+			MorosBecomingCloser01_B =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun" },
+						HasAny = { "Cleared" },
+					},
+					{
+						Path = { "CurrentRun" },
+						HasNone = { "IsDreamRun", "ActiveBounty" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosTaverna02" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "MorosBecomingCloser01" },
+					},
+					-- sorry, no...
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "CirceShrinkTrait", "CirceEnlargeTrait" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent" },
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+					--[[
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					]]--
+				},
+
+				{ Cue = "/VO/Moros_0405",
+					PreLineWait = 1.0,
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "I apologize for the abruptness of my approach. My mind... told me not to appear before you without good cause, but my heart demanded otherwise. Is this... not a good time?" },
+
+				{ Cue = "/VO/MelinoeField_3822", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					Text = "Oh, you know, Lord Moros... I was just about to turn in after another night of furious conflict. So what brings you here? {#Emph}<Scoff> {#Prev}I must look like hell..." },
+
+				{ Cue = "/VO/Moros_0406",
+					Text = "No, you look... well, I am truly at a loss for words... I should have rehearsed what I sought to say more thoroughly." },
+
+				{ Cue = "/VO/MelinoeField_3731", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Casual_01",
+					Text = "You don't need to be so nervous around me, or so formal for that matter. And it's nice to see you here as well, in one of my many moments of wretched failure. How long can we stay here, anyway? It's so peaceful..." },
+
+				{ Cue = "/VO/Moros_0407",
+					Portrait = "Portrait_Moros_Pleased_01",
+					SecretMusic = "/Music/NarcissusTheme",
+					PreLineWait = 0.5,
+					Text = "We can stay for... I don't exactly know. A while, that to others shall seem merely an instant, so... I sought to see you here again, in the off chance... you sought to see me...?" },
+
+				EndVoiceLines =
+				{
+					{
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosDecline" },
+							},
+						},
+						{
+							PreLineWait = 0.4,
+							UsePlayerSource = true,
+							{ Cue = "/VO/MelinoeField_3734", Text = "Farewell..." },
+						},
+					},
+					{
+						PreLineWait = 0.2,
+						UsePlayerSource = true,
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{ Cue = "/VO/MelinoeField_3824", Text = "...Then we stay." },
+					},
+					{
+						PreLineWait = 0.3,
+						Source = { LineHistoryName = "NPC_Moros_01", SubtitleColor = Color.MorosVoice },
+						GameStateRequirements =
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{ Cue = "/VO/Moros_0156", Text = "Yes." },
+					},
+				},
+				{
+					Text = "Choice_MorosBecomingCloser01",
+					Portrait = "Portrait_Moros_Pleased_01",
+					IgnoreRawText = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					IsNarration = true,
+					SkipContextArt = true,
+					IgnoreContinueArrow = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_MorosDecline",
+							{ Cue = "/VO/MelinoeField_3732",
+								SkipContextArt = true,
+								UsePlayerSource = true,
+								PreLineWait = 1.0,
+								Portrait = "Portrait_Mel_Vulnerable_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+								Text = "It is the height of flattery that you would feel this way, Lord Moros. But... in listening to my own heart once again... it's not my wish to risk or change what we already have. I know you must be disappointed, but I hope you understand." },
+
+							{ Cue = "/VO/Moros_0408",
+								SkipContextArt = true,
+								PreLineWait = 0.5,
+								Portrait = "Portrait_Moros_Pleased_01",
+								Text = "No, not disappointed in the least, Princess. And I do understand. Forgive me, once again, this outburst of feeling... I don't wish to pretend I never asked, but... may we perhaps still carry on as close acquaintances?" },
+
+							{ Cue = "/VO/MelinoeField_3733",
+								Portrait = "Portrait_Mel_Empathetic_01",
+								SkipContextArt = true,
+								UsePlayerSource = true,
+								PreLineWait = 0.35,
+								Text = "If it were any other way, I'd never forgive myself, nor you." },
+
+							{ Cue = "/VO/Moros_0409",
+								SkipContextArt = true,
+								Portrait = "Portrait_Moros_Pleased_01",
+								Text = "{#Emph}Hah! {#Prev}Well then, may you recover as swiftly as ever, and I shall see you shortly on the other side. Farewell for now.",
+								PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+						},
+						{
+							ChoiceText = "Choice_MorosAccept",
+							{ Cue = "/VO/MelinoeField_3735",
+								SkipContextArt = true,
+								UsePlayerSource = true,
+								PreLineWait = 1.0,
+								Portrait = "Portrait_Mel_Proud_01",
+								PortraitExitAnimation = "Portrait_Mel_Proud_01_Exit",
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", TimeTicks = 10, ExtraWaitTime = 0.25 },
+
+								Text = "...Chance has nothing to do with it, Lord Moros. Most nights I have a brush with death, but not with you. I {#Emph}have {#Prev}wanted this, yes." },
+
+							-- INTERMISSION PRESENTATION
+
+							{ Cue = "/VO/MelinoeField_3736", 
+								SkipContextArt = true,
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								Text = "...Lord Moros, are... are you certain this shall only seem an instant by the time we return? Because..." },
+
+							{ Cue = "/VO/Moros_0411",
+								SkipContextArt = true,
+								Portrait = "Portrait_Moros_Flushed_01",
+
+								Text = "You have my word. As for your own sense of time, {#Emph}that {#Prev}I cannot change. So, as much as I would like remaining here with you eternally... we should probably be getting back." },
+
+							{ Cue = "/VO/MelinoeField_3823",
+								SkipContextArt = true,
+								UsePlayerSource = true,
+								EndSecretMusic = true,
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								Text = "Probably... but my heart says we can stay a little longer. And my mind has no coherent arguments to the contrary." },
+
+							{ Cue = "/VO/Moros_0412",
+								SkipContextArt = true,
+								Portrait = "Portrait_Moros_Flushed_01",
+								EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+								Text = "On that, you'll hear no arguments from me, either.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+						},
+					},
+				},
+			},
+
+			MorosBecomingCloserChatFollowUp01 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "PrevRun", "TextLinesRecord" },
+						HasAny =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0585",
+					PreLineWait = 1.0,
+					Portrait = "Portrait_Moros_Pleased_01",
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "...You summoned me?" },
+
+				{ Cue = "/VO/MelinoeField_5310", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					ExitPortraitImmediately = true,
+
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", Repeatable = true, TimeTicks = 10 },
+
+					Text = "Good evening, Lord Moros. Glad you could make it." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Moros_0540",
+					SkipContextArt = true,
+					Portrait = "Portrait_Moros_Flushed_01",
+
+					Text = "...As much as I long for you to succeed each night, I couldn't wait to see you again." },
+
+				{ Cue = "/VO/MelinoeField_5311", 
+					SkipContextArt = true,
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+
+					-- no time passes at all...
+					-- PostLineThreadedFunctionName = "InCombatTextEvent",
+					-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Text = "I felt much the same. See you in the Crossroads.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+			},
+			MorosBecomingCloserChatFollowUp02 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "PrevRun", "TextLinesRecord" },
+						HasAny =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0582",
+					PreLineWait = 1.0,
+					Portrait = "Portrait_Moros_Pleased_01",
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "...Pardon the interruption." },
+
+				{ Cue = "/VO/MelinoeField_5312", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					ExitPortraitImmediately = true,
+
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", Repeatable = true, TimeTicks = 10 },
+
+					Text = "There you are, Moros. It's good to see you." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Moros_0542",
+					SkipContextArt = true,
+					Portrait = "Portrait_Moros_Flushed_01",
+
+					Text = "...I'm so accustomed to feeling alone while here... but to be together with you...?" },
+
+				{ Cue = "/VO/MelinoeField_5313", 
+					SkipContextArt = true,
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+
+					-- no time passes at all...
+					-- PostLineThreadedFunctionName = "InCombatTextEvent",
+					-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Text = "It's nice. Though we had best get back.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+			},
+			MorosBecomingCloserChatFollowUp03 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "PrevRun", "TextLinesRecord" },
+						HasAny =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+
+				{ Cue = "/VO/Moros_0581",
+					PreLineWait = 1.0,
+					Portrait = "Portrait_Moros_Pleased_01",
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "...Please don't return just yet." },
+
+				{ Cue = "/VO/MelinoeField_5314", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					ExitPortraitImmediately = true,
+
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", Repeatable = true, TimeTicks = 10 },
+
+					Text = "You got here just in time, Lord Moros. Good." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Moros_0544",
+					SkipContextArt = true,
+					Portrait = "Portrait_Moros_Flushed_01",
+
+					Text = "...It's comfortable here, isn't it? Peaceful and quiet. And with you, so much the better." },
+
+				{ Cue = "/VO/MelinoeField_5315", 
+					SkipContextArt = true,
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+
+					-- no time passes at all...
+					-- PostLineThreadedFunctionName = "InCombatTextEvent",
+					-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Text = "It's comfortable indeed. We could stay longer I suppose?", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+			},
+			MorosBecomingCloserChatFollowUp04 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "PrevRun", "TextLinesRecord" },
+						HasAny =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0556",
+					PreLineWait = 1.0,
+					Portrait = "Portrait_Moros_Pleased_01",
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "...All these shadows." },
+
+				{ Cue = "/VO/MelinoeField_5316", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					ExitPortraitImmediately = true,
+
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", Repeatable = true, TimeTicks = 10 },
+
+					Text = "Hi, Moros. I suppose we're all alone again." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Moros_0546",
+					SkipContextArt = true,
+					Portrait = "Portrait_Moros_Flushed_01",
+
+					Text = "...I know it's not your preference to end up here in this place, but we can make it ours." },
+
+				{ Cue = "/VO/MelinoeField_5317", 
+					SkipContextArt = true,
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+
+					-- no time passes at all...
+					-- PostLineThreadedFunctionName = "InCombatTextEvent",
+					-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Text = "I'd say we already have.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+			},
+			MorosBecomingCloserChatFollowUp05 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "PrevRun", "TextLinesRecord" },
+						HasAny =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0553",
+					PreLineWait = 1.0,
+					Portrait = "Portrait_Moros_Pleased_01",
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "...Moonlight even here." },
+
+				{ Cue = "/VO/MelinoeField_5318", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					ExitPortraitImmediately = true,
+
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", Repeatable = true, TimeTicks = 10 },
+
+					Text = "You made it, Lord Moros. And always so punctual." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Moros_0548",
+					SkipContextArt = true,
+					Portrait = "Portrait_Moros_Flushed_01",
+
+					Text = "...If you're not in a hurry to return, would you mind remaining here with me?" },
+
+				{ Cue = "/VO/MelinoeField_5319", 
+					SkipContextArt = true,
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+
+					-- no time passes at all...
+					-- PostLineThreadedFunctionName = "InCombatTextEvent",
+					-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Text = "It would be my pleasure.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
+			},
+			MorosBecomingCloserChatFollowUp06 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "PrevRun", "TextLinesRecord" },
+						HasAny =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirementsFalse = { "TrueEndingCriticalPathEventOccurred", "FatesDiscovered", "FatesDiscoveredTooSoon", "NearTrueEnding" },
+				},
+				SkipContextArt = true,
+
+				{ Cue = "/VO/Moros_0485",
+					PreLineWait = 1.0,
+					Portrait = "Portrait_Moros_Pleased_01",
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					Text = "...Pardon the intrusion." },
+
+				{ Cue = "/VO/MelinoeField_5320", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Empathetic_01",
+
+					ExitPortraitImmediately = true,
+
+					-- PreLineFunctionName = "DoomContextArtPresentation",
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { SkipFadeOut = true, SkipTimePassage = true, Text= "BedroomIntermissionMessageAlt", TitleTextOffetX = 101, Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Moros", Repeatable = true, TimeTicks = 10 },
+
+					Text = "Hello, Moros. I've thought fondly of when last we were here." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Moros_0550",
+					SkipContextArt = true,
+					Portrait = "Portrait_Moros_Flushed_01",
+
+					Text = "...I used to feel nothing while here. But now, with you... there's so much more." },
+
+				{ Cue = "/VO/MelinoeField_5321", 
+					SkipContextArt = true,
+					UsePlayerSource = true,
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+
+					-- no time passes at all...
+					-- PostLineThreadedFunctionName = "InCombatTextEvent",
+					-- PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Text = "And I look forward to meeting my Doom on nights like this.", PostLineThreadedFunctionName = "HideDoomContextArtPresentation" },
 			},
 
 			-- @ ending
@@ -582,7 +1321,7 @@ UnitSetData.NPC_Moros =
 					Portrait = "Portrait_Fates_02_NoEnter",
 					Speaker = "NPC_Fates_01",
 					PortraitExitAnimation = "Portrait_Fates_02_Exit",
-					Text = "{#Emph}OK! {#Prev}We're {#Emph}fine{#Prev}, sweetie, least {#Emph}now {#Prev}we are! Your grandpa got us, yeah, we were a little miffed, you know? Cause we'd been {#Emph}weaving{#Prev}, and {#Emph}weaving{#Prev}, and {#Emph}weaving{#Prev}, so then we figured: What's a better time to take a break?" },
+					Text = "{#Emph}OK! {#Prev}We're {#Emph}fine{#Prev}, sweetie, least {#Emph}now {#Prev}we are! Your grandpa got us, yeah, we were a little miffed, you know? 'Cause we'd been {#Emph}weaving{#Prev}, and {#Emph}weaving{#Prev}, and {#Emph}weaving{#Prev}, so then we figured: What's a better time to take a break?" },
 
 				{ Cue = "/VO/MelinoeField_4074", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
@@ -681,7 +1420,7 @@ UnitSetData.NPC_Moros =
 					},
 				},
 			},
-			-- goes to Outro_Epilogue01 =
+			-- goes to the QuestRescueFatesTrue interstitial
 		},
 
 		InteractTextLineSets =
@@ -1350,7 +2089,7 @@ UnitSetData.NPC_Moros =
 					Text = "The Oath of the Unseen is somewhere here, isn't that so, Princess...? The aura that it emanates... I haven't felt it since before all this. I thought the Oath was lost with Mother Nyx, but it was in the care of Lady Hecate." },
 				{ Cue = "/VO/Melinoe_3121", UsePlayerSource = true,
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "It's in my own care now. The will of Night shall be done no matter what, isn't that so? You're here among the Unseen; you know our charge." },
 				EndVoiceLines =
 				{
@@ -1358,6 +2097,90 @@ UnitSetData.NPC_Moros =
 						PreLineWait = 0.4,
 						ObjectType = "NPC_Moros_01",
 						{ Cue = "/VO/Moros_0314", Text = "The Oath is clearly in good hands." },
+					},
+				},
+			},
+			MorosAboutShrine02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MorosAboutShrine01" },
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 20,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0499",
+					Text = "It's such a fearsome night. On such occasions the Three Fates and I would do some of our finest work, I think." },
+
+				{ Cue = "/VO/Melinoe_4763", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You mean by sending mortals to some sort of unexpected but ultimately warranted demise. Did doing so involve the Oath of the Unseen?" },
+
+				{ Cue = "/VO/Moros_0500",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "Most likely, yes. I didn't speak the vows myself, but did experience some of the results. When mortals perish in some sort of dramatic fashion, it tends to make for reverent and obedient Shades." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						{ Cue = "/VO/Melinoe_4764", Text = "I could see that." },
+					},
+				},
+			},
+
+			MorosAboutTrophyQuest01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "TrophyQuestComplete03", "SkellyAboutTrophyQuest03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Melinoe_4767", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Are you familiar with the Gifts of the Veil, Lord Moros? Bestowed on Night's Champion for dedicated service to the realm, having sworn a lot of Vows." },
+
+				{ Cue = "/VO/Moros_0505",
+					PreLineAnim = "Moros_Pensive_Start",
+					Text = "I'm well aware of them indeed. My sisters wove the Gifts themselves; considered them some of their finest work. Why do you ask?" },
+
+				{ Cue = "/VO/Melinoe_4768", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Merely curious. And when you say they {#Emph}wove {#Prev}the Gifts, you don't mean sculpting, metallurgy, anything like that?" },
+
+				{ Cue = "/VO/Moros_0506",
+					PreLineAnim = "Moros_Pensive_End",
+					Text = "No, Princess. What you insinuate is causing me some slight concern. Did something happen to the Gifts?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4769", Text = "Oh not at all! I think." },
 					},
 				},
 			},
@@ -1391,6 +2214,105 @@ UnitSetData.NPC_Moros =
 						PreLineWait = 0.4,
 						UsePlayerSource = true,
 						{ Cue = "/VO/Melinoe_0693", Text = "You're welcome here and safe." },
+					},
+				},
+			},
+
+			MorosAboutTavernaShades01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "WorldUpgradesAdded" },
+						HasAll = { "WorldUpgradeGameStats", "WorldUpgradeRunHistory" },
+					},
+					{
+						Path = { "GameState", "ScreensViewed" },
+						HasAll = { "GameStats", "RunHistory" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0507",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "That Record Keeper over at the taverna must have served your father. And the Sage appears to have experience with prophecy. You've assembled quite a retinue." },
+
+				{ Cue = "/VO/Melinoe_4770", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I've always gotten on with Shades. Sometimes I think I understand them better than living beings. They can be easier for me to read." },
+
+				{ Cue = "/VO/Moros_0508",
+					PreLineAnim = "Moros_Pensive_Start",
+					PostLineAnim = "Moros_Pensive_End",
+					Text = "I make most social inferences from a mix of speech, both tone and substance, and the speaker's small movements. With Shades, I can't discern these things at all." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						{ Cue = "/VO/Melinoe_4771", Text = "Takes practice certainly." },
+					},
+				},
+			},
+
+			MorosAboutFurnishings01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraWithMoros01" },
+					},
+					{
+						Path = { "GameState", "WorldUpgrades" },
+						CountOf =
+						{
+							"Cosmetic_MorosChaise",
+							"Cosmetic_MorosTentCanopy",
+							"Cosmetic_MorosScrolls",
+							"Cosmetic_MorosRug",
+							"Cosmetic_MorosSpools",
+							"Cosmetic_MorosTerrain",
+						},
+						Comparison = ">=",
+						Value = 4,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0501",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "All these thoughtful furnishings nearby... thank you, Princess. Your companion Dora asked me a variety of questions about my preferences, but I didn't realize you would accommodate me in this way." },
+
+				{ Cue = "/VO/Melinoe_4765", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "As you've been staying with us for a little while now, you may as well have a degree of comfort here. Though surely it's nothing compared to what you had serving the Fates." },
+
+				{ Cue = "/VO/Moros_0502",
+					PreLineAnim = "Moros_Perplexed_End",
+					Text = "Oh, where I used to reside was more configured to my sisters' tastes. Although considering how much I've come to like spindles and drapery, perhaps mine aren't far off." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						{ Cue = "/VO/Melinoe_4766", Text = "To each their own!" },
 					},
 				},
 			},
@@ -1838,6 +2760,9 @@ UnitSetData.NPC_Moros =
 					{
 						PathTrue = { "CurrentRun", "TraitCache", "TorchDetonateAspect" }
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
@@ -1846,14 +2771,17 @@ UnitSetData.NPC_Moros =
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "I figured that you knew something of the Nocturnal Arms, Lord Moros. But your connection to Ygnium, I'd not have guessed. You once wielded the Umbral Flames yourself! I revealed an Aspect of them that could only be your own." },
+
 				{ Cue = "/VO/Moros_0432",
 					PreLineAnim = "Moros_Perplexed_Start",
 					Text = "Princess, I take it you're not saying this for sake of jest, so please believe in turn that I have never used the Flames before; I know them only by reputation. Can you be certain that this Aspect is my own? I've many relatives..." },
+
 				{ Cue = "/VO/Melinoe_3156", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Hesitant_01",
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "I... yes, I think it is! The Nocturnal Arms bond with their bearers in such a way that their connections to other bearers become almost like shared memories. Although..." },
+
 				{ Cue = "/VO/Moros_0316",
 					PostLineAnim = "Moros_Perplexed_End",
 					Text = "...Although, these glimpses can be both of bearers past, and still to come, true? So it may be that I shall bear those Flames in some other age in which the realm's in need. I... trust the Fates must have wanted me to know in advance." },
@@ -1863,6 +2791,58 @@ UnitSetData.NPC_Moros =
 						PreLineWait = 0.4,
 						UsePlayerSource = true,
 						{ Cue = "/VO/Melinoe_3157", Text = "Well, {#Emph}erm... {#Prev}surprise...!" },
+					},
+				},
+			},
+			MorosAboutMorosAspect02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "WeaponsCache", "WeaponTorch" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosAboutMorosAspect01", "MorosTaverna02" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Melinoe_4775", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "So when did you want to start learning the Umbral Flames, Lord Moros? Perhaps a lesson is in order at some point." },
+
+				{ Cue = "/VO/Moros_0688",
+					PreLineAnim = "Moros_Perplexed_Start",
+					Text = "As tempting as that sounds, I don't think I ought to be borrowing the Arms of Night. I don't want to make too much a habit of defying my sisters, even if they're not around." },
+
+				{ Cue = "/VO/Melinoe_4776", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "What do you suppose will be the reason I eventually hand over the Flames to you, then? Or it may not even be me..." },
+
+				{ Cue = "/VO/Moros_0689",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "A situation similar to yours; those I care about in need, the Flames available. I'd take them up unhesitatingly." },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4777", Text = "And come to my rescue!" },
+					},
+					{
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Moros_01",
+						{ Cue = "/VO/Moros_0690", Text = "That's not what I meant." },
 					},
 				},
 			},
@@ -2104,6 +3084,7 @@ UnitSetData.NPC_Moros =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
+				GiftableOffSource = true,
 				GameStateRequirements =
 				{
 					{
@@ -2117,15 +3098,18 @@ UnitSetData.NPC_Moros =
 					PreLineAnim = "Moros_Perplexed_Start",
 					PostLineAnim = "Moros_Perplexed_End",
 					Text = "I have been thinking more about what you said at the taverna, Princess. About finding one's source of motivation, whether through encouraging results or through adversity. Or more Ambrosia." },
+					
 				{ Cue = "/VO/Melinoe_4634", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Casual_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "{#Emph}Oh {#Prev}I wasn't being serious about the Ambrosia part. It's just, I find it remarkable sometimes that adversity and negativity spur me more than expressions of faith and support." },
+
 				{ Cue = "/VO/Moros_0431",
 					Portrait = "Portrait_Moros_Pleased_01",
 					PreLineAnim = "Moros_Salute",				
 					Text = "{#Emph}Hah! {#Prev}As a force of adversity and negativity myself, I appreciate your open-mindedness. But I wanted to say that Ambrosia's quite a motivator, too. I trust we can share some again sometime." },
+
 				EndVoiceLines =
 				{
 					{
@@ -2187,9 +3171,20 @@ UnitSetData.NPC_Moros =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
-						IsAny = { "Choice_MorosAccept" },
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01_B" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -2229,9 +3224,20 @@ UnitSetData.NPC_Moros =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
-						IsAny = { "Choice_MorosDecline" },
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosDecline" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosDecline" },
+							},
+						},
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -2273,12 +3279,23 @@ UnitSetData.NPC_Moros =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01" },
-						IsAny = { "Choice_MorosAccept" },
-					},
-					{
 						FunctionName = "RequireRunsSinceTextLines",
-						FunctionArgs = { TextLines = { "MorosBecomingCloser01" }, Min = 3 },
+						FunctionArgs = { TextLines = { "MorosBecomingCloser01", "MorosBecomingCloser01_B" }, Min = 3 },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -2322,15 +3339,27 @@ UnitSetData.NPC_Moros =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "MorosBecomingCloser01" }
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "NemesisPostCombatBecomingCloser01", "ErisBecomingCloser01", "IcarusBecomingCloser01" },
 					},
 					{
 						FunctionName = "RequireRunsSinceTextLines",
-						FunctionArgs = { TextLines = { "MorosBecomingCloser01", "NemesisPostCombatBecomingCloser01", "ErisBecomingCloser01", "IcarusBecomingCloser01" }, Min = 2 },
+						FunctionArgs = { TextLines = { "MorosBecomingCloser01", "MorosBecomingCloser01_B", "NemesisPostCombatBecomingCloser01", "ErisBecomingCloser01", "IcarusBecomingCloser01" }, Min = 2 },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -3366,6 +4395,61 @@ UnitSetData.NPC_Moros =
 				},
 			},
 
+			MorosAboutIcarus01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "IcarusHomeAboutMoros01", "IcarusHomeAboutMoros01_B" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "UseRecord", "NPC_Icarus_01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Icarus_01", } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0496",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "That winged Shade you speak to on some nights... I recall his case, and am surprised a simple boy who died too young found his way here. He is an asset to your cause?" },
+					
+				{ Cue = "/VO/Melinoe_4757", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Icarus is no mere asset. He's the apprentice of great Daedalus, as well as someone dear to me. I think he may remember you as well." },
+
+				{ Cue = "/VO/Moros_0497",
+					PreLineAnim = "Moros_Pensive_Start",
+					PostLineAnim = "Moros_Pensive_End",
+					Text = "A mortal's death often results in them forgetting me, though not always. I'm pleased that Icarus did not allow the circumstances of his passing to dictate the rest of his existence. Do you recommend I greet him?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.37,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4758", Text = "Probably best to leave him be." },
+					},
+					{
+						PreLineWait = 0.37,
+						ObjectType = "NPC_Moros_01",
+						{ Cue = "/VO/Moros_0498", Text = "That tends to be the case." },
+					},
+				},
+			},
+
 			MorosAboutArachne01 =
 			{
 				PlayOnce = true,
@@ -3865,6 +4949,9 @@ UnitSetData.NPC_Moros =
 					{
 						PathTrue = { "CurrentRun", "TraitCache", "TorchAutofireAspect" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					--[[ asserting... but why...
 					{
 						SumPrevRuns = 8,
@@ -3881,7 +4968,7 @@ UnitSetData.NPC_Moros =
 				{ Cue = "/VO/Melinoe_4586", UsePlayerSource = true,
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "The phrase you told me ended up revealing a new Aspect of the Umbral Flames, of a dark god known as Supay. Is that name at all familiar to you?" },
+					Text = "The phrase you told me ended up revealing a new Aspect of the Umbral Flames, a dark god known as Supay. Is that name at all familiar to you?" },
 				{ Cue = "/VO/Moros_0372_B",
 					PreLineAnim = "Moros_Perplexed_Start",
 					PostLineAnim = "Moros_Perplexed_End",
@@ -4052,6 +5139,7 @@ UnitSetData.NPC_Moros =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
 				GameStateRequirements =
 				{
 					{
@@ -4073,6 +5161,9 @@ UnitSetData.NPC_Moros =
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestRescueFatesProgress" },
 
 				{ Cue = "/VO/Moros_0454",
 					PreLineAnim = "Moros_Perplexed_Start",
@@ -4098,12 +5189,13 @@ UnitSetData.NPC_Moros =
 				{ Cue = "/VO/Moros_0456",
 					PreLineAnim = "Moros_Pensive_Start",
 					PostLineAnim = "Moros_Pensive_End",
+					PostLineThreadedFunctionName = "FlashQuestLog",
 					Text = "I often search the void where you and I first met, since the Fates would sometimes go there, too. But it's a vast place..." },
 
 				EndVoiceLines =
 				{
 					{
-						PreLineWait = 0.38,
+						PreLineWait = 0.5,
 						UsePlayerSource = true,
 						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
 						{ Cue = "/VO/Melinoe_4794", Text = "We'll keep searching." },
@@ -4115,6 +5207,7 @@ UnitSetData.NPC_Moros =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
 				GameStateRequirements =
 				{
 					{
@@ -4138,6 +5231,9 @@ UnitSetData.NPC_Moros =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
 
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestRescueFatesTrue" },
+
 				{ Cue = "/VO/Moros_0457",
 					PreLineAnim = "Moros_Perplexed_Start",
 					-- PreLineAnim = "Moros_Pensive_Start",
@@ -4151,12 +5247,13 @@ UnitSetData.NPC_Moros =
 
 				{ Cue = "/VO/Moros_0458",
 					PreLineAnim = "Moros_Perplexed_End",
+					PostLineThreadedFunctionName = "FlashQuestLog",
 					Text = "I'm attempting to understand what could have prompted such a change. You'll follow where the List is leading, yes?" },
 
 				EndVoiceLines =
 				{
 					{
-						PreLineWait = 0.38,
+						PreLineWait = 0.5,
 						UsePlayerSource = true,
 						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
 						{ Cue = "/VO/Melinoe_4797", Text = "You have my word." },
@@ -4168,6 +5265,7 @@ UnitSetData.NPC_Moros =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
+				InitialGiftableOffSource = true,
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ReachedEpilogue" },
@@ -4237,6 +5335,7 @@ UnitSetData.NPC_Moros =
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusAboutEpilogue01" },
 					},
+					NamedRequirements = { "ReachedEpilogue" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
@@ -4372,6 +5471,56 @@ UnitSetData.NPC_Moros =
 				},
 			},
 
+			MorosAboutRain01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "NextBiomeStateName" },
+						IsAny = { "Rain" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosTaverna02" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+
+				{ Cue = "/VO/Moros_0695",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "The rain is quite refreshing here, and strange. It never rains where I am from. A contribution from your grandmother to keep the Crossroads verdant, I suppose." },
+
+				{ Cue = "/VO/Melinoe_4778", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I learned I was related to Lady Demeter when I was young, and always thought of her whenever it did rain. She and my mother seem so different. I wonder how they got on." },
+
+				{ Cue = "/VO/Moros_0696",
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "Knowing how it is between the generations in our families, it's possible they didn't get along that well. But your mother would regularly visit at least, I understand." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.37,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+						{ Cue = "/VO/Melinoe_4779", Text = "I'll try to do the same." },
+					},
+				},
+			},
+
 			-- partner conversations
 			MorosWithOdysseus01 =
 			{
@@ -4379,7 +5528,7 @@ UnitSetData.NPC_Moros =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "MorosAboutOdysseus02" },
+						PathTrue = { "GameState", "TextLinesRecord", "MorosAboutOdysseus01" },
 					},
 				},
 
@@ -4407,11 +5556,13 @@ UnitSetData.NPC_Moros =
 					Text = "Oh, {#Emph}hah{#Prev}, I'm... flattered and relieved to hear it, very kind of you to let me know, particularly after... all this time..." },
 				{ Cue = "/VO/Moros_0193",
 					PreLineAnim = "Moros_Greet",
+					Portrait = "Portrait_Moros_Pleased_01",
 					Text = "It's quite humorous, in fact. While you drew breath, I never once had opportunity to tell you!" },
 				{ Cue = "/VO/Odysseus_0167", Portrait = "Portrait_Odysseus_Default_01", Speaker = "NPC_Odysseus_01",
 					Text = "{#Emph}Erm, {#Prev}quite humorous indeed, milord! I intended no offense by avoiding you, you know that, of course? A mortal impulse, whilst in mortal peril." },
 				{ Cue = "/VO/Moros_0194",
-					Text = "Oh, you were a wonder to behold! There were the Laestrygonian giants, Charybdis, and, lest we forget... the war of Ilium...!" },
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "Oh, you were a wonder to behold! There were the Laestrygonian Giants, Charybdis, and, lest we forget... the war of Ilium...!" },
 				EndVoiceLines =
 				{
 					{
@@ -4428,7 +5579,7 @@ UnitSetData.NPC_Moros =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "MorosAboutOdysseus01", "OdysseusBackstory01" },
+						HasAll = { "MorosWithOdysseus01" },
 					},
 					{
 						FunctionName = "RequireRunsSinceTextLines",
@@ -4525,6 +5676,60 @@ UnitSetData.NPC_Moros =
 						PreLineWait = 0.4,
 						ObjectType = "NPC_Odysseus_01",
 						{ Cue = "/VO/Odysseus_0227", Text = "Hear that, Goddess?" },
+					},
+				},
+			},
+			MorosWithOdysseus04 =
+			{
+				Partner = "NPC_Odysseus_01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosWithOdysseus03", "MorosTaverna02", "OdysseusFishing02" },
+					},
+				},
+
+				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				SkipPreEventFunction = true,
+				-- StatusAnimation = false,
+				TeleportToId = 557112,
+				TeleportOffsetX = 100,
+				TeleportOffsetY = 100,
+				AngleTowardTargetId = 557112,
+				InteractDistance = 300,
+
+				{ Cue = "/VO/Moros_0691",
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "...Oh we were very busy during that time, as I know you were, Master Odysseus. Marshaling armies, outsmarting enemy commanders... you fought so fiercely then!" },
+
+				{ Cue = "/VO/Odysseus_0703", Portrait = "Portrait_Odysseus_Default_01", Speaker = "NPC_Odysseus_01",
+					PreLineAnim = "Odysseus_Greet",
+					PreLineAnimTarget = 557112,
+					Text = "Yes, well... I'm pleased to now be plying my trade from behind a desk. It's difficult to lead a life of bloodshed for too long. Especially for mortals since they die." },
+
+				{ Cue = "/VO/Moros_0692",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Salute",
+					Text = "Well I salute all your accomplishments and daring escapes! Lady Hecate could not have chosen a better Shade." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Odysseus_01",
+						PreLineAnim = "Odysseus_KnifeToss",
+						{ Cue = "/VO/Odysseus_0704", Text = "{#Emph}Hah{#Prev}, surely not if you yourself say so!" },
 					},
 				},
 			},
@@ -4647,7 +5852,6 @@ UnitSetData.NPC_Moros =
 				-- GiftableOffSource = true,
 				-- UseText = "UseListenNPC",
 				-- BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				SkipPreEventFunction = true,
 				-- StatusAnimation = false,
 				TeleportToId = 566612,
@@ -4700,7 +5904,6 @@ UnitSetData.NPC_Moros =
 				},
 				BlockDistanceTriggers = true,
 				SkipPreEventFunction = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 590426,
 				AngleTowardTargetId = 585573,
@@ -4753,7 +5956,6 @@ UnitSetData.NPC_Moros =
 				},
 				BlockDistanceTriggers = true,
 				SkipPreEventFunction = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 590426,
 				AngleTowardTargetId = 585573,
@@ -4816,16 +6018,15 @@ UnitSetData.NPC_Moros =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "MorosAboutIcarus01" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "IcarusHomeAboutMoros01", "IcarusHomeAboutMoros01_B" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MorosAboutIcarus01" }
 					},
 				},
 				BlockDistanceTriggers = true,
 				SkipPreEventFunction = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 743557,
 				TeleportOffsetY = 50,
@@ -4887,7 +6088,6 @@ UnitSetData.NPC_Moros =
 				-- StatusAnimation = false,
 				BlockDistanceTriggers = true,
 				SkipPreEventFunction = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 566613,
 				AngleTowardTargetId = 566620,
@@ -5195,6 +6395,7 @@ UnitSetData.NPC_Moros =
 				},
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
 				{ Cue = "/VO/Moros_0025",
+					Portrait = "Portrait_Moros_Pleased_01",
 					Text = "Always a pleasure, Princess. Though, please... don't let me keep you." },
 			},
 			MorosChat23 =
@@ -5270,11 +6471,27 @@ UnitSetData.NPC_Moros =
 			},
 			MorosChat28 =
 			{
+				PlayFirst = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "MorosGift01" },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01" },
+								IsNone = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B" },
+								IsNone = { "Choice_MorosAccept" },
+							},
+						},
 					},
 				},
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
@@ -5300,13 +6517,531 @@ UnitSetData.NPC_Moros =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "MorosGift01" },
+						PathTrue = { "GameState", "TextLinesRecord", "MorosGift04" },
 					},
 				},
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
 				{ Cue = "/VO/Moros_0033",
+					Portrait = "Portrait_Moros_Pleased_01",
 					Text = "I've no additional bad news for now, I'm pleased to say, Princess." },
 			},
+
+			MorosChat31 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Cleared" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosGift06", "ZeusPalacePostTrueEnding01" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "NeoChronosAboutTartarus01", "NeoChronosAboutTartarus01_B" }
+					},
+				},
+				{ Cue = "/VO/Moros_0670",
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "May your next battle beyond space and time go as smoothly as the last." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat32 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "Cleared" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosGift04" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TraitCache", "BlockDeathKeepsake" },
+						-- CountPathTrue = true,
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				{ Cue = "/VO/Moros_0671",
+					Text = "You need a few extra moments out there, remember you have the Engraved Pin." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat33 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+				},
+				{ Cue = "/VO/Moros_0672",
+					Text = "I shall be keeping an eye on the Fated List, in case of any sudden change." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat34 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "RoomsEntered", "O_Boss01" },
+					},
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Eris_01", } },
+					},
+				},
+				{ Cue = "/VO/Moros_0673",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "If you're headed toward the surface, perhaps I can delay Eris a bit..." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat35 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MorosGift08" },
+					},
+				},
+				{ Cue = "/VO/Moros_0674",
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "I know you've done this once or twice, though please be careful nonetheless." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat36 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B" },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/Moros_0675",
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "Each time I see you, it reminds me of the first, Melinoë." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat37 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgrades", "Cosmetic_MorosSpools" },
+					},
+					{
+						Path = { "GameState", "WorldUpgrades" },
+						CountOf =
+						{
+							"Cosmetic_MorosChaise",
+							"Cosmetic_MorosTentCanopy",
+							"Cosmetic_MorosScrolls",
+							"Cosmetic_MorosRug",
+							-- "Cosmetic_MorosSpools",
+							"Cosmetic_MorosTerrain",
+						},
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				{ Cue = "/VO/Moros_0676",
+					Portrait = "Portrait_Moros_Pleased_01",
+					Text = "Perhaps I ought to take up weaving for myself with all of this." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat38 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraWithMoros01" },
+					},
+				},
+				{ Cue = "/VO/Moros_0677",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "I'm beginning to fear your companion Dora is set to sneak up on me..." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+			MorosChat39 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MorosGift06" },
+					},
+				},
+				{ Cue = "/VO/Moros_0678",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Attention",
+					Text = "Come what may, I'm pleased that I could be here in these Crossroads with you all." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+
+			MorosBecomingCloserChat01 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentMorosBecomingCloserEvent" },
+					NamedRequirementsFalse = { "SurfaceRouteLockedByTyphonKill", "ErisBecomingCloserEventQueued", "IcarusBecomingCloserEligible" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0539",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "Might I pay you a visit tonight during your return? If you'd welcome that..." },
+
+				{ Cue = "/VO/Melinoe_5896", UsePlayerSource = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...Perhaps. You know where to find me." },
+			},
+			MorosBecomingCloserChat02 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentMorosBecomingCloserEvent" },
+					NamedRequirementsFalse = { "SurfaceRouteLockedByTyphonKill", "ErisBecomingCloserEventQueued", "IcarusBecomingCloserEligible" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0541",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Pensive_Start",
+					PostLineAnim = "Moros_Pensive_End",
+					Text = "I'd like to see you again this evening, once you're finished with your work of course." },
+
+				{ Cue = "/VO/Melinoe_5897", UsePlayerSource = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...I think that can be arranged." },
+			},
+			MorosBecomingCloserChat03 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentMorosBecomingCloserEvent" },
+					NamedRequirementsFalse = { "SurfaceRouteLockedByTyphonKill", "ErisBecomingCloserEventQueued", "IcarusBecomingCloserEligible" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0543",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Perplexed_Start",
+					PostLineAnim = "Moros_Perplexed_End",
+					Text = "I mustn't interfere too much with your journey tonight... but, might I see you after?" },
+
+				{ Cue = "/VO/Melinoe_5898", UsePlayerSource = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...Yes, you certainly might." },
+			},
+			MorosBecomingCloserChat04 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentMorosBecomingCloserEvent" },
+					NamedRequirementsFalse = { "SurfaceRouteLockedByTyphonKill", "ErisBecomingCloserEventQueued", "IcarusBecomingCloserEligible" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0545",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Pensive_Start",
+					PostLineAnim = "Moros_Pensive_End",
+					Text = "Should your path lead to an untimely fall tonight, perhaps I can be there to catch you." },
+
+				{ Cue = "/VO/Melinoe_5899", UsePlayerSource = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...You're welcome to try." },
+			},
+			MorosBecomingCloserChat05 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentMorosBecomingCloserEvent" },
+					NamedRequirementsFalse = { "SurfaceRouteLockedByTyphonKill", "ErisBecomingCloserEventQueued", "IcarusBecomingCloserEligible" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0547",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Pensive_Start",
+					PostLineAnim = "Moros_Pensive_End",
+					Text = "Do you think you might be free this evening once your work is over with?" },
+
+				{ Cue = "/VO/Melinoe_5900", UsePlayerSource = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...Oh I think so, yes." },
+			},
+			MorosBecomingCloserChat06 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01_B", },
+								IsAny = { "Choice_MorosAccept" },
+							},
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentMorosBecomingCloserEvent" },
+					NamedRequirementsFalse = { "SurfaceRouteLockedByTyphonKill", "ErisBecomingCloserEventQueued", "IcarusBecomingCloserEligible" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MorosGreeting,
+
+				{ Cue = "/VO/Moros_0549",
+					Portrait = "Portrait_Moros_Pleased_01",
+					PreLineAnim = "Moros_Pensive_Start",
+					PostLineAnim = "Moros_Pensive_End",
+					Text = "When you next return to shadow, I'd like to join you again, if you'll have me." },
+
+				{ Cue = "/VO/Melinoe_5901", UsePlayerSource = true,
+					PreLineWait = 0.25,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...I'd like that, too." },
+			},
+
+			OdysseusWithMorosTavernaChat01 = 
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+
+				TeleportToId = 589482,
+				TeleportOffsetX = 80,
+				TeleportOffsetY = 40,
+				AngleTowardTargetId = 585756,
+
+				CopyDataFromPartner = true,
+			},
+
+			OdysseusWithMorosTavernaChat02 = 
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+
+				TeleportToId = 589482,
+				TeleportOffsetX = 80,
+				TeleportOffsetY = 40,
+				AngleTowardTargetId = 585756,
+
+				CopyDataFromPartner = true,
+			},
+
+			OdysseusWithMorosTavernaChat03 = 
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+
+				TeleportToId = 589482,
+				TeleportOffsetX = 80,
+				TeleportOffsetY = 40,
+				AngleTowardTargetId = 585756,
+
+				CopyDataFromPartner = true,
+			},
+
+			OdysseusWithMorosTavernaChat04 = 
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+
+				TeleportToId = 589482,
+				TeleportOffsetX = 80,
+				TeleportOffsetY = 40,
+				AngleTowardTargetId = 585756,
+
+				CopyDataFromPartner = true,
+			},
+
+			OdysseusWithMorosTavernaChat05 = 
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+
+				TeleportToId = 589482,
+				TeleportOffsetX = 80,
+				TeleportOffsetY = 40,
+				AngleTowardTargetId = 585756,
+
+				CopyDataFromPartner = true,
+			},
+
+			OdysseusWithMorosTavernaChat06 = 
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+
+				TeleportToId = 589482,
+				TeleportOffsetX = 80,
+				TeleportOffsetY = 40,
+				AngleTowardTargetId = 585756,
+
+				CopyDataFromPartner = true,
+			},
+
 		},
 
 		GiftTextLineSets =
@@ -5880,6 +7615,161 @@ UnitSetData.NPC_Moros =
 
 			},
 
+			MorosTavernaRepeatable01 =
+			{
+				Cost =
+				{
+					SuperGiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MorosTaverna02" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "MorosTavernaRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before taverna
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0524",
+						PreLineAnim = "Moros_Greet",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "Princess, it would be my pleasure to share some Ambrosia with you." },
+
+					{ Cue = "/VO/Moros_0527",
+						PreLineAnim = "Moros_Greet",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "As long as you don't think I'd be unwelcome over there, especially with you." },
+
+					{ Cue = "/VO/Moros_0530",
+						PreLineAnim = "Moros_Greet",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "I could do with some time away from the Fated List, now that you mention it." },
+				},
+
+				-- at taverna
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0525",
+						SkipContextArt = true,
+						PreLineAnim = "Moros_Salute",
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "...The other Shades still seem a bit on edge with me around..." },
+
+					{ Cue = "/VO/Moros_0528",
+						SkipContextArt = true,
+						PreLineAnim = "Moros_Salute",
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "...This truly is one of my favorite customs here. To your continued victories!" },
+
+					{ Cue = "/VO/Moros_0531",
+						SkipContextArt = true,
+						PreLineAnim = "Moros_Salute",
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "...At times like this, I think about my sisters, without whom we never would have met." },
+				},
+
+				-- after taverna
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0526",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "Thank you for the company. I trust you enjoyed that as much as I did." },
+
+					{ Cue = "/VO/Moros_0529",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "How is it that Ambrosia can taste different and amazing every time?" },
+
+					{ Cue = "/VO/Moros_0532",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						PreLineAnim = "Moros_Pensive_Start",
+						PostLineAnim = "Moros_Pensive_End",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "I wonder if the Fates themselves knew we would have times such as these." },
+
+					{ Cue = "/VO/Moros_0360",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						PreLineAnim = "Moros_Pensive_Start",
+						PostLineAnim = "Moros_Pensive_End",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "Thank you for that! I had a pleasant time with you back there." },
+				},
+				
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+
+			-- bath house
 			MorosBathHouseDecline01 =
 			{
 				PlayOnce = true,
@@ -5904,7 +7794,7 @@ UnitSetData.NPC_Moros =
 						HintId = "Codex_TimePassesGiftUsed",
 					},
 					{
-						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+						PathFalse = { "GameState", "TextLinesRecord", "MorosTaverna02" },
 					},
 				},		
 				{ Cue = "/VO/Melinoe_3555", UsePlayerSource = true,
@@ -5917,7 +7807,6 @@ UnitSetData.NPC_Moros =
 					PostLineAnim = "Moros_Pensive_End",
 					Text = "Respectfully, Princess, I've past events to document so I had better not. Some other time, perhaps?" },
 			},
-
 			MorosBathHouse01 =
 			{
 				PauseMusicPlayerMusic = true,
@@ -5940,7 +7829,7 @@ UnitSetData.NPC_Moros =
 						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
 					},
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "MorosGift02" },
+						PathTrue = { "GameState", "TextLinesRecord", "MorosGift01" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -6100,7 +7989,11 @@ UnitSetData.NPC_Moros =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "MorosPostEpilogue01", "MorosBecomingCloser01" },
+						HasAll = { "MorosPostEpilogue01" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "MorosBecomingCloser01", "MorosBecomingCloser01_B" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -6178,6 +8071,264 @@ UnitSetData.NPC_Moros =
 				},
 			},
 
+			MorosBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MorosTaverna02", "MorosBathHouse03" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "MorosBathHouseRepeatable01", "MorosBathHouse03" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0509",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "I'd more than welcome visiting the springs again with you." },
+
+					{ Cue = "/VO/Moros_0512",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "There's nothing I'd like better than to join you at the springs again." },
+
+					{ Cue = "/VO/Moros_0515",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "Your wish in this case is the same as mine. To the springs!" },
+
+					{ Cue = "/VO/Moros_0637",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "I feared that you would never ask again." },
+
+					{ Cue = "/VO/Moros_0640",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "I would be more than happy to oblige." },
+
+					{ Cue = "/VO/Moros_0643",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "That would be wonderful right now. Shall we?" },
+
+					{ Cue = "/VO/Moros_0646",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "Now that you mention it, I'd like that very much." },
+				},
+
+				-- Mel in the bath
+				[2] = HeroRepeatableTextLines.BathHouseIntroTextLines,
+
+				-- Moros in the bath
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0510",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...It's an even greater comfort being here than in the shadows beyond space and time." },
+
+					{ Cue = "/VO/Moros_0513",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...This is a good place to discard whichever worries we are carrying around." },
+
+					{ Cue = "/VO/Moros_0516",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...The warmth and comfort of these waters never ceases to amaze me." },
+
+					{ Cue = "/VO/Moros_0638",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...May all our concerns wash away for now." },
+
+					{ Cue = "/VO/Moros_0641",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...The temperature is always perfect here." },
+
+					{ Cue = "/VO/Moros_0644",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...I really could stay here all night, I think." },
+
+					{ Cue = "/VO/Moros_0647",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Moros_Bath_01",
+						PortraitExitAnimation = "Portrait_Moros_Bath_01_Exit",
+						Text = "...To cleanse the body is to cleanse the mind." },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0511",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "That was refreshing, and a genuine delight." },
+
+					{ Cue = "/VO/Moros_0514",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "...I feel entirely restored, and it was a pleasure as always." },
+
+					{ Cue = "/VO/Moros_0517",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "{#Emph}Whew! {#Prev}I could have stayed there all night long I think." },
+
+					{ Cue = "/VO/Moros_0639",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "A pleasure every single time, Princess." },
+
+					{ Cue = "/VO/Moros_0642",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "I must have really needed that. Thank you." },
+
+					{ Cue = "/VO/Moros_0645",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "Well, that was quite refreshing, wasn't it?" },
+
+					{ Cue = "/VO/Moros_0648",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "I quite enjoyed that, and always grateful for your company." },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
+
+			-- fishing
 			MorosFishingDecline01 =
 			{
 				PlayOnce = true,
@@ -6202,7 +8353,7 @@ UnitSetData.NPC_Moros =
 						HintId = "Codex_TimePassesGiftUsed",
 					},
 					{
-						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+						PathFalse = { "GameState", "TextLinesRecord", "MorosTaverna02" },
 					},
 				},		
 				{ Cue = "/VO/Melinoe_3501", UsePlayerSource = true,
@@ -6215,7 +8366,6 @@ UnitSetData.NPC_Moros =
 					PostLineAnim = "Moros_Perplexed_End",
 					Text = "{#Emph}Ah! {#Prev}I fear the river denizens will not approach this evening if I'm there, for they can sense me every now and then. Apologies." },
 			},
-
 			MorosFishing01 =
 			{
 				PauseMusicPlayerMusic = true,
@@ -6296,6 +8446,134 @@ UnitSetData.NPC_Moros =
 					Text = "Perhaps it's good to let the mind wander a bit to such pursuits, every once in a while." },
 			},
 
+			MorosFishingRepeatable01 =
+			{
+				Cost =
+				{
+					GiftPointsEpic = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MorosTaverna02" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "MorosFishingRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- start fishing
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0518",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "Certainly, as long as you don't mind if I scare off everything in the river." },
+
+					{ Cue = "/VO/Moros_0125",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "Fair warning, you'll get no unfair advantages from me luring those unsuspecting fish." },
+
+					{ Cue = "/VO/Moros_0520",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						PortraitExitAnimation = "Portrait_Moros_Pleased_01_Exit",
+						Text = "Apparently the time has come for a river denizen or two." },
+
+					{ Cue = "/VO/Moros_0522",
+						GameStateRequirements =
+						{
+							{
+								FunctionName = "RequiredAlive",
+								FunctionArgs = { Id = 585573 },
+							},
+						},
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Moros_Default_01",
+						PortraitExitAnimation = "Portrait_Moros_Default_01_Exit",
+						Text = "We may endure some ridicule from Eris, though why not." },
+				},
+
+				-- end fishing
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Moros_0519",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "...I don't know what it is about me that fish find so imposing..." },
+
+					{ Cue = "/VO/Moros_0521",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "...I quite enjoy it over by the riverside. Thank you for the outing." },
+
+					{ Cue = "/VO/Moros_0523",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Portrait = "Portrait_Moros_Pleased_01",
+						Text = "...A most successful outing, and the night is just getting started!" },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Moros",
+			},
 		},
 
 		MissingDistanceTrigger =

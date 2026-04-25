@@ -2,7 +2,7 @@ UnitSetData.Wisp =
 {
 	Wisp =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 90,
 

@@ -2,7 +2,7 @@ UnitSetData.CorruptedShadeLarge =
 {
 	CorruptedShadeLarge =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 		DeathAnimation = "EnemyDeathFxCorruptedShade_Large",
 		MaxHealth = 640,
 		HealthBarOffsetY = -250,

@@ -41,12 +41,13 @@ WeaponSetData =
 				{
 					{ Name = "HecateSpokeRecently", Time = 8 },
 				},
+				SkipCooldownCheckIfNonePlayed = true,
+
 				{ Cue = "/VO/HecateField_0051", Text = "All right." },
 				{ Cue = "/VO/HecateField_0052", Text = "Let us try {#Emph}this." },
 				{ Cue = "/VO/HecateField_0055", Text = "Now..." },
 				{ Cue = "/VO/HecateField_0189", Text = "{#Emph}Twilight Curse!" },
 				{ Cue = "/VO/HecateField_0190", Text = "{#Emph}Twilight Curse...!", PlayFirst = true },
-
 			},
 		},
 		
@@ -348,7 +349,7 @@ WeaponSetData =
 				{ ProjectileName = "HecateRangedSmall", AIDataOverrides = { FireProjectileAngleRelative = 0, SpawnFromMarker = "WeaponHecateL_Rig:flame01_C_joint" }  },
 				{ ProjectileName = "HecateRangedSmall", AIDataOverrides = { FireProjectileAngleRelative = -180, SpawnFromMarker = "WeaponHecateR_Rig:flame01_C_joint" }  },
 			},
-			FireTicks = 10,
+			FireTicks = 8,
 			FireInterval = 0.3,
 
 			--TargetId = 510277,
@@ -438,7 +439,7 @@ WeaponSetData =
 
 			ProjectileName = "HecateRangedSmallHoming",
 			SpawnFromMarker = "WeaponHecateL_Rig:flame01_C_joint",
-			NumProjectiles = 18,
+			NumProjectiles = 16,
 			ProjectileInterval = 0.17,
 
 			TrackTargetDuringCharge = false,
@@ -768,34 +769,36 @@ WeaponSetData =
 
 			PreAttackVoiceLines =
 			{
-				RandomRemaining = true,
-				BreakIfPlayed = true,
-				PreLineWait = 0.0,
-				GameStateRequirements =
 				{
+					RandomRemaining = true,
+					BreakIfPlayed = true,
+					PreLineWait = 0.0,
+					GameStateRequirements =
 					{
-						Path = { "CurrentRun", "TextLinesRecord" },
-						HasNone = {
-							"HecateBossAboutChronos03",
-							"HecateBossAbouotArachneOutfit01",
-							"HecateBossAboutFailure01",
-							"HecateBossAboutArachne02",
+						{
+							Path = { "CurrentRun", "TextLinesRecord" },
+							HasNone = {
+								"HecateBossAboutChronos03",
+								"HecateBossAbouotArachneOutfit01",
+								"HecateBossAboutFailure01",
+								"HecateBossAboutArachne02",
+							},
 						},
 					},
-				},
-				Cooldowns =
-				{
-					{ Name = "HecateSpokeRecently", Time = 8 },
-				},
+					Cooldowns =
+					{
+						{ Name = "HecateSpokeRecently", Time = 8 },
+					},
 
-				{ Cue = "/VO/Hecate_0489", Text = "{#Emph}Crossed Flames{#Prev}, awaken!", PlayFirst = true },
-				{ Cue = "/VO/Hecate_0490", Text = "{#Emph}Crossed Flames{#Prev}, awaken...!" },
-				{ Cue = "/VO/Hecate_0491", Text = "{#Emph}Crossed Flames!" },
-				{ Cue = "/VO/Hecate_0492", Text = "The all-consuming flame!" },
-				{ Cue = "/VO/HecateField_0201", Text = "{#Emph}Crossed Flames!" },
-				{ Cue = "/VO/HecateField_0202", Text = "Now, the {#Emph}Crossed Flames...!" },
-				{ Cue = "/VO/HecateField_0203", Text = "{#Emph}Crossed Flames burn!" },
-				{ Cue = "/VO/HecateField_0204", Text = "{#Emph}Crossed Flames, burn...!" },
+					{ Cue = "/VO/Hecate_0489", Text = "{#Emph}Crossed Flames{#Prev}, awaken!", PlayFirst = true },
+					{ Cue = "/VO/Hecate_0490", Text = "{#Emph}Crossed Flames{#Prev}, awaken...!" },
+					{ Cue = "/VO/Hecate_0491", Text = "{#Emph}Crossed Flames!" },
+					{ Cue = "/VO/Hecate_0492", Text = "The all-consuming flame!" },
+					{ Cue = "/VO/HecateField_0201", Text = "{#Emph}Crossed Flames!" },
+					{ Cue = "/VO/HecateField_0202", Text = "Now, the {#Emph}Crossed Flames...!" },
+					{ Cue = "/VO/HecateField_0203", Text = "{#Emph}Crossed Flames burn!" },
+					{ Cue = "/VO/HecateField_0204", Text = "{#Emph}Crossed Flames, burn...!" },
+				},
 			},
 		},
 	},

@@ -15,7 +15,7 @@ function GenerateMarketItems( source, args )
 
 	CurrentRun.MarketItems = CurrentRun.MarketItems or {}
 	for categoryIndex, category in ipairs( ScreenData.MarketScreen.ItemCategories ) do
-		if ( category.RefreshOncePerRun and args.RefreshOncePerRun ) or ( not category.RefreshOncePerRun and not args.RefreshOncePerRun ) then
+		if args.RefreshOncePerRun == category.RefreshOncePerRun and (args.CategoryIndex or categoryIndex) == categoryIndex then
 			CurrentRun.MarketItems[categoryIndex] = {}
 			local nonPriorityItems = {}
 			for j, buyData in ipairs( category ) do
@@ -58,10 +58,6 @@ function OpenMarketScreen( args )
 	OnScreenOpened( screen )
 	CreateScreenFromData( screen, screen.ComponentData )
 	screen.ActiveCategoryIndex = args.DefaultCategoryIndex or 1
-
-	-- Regenerate sell/exchange items dynamically.
-	-- Purchaseable items will have already been generated upfront in DeathLoopData.
-	GenerateMarketItems()
 
 	local components = screen.Components
 	local tabsToReveal = nil
@@ -201,6 +197,10 @@ function MarketScreenDisplayCategory( screen, categoryIndex, args )
 
 	local category = screen.ItemCategories[categoryIndex]
 	local slotName = category.Name
+
+	-- Regenerate sell/exchange items dynamically.
+	-- Purchaseable items will have already been generated upfront in DeathLoopData.
+	GenerateMarketItems( screen, { CategoryIndex = categoryIndex } )
 
 	GameState.WorldUpgradesViewed[category.Name] = true
 	local newButtonKey = "NewIcon"..category.Name

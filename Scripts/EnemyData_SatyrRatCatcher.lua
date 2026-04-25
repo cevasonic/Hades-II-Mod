@@ -2,7 +2,7 @@ UnitSetData.SatyrRatCatcher =
 {
 	SatyrRatCatcher =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 1000,
 		HealthBarOffsetY = -250,

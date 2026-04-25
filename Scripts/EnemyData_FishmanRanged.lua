@@ -3,7 +3,7 @@ UnitSetData.FishmanRanged =
 
 	FishmanRanged =
 	{
-		InheritFrom = { "OceanusUnitData", "BaseVulnerableEnemy" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "BaseVulnerableEnemy" },
 		
 		ActivateAnimation = "Enemy_FishmanRanged_Spawn",
 		ClearChillOnDeath = true,

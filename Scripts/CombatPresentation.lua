@@ -742,7 +742,9 @@ end
 
 function PlayerLastStandPresentationEnd()
 	RemoveFromGroup({ Id = CurrentRun.Hero.ObjectId, Names = { "Combat_Menu" } })
-	AddToGroup({ Id = CurrentRun.Hero.ObjectId, Name = "Standing", DrawGroup = true })
+	if not SessionMapState.TyphonSpecialKillPresentation then
+		AddToGroup({ Id = CurrentRun.Hero.ObjectId, Name = "Standing", DrawGroup = true })
+	end
 	SetPlayerDarkside( "LastStand" )
 	local secondChanceFxOutTime = 0.4
 	AdjustRadialBlurStrength({ Fraction = 0, Duration = secondChanceFxOutTime  })
@@ -1060,16 +1062,6 @@ GlobalVoiceLines.MorosCountdownVoiceLines =
 			}
 		},
 	},
-	{ Cue = "/VO/Moros_0264", Text = "Zero.",
-		GameStateRequirements =
-		{
-			{
-				Path = { "SessionMapState", "RemainingTolls" },
-				Comparison = "==",
-				Value = 0,
-			}
-		},
-	},
 }
 function TickBlockDeathPresentation( source, remainingTolls )
 	if remainingTolls == 5 then
@@ -1226,7 +1218,7 @@ function CreateLevelDisplay( newEnemy, currentRun )
 			UpdateHealthBar( newEnemy, 0, { Force = true })
 		end
 	end
-	if not newEnemy.HasOutline and newEnemy.Outline ~= nil and newEnemy.HealthBuffer ~= nil and newEnemy.HealthBuffer > 0 then
+	if not newEnemy.HasOutline and newEnemy.Outline ~= nil then
 		newEnemy.Outline.Id = newEnemy.ObjectId
 		AddOutline( newEnemy.Outline )
 		newEnemy.HasOutline = true
@@ -1236,6 +1228,7 @@ end
 function PostEnemyKillPresentation( victim, triggerArgs )
 
 	local currentRoom = CurrentRun.CurrentRoom
+	local roomData = RoomData[currentRoom.Name] or currentRoom
 	local killer = triggerArgs.AttackerTable
 
 	local sourceProjectileData = nil
@@ -1259,7 +1252,7 @@ function PostEnemyKillPresentation( victim, triggerArgs )
 		thread( PlayVoiceLines, sourceProjectileData.KillingEnemyVoiceLines, true )
 	end
 
-	if RequiredKillEnemies[victim.ObjectId] ~= nil and TableLength( RequiredKillEnemies ) > 1 then
+	if RequiredKillEnemies[victim.ObjectId] ~= nil and ( TableLength( RequiredKillEnemies ) > 1 or roomData.AlwaysAllowKillingEnemyVoiceLines ) then
 		if killer ~= nil and killer.KillingEnemyVoiceLines ~= nil then
 			thread( PlayVoiceLines, killer.KillingEnemyVoiceLines, true, killer )
 		elseif GameState.LastKilledByName ~= nil and GameState.LastKilledByName == victim.Name then
@@ -2274,7 +2267,7 @@ function DoWeaponSounds( soundData, parentTable, weaponData )
 
 	for _, soundDatum in pairs( soundData ) do
 		local inCooldown = soundDatum.Cooldown and not CheckCooldown( soundDatum.Name, soundDatum.Cooldown )
-		if not inCooldown and soundDatum.Name ~= nil then
+		if not inCooldown and soundDatum.Name ~= nil and (soundDatum.GameStateRequirements == nil or IsGameStateEligible(soundDatum, soundDatum.GameStateRequirements)) then
 			local managerCap = weaponManagerCap or parentManagerCap or defaultManagerCap
 			if parentTable ~= CurrentRun.Hero then
 				managerCap = soundDatum.ManagerCap or managerCap
@@ -2783,10 +2776,6 @@ function GenericBossKillPresentation( unit, args )
 		end
 	end
 
-	if deathPanSettings.BossDifficultyMessage and GetNumShrineUpgrades( "BossDifficultyShrineUpgrade" ) > 0 then
-		textMessage = deathPanSettings.BossDifficultyMessage
-	end
-
 	thread( DisplayInfoBanner, nil, { 
 		Text = textMessage or "BiomeClearedMessage", 
 		Delay = 0.75, 
@@ -2807,17 +2796,13 @@ function GenericBossKillPresentation( unit, args )
 		SubtitleTextRevealSound = "/Leftovers/World Sounds/MapZoomInTight",
 	} )
 
-	if deathPanSettings.BatsAfterDeath then
-		thread( SendCritters, { MinCount = 80, MaxCount = 90, StartX = 0, StartY = 300, MinAngle = 75, MaxAngle = 115, MinSpeed = 400, MaxSpeed = 2000, MinInterval = 0.03, MaxInterval = 0.1, GroupName = "CrazyDeathBats" } )
-	end
-
 	wait( deathPanSettings.EndPanTime or 5.5 )
 
 	if CurrentRun.CurrentRoom.Encounter.BossKillGlobalVoiceLines ~= nil then
 		thread( PlayVoiceLines, GlobalVoiceLines[CurrentRun.CurrentRoom.Encounter.BossKillGlobalVoiceLines], false )
 	end
 
-	if CurrentRun.CurrentRoom.Encounter.DeathExtraSounds ~= nil then
+	if CurrentRun.CurrentRoom.Encounter.DeathExtraSounds ~= nil and not CurrentRun.IsDreamRun then
 		local randomSound = GetRandomValue( CurrentRun.CurrentRoom.Encounter.DeathExtraSounds )
 		PlaySound({ Name = randomSound })
 	end
@@ -2880,6 +2865,11 @@ function GenericBossKillPresentation( unit, args )
 	CurrentRun.CurrentRoom.Encounter.BossKillPresentation = false
 	ToggleCombatControl( CombatControlsDefaults, true, "BossKill" )
 	SetThingProperty({ Property = "AllowAnyFire", Value = true, DestinationId = CurrentRun.Hero.ObjectId, DataValue = false })
+
+	if args.IsBiomeBoss and CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount then
+		wait( 1.8 )
+		OpenRunClearScreen()
+	end
 end
 
 function ScreamerDistortionEffect( victim, attacker, triggerArgs )
@@ -3033,7 +3023,7 @@ function HitInvulnerablePresentation( victim, attacker, triggerArgs )
 	end
 
 	if victim.HitInvulnerablePresentationThreadedFunctionName ~= nil then
-		thread( CallFunctionName, victim.HitInvulnerablePresentationThreadedFunctionName, victim )
+		thread( CallFunctionName, victim.HitInvulnerablePresentationThreadedFunctionName, victim, attacker )
 	end
 	if victim.InvulnerableVoiceLines then
 		thread( PlayVoiceLines, victim.InvulnerableVoiceLines, nil, victim )
@@ -3058,7 +3048,7 @@ function HitInvulnerablePresentation( victim, attacker, triggerArgs )
 		ShowInvincibubbleOnObject( victim, { Scale = victim.InvincibubbleScale } )
 	end
 
-	if victim.HitInvulnerableExpireProjectiles then
+	if victim.HitInvulnerableExpireProjectiles and (not triggerArgs.SourceWeapon or not WeaponData[triggerArgs.SourceWeapon] or not WeaponData[triggerArgs.SourceWeapon].IgnoreHitInvulnerableExpire ) then 
 		ExpireProjectiles({ ProjectileIds = { triggerArgs.ProjectileId } })
 	end
 end
@@ -3168,12 +3158,13 @@ end
 
 function EndPoisonPresentation()
 	local clearDuration = 0.3
+	CurrentRun.Hero.CurrentlyPoisoned = nil
 	SetAnimation({ Name = "PoisonVignetteEnd", DestinationId = ScreenAnchors.PoisonVignetteId  })
 	wait(clearDuration)
-	Destroy({ Id = ScreenAnchors.PoisonVignetteId })
-	ScreenAnchors.PoisonVignetteId = nil
-	wait(0.5) -- additional 0.5s for flames to end
-	CurrentRun.Hero.CurrentlyPoisoned = nil
+	if CurrentRun.Hero.CurrentlyPoisoned == nil then
+		Destroy({ Id = ScreenAnchors.PoisonVignetteId })
+		ScreenAnchors.PoisonVignetteId = nil
+	end
 end
 
 function DoReactionPresentation( victim, reaction )
@@ -3384,7 +3375,7 @@ function GetDamagedFx( victim, sourceProjectileData, triggerArgs)
 end
 
 function BlockedDamageInvulnerablePresentation( victim, triggerArgs )
-	if CurrentRun.CurrentRoom.Encounter.BossKillPresentation then
+	if CurrentRun.CurrentRoom.Encounter.BossKillPresentation or IsScreenOpen( "RunClear" ) then
 		return
 	end
 	local angle = 0
@@ -4506,7 +4497,7 @@ function ErisReloadJamPresentation(enemy, aiData, currentRun, args)
 
 end
 
-function ChronosTyphonFightHitPresentation( blocker )
+function ChronosTyphonFightHitPresentation( blocker, attacker )
 	if blocker.IsDead then
 		return
 	end
@@ -4521,9 +4512,11 @@ function ChronosTyphonFightHitPresentation( blocker )
 		CreateAnimation({ Name = blocker.InvulnerableHitFx, DestinationId = blocker.ObjectId })
 	end
 	
-	thread( PlayVoiceLines, blocker.InvulnerableVoiceLines, nil, blocker )
+	if attacker ~= nil and attacker.Name == "Default" then
+		thread( PlayVoiceLines, blocker.InvulnerableVoiceLines, nil, blocker )
+	end
 
-	wait(0.15)
+	wait(0.15, "ChronosTyphonFightHitPresentation")
 	SetAlpha({ Id = blocker.ObjectId, Fraction = 1.0, Duration = 0.13 })
 end
 
@@ -4585,6 +4578,12 @@ function AmmoPackPickup(ammoPack, zag, args)
 	Destroy({ Id = ammoPack.ObjectId })
 end
 
+function ZagreusBossDreamRunIntro( source, args )
+	PlayZagreusTauntAnim( source )
+	wait( 1.0 )
+	StartZagreusBossFight()
+end
+
 function ZagreusKillPresentation( unit, args )
 	args = args or {}
 
@@ -4634,11 +4633,20 @@ function ZagreusKillPresentation( unit, args )
 	CreateAnimation({ Name = "ZagreusDeathDefianceBlood", DestinationId = unit.ObjectId })
 	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = unit.ObjectId })
 
-	wait( 2.8, RoomThreadName )
+	wait( 1.4, RoomThreadName )
 
-	local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
-	unit.TextLinesUseWeaponIdle = nil
-	PlayTextLines( unit, textLines )
+	if CurrentRun.IsDreamRun then
+		local unequipAnimation = GetEquippedWeaponValue("UnequipAnimation") or "MelinoeIdleWeaponless"
+		SetAnimation({ Name = unequipAnimation, DestinationId = CurrentRun.Hero.ObjectId, })
+	end
+
+	wait( 1.4, RoomThreadName )
+
+	if not CurrentRun.IsDreamRun then
+		local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
+		unit.TextLinesUseWeaponIdle = nil
+		PlayTextLines( unit, textLines )
+	end
 
 	SetCameraClamp({ Ids = GetIds({ Name = "CameraClamps" }), SoftClamp = 0.75 })
 
@@ -4795,8 +4803,6 @@ function ZagreusKillPresentation( unit, args )
 	end
 
 	local textMessage = deathPanSettings.Message
-
-	-- for CrawlerMiniboss & others
 	if unit.AltDeathMessageTextIds ~= nil then
 		local eligibleTextIds = {}
 		for k, altTextIdData in pairs( unit.AltDeathMessageTextIds ) do
@@ -4809,12 +4815,8 @@ function ZagreusKillPresentation( unit, args )
 		end
 	end
 
-	if deathPanSettings.BossDifficultyMessage and GetNumShrineUpgrades( "BossDifficultyShrineUpgrade" ) > 0 then
-		textMessage = deathPanSettings.BossDifficultyMessage
-	end
-
 	thread( DisplayInfoBanner, nil, { 
-		Text = textMessage or "BiomeClearedMessage", 
+		Text = textMessage,
 		Delay = 0.75, 
 		TextColor = Color.White, 
 		TextFadeColor = {64,230,255,255},
@@ -4832,10 +4834,6 @@ function ZagreusKillPresentation( unit, args )
 		SubtitleText = args.SubtitleText or GetRandomValue(args.SubtitleTextOptions),
 		SubtitleTextRevealSound = "/Leftovers/World Sounds/MapZoomInTight",
 	} )
-
-	if deathPanSettings.BatsAfterDeath then
-		thread( SendCritters, { MinCount = 80, MaxCount = 90, StartX = 0, StartY = 300, MinAngle = 75, MaxAngle = 115, MinSpeed = 400, MaxSpeed = 2000, MinInterval = 0.03, MaxInterval = 0.1, GroupName = "CrazyDeathBats" } )
-	end
 
 	wait( 1.0 )
 

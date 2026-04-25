@@ -95,12 +95,20 @@ OnControlPressed{ "SpecialInteract",
 					MapState.RoomRequiredObjects[target.ObjectId] = nil
 					previouslyRequired = true
 				end
-				HideUseButton( target.ObjectId, target )
+				thread( HideUseButton, target.ObjectId, target )
 				if CurrentRun.CurrentRoom.Encounter ~= nil and CurrentRun.CurrentRoom.Encounter.RewardsToRestore ~= nil then
 					CurrentRun.CurrentRoom.Encounter.RewardsToRestore[target.ObjectId] = nil
 				end
 					
 				local goldGain = GetRewardGoldifyValue(target)
+				local longerPlayerInputBlock = false
+				if CurrentRun.CurrentRoom.Encounter ~= nil and CurrentRun.CurrentRoom.Encounter.EncounterType == "Devotion" and not CurrentRun.CurrentRoom.Encounter.StartTime then
+					longerPlayerInputBlock = true
+				end
+
+				if longerPlayerInputBlock then
+					AddInputBlock({ Name = "AdditionalGoldifyPresentationLockout"})
+				end
 				GoldifyPresentation( target )
 				thread( GushMoney, { Amount = goldGain, LocationId = target.ObjectId, Radius = 100, Source = "DebugSpawnMoney" } )
 				Destroy({ Id = target.ObjectId })
@@ -124,6 +132,11 @@ OnControlPressed{ "SpecialInteract",
 					notifyExistingWaiters( target.NotifyName )
 				end
 				wait( 0.2 )
+				
+				if longerPlayerInputBlock then
+					RemoveInputBlock({ Name = "AdditionalGoldifyPresentationLockout"})
+				end
+
 				if CheckRoomExitsReady( CurrentRun.CurrentRoom ) then
 					UnlockRoomExits( CurrentRun, CurrentRun.CurrentRoom )
 				end

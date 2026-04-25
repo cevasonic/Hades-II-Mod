@@ -1443,6 +1443,7 @@
 							"HecateBossAboutFates01",
 						},
 					},
+					--[[
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = {
@@ -1450,6 +1451,7 @@
 							"NemesisAboutChronosNightmare02_B",
 						},
 					},
+					]]--
 					NamedRequirementsFalse = { "StandardPackageBountyActive" },
 				},
 				PreEventFunctionName = "ChaosInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0 },
@@ -1477,6 +1479,16 @@
 					SecretMusicActiveStems = { "ChaosBass" },
 					PreContentSound = "/SFX/Menu Sounds/ChaosBoonChange",
 					Text = "Yet they are not so powerful as they appeared. Nevertheless, I think you are correct. Chronos indicated his intentions were benign. I am unfamiliar with deceit, and was misled. I remain quite displeased about this still." },
+
+				PrePortraitExitFunctionName = "QueueQuestProgressUpdate",
+				PrePortraitExitFunctionArgs =
+				{
+					QuestName = "QuestRescueFatesProgress",
+					GameStateRequirements =
+					{
+						NamedRequirements = { "TrueFatesQuestUnlocked" },
+					},
+				},
 			},
 			ChaosAboutChronosNightmare01_B =
 			{
@@ -1506,6 +1518,7 @@
 							"HecateBossAboutFates01",
 						},
 					},
+					--[[
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = {
@@ -1513,6 +1526,7 @@
 							"NemesisAboutChronosNightmare02_B",
 						},
 					},
+					]]--
 					NamedRequirementsFalse = { "StandardPackageBountyActive" },
 				},
 				PreEventFunctionName = "ChaosInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0 },
@@ -1543,6 +1557,16 @@
 					SecretMusicActiveStems = { "ChaosBass" },
 					PreContentSound = "/SFX/Menu Sounds/ChaosBoonChange",
 					Text = "Yet they are not so powerful as they appeared. Nevertheless, I think you are correct. Chronos indicated his intentions were benign. I am unfamiliar with deceit, and was misled. I remain quite displeased about this still." },
+
+				PrePortraitExitFunctionName = "QueueQuestProgressUpdate",
+				PrePortraitExitFunctionArgs =
+				{
+					QuestName = "QuestRescueFatesProgress",
+					GameStateRequirements =
+					{
+						NamedRequirements = { "TrueFatesQuestUnlocked" },
+					},
+				},
 			},
 
 			ChaosAboutChronosNightmare02 =
@@ -1574,7 +1598,7 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "ChaosGift04", "ChronosGift04" },
+						HasAll = { "ChaosGift04", "NeoChronosGift04" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "FatesEpilogue01" },
@@ -3478,22 +3502,6 @@
 			{ Cue = "/VO/MelinoeField_0769", Text = "Whatever this is... it's remarkable, truly." },
 		},
 
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
-		},
-
 		DeathTauntVoiceLines =
 		{
 			{
@@ -3544,7 +3552,7 @@
 					GameStateRequirements =
 					{
 						{
-							PathFalse = { "CurrentRun", "CurrentRoom", "UseRecord", "GemPointsBigDrop" }
+							PathTrue = { "CurrentRun", "CurrentRoom", "UseRecord", "Mixer5CommonDrop" },
 						},
 					},
 				},

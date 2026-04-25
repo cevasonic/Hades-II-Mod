@@ -203,6 +203,7 @@ TraitSetData.Chaos =
 				BaseMax = 0.50,
 			},
 			Epic = 0.1,
+			Duo = 0.1,
 			Legendary = 0.1,
 			ReportValues = { ReportedRarity = "Rare"}
 		},
@@ -363,7 +364,7 @@ TraitSetData.Chaos =
 			Args =
 			{
 				Name = "ChaosManaOverTimeBlessing",
-				ManaRegenPerSecond = { BaseMin = 4, BaseMax = 6, ToNearest = 0.5 },
+				ManaRegenPerSecond = { BaseMin = 4, BaseMax = 6, AsInt = true},
 				ReportValues = { ReportedManaRecovery = "ManaRegenPerSecond" }
 			},
 			RunOnce = true
@@ -638,6 +639,9 @@ TraitSetData.Chaos =
 		{
 			{
 				PathFalse = { "CurrentRun", "ActiveBounty" },
+			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" },
 			},
 		},
 		Icon = "Boon_Chaos_57",
@@ -938,7 +942,7 @@ TraitSetData.Chaos =
 				BaseMax = 0.60,
 				SourceIsMultiplier = true,
 				DeriveSource = "DeriveSource",
-				ReportValues = { ReportedBaseSpeed = "ChangeValue" },
+				ReportValues = { ReportedSpeedPenalty = "ChangeValue" },
 			},
 			{
 				WeaponNames = { "WeaponSprint" },
@@ -961,7 +965,7 @@ TraitSetData.Chaos =
 		ExtractValues =
 		{
 			{
-				Key = "ReportedBaseSpeed",
+				Key = "ReportedSpeedPenalty",
 				ExtractAs = "TooltipSpeedPenalty",
 				Format = "NegativePercentDelta",
 			},

@@ -87,9 +87,11 @@ WeaponSetData =
 
 			MoveWithinRange = true,
 			AttackDistance = 870,
+			RequireProjectileLoS = true,
+			LoSBuffer = 100,
 
 			PreAttackDuration = 0.8,
-			FireDuration = 0.8,
+			FireDuration = 0.5,
 			PostAttackDuration = 1.2,
 
 			PreAttackSound = "/SFX/Enemy Sounds/Talos/EmoteCharging",

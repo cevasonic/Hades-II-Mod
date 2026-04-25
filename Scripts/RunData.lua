@@ -185,6 +185,7 @@ if fullGame then
 	Import "RoomDataAnomaly.lua"
 	Import "RoomDataC.lua"
 	Import "RoomDataChaos.lua"
+	Import "RoomDataDream.lua"
 	Import "RoomDataG.lua"
 	Import "RoomDataH.lua"
 	Import "RoomDataI.lua"
@@ -462,10 +463,8 @@ Import "HealthLogic.lua"
 Import "UpgradeLogic.lua"
 Import "RequirementsLogic.lua"
 Import "StoryResetLogic.lua"
-
---@Mod
-Import "WxRoomDamageScale.lua"
-
+Import "DreamRunLogic.lua"
+Import "DreamRunPresentation.lua"
 
 GlobalVoiceLines = GlobalVoiceLines or {}
 GlobalTextLines = GlobalTextLines or {}
@@ -474,8 +473,6 @@ function SetupRunData( args )
 
 	args = args or {}	
 	TextLinesCache = {}
-
-	local enableConsoleMenus = GetConfigOptionValue({ Name = "EnableConsoleMenus" })
 
 	for roomName, roomData in pairs( RoomData ) do
 		roomData.Name = roomName
@@ -493,9 +490,8 @@ function SetupRunData( args )
 				roomData.IllegalEncountersDictionary[encounterName] = true
 			end
 		end
-		if enableConsoleMenus and roomData.ZoomFractionSwitch ~= nil then
-			roomData.ZoomFraction = roomData.ZoomFractionSwitch
-		end
+		roomData.ZoomFractionOriginal = roomData.ZoomFraction
+		roomData.CameraZoomWeightsOriginal = roomData.CameraZoomWeights
 	end
 	for roomSetName, roomSetData in pairs( RoomSetData ) do
 		for roomName, roomData in pairs( roomSetData ) do
@@ -506,6 +502,8 @@ function SetupRunData( args )
 	for hubRoomName, hubRoomData in pairs( HubRoomData ) do
 		hubRoomData.Name = hubRoomName
 		ProcessDataInheritance( hubRoomData, HubRoomData )
+		hubRoomData.ZoomFractionOriginal = hubRoomData.ZoomFraction
+		hubRoomData.CameraZoomWeightsOriginal = hubRoomData.CameraZoomWeights
 	end
 
 	for encounterName, encounterData in pairs( EncounterData ) do
@@ -562,6 +560,10 @@ function SetupRunData( args )
 					IgnoreRestrictBoonChoices = enemyData.IgnoreRestrictBoonChoices,
 					ExcludeFromLastRunBoon = enemyData.ExcludeFromLastRunBoon,
 					GodLoot = enemyData.GodLoot,
+					RecheckConversationOnLootPickup = enemyData.RecheckConversationOnLootPickup,
+					IgnoreTempRarityBonus = enemyData.IgnoreTempRarityBonus,
+					BlockForceCommon = enemyData.BlockForceCommon,
+					BlockDoubleBoon = enemyData.BlockDoubleBoon,
 				}
 		end
 
@@ -871,12 +873,6 @@ function SetupRunData( args )
 			end
 			
 			traitData.WeaponSpeedMultiplier.WeaponNamesLookup = ToLookup( traitData.WeaponSpeedMultiplier.WeaponNames )
-		end
-		if traitData.OnResourceMaxHealth then
-			traitData.OnResourceMaxHealth.ResourceNamesLookup = ToLookup( traitData.OnResourceMaxHealth.ResourceNames )
-		end
-		if traitData.OnResourceMaxMana then
-			traitData.OnResourceMaxMana.ResourceNamesLookup = ToLookup( traitData.OnResourceMaxMana.ResourceNames )
 		end
 		if traitData.WeaponDataOverride then
 			for weaponName, weaponData in pairs(traitData.WeaponDataOverride) do

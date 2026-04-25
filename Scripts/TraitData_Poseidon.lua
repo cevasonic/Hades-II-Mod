@@ -489,6 +489,15 @@ OverwriteTableKeys( TraitData, {
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Poseidon",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			{
 				FalseTraitName = "LobCloseAttackAspect",
@@ -919,6 +928,9 @@ OverwriteTableKeys( TraitData, {
 					"ProjectileSuitBomb",
 					"ProjectileSuitGrenadeStraight",
 					"ProjectileSuitBombStraight",
+
+					-- Spell
+					"ProjectileTransformRing",
 				},
 				MultihitProjectileConditions =
 				{
@@ -949,6 +961,8 @@ OverwriteTableKeys( TraitData, {
 					ProjectileSuitBomb = { Count = 3, Window = 0.2 },
 					ProjectileSuitGrenadeStraight = { Count = 3, Window = 0.15 },
 					ProjectileSuitBombStraight = { Count = 3, Window = 0.2 },
+
+					ProjectileTransformRing = { Count = 3, Window = 0.25 },
 				},
 				Cooldown = 0.033,
 				DamageMultiplier = 

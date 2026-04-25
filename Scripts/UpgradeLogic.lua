@@ -177,14 +177,14 @@ function ApplyUnitPropertyChange( unit, propertyChange, applyLuaUpgrades, revers
 					if propertyChange.MaintainDelta then
 						if propertyChange.ChangeType == "Add" then
 							if delta < 0 then
-								SacrificeHealth({SacrificeHealth = math.abs(delta), MinHealth = 1, Silent = true, DeductHealth = true})
+								SacrificeHealth({SacrificeHealth = math.abs(delta), MinHealth = 1, Silent = true, DeductHealth = true, NotDamageTaken = true })
 							else
 								Heal( unit, { HealAmount = delta, SourceName = "MaxLifeChange", Silent = true})
 							end
 							currentHealth = math.max( 1, currentHealth + delta )
 						else
 							currentHealth = currentHealth * changeValue
-							SacrificeHealth({SacrificeHealth = math.abs(unit.Health - currentHealth), MinHealth = 1, Silent = true, DeductHealth = true})
+							SacrificeHealth({SacrificeHealth = math.abs(unit.Health - currentHealth), MinHealth = 1, Silent = true, DeductHealth = true, NotDamageTaken = true})
 						end
 					end
 
@@ -759,6 +759,7 @@ function ProcessHeroTraitChanges( trait, reverse )
 	end
 	
 	if CurrentRun.Hero.ObjectId then
+		local changedWeapons = false
 		for weaponName in pairs( referencedWeapons ) do
 			if MapState.EquippedWeapons[weaponName] then
 				local enabledStatus = GetWeaponDataValue({ WeaponName = weaponName, Id = CurrentRun.Hero.ObjectId, Property = "Enabled" })
@@ -767,10 +768,13 @@ function ProcessHeroTraitChanges( trait, reverse )
 				if weaponData then
 					SetWeaponProperty({ WeaponName = weaponData.Name, DestinationId = CurrentRun.Hero.ObjectId, Property = "Enabled", Value = enabledStatus })
 				end
+				changedWeapons = true
 			end
 		end
+		if changedWeapons then
+			UpdateWeaponMana()
+		end
 	end
-	
 	OrderAndApplyPropertyChanges( referencedWeapons )
 end
 
@@ -804,10 +808,15 @@ function GatherAndEquipWeapons( currentRun )
 			table.insert( weaponNames, weaponName )
 		end
 	end
+	local sprintDisableEffectName = nil
 	for k, weaponName in ipairs( weaponNames ) do
 		--DebugPrint({ Text = "Equipping = "..weaponName })
 		EquipWeapon({ Name = weaponName, DestinationId = currentRun.Hero.ObjectId, LoadPackages = not GameData.MissingPackages[weaponName] })
 		MapState.EquippedWeapons[weaponName] = true
+		if WeaponData[weaponName] and WeaponData[weaponName].SprintDisableEffectName then
+			sprintDisableEffectName = WeaponData[weaponName].SprintDisableEffectName 
+		end
+
 		local linkedWeaponNames = WeaponSets.HeroWeaponSets[weaponName]
 		if linkedWeaponNames ~= nil then
 			for k, linkedWeaponName in ipairs( linkedWeaponNames ) do
@@ -816,7 +825,9 @@ function GatherAndEquipWeapons( currentRun )
 			end
 		end
 	end	
-
+	if sprintDisableEffectName then
+		SetWeaponProperty({ WeaponName = "WeaponSprint", DestinationId = currentRun.Hero.ObjectId, Property = "DisableFireWithEffect2", Value = sprintDisableEffectName })
+	end
 end
 
 function HandleWeaponAnimSwaps()

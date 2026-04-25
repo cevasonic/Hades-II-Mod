@@ -2,7 +2,7 @@ UnitSetData.LycanSwarmer =
 {
 	LycanSwarmer =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 
 		MaxHealth = 270,
 		HealthBarOffsetY = -120,
@@ -100,7 +100,7 @@ UnitSetData.LycanSwarmer =
 
 	LycanSwarmer2 =
 	{
-		InheritFrom = { "LycanSwarmer_Elite" },
+		InheritFrom = { "BaseQEnemy", "LycanSwarmer_Elite" },
 		GenusName = "LycanSwarmer_Elite",
 		MaxHealth = 2000,
 		HealthBuffer = 2000,

@@ -164,7 +164,7 @@ function EquipKeepsake( heroUnit, traitName, args )
 end
 
 function UnequipKeepsake( heroUnit, traitName, args )
-	if not traitName then
+	if not traitName or not TraitData[traitName] then
 		return
 	end
 	args = args or {}
@@ -318,7 +318,13 @@ function AdvanceKeepsake( fromTrait )
 						end
 						AddTalentPoints( { Count = count }, traitData )
 					end
+					if traitData.Name == "GoldifyKeepsake" then
+						-- Another hard-coded optimization
+						traitData.CustomName = nil
+						traitData.BoonConversionUses = traitData.BoonConversionUses + 1
+					end
 					if traitData.Name == "DecayingBoostKeepsake" then
+						traitData.CustomTrayText = TraitData[traitData.Name].CustomTrayText
 						traitData.CurrentKeepsakeDamageBonus = traitData.InitialKeepsakeDamageBonus
 					end
 					UpdateTraitNumber(traitData)
@@ -337,23 +343,50 @@ function SetupBlockDeathThread()
 	thread( DamageAfterInterval, blockDeathTimer, 1000 )
 end
 
+function GetBlockDeathCurrentEncounter( room, encounter ) 
+	if not IsEmpty(room.Encounters) and encounter and encounter.SkipEndEncounterEffects then
+		if CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.InProgress then
+			return  CurrentRun.CurrentRoom.Encounter
+		end
+		return encounter
+	elseif not IsEmpty(MapState.OfferedExitDoors) then
+		local hasEncounter = false
+		for door, doorData in pairs( MapState.OfferedExitDoors ) do
+			if doorData.EncounterCostStarted and doorData.EncounterCost then
+				hasEncounter = true
+				break
+			end
+		end
+		if hasEncounter and not IsEmpty( room.ActiveEncounters ) then
+			return GetFirstValue( room.ActiveEncounters )
+		end
+	end
+	if not encounter then
+		encounter = CurrentRun.CurrentRoom.Encounter
+	end
+	return encounter
+end
+
 function DamageAfterInterval( timer, damage )
-	local encounter = nil
+	local startEncounter = nil
 	if MapState.EncounterOverride then
-		encounter = MapState.EncounterOverride
+		startEncounter = MapState.EncounterOverride
 	elseif CurrentRun and CurrentRun.CurrentRoom then
 		if CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.InProgress then
-			encounter = CurrentRun.CurrentRoom.Encounter
+			startEncounter = CurrentRun.CurrentRoom.Encounter
 		elseif CurrentRun.CurrentRoom.ChallengeEncounter and CurrentRun.CurrentRoom.ChallengeEncounter.InProgress then
-			encounter = CurrentRun.CurrentRoom.ChallengeEncounter
+			startEncounter = CurrentRun.CurrentRoom.ChallengeEncounter
 		end
 	end
 
-	if encounter == nil then
+	if startEncounter == nil then
+		startEncounter = GetBlockDeathCurrentEncounter( CurrentRun.CurrentRoom )
+	end
+	if startEncounter == nil then
 		return
 	end
-	local encounterAlreadyCompleted = encounter.Completed
-
+	
+	local encounterAlreadyCompleted = startEncounter.Completed
 	local dummySource = { LineHistoryName = "NPC_Moros_01", SubtitleColor = Color.MorosVoice },
 
 	SetPlayerInvulnerable( "BlockDeath" )
@@ -361,7 +394,8 @@ function DamageAfterInterval( timer, damage )
 	local tollTimes = math.floor(timer)
 	StartBlockDeathPresentation( tollTimes )
 	while tollTimes > 0 do
-		if encounter.BossKillPresentation or (encounter.Completed and not encounterAlreadyCompleted) or CurrentRun.CurrentRoom.Leaving or encounter.ChronosTransition or not encounter.InProgress then
+		local encounter = GetBlockDeathCurrentEncounter( CurrentRun.CurrentRoom, startEncounter )
+		if encounter.BossKillPresentation or (encounter.Completed and not encounterAlreadyCompleted and not encounter.RecordSpawnedEnemiesForBlockDeath ) or CurrentRun.CurrentRoom.Leaving or encounter.ChronosTransition or ( not encounterAlreadyCompleted and not encounter.InProgress ) then
 			SetPlayerVulnerable( "BlockDeath" )
 			BlockDeathCanceled( dummySource )
 			return
@@ -379,7 +413,21 @@ function DamageAfterInterval( timer, damage )
 				return
 			end
 		end
-		if PlayingTextLines or SessionMapState.TyphonStaggerPresentation or SessionMapState.ChronosPolymorphChallengeEndPresentation then
+		if encounter.RecordSpawnedEnemiesForBlockDeath  then
+			local hasAliveEnemies = false
+			for _, id in pairs( SessionMapState.MidEncounterSpawns ) do
+				if ActiveEnemies[id] and not ActiveEnemies[id].IsDead then
+					hasAliveEnemies = true
+				end
+			end
+			
+			if not hasAliveEnemies and encounter.Completed then
+				SetPlayerVulnerable( "BlockDeath" )
+				BlockDeathCanceled( dummySource )
+				return
+			end
+		end
+		if PlayingTextLines or SessionMapState.TyphonStaggerPresentation or SessionMapState.ChronosPolymorphChallengeEndPresentation  then
 			wait( 0.3 )
 		else
 			TickBlockDeathPresentation( dummySource, tollTimes )
@@ -391,7 +439,7 @@ function DamageAfterInterval( timer, damage )
 	while SessionMapState.TyphonStaggerPresentation or SessionMapState.ChronosPolymorphChallengeEndPresentation do
 		wait( 0.3 )
 	end
-	
+	local encounter = GetBlockDeathCurrentEncounter( CurrentRun.CurrentRoom, startEncounter )
 	SetPlayerVulnerable( "BlockDeath" )
 	if encounter.BossKillPresentation or (encounter.Completed and not encounterAlreadyCompleted) or CurrentRun.CurrentRoom.Leaving or encounter.ChronosTransition then
 		BlockDeathCanceled( dummySource )
@@ -399,6 +447,12 @@ function DamageAfterInterval( timer, damage )
 	end
 	if ( encounterAlreadyCompleted and ( not CurrentRun.Hero.InvulnerableFlags or not CurrentRun.Hero.InvulnerableFlags.LeaveRoom)) or ( not encounter.Completed and not encounter.BossKillPresentation and encounter.InProgress ) then
 		CurrentRun.Hero.HealthBuffer = 0
+		SessionMapState.CauseOfDeathOverride = 
+		{
+			CauseOfDeath = SessionMapState.BlockDeathCauseOfDeath,
+			CauseOfDeathDisplay = SessionMapState.BlockDeathCauseOfDeathDisplay,
+			KilledByName = SessionMapState.BlockDeathLastKilledByName,
+		}
 		SacrificeHealth({SacrificeHealthMin = damage, SacrificeHealthMax = damage, MinHealth = 0, Silent = true, IgnoreCap = true  })
 	else
 		BlockDeathCanceled( dummySource )
@@ -420,7 +474,7 @@ function KeepsakeAddMaxMana( args )
 end
 
 function CheckOverTimeManaRefund( functionArgs, manaDelta )
-	if not IsEmpty(MapState.ClearCastWeapons) or not HeroHasTrait( "ManaOverTimeRefundTrait" ) then
+	if not IsEmpty(MapState.ClearCastWeapons) or not HeroHasTrait( "ManaOverTimeRefundTrait" ) or HeroHasTrait("ChaosManaFocusCurse") then
 		return
 	end
 	local manaRestored = math.abs(manaDelta)
@@ -514,7 +568,7 @@ function EquipLastAwardTrait( eventSource, hero )
 		CurrentRun.SaveFirstKeepsakeSwapped = true
 	end
 	if GameState.LastAwardTrait ~= nil then
-		EquipKeepsake( existingHero, GameState.LastAwardTrait )
+		EquipKeepsake( existingHero, GameState.LastAwardTrait, { SkipAddToHUD = SessionMapState.HubBountyLoadPresentation or SessionMapState.HubDreamLoadPresentation })
 	end
 end
 
@@ -536,6 +590,7 @@ function OpenKeepsakeRackScreen( source )
 	if IsScreenOpen( screen.Name ) then
 		return
 	end
+	AddInputBlock({ Name = "OpenKeepsakeRackScreen" })
 	HideCombatUI( screen.Name )
 	OnScreenOpened( screen )
 	CreateScreenFromData( screen, screen.ComponentData )
@@ -582,7 +637,9 @@ function OpenKeepsakeRackScreen( source )
 			CreateKeepsakeIcon( screen, components, { Index = itemIndex, UpgradeData = itemData, X = localx, Y = localy } )
 		end
 	end
+	wait( 0.02 )
 
+	thread( PlayVoiceLines, GlobalVoiceLines.OpenedAwardMenuEpilogueHintVoiceLines, false )
 	if not screen.HasUnlocked then
 		TeleportCursor({ OffsetX = screen.StartX, OffsetY = screen.StartY, ForceUseCheck = true })
 		thread( PlayVoiceLines, GlobalVoiceLines.AwardMenuEmptyVoiceLines, false )
@@ -593,6 +650,7 @@ function OpenKeepsakeRackScreen( source )
 	end
 
 	SetAnimation({ DestinationId = CurrentRun.Hero.ObjectId, Name = "MelinoeEquip" })
+	RemoveInputBlock({ Name = "OpenKeepsakeRackScreen" })
 
 	screen.KeepOpen = true
 	HandleScreenInput( screen )
@@ -701,6 +759,13 @@ function CreateKeepsakeIcon( screen, components, args )
 			local text = "RandomWarningAlt_Tooltip"
 			local validFateState = IsFateValid()
 			if CurrentRun.Hero.IsDead then
+				validFateState = true
+				for metaUpgradeName in pairs(FatedDisableMetaUpgrades) do
+					if GameState.MetaUpgradeState[metaUpgradeName].Equipped then
+						validFateState = false
+						break
+					end
+				end
 				text = "RandomWarning_Tooltip"
 			end
 			if not validFateState then
@@ -767,12 +832,10 @@ function CreateKeepsakeIcon( screen, components, args )
 			components[buttonKey].Blocked = true
 		elseif not screen.FirstUsable and screen.LastTrait == nil and screen.LastAssist == nil then
 			TeleportCursor({ OffsetX = localx, OffsetY = localy, ForceUseCheck = true })
-			KeepsakeScreenShowInfo( screen, components[buttonKey] )
 			screen.FirstUsable  = true
 		elseif screen.LastTrait == upgradeData.Gift or screen.LastAssist == upgradeData.Gift then
 			SetSelectedFrame( screen, components[buttonKey], { Duration = 0.4 } )
 			TeleportCursor({ OffsetX = localx, OffsetY = localy, ForceUseCheck = true })
-			KeepsakeScreenShowInfo( screen, components[buttonKey] )
 		end
 	else
 		SetAnimation({ DestinationId = components[buttonKey].Id, Name = "Keepsake_Unknown" })
@@ -941,6 +1004,9 @@ function KeepsakeScreenShowInfo( screen, button )
 			local statLine = statLines[1]
 			ModifyTextBox({ Id = components.InfoBoxStatLineLeft.Id, AppendToId = components.InfoBoxDescription.Id, Text = statLine, LuaKey = "TooltipData", LuaValue = traitData, FadeTarget = 1.0 })
 			ModifyTextBox({ Id = components.InfoBoxStatLineRight.Id, AppendToId = components.InfoBoxDescription.Id, Text = statLine, UseDescription = true, LuaKey = "TooltipData", LuaValue = traitData, FadeTarget = 1.0})
+		else
+			ModifyTextBox({ Id = components.InfoBoxStatLineLeft.Id, FadeTarget = 0.0 })
+			ModifyTextBox({ Id = components.InfoBoxStatLineRight.Id, FadeTarget = 0.0 })
 		end
 		if traitData.SignoffText ~= nil then
 			ModifyTextBox({ Id = components.InfoBoxFlavor.Id, Text = traitData.SignoffText, FadeTarget = 1.0 })
@@ -1218,6 +1284,10 @@ function HandleUpgradeToggle( screen, button, textOverride )
 	if not button.Data.Unlocked then
 		return
 	end
+	if upgradeData.BlockedByEnding and not IsGameStateEligible( upgradeData, { NamedRequirementsFalse = {"SurfaceRouteLockedByTyphonKill"}}) then
+		return
+	end
+
 	local changed = false
 	if upgradeData.Slot == "Keepsake" and GameState.LastAwardTrait ~= upgradeName then
 		GameState.LastAwardTrait = upgradeName
@@ -1237,7 +1307,7 @@ function KeepsakeAcquireSpellDrop( args, trait )
 		return
 	end
 	AddTalentPoints( args, trait )
-	if CurrentRun.Hero.SlottedSpell == nil then
+	if (CurrentRun.UseRecord.SpellDrop or 0) <= 0 then
 		RewardStoreAddPriority( args, trait )
 	else
 		local alternateArgs = ShallowCopyTable( args )

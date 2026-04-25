@@ -20,7 +20,7 @@ function UseGardenPlot( plot, args, user )
 
 	if plot.SeedName == nil then
 		-- Plant new seed
-		OpenInventoryScreen( { PlantTarget = plot, DefaultCategoryIndex = 2, CategoryLocked = true, InitialSelection = GameState.GardenLastSeedPlanted, } )
+		OpenInventoryScreen( { PlantTarget = plot, DefaultCategoryIndex = 2, CategoryLocked = true } )
 		return
 	end
 	
@@ -159,9 +159,6 @@ end
 
 function GardenTimeTick( args )
 	args = args or {}
-	if args.UpdatePlotPresentation then
-		GardenPlotTimeUpdateStartPresentation( args )
-	end
 	for tick = 1, (args.Ticks or 1) do
 		for plotId, plot in pairs( GameState.GardenPlots ) do
 			if args.PlotId == nil or plotId == args.PlotId then
@@ -170,23 +167,13 @@ function GardenTimeTick( args )
 					if plot.GrowTimeRemaining <= 0 then
 						plot.ReadyForHarvest = true
 					end
-					GardenPlotTimeTickPresentation( plot, args )
 					if args.UpdatePlotPresentation then
 						GardenPlotTimeUpdatePresentation( plot, args )
 					end
 				end
 			end
 		end
-		wait( args.TickInterval )
 	end
-end
-
-function GiftGardenPlot( target, args, giftName )
-	AddInputBlock({ Name = "GiftGardenPlot" })
-	UseableOff({ Id = target.ObjectId })
-	GardenTimeTick( { Ticks = args.Ticks, PlotId = target.ObjectId, UpdatePlotPresentation = true, PanDuration = 0.0, SkipCameraPan = true, TickInterval = 0.2, } )
-	UseableOn({ Id = target.ObjectId })
-	RemoveInputBlock({ Name = "GiftGardenPlot" })
 end
 
 function HasSeeds( neededCount )

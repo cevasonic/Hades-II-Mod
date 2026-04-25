@@ -101,10 +101,12 @@ function ShrineScreenUpdateActivePoints( screen, button, args )
 	local text = nil
 	local luaKey = nil
 	local luaValue = nil
-	if activeShrinePoints == GetMaxShrinePoints() then
-		text = screen.MaxShrinePointsText
-	elseif screen.HasBountyForWeapon then
-		if screen.ActiveBounty ~= nil then
+	if screen.HasBountyForWeapon then
+		if activeShrinePoints == GetMaxShrinePoints() then
+			text = screen.MaxShrinePointsText
+		elseif activeShrinePoints == 0 then
+			text = screen.ZeroShrinePointsText
+		elseif screen.ActiveBounty ~= nil then
 			if highestExcessShrinePoints == 0 then
 				text = screen.ExactShrinePointsText
 			else
@@ -119,19 +121,10 @@ function ShrineScreenUpdateActivePoints( screen, button, args )
 		else
 			text = screen.BelowShrinePointsText
 		end
-	else
-		if screen.FirstBountyWeapon ~= nil then
-			text = screen.NoBountyAvailableForWeaponText
-			local weaponData = WeaponData[screen.FirstBountyWeapon]
-			text = weaponData.NoBountyAvailableText or text
-			luaKey = "TempTextData"
-			luaValue = { WeaponName = screen.FirstBountyWeapon }
-		else
-			text = screen.NoBountyAvailableText
-		end
-	end
-	if GameState.SpentShrinePointsCache == 0 and text ~= screen.NoBountyAvailableForWeaponText then
-		text = screen.ZeroShrinePointsText
+	elseif screen.FirstBountyWeapon ~= nil then
+		text = WeaponData[screen.FirstBountyWeapon].NoBountyAvailableText
+		luaKey = "TempTextData"
+		luaValue = { WeaponName = screen.FirstBountyWeapon }
 	end
 	ModifyTextBox({ Id = screen.Components.ThermometerText.Id, Text = text, LuaKey = luaKey, LuaValue = luaValue })
 

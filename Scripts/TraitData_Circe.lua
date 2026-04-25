@@ -2,19 +2,71 @@ OverwriteTableKeys( TraitData, {
 	-- Circe
 	BaseCirce =
 	{
+		InheritFrom = { "ForceCommonAppearanceTrait" },
 		IsCirceBoon = true,
 		DebugOnly = true,
 		PackageName = "NPC_Circe_01",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 1
+			},
+		},
 	},
 	RandomArcanaTrait = 
 	{
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_06",
 		
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 3
+			},
+		},
+		CustomNameWithRequirements = 
+		{
+			GameStateRequirements = 
+			{
+				{
+					PathFromSource = true,
+					Path = { "AcquireFunctionArgs", "Count" },
+					Comparison = ">",
+					Value = 1,
+				}
+			},
+			Name = "RandomArcanaTrait_Plural"
+		},
 		AcquireFunctionName = "CirceRandomMetaUpgrade",
 		AcquireFunctionArgs = 
 		{
-			Count = 1, 
+			Count = { BaseValue = 1 }, 
 			ReportValues = { ReportedCount = "Count" }
 		},
 		
@@ -31,10 +83,42 @@ OverwriteTableKeys( TraitData, {
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_07",
 		
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 3
+			},
+		},
+		CustomNameWithRequirements = 
+		{
+			GameStateRequirements = 
+			{
+				{
+					PathFromSource = true,
+					Path = { "AcquireFunctionArgs", "Count" },
+					Comparison = ">",
+					Value = 1,
+				}
+			},
+			Name = "RemoveShrineTrait_Plural"
+		},
 		AcquireFunctionName = "CirceRemoveShrineUpgrades",
 		AcquireFunctionArgs = 
 		{
-			Count = 1, 
+			Count = { BaseValue = 1 }, 
 			ReportValues = { ReportedCount = "Count" }
 		},
 		
@@ -50,11 +134,30 @@ OverwriteTableKeys( TraitData, {
 	{
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_04",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 2
+			},
+		},
 		HideStatLinesInCodex = true,
 		AcquireFunctionName = "CircePetMultiplier",
 		AcquireFunctionArgs = 
 		{
-			BonusMultiplier = 1, 
+			BonusMultiplier = { BaseValue = 1 }, 
 			ReportValues = { ReportedBonus = "BonusMultiplier" }
 		},
 		StatLines = 
@@ -82,6 +185,12 @@ OverwriteTableKeys( TraitData, {
 				Format = "TotalHeroTraitValue",
 				Key = "FamiliarLastStandHealAmount",
 				ExtractAs = "TooltipLastStandHealth",
+			},
+			{
+				IsExternal = true,
+				Format = "TotalHeroTraitValue",
+				Key = "ReportedFamiliarLastStandAmount",
+				ExtractAs = "TooltipLastStandAmount",
 			}
 		}
 	},
@@ -90,10 +199,31 @@ OverwriteTableKeys( TraitData, {
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_05",
 		CustomTrayText = "HealAmplifyTrait_Tray",
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 60/50,
+			},
+			Heroic =
+			{
+				Multiplier = 80/50,
+			},
+		},
+
 		AcquireFunctionName = "CirceHeal",
 		AcquireFunctionArgs = 
 		{
-			HealFraction = 0.5,
+			HealFraction = { BaseValue = 0.5 },
 			ReportValues = { ReportedHeal = "HealFraction" }
 		},
 		CustomStatLinesWithShrineUpgrade = 
@@ -124,10 +254,29 @@ OverwriteTableKeys( TraitData, {
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_01",
 		
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1.5
+			},
+			Heroic =
+			{
+				Multiplier = 2.5
+			},
+		},
 		AcquireFunctionName = "CirceMetaUpgradeRarity",
 		AcquireFunctionArgs = 
 		{
-			Count = 2, 
+			Count = { BaseValue = 2 }, 
 			ReportValues = { ReportedCount = "Count" }
 		},
 		ExtractValues =
@@ -143,6 +292,27 @@ OverwriteTableKeys( TraitData, {
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_02",
 		BaseChipmunkValue = -0.43,
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1.20/1.15,
+			},
+			Heroic =
+			{
+				Multiplier = 1.30/1.15,
+			},
+		},
+
 		SetupFunction = 
 		{
 			Name = "CirceEnlarge",
@@ -162,11 +332,11 @@ OverwriteTableKeys( TraitData, {
 				},
 			},
 		},
-		MaxHealthMultiplier = 1.15, 
+		MaxHealthMultiplier = { BaseValue = 1.15 },
 		AddOutgoingDamageModifiers = 
 		{
 			ValidWeapons = WeaponSets.HeroPrimarySecondaryWeapons,
-			ValidWeaponMultiplier = 1.15,
+			ValidWeaponMultiplier = { BaseValue = 1.15 },
 			ReportValues = {ReportedMultiplier = "ValidWeaponMultiplier"}
 		},
 		
@@ -189,6 +359,27 @@ OverwriteTableKeys( TraitData, {
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_03",
 		BaseChipmunkValue = 0.33,
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 15/10,
+			},
+			Heroic =
+			{
+				Multiplier = 20/10,
+			},
+		},
+
 		SetupFunction = 
 		{
 			Name = "CirceShrink",
@@ -221,7 +412,7 @@ OverwriteTableKeys( TraitData, {
 			{
 				UnitProperty = "Speed",
 				ChangeType = "Multiply",
-				ChangeValue = 1.10,
+				BaseValue = 1.10,
 				SourceIsMultiplier = true,
 				ReportValues = { ReportedBaseSpeed = "ChangeValue" },
 			},
@@ -244,12 +435,33 @@ OverwriteTableKeys( TraitData, {
 	{
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_08",
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1.4/1.3,
+			},
+			Heroic =
+			{
+				Multiplier = 1.6/1.3,
+			},
+		},
+
 		AllyDataModifiers = 
 		{			
 			AddOutgoingDamageModifiers =
 			{
 				{
-					NonPlayerMultiplier = 1.3
+					NonPlayerMultiplier = { BaseValue = 1.3 },
 				},
 			},
 		},
@@ -257,7 +469,7 @@ OverwriteTableKeys( TraitData, {
 		{
 			-- Match this to above ally data modifier too!
 			ValidProjectiles = WeaponSets.SpellProjectileNames,
-			ValidWeaponMultiplier = 1.3,
+			ValidWeaponMultiplier = { BaseValue = 1.3 },
 			ReportValues = { ReportedMultiplier = "ValidWeaponMultiplier"},
 		},
 		ExtractValues =
@@ -275,6 +487,27 @@ OverwriteTableKeys( TraitData, {
 		InheritFrom = {"BaseCirce"},
 		Icon = "Boon_Circe_09",
 		ShowInHUD = true,
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 20/15,
+			},
+			Heroic =
+			{
+				Multiplier = 30/15,
+			},
+		},
+
 		CodexGameStateRequirements =
 		{
 			{
@@ -287,8 +520,18 @@ OverwriteTableKeys( TraitData, {
 			FunctionName = "CircePolymorph",
 			Args = 
 			{
-				Chance = 0.15,
-				Cooldown = 10,
+				Chance = { BaseValue = 0.15 },
+				Cooldown =
+				{
+					BaseValue = 10,
+					CustomRarityMultiplier = 
+					{
+						Common = { Multiplier = 1 },
+						Rare = { Multiplier = 1 },
+						Epic = { Multiplier = 8/10 },
+						Heroic = { Multiplier = 4/10 },
+					},
+				},
 				ReportValues = 
 				{ 
 					ReportedChance = "Chance", 

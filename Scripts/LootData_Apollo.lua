@@ -400,6 +400,31 @@ LootSetData.Apollo =
 					Portrait = "Portrait_Apollo_Serious_01",
 					Text = "I'm a bit of a physician, sunshine, and my professional opinion is your vital signs are not the best right now. Although perhaps we can still get you back in shape..." },
 			},
+			ApolloLowHealth04 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "Hero", "LastStands", },
+						UseLength = true,
+						Comparison = "<=",
+						Value = 1,
+					},
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = "<=", Value = 0.3, },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0233",
+					Portrait = "Portrait_Apollo_Serious_01",
+					Emote = "PortraitEmoteDepressed",
+					Text = "{#Emph}Eugh{#Prev}, looks like I've run a little late, as you most likely could have used assistance from me prior to whatever gave you such a thorough drubbing. Try to hold on, all right?" },
+			},
 
 			-- run starts
 			ApolloRunStart01 =
@@ -446,6 +471,20 @@ LootSetData.Apollo =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Apollo_0231",
 					Text = "Before you go charging off to battle and glory once more, please, allow me! And may this blessing be of benefit every step of the way tonight." },
+			},
+			ApolloRunStart04 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name", },
+						IsAny = { "F_Opening01", "F_Opening02", "F_Opening03", "N_Opening01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0232",
+					Text = "Thought you could use this extra bit of preparation before heading out again in earnest, Cousin! A bit of extra reassurance that you'll make it all the way." },
 			},
 
 			-- story events
@@ -1097,6 +1136,27 @@ LootSetData.Apollo =
 				{ Cue = "/VO/Apollo_0240",
 					Text = "For such a fearful lot, mortals sure love killing each other! There was this war they had a while back that even had us gods at one another's throats. I tried to settle it with plague and arrows and such, but {#Emph}no! {#Prev}Father wanted it to play out." },
 			},
+			ApolloAboutMortals03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "N", "O" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0243",
+					Portrait = "Portrait_Apollo_Serious_01",
+					Text = "Lately I'm reminded just how frail mortals are... I never let myself get attached anymore. They can be so much like us, even beautiful, but there's all heartbreak watching them die. Their deaths aren't even the end, but they sure act like it! " },
+			},
 
 			ApolloAboutHouse01 =
 			{
@@ -1153,7 +1213,7 @@ LootSetData.Apollo =
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt" },
+						HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
@@ -1715,6 +1775,29 @@ LootSetData.Apollo =
 					Portrait = "Portrait_Apollo_Serious_01",
 					Text = "Between us, I have never seen Ares so pleased as he has been recently. And I can probably imagine why. This war that we've been waging... it's a real piece of work, even for him." },
 			},
+			ApolloAboutAres02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "AresUpgrade" }
+					},
+					--[[
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+					]]--
+					NamedRequirementsFalse = { "ReachedEpilogue" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0237",
+					Text = "At least my good half-brother Ares finally made an appearance. I was beginning to wonder if he'd ever show up! Though, he might have wondered that about me in the past..." },
+			},
 			ApolloAboutHermes01 =
 			{
 				PlayOnce = true,
@@ -1735,6 +1818,27 @@ LootSetData.Apollo =
 				{ Cue = "/VO/Apollo_0082",
 					Portrait = "Portrait_Apollo_Serious_01",
 					Text = "You got there faster than expected, which might mean you got a bit of a boost from Hermes! He's swift for sure, though I can never get a straight answer out of him about anything..." },
+			},
+			ApolloAboutHermes02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0238",
+					Portrait = "Portrait_Apollo_Displeased_01",
+					Text = "Sometimes I think Hermes must still be running about in the Underworld like he used to, as lately I can't seem to find him anywhere. He's been so cagey with me, too! Some messenger." },
 			},
 			ApolloAboutDionysus01 =
 			{
@@ -1766,6 +1870,86 @@ LootSetData.Apollo =
 				{ Cue = "/VO/Apollo_0230",
 					Portrait = "Portrait_Apollo_Serious_01",
 					Text = "You can count on most of us, but I can't speak for Dionysus; don't even know where he is! I like a feast as much as anybody at the proper time, but the god of wine thinks the proper time is {#Emph}all {#Prev}the time." },
+			},
+			ApolloAboutDionysus02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathFalse = { "CurrentRun", "ActiveBounty" },
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 2,
+						Path = { "UseRecord", "NPC_Dionysus_01" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ApolloAboutDionysus01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0239",
+					Portrait = "Portrait_Apollo_Serious_01",
+					Text = "Still no sign of Dionysus. I'd be worried if it wasn't him, but he gets like this. Sometimes I {#Emph}cannot {#Prev}believe we're related. I want a bit of order around here, he wants the opposite." },
+			},
+			ApolloAboutSelene01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "SpellDrop" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					--[[
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+					]]--
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0235",
+					Portrait = "Portrait_Apollo_Serious_01",
+					Text = "You seem fairer than ever, Cousin. Awash in moonlight...  you're working with Selene, aren't you? And here I thought she'd be too busy galloping across the sky to back us up..." },
+			},
+			ApolloAboutSelene02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "SpellDrop" }
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.GodAboutGodEvents,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0236",
+					Text = "The light of day {#Emph}can {#Prev}be a bit harsh, so it's fortunate the Moon offers such a pleasant alternative. Selene's shine may be more to your liking, if you can even see her from there..." },
 			},
 
 			-- ApolloAboutArtemis01 intentionally omitted
@@ -1995,6 +2179,9 @@ LootSetData.Apollo =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
 						Path = { "CurrentRun", "ActiveBountyAttempts" },
 						Comparison = ">=",
 						Value = 3,
@@ -2005,6 +2192,29 @@ LootSetData.Apollo =
 					Portrait = "Portrait_Apollo_Serious_01",
 					Text = "There's something exceedingly odd about tonight. Haven't we already had an evening just like this, down to the smallest detail? Your magick at work perhaps... as long as it isn't Chronos." },
 			},
+			ApolloAboutPackagedBountyLateStart01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "PrevRun", "ActiveBounty" },
+					},
+					{
+						Path = { "CurrentRun", "ActiveBounty" },
+						IsAny = GameData.LateStartPackagedBounties,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0253",
+					Emote = "PortraitEmoteSurprise",
+					Portrait = "Portrait_Apollo_Serious_01",
+					Text = "Wait how exactly did you even get there, sunshine? Last I checked you were traversing someplace else entirely! But then I had a hunch to check {#Emph}again{#Prev}, and sure enough..." },
+			},
+
 			ApolloAboutShrine01 =
 			{
 				PlayOnce = true,
@@ -2066,6 +2276,24 @@ LootSetData.Apollo =
 					PostLineFunctionName = "RelationshipAdvancedPresentation",
 					PostLineFunctionArgs = { Delay = 0.5 },
 					Text = "When I first reached out to you many nights ago, I figured, {#Emph}hey, another cousin! I like those! {#Prev}But the truth is I never expected you to make as great a difference as you have. My hope is I've done my part to make it possible." },
+			},
+			ApolloAboutRelationship02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ApolloGift06", "AphroditeAboutRelationship01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Apollo_0245",
+					Text = "Aphrodite's been quite excited for you... she has a way of knowing everybody's supposedly-private lives, but if she's blessing your relationships, you're better off. Some of mine certainly could have used it..." },
 			},
 
 			ApolloAboutMomusAspect01 =
@@ -2393,6 +2621,48 @@ LootSetData.Apollo =
 				{ Cue = "/VO/Apollo_0208",
 					Text = "It was a joy and honor to accompany you to the Crossroads on Selene's silver chariot, Cousin. The ballad Artemis and I performed... that's the first we jointly composed. We don't always get along but you inspired us." },
 			},
+			ApolloPostTrueEnding02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NeoChronosAboutNewJob01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TextLinesRecord", "NeoChronosAboutNewJob01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0242",
+					Text = "I'm impressed our fathers reached an agreement about Chronos, and {#Emph}certainly {#Prev}did not expect they'd send him to the Isles of the Blessed! Best spot in all the Underworld, so I hear. May he keep it that way!" },
+			},
+			ApolloPostTrueEnding03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArtemisHubSingingEndTheme01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Apollo_0256",
+					Text = "The song Artemis and I composed, we call it {#Emph}Time Belongs to Us. {#Prev}Came up with it when our hope of overcoming Chronos was starting to slip, but my knack for prophecy told me we had to hold on..." },
+			},
+
 			ApolloAboutUnderworld01 =
 			{
 				PlayOnce = true,
@@ -3471,22 +3741,6 @@ LootSetData.Apollo =
 			{ Cue = "/VO/Melinoe_1734", Text = "Thank you for this, Cousin!" },
 		},
 
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
-		},
-
 		FullSuperActivatedVoiceLines =
 		{
 			Queue = "Interrupt",
@@ -3540,7 +3794,7 @@ LootSetData.Apollo =
 				RandomRemaining = true,
 				ObjectTypes = { "NPC_Artemis_Field_01" },
 				PreLineWait = 0.35,
-				SuccessiveChanceToPlay = 0.5,
+				SuccessiveChanceToPlayAll = 0.5,
 				SkipCooldownCheckIfNonePlayed = true,
 				Cooldowns =
 				{

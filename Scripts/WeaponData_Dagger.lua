@@ -19,7 +19,8 @@ OverwriteTableKeys( WeaponData,
 		DashWeapon = "WeaponDaggerDash",
 		ExpireDashWeaponOnDash = true,
 		DummyTraitName = "DummyWeaponDagger",
-		
+		SprintDisableEffectName = "DaggerSpecial1DisableMoveHold",
+
 		SwapAnimations =
 		{
 			["MelinoeIdle"] = "Melinoe_Dagger_Idle",
@@ -105,6 +106,20 @@ OverwriteTableKeys( WeaponData,
 				Shell = "/SFX/ShellImpact",
 			},
 		},
+		SpeedPropertyChanges = 
+		{
+			{
+				WeaponProperty = "ChargeTime",
+			},
+			{
+				EffectName = "Swing1Disable",
+				EffectProperty = "Duration",
+			},
+			{
+				EffectName = "Swing1DisableCancellable",
+				EffectProperty = "Duration",
+			},
+		},
 	},
 	WeaponDaggerDash =
 	{
@@ -153,6 +168,20 @@ OverwriteTableKeys( WeaponData,
 	WeaponDagger2 =
 	{
 		InheritFrom = { "WeaponDagger", },
+		SpeedPropertyChanges = 
+		{
+			{
+				WeaponProperty = "ChargeTime",
+			},
+			{
+				EffectName = "Swing2Disable",
+				EffectProperty = "Duration",
+			},
+			{
+				EffectName = "Swing2DisableCancellable",
+				EffectProperty = "Duration",
+			},
+		},
 	},
 
 	WeaponDaggerMultiStab =
@@ -184,6 +213,20 @@ OverwriteTableKeys( WeaponData,
 				MetalObstacle = "/SFX/SwordWallHitClankSmall",
 				BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
 				Shell = "/SFX/ShellImpact",
+			},
+		},
+		SpeedPropertyChanges = 
+		{
+			{
+				WeaponProperty = "ChargeTime",
+			},
+			{
+				EffectName = "SwingMultiDisable",
+				EffectProperty = "Duration",
+			},
+			{
+				EffectName = "SwingMultiDisableCancellable",
+				EffectProperty = "Duration",
 			},
 		},
 
@@ -242,7 +285,21 @@ OverwriteTableKeys( WeaponData,
 				BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
 				Shell = "/SFX/ShellImpact",
 			},
-		}
+		},
+		SpeedPropertyChanges = 
+		{
+			{
+				WeaponProperty = "ChargeTime",
+			},
+			{
+				EffectName = "SwingDoubleDisable",
+				EffectProperty = "Duration",
+			},
+			{
+				EffectName = "SwingDoubleDisableCancellable",
+				EffectProperty = "Duration",
+			},
+		},
 	},
 
 	WeaponDagger5 =

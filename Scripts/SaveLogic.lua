@@ -34,12 +34,15 @@ MainRunSaveWhitelist = ToLookup(
 	"ActiveBounty",
 	"VictoryMessage",
 	"UsedStoryReset",
+	"BiomeVisitOrder",
 })
 
 RecentRunSaveWhitelist = ToLookup(
 {
 	"Cleared",
 	"BountyCleared",
+	"IsDreamRun",
+	"DreamCleared",
 	"BiomeStateChangeCount",
 })
 
@@ -60,6 +63,25 @@ RecentRunTablesSaveWhitelist = ToLookup(
 	"WeaponsUnlocked",
 	"NemesisTakeExitRecord",
 	"SpecialInteractRecord",
+})
+
+PrevRunSaveBlacklist = ToLookup(
+{
+	"LineHistory",
+	"RewardStores",
+	"MarketItems",
+	"LootChoiceHistory",
+})
+
+PrevRunHeroSaveBlacklist = ToLookup(
+{
+	"Traits", -- This wasn't even accurate because it was only the traits from PreRun
+	"PreDeathTraits",
+	"TraitDictionary",
+	"WeaponDataOverride",
+	"FirstTraitWithPropertyCache",
+	"HeroTraitValuesCache",
+	"AllLinkedWeaponsCache",
 })
 
 RoomSaveWhitelist = ToLookup(
@@ -120,7 +142,14 @@ AudioSaveWhitelist = ToLookup(
 function StripRunForSave( run, runsBackFromCurrent )
 
 	if runsBackFromCurrent <= 0 then
-		return -- Don't strip prevRun
+		-- PrevRun
+		for key, value in pairs( PrevRunSaveBlacklist ) do
+			run[key] = nil
+		end
+		for key, value in pairs( PrevRunHeroSaveBlacklist ) do
+			run.Hero[key] = nil
+		end
+		return
 	end
 
 	for key, value in pairs( run ) do
@@ -165,11 +194,7 @@ function StripRoomsForSave( run, keepLastRoom )
 	end
 end
 
-
-function Save()
-
-	-- Iris specific stripping
-	StripRoomsForSave( CurrentRun, true )
+function StripRunHistoryForSave()
 	local runCount = #GameState.RunHistory
 	for runIndex, run in ipairs( GameState.RunHistory ) do
 		StripRunForSave( run, runCount - runIndex )
@@ -177,6 +202,11 @@ function Save()
 			StripRoomsForSave( run, false )
 		end
 	end
+end
+
+function Save()
+
+	StripRoomsForSave( CurrentRun, true )
 
 	local sessionMapState = MapState
 	MapState = {}

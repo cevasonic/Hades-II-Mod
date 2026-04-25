@@ -46,7 +46,7 @@
 
 		Background = 
 		{
-			Animation = "TradeScreenBackground",
+			Animation = "TradeScreenIn",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
 		},
@@ -190,23 +190,6 @@
 						},
 					},
 				},
-				
-				--[[
-				GiveInfoBoxStatLineLeft =
-				{ 
-					TextArgs = ScreenData.UpgradeChoice.StatLineLeft,
-				},
-				
-				GiveInfoBoxStatLineRight =
-				{ 
-					TextArgs = ScreenData.UpgradeChoice.StatLineRight,
-				},
-
-				GiveInfoBoxRarity =
-				{
-					TextArgs = ScreenData.UpgradeChoice.RarityText,
-				},
-				]]
 			},
 		},
 
@@ -318,18 +301,6 @@
 						},
 					},
 				},
-				
-				--[[
-				GetInfoBoxStatLineLeft =
-				{ 
-					TextArgs = ScreenData.UpgradeChoice.StatLineLeft,
-				},
-				
-				GetInfoBoxStatLineRight =
-				{ 
-					TextArgs = ScreenData.UpgradeChoice.StatLineRight,
-				},
-				]]
 			},
 		},
 

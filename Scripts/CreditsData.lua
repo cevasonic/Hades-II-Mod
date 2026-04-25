@@ -54,7 +54,7 @@ CreditsData =
 		CreditH2 =
 		{
 			InheritFrom = { "ColumnCenter" },
-			Font = "P22UndergroundSCMedium",
+			Font = "CreditsTitleP22UndergroundSCMedium",
 			FontSize = 28,
 			Color = { 0.27, 0.65, 0.79 },
 			OutlineColor = { 0.1, 0.1, 0.1 },
@@ -67,7 +67,7 @@ CreditsData =
 		CreditAcknowledgement =
 		{
 			InheritFrom = { "ColumnCenter" },
-			Font = "P22UndergroundSCMedium",
+			Font = "CreditsTitleP22UndergroundSCMedium",
 			FontSize = 22,
 			Color = { 0.55, 0.79, 0.92 },
 			ShadowColor = { 0, 0, 0, 1 },
@@ -77,7 +77,7 @@ CreditsData =
 		CreditH4 =
 		{
 			InheritFrom = { "ColumnCenter" },
-			Font = "P22UndergroundSCMedium",
+			Font = "CreditsTitleP22UndergroundSCMedium",
 			FontSize = 22,
 			Color = { 0.27, 0.65, 0.79 },
 		},
@@ -85,7 +85,7 @@ CreditsData =
 		CreditTitle =
 		{
 			InheritFrom = { "ColumnCenter" },
-			Font = "P22UndergroundSCMedium",
+			Font = "CreditsTitleP22UndergroundSCMedium",
 			FontSize = 22,
 			Color = { 0.27, 0.65, 0.79 }, --BLUE
 			ShadowColor = { 0, 0, 0, 1 },
@@ -830,31 +830,40 @@ CreditsData =
 			Delay = 2.5,
 		},
  
- 		{ Format = "CreditH2", Text = "Credits_Heading_SpecialThanks", SetScrollSpeed = 115 },
+ 		{ Format = "CreditH2", Text = "Credits_Heading_SpecialThanks", SetScrollSpeed = 117 },
 		{ Format = "ColumnCenter", SpacingY = 50 },
 		{ Format = "CreditName", Text = "Credits_Name_243" },
+		{ Format = "CreditName", Text = "Credits_Name_386" },
 		{ Format = "CreditName", Text = "Credits_Name_244" },
 		{ Format = "CreditName", Text = "Credits_Name_245" },
+		{ Format = "CreditName", Text = "Credits_Name_387" },
 		{ Format = "CreditName", Text = "Credits_Name_263" },
 		{ Format = "CreditName", Text = "Credits_Name_261" },
+		{ Format = "CreditName", Text = "Credits_Name_388" },
 		{ Format = "CreditName", Text = "Credits_Name_246" },
 		{ Format = "CreditName", Text = "Credits_Name_259" },
 		{ Format = "CreditName", Text = "Credits_Name_247" },
 		{ Format = "CreditName", Text = "Credits_Name_248" },
+		{ Format = "CreditName", Text = "Credits_Name_393" },
 		{ Format = "CreditName", Text = "Credits_Name_262" },
 		{ Format = "CreditName", Text = "Credits_Name_249" },
 		{ Format = "CreditName", Text = "Credits_Name_266" },
+		{ Format = "CreditName", Text = "Credits_Name_392" },
 		{ Format = "CreditName", Text = "Credits_Name_250" },
 		{ Format = "CreditName", Text = "Credits_Name_260" },
 		{ Format = "CreditName", Text = "Credits_Name_258" },
+		{ Format = "CreditName", Text = "Credits_Name_389" },
 		{ Format = "CreditName", Text = "Credits_Name_251" },
 		{ Format = "CreditName", Text = "Credits_Name_252" },
 		{ Format = "CreditName", Text = "Credits_Name_253" },
 		{ Format = "CreditName", Text = "Credits_Name_254" },
 		{ Format = "CreditName", Text = "Credits_Name_255" },
+		{ Format = "CreditName", Text = "Credits_Name_395" },
 		{ Format = "CreditName", Text = "Credits_Name_265" },
 		{ Format = "CreditName", Text = "Credits_Name_256" },
 		{ Format = "CreditName", Text = "Credits_Name_257" },
+		{ Format = "CreditName", Text = "Credits_Name_378" },
+		{ Format = "CreditName", Text = "Credits_Name_385" },
 		{ Format = "CreditName", Text = "Credits_Name_267" },
 		{ Format = "CreditName", Text = "Credits_Name_264" },
 		--{ Format = "CreditTitle", Text = "Credits_Div_B" },

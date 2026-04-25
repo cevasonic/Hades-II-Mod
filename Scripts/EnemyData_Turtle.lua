@@ -3,7 +3,7 @@ UnitSetData.Turtle =
 	
 	Turtle =
 	{
-		InheritFrom = { "OceanusUnitData", "BaseVulnerableEnemy" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "BaseVulnerableEnemy" },
 		IntroEncounterName = "TurtleIntro",
 
 		GameStateRequirements =

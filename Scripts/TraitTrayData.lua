@@ -96,7 +96,7 @@
 		FreeFormSelectWrapY = false,
 		FreeFormSelectGridLock = true,
 		FreeFormSelectStepDistance = 16,
-		FreeFormSelectSuccessDistanceStep = 4,
+		FreeFormSelectSuccessDistanceStep = 3,
 		FreeFormSelectRepeatDelay = 0.6,
 		FreeFormSelectRepeatInterval = 0.1,
 		FreeFormSelecSearchFromId = 0,

@@ -307,8 +307,10 @@ end
 
 function SetDefaultMusicParams( trackName, musicId, args )
 
-	args = args or {}	
-	local roomData = RoomData[CurrentRun.CurrentRoom.Name]
+	args = args or {}
+
+	local currentRoom = CurrentHubRoom or CurrentRun.CurrentRoom
+	local roomData = RoomData[currentRoom.Name] or currentRoom
 
 	SetSoundCueValue({ Names = args.ParamNames or roomData.DefaultMusicParams or { "Guitar", "Drums", "Bass", "Keys", }, Id = musicId, Value = 1 })
 
@@ -360,7 +362,7 @@ function MusicMixer( mixArgs )
 		AudioState.MusicActiveStems = mixArgs.MusicActiveStems
 		SetSoundCueValue({ Names = mixArgs.MusicActiveStems, Id = AudioState.MusicId, Value = 1, Duration = 0.75 })
 	end
-	if mixArgs.MusicMutedStems ~= nil then
+	if mixArgs.MusicMutedStems ~= nil and ( mixArgs.MusicMutedStemsRequirements == nil or IsGameStateEligible( mixArgs, mixArgs.MusicMutedStemsRequirements ) ) then
 		AudioState.MusicMutedStems = mixArgs.MusicMutedStems
 		SetSoundCueValue({ Names = mixArgs.MusicMutedStems, Id = AudioState.MusicId, Value = 0, Duration = mixArgs.MusicMutedStemsDuration or 0.75 })
 	end
@@ -429,7 +431,7 @@ function EndMusic( musicId, musicName, hardStopTime, args )
 	end
 
 	if hardStopTime ~= nil then
-		StopSound({ Id = musicId, Value = 0.0, Duration = hardStopTime })
+		StopSound({ Id = musicId, Duration = hardStopTime })
 		AudioState.StoppingMusicId = musicId
 	end
 
@@ -456,6 +458,22 @@ function ResumeMusic( args )
 	wait( args.Delay )
 	ResumeSound({ Id = AudioState.MusicId, Duration = args.Duration or 0.2 })
 	AudioState.MusicPaused = false
+end
+
+function PauseSecretMusic( args )
+	args = args or {}
+	PauseSound({ Id = AudioState.SecretMusicId, Duration = args.Duration or 0.2 })
+	AudioState.SecretMusicPaused = true
+end
+
+function ResumeSecretMusic( args )
+	args = args or {}
+	if AudioState.SecretMusicId == nil then
+		return
+	end
+	wait( args.Delay )
+	ResumeSound({ Id = AudioState.SecretMusicId, Duration = args.Duration or 0.2 })
+	AudioState.SecretMusicPaused = false
 end
 
 function SetMusicSection( section, musicId )
@@ -499,7 +517,7 @@ function StartRoomAmbience( currentRun, currentRoom, args )
 		-- Specific track requested
 		if newTrackName ~= AudioState.AmbienceName then
 			StopSound({ Id = AudioState.AmbienceId, Duration = 0.5 })
-			AudioState.AmbienceId = PlaySound({ Name = newTrackName, Duration = 0.5 })
+			AudioState.AmbienceId = PlaySound({ Name = newTrackName })
 			AudioState.AmbienceName = newTrackName
 		end
 	end
@@ -509,6 +527,9 @@ function StartRoomAmbience( currentRun, currentRoom, args )
 	end
 	if roomData.GlobalEcho ~= nil then
 		SetAudioEffectState({ Name = "GlobalEcho", Value = roomData.GlobalEcho })
+	end
+	if CurrentRun.IsDreamRun and CurrentHubRoom == nil then
+		SetAudioEffectState({ Name = "Dream", Value = roomData.DreamParameterValue or 1 })
 	end
 
 end
@@ -786,7 +807,11 @@ function PlayVoiceLine( line, prevLine, parentLine, source, args, originalArgs )
 		end
 
 		local preLineAnim = line.PreLineAnim or parentLine.PreLineAnim
-		if preLineAnim ~= nil and not line.IgnorePreLineAnim then
+		local ignorePreLineAnim = line.IgnorePreLineAnim
+		if CurrentRun.IsDreamRun and ( line.IgnorePreLineAnimInDreamRuns or parentLine.IgnorePreLineAnimInDreamRuns ) then
+			ignorePreLineAnim = true
+		end
+		if preLineAnim ~= nil and not ignorePreLineAnim then
 			SetAnimation({ Name = preLineAnim, DestinationId = source.ObjectId })
 		end
 
@@ -813,8 +838,14 @@ function PlayVoiceLine( line, prevLine, parentLine, source, args, originalArgs )
 			SetSoundCueValue({ Id = playedSpeechId, Names = { "VoiceOcclusion" }, Value = 1.0, Duration = 0.01 })
 		end
 		if playedSpeechId > 0 then
-			local textId = string.sub( line.Cue, 5 )
-			table.insert( CurrentRun.LineHistory, { SpeakerName = line.LineHistoryName or source.LineHistoryName, SourceName = source.Name, Text = textId, SubtitleColor = source.NarrativeFadeInColor or source.SubtitleColor } )
+			if useSubtitles then
+				local textId = string.sub( line.Cue, 5 )
+				local speakerName = line.LineHistoryName or source.LineHistoryName
+				if CurrentRun.IsDreamRun and CurrentHubRoom == nil and source ~= CurrentRun.Hero and not source.LineHistoryNameKeepInDreamRun then
+					speakerName = "NPC_DreamRun"
+				end
+				table.insert( CurrentRun.LineHistory, { SpeakerName = speakerName, SourceName = source.Name, Text = textId, SubtitleColor = line.LineHistoryColor or source.NarrativeFadeInColor or source.SubtitleColor } )
+			end
 			prevLine = line
 			LastLinePlayed = line.Cue
 			playedSomething = line.Cue
@@ -831,6 +862,10 @@ function PlayVoiceLine( line, prevLine, parentLine, source, args, originalArgs )
 			CurrentRun.CurrentRoom.SpeechRecord[line.Cue] = (CurrentRun.CurrentRoom.SpeechRecord[line.Cue] or 0) + 1
 			GameState.SpeechRecord[line.Cue] = (GameState.SpeechRecord[line.Cue] or 0) + 1
 			CurrentRun.SpeechRecord[line.Cue] = (CurrentRun.SpeechRecord[line.Cue] or 0) + 1
+			if parentLine.RandomRemaining then
+				GameState.PlayedRandomLines[line.Cue] = true
+				GameState.LastPlayedRandomLines[line.Cue] = true
+			end
 			if args.PlayOnceContext ~= nil then
 				GameState.SpeechRecordContexts[args.PlayOnceContext] = GameState.SpeechRecordContexts[args.PlayOnceContext] or {}
 				GameState.SpeechRecordContexts[args.PlayOnceContext][line.Cue] = true
@@ -913,10 +948,6 @@ function PlayVoiceLine( line, prevLine, parentLine, source, args, originalArgs )
 			else
 				randomLine = GetRandomValue( eligibleUnplayedLines )
 			end
-			if randomLine.Cue ~= nil then
-				GameState.PlayedRandomLines[randomLine.Cue] = true
-				GameState.LastPlayedRandomLines[randomLine.Cue] = true
-			end
 			-- Effectively pass down by value rather than reference
 			local subLineArgs = ShallowCopyTable( args )
 			local cuePlayed = PlayVoiceLine( randomLine, prevLine, line, source, subLineArgs, originalArgs )
@@ -987,7 +1018,7 @@ function OnLinePlayedSomething( line, source, args, originalArgs )
 		originalArgs.PlayedSomethingFunctionNames = originalArgs.PlayedSomethingFunctionNames or {}
 		if not originalArgs.PlayedSomethingFunctionNames[args.OnPlayedSomethingFunctionName] then
 			originalArgs.PlayedSomethingFunctionNames[args.OnPlayedSomethingFunctionName] = true
-			thread( CallFunctionName, args.OnPlayedSomethingFunctionName, source, args.OnPlayedSomethingFunctionArgs )
+			thread( CallFunctionName, args.OnPlayedSomethingFunctionName, source, line, args.OnPlayedSomethingFunctionArgs )
 		end
 	end
 

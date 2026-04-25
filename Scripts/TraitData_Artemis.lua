@@ -402,7 +402,7 @@ OverwriteTableKeys( TraitData, {
 				BaseName = "ArtemisBoonHuntersMark",
 				BaseProperty = "CritVulnerability",
 				ExtractAs = "CritRate",
-				Format = "Percent",
+				Format = "LuckModifiedPercent",
 				SkipAutoExtract = true,
 			}
 		}

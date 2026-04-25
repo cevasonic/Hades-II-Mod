@@ -139,6 +139,33 @@ UnitSetData.Stalker =
 			IgnoreEndMusic = true,
 		},
 
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonSupportMinibossDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
 		DefaultAIData =
 		{
 			DeepInheritance = true,
@@ -175,13 +202,15 @@ UnitSetData.Stalker =
 			},
 			Name = "MiniBossStalker_Alt",
 		},
-		AltHealthBarTextIds =
+		-- AltHealthBarTextIds in encounter data
+		AltDeathMessageTextIds =
 		{
-			{ TextId = "MiniBossStalker_Alt",
+			{
+				TextId = "DreamBossDefeatedMessage",
 				GameStateRequirements =
 				{
 					{
-						PathFalse = { "GameState", "RoomsEntered", "Q_Boss01" },
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					}
 				},
 			},

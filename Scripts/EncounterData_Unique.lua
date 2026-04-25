@@ -45,9 +45,16 @@ OverwriteTableKeys( EncounterData,
 					{
 						PathFalse = { "PrevRun", "HeraclesShopped" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					NamedRequirements = { "NoRecentFieldNPCEncounter", },
 					NamedRequirementsFalse = { "StandardPackageBountyActive" },
 					ChanceToPlay = 0.125, 
+				},
+				Args =
+				{
+					NPCVariantData = "HeraclesShopping",
 				},
 			},
 			{
@@ -66,6 +73,9 @@ OverwriteTableKeys( EncounterData,
 					},
 					{
 						PathFalse = { "PrevRun", "NemesisShopped" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 					NamedRequirements = { "NoRecentNemesisEncounter", },
 					NamedRequirementsFalse = { "StandardPackageBountyActive", "HecateMissing" },
@@ -88,6 +98,9 @@ OverwriteTableKeys( EncounterData,
 					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsAny = { "H_Bridge01", "H_PreBoss01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},

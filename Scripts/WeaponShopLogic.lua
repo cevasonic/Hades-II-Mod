@@ -551,11 +551,11 @@ function DoWeaponShopPurchase( screen, button )
 	end
 
 	if itemData.SkipAutoEquip then
-		RequestPreRunLoadoutChangeSave()
 		if traitData ~= nil and ( HeroHasTrait( traitData.Name ) or CurrentRun.Hero.Weapons[itemData.WeaponName] ) then
 			UnequipWeaponUpgrade({ SkipUnequipFunctionName = HeroHasTrait( traitData.Name ) })
 			EquipWeaponUpgrade( CurrentRun.Hero, { SkipKitUpdate = true, SkipQuestStatusCheck = true } )
 		end
+		RequestPreRunLoadoutChangeSave()
 
 		WeaponShopPurchaseNoEquipPresentation( screen, button, itemData, weaponData )
 		OpenWeaponShopScreen( screen.OpenedFrom, { DefaultCategoryIndex = screen.ActiveCategoryIndex } )

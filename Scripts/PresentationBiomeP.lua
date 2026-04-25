@@ -10,6 +10,10 @@ function RoomEntranceBossPrometheus( currentRun, currentRoom, args )
 
 	HideCombatUI("BossEntrance")
 	local roomIntroSequenceDuration = roomData.IntroSequenceDuration or RoomData.BaseRoom.IntroSequenceDuration or 0.0
+	if CurrentRun.IsDreamRun then
+		StartBossRoomMusic()
+		roomIntroSequenceDuration = args.DreamIntroSequenceDuration or roomIntroSequenceDuration
+	end
 	wait(0.03)
 
 	FadeIn({ Duration = 0.0 })
@@ -28,9 +32,27 @@ function RoomEntranceBossPrometheus( currentRun, currentRoom, args )
 
 	wait(0.2)
 
-	thread( PlayVoiceLines, encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
+	thread( PrometheusEagleEntrance, prometheusId, eagleId, args )
 
-	wait(1.3)
+	if not CurrentRun.IsDreamRun then
+		PlayVoiceLines( encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
+	else
+		thread( PlayVoiceLines, roomData.EnterDreamVoiceLines or encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
+		wait( args.DreamEnterWait or 0 )
+	end
+
+	wait(1.35)
+
+	UnblockCombatUI("BossEntrance")
+end
+
+function PrometheusEagleEntrance( prometheusId, eagleId, args )
+
+	if CurrentRun.IsDreamRun then
+		wait( args.DreamEnterWait or 1.3)
+	else
+		wait( 1.3 )
+	end
 
 	SetAnimation({ Name = "Enemy_Prometheus_IntroCall_Start", DestinationId = prometheusId })
 
@@ -38,8 +60,6 @@ function RoomEntranceBossPrometheus( currentRun, currentRoom, args )
 
 	SetAnimation({ Name = "Enemy_Prometheus_IntroCatch_Start", DestinationId = prometheusId })
 	SetAnimation({ Name = "Enemy_Eagle_SpiralCatch", DestinationId = eagleId })
-
-	UnblockCombatUI("BossEntrance")
 end
 
 function PrometheusBattleStart( prometheus, args )
@@ -145,21 +165,25 @@ function PrometheusKillPresentation( unit, args )
 	EndMusic()
 	thread( LastKillPresentation, unit )
 	Stop({ Id = unit.ObjectId })
-	SetGoalAngle({ Id = unit.ObjectId, Angle = 210 })
+	SetGoalAngle({ Id = unit.ObjectId, Angle = 210, CompleteAngle = true })
+	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = unit.ObjectId })
 	if not unit.KnockedOut then
 		SetAnimation({ Name = "Enemy_Prometheus_Death_Start", DestinationId = unit.ObjectId })
 	end
-	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = unit.ObjectId })
 
-	if GameState.TextLinesRecord.PrometheusBossOutro01 then
-		wait( 2.8, RoomThreadName )
+	if not CurrentRun.IsDreamRun then
+		if GameState.TextLinesRecord.PrometheusBossOutro01 then
+			wait( 2.8, RoomThreadName )
+		else
+			wait( 3.5, RoomThreadName )
+		end
+
+		local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
+		unit.TextLinesUseWeaponIdle = nil
+		PlayTextLines( unit, textLines )
 	else
-		wait( 3.5, RoomThreadName )
+		wait( 1.15, RoomThreadName )
 	end
-
-	local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
-	unit.TextLinesUseWeaponIdle = nil
-	PlayTextLines( unit, textLines )
 
 	SetCameraClamp({ Ids = GetIds({ Name = "CameraClamps" }), SoftClamp = 0.75 })
 
@@ -167,12 +191,17 @@ function PrometheusKillPresentation( unit, args )
 
 	StopAnimation({ Name = "PrometheusFistFire", DestinationId = unit.ObjectId })
 	CreateAnimation({ Name = "PrometheusFistFire_Death", DestinationId = unit.ObjectId })
+	RemoveInputBlock({ Name = "PrometheusKillPresentation" })
 	GenericBossKillPresentation( unit, args )
-	SetAnimation({ Name = "MelinoeEquip", DestinationId = CurrentRun.Hero.ObjectId })
+	AddInputBlock({ Name = "PrometheusKillPresentation" })
 
-	PlaySound({ Name = "/SFX/TimeSlowStart" })
+	if not CurrentRun.IsDreamRun then
+		SetAnimation({ Name = "MelinoeEquip", DestinationId = CurrentRun.Hero.ObjectId })
 
-	wait( 2.0 )
+		PlaySound({ Name = "/SFX/TimeSlowStart" })
+
+		wait( 2.0 )
+	end
 
 	RemoveInputBlock({ Name = "PrometheusKillPresentation" })
 	RemoveTimerBlock( CurrentRun, "PrometheusKillPresentation" )
@@ -843,4 +872,89 @@ function SatyrGuestHitPresentation( victim, args )
 	end
 	SetAnimation({ Name = args.OnHitAnimation, DestinationId = victim.ObjectId, })
 	ShowInvincibubbleOnObject( victim, { Scale = victim.InvincibubbleScale or 1 } )
+end
+
+function SetupHeraclesForBathHouse( source, args )
+	local spawnRecordName = "NPC_Heracles_01_BathHouse"
+	GameState.SpawnRecord[spawnRecordName] = (GameState.SpawnRecord[spawnRecordName] or 0) + 1
+	CurrentRun.SpawnRecord[spawnRecordName] = (CurrentRun.SpawnRecord[spawnRecordName] or 0) + 1
+
+	OverwriteSelf( source, NPCVariantData.HeraclesBathHouse )
+end
+
+function DionysusBathHouseStartPresentation( source, args, line )
+	args = args or {}
+
+	-- EstablishConversationStartingPoint( source )
+
+	-- FadeOut({ Color = Color.Black, Duration = 0.5 })
+	-- PlaySound({ Name = "/Leftovers/World Sounds/MapZoomInShortHigh" })
+
+	ClearCameraClamp({ LerpTime = 0 })
+
+	local distanceAdjustment = GetLocation({ Id = source.ObjectId }).Y - GetLocation({ Id = CurrentRun.Hero.ObjectId }).Y
+
+	PlaySound({ Name = "/Leftovers/World Sounds/MapZoomSlow" })
+	PanCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 8, OffsetY = distanceAdjustment - 1100, EaseIn = 0.5, EaseOut = 2, Retarget = true })
+
+	SetVolume({ Id = AudioState.SecretMusicId, Value = 0.3, Duration = 3 })
+
+	SetAlpha({ Id = ScreenAnchors.DialogueBackgroundId, Fraction = 0.0, Duration = 0.0 })
+
+	waitUnmodified( 1.5 )
+	SetAnimation({ Name = "MelTalkBroodingFull01", DestinationId = CurrentRun.Hero.ObjectId })
+	if source.PreBathAnimationName ~= nil then
+		SetAnimation({ Name = source.PreBathAnimationName,DestinationId = source.ObjectId })
+	end
+
+	waitUnmodified( 3.0 )
+
+	PlaySound({ Name = "/Leftovers/Menu Sounds/RobesInteract" })
+	waitUnmodified( 0.4 )
+	PlaySound({ Name = source.BathEnterSound1 or "/Leftovers/SFX/RobeFlutterInScene" })
+	waitUnmodified( 0.4 )
+	PlaySound({ Name = source.BathEnterSound2 or "/Leftovers/SFX/RobeFlutterInScene" })
+	waitUnmodified( 1.0 )
+	PlaySound({ Name = "/Leftovers/World Sounds/ClickSplashSlosh" })
+	waitUnmodified( 0.2 )
+	PlaySound({ Name = "/Leftovers/World Sounds/ClickSplashSlosh" })
+	waitUnmodified( 1.0 )
+	PlaySound({ Name = "/Leftovers/World Sounds/ClickSplashSlosh" })
+	waitUnmodified( 0.3 )
+	PlaySound({ Name = "/Leftovers/World Sounds/ClickSplashSlosh" })
+	waitUnmodified( 0.6 )
+	PlayVoiceLines( GlobalVoiceLines.EnteredBathVoiceLines )
+
+	AudioState.BathHouseSoundId = PlaySound({ Name = "/Leftovers/Ambience/BathHouseAmbience" })
+	SetVolume({ Id = AudioState.BathHouseSoundId, Value = 0, Duration = 0 })
+	SetVolume({ Id = AudioState.BathHouseSoundId, Value = 1, Duration = 1.0 })
+
+	SetAlpha({ Id = ScreenAnchors.DialogueBackgroundId, Fraction = 1.0, Duration = 0.5 })
+	waitUnmodified( line.EndWaitTime or 1.0 )
+end
+
+function DionysusBathHouseEndPresentation( source, args )
+	args = args or {}
+
+	-- FadeOut({ Color = Color.Black, Duration = 0.6 })
+	FullScreenFadeOutAnimation( "RoomTransitionIn_Radial" )
+	-- waitUnmodified( 0.6 )
+
+	waitUnmodified( 4.5 )
+
+	PlaySound({ Name = "/Leftovers/Menu Sounds/EmoteExcitement" })
+	waitUnmodified( 0.5 )
+	-- FadeIn({ Duration = 1.8 })
+	FullScreenFadeInAnimation( "RoomTransitionOut_Radial" )
+	waitUnmodified( 1.0 )
+
+	SetVolume({ Id = AudioState.SecretMusicId, Value = 1.0, Duration = 3 })
+
+	local roomData = RoomData[CurrentRun.CurrentRoom.Name] or CurrentRun.CurrentRoom
+	local cameraClamps = roomData.CameraClamps or GetDefaultClampIds()
+	SetCameraClamp({ Ids = cameraClamps, SoftClamp = roomData.SoftClamp })
+end
+
+function PrometheusBossDreamRunIntro( source, args )
+	wait( 0.7 )
 end

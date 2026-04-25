@@ -17,6 +17,52 @@
 		AttachedAnimationName = "MedeaGlow",
 
 		RequiredRoomInteraction = true,
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					ForceTextLines = "MedeaDreamRun",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/MedeaDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+		},
 		
 		Traits = 
 		{
@@ -53,6 +99,22 @@
 
 		UpgradeMenuOpenVoiceLines =
 		{
+			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunMedeaIntroVO",
+				BreakIfPlayed = true,
+				PreLineWait = 0.9,
+				UsePlayerSource = true,
+				AllowTalkOverTextLines = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun", },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5650", Text = "Hypnos might still be asleep if not for Lady Medea..." },
+			},
 			{
 				PlayOnce = true,
 				BreakIfPlayed = true,
@@ -133,6 +195,21 @@
 				},
 
 				{ Cue = "/VO/MelinoeField_3950", Text = "Absolutely." },
+			},
+			{
+				BreakIfPlayed = true,
+				PreLineWait = 1.3,
+				SkipAnim = true,
+				UsePlayerSource = true,
+				AllowTalkOverTextLines = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "TextLinesRecord", "MedeaAboutCharon02" },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5234", Text = "We've managed." },
 			},
 		},
 
@@ -356,6 +433,48 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
 
+			MedeaAboutShrine01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MedeaAboutAltFight01" }
+					},
+					{
+						Path = { "GameState", "ActiveShrineBounty" },
+						IsAny =
+						{
+							"BountyShrineAxeNBoss",
+							"BountyShrineDaggerNBoss",
+							"BountyShrineStaffNBoss",
+							"BountyShrineSuitNBoss",
+							"BountyShrineLobNBoss",
+							"BountyShrineTorchNBoss",
+						},
+					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaWitchcraft,
+
+				{ Cue = "/VO/Medea_0587",
+					Text = "The Testament of Night requires that the Cyclops must be vanquished, no? I shall be forced to make that difficult." },
+
+				{ Cue = "/VO/MelinoeField_4740", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I know and understand. Though I sometimes wonder whether Polyphemus has any idea about all this." },
+
+				{ Cue = "/VO/Medea_0588",
+					PreLineAnim = "Medea_Scoff",
+					Text = "He's not a complicated sort, but his instincts are quite well-honed. In his own words, he knows when something's up. I suppose we shall be seeing you quite soon?" },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
 			MedeaAboutEphyra01 =
 			{
 				PlayOnce = true,
@@ -376,6 +495,114 @@
 				{ Cue = "/VO/Medea_0028",
 					PreLineAnim = "Medea_Scoff",
 					Text = "Oh, yes! All the death and panic made for many vacancies. I slipped in through the shadows soon after the city fell, and remained, practicing, observing.... Great Hecate has eyes upon the surface {#Emph}everywhere..." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutThessaly01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "PolyphemusAboutAltFight01", "PolyphemusAboutAltFight01_B" },
+					},
+					{
+						PathTrue = { "GameState", "RoomsEntered", "P_Intro" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0579",
+					Text = "The Cyclops tells me that you voyage through the Rift of Thessaly to gain that mountain night upon night, is that so? {#Emph}Eugh{#Prev}, I've no fond memories of my nights spent at sea..." },
+
+				{ Cue = "/VO/MelinoeField_4718", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "The Titan's fleet has inadvertently been helping me get all the way from here to there, indeed. What is it about travel by sea that didn't suit you? I can imagine many possibilities." },
+
+				{ Cue = "/VO/Medea_0580",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Well I have to say, it mostly was the crew with whom I sailed. Some of their Shades are likely loitering about Elysium still... although their stay may not be quite as pleasant as for some." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutEarlyArrival01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "BiomeDepthCache" },
+						Comparison = "<=",
+						Value = 3,
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MedeaGift03" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0262",
+					Text = "The night is young and you're already here! I appreciate you making this little corner of Ephyra one of your first stops as you attempt to flee these desecrated streets." },
+
+				{ Cue = "/VO/MelinoeField_4732", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Oh, {#Emph}erm{#Prev}, yes of course. Most of the other alleyways and such have nothing good for me in store... only the wretched dead with nowhere left to go." },
+
+				{ Cue = "/VO/Medea_0263",
+					PreLineAnim = "Medea_Greet",
+					Text = "{#Emph}Ah {#Prev}well, to each their own! I quite enjoy exploring the various dead ends, although of late I've lingered more and more. I've accumulated more than enough to work with." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutTimePassing01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MedeaGift05" },
+					},
+					{
+						SumPrevRuns = 6,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "N_Story01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0275",
+					Text = "It has been far too many nights since last we saw each other, sorceress! More urgent matters in the Underworld, I presume?" },
+
+				{ Cue = "/VO/MelinoeField_4736", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Yes, you could say that. How have you fared? Any new developments I should know about?" },
+
+				{ Cue = "/VO/Medea_0276",
+					PreLineAnim = "Medea_Salute",
+					Text = "Oh, I've been faring as well as could be expected, if not more. The opportunities remain abundant here. May your journeys likewise yield all that you desire." },
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
@@ -712,7 +939,7 @@
 
 				{ Cue = "/VO/MelinoeField_0342", UsePlayerSource = true,
 					PreLineThreadedFunctionArgs = { Name = "MelTalkExplaining01", WaitTime = 1, UsePlayerSource = true },
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "What gives your incantations such great potency, Lady Medea? So many curses have intangible effects, yet yours pierce like a blade..." },
 				{ Cue = "/VO/Medea_0050",
 					PreLineAnim = "Medea_Casting_Start",
@@ -724,6 +951,80 @@
 				{ Cue = "/VO/Medea_0051",
 					PreLineAnim = "Medea_Casting_End",
 					Text = "With practice, sorceress! Ill intent does threaten to reflect back upon oneself, often with greater potency. But with the blackest of intent... there's nothing to reflect at all." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaAboutCurses02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaAboutCurses01", "MedeaGift07" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/MelinoeField_4716", UsePlayerSource = true,
+					PreLineThreadedFunctionArgs = { Name = "MelTalkExplaining01", WaitTime = 1, UsePlayerSource = true },
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "What is it about curses that's so singularly fascinating to you, Lady Medea? I've never been able to fixate on any one branch of our craft... I sometimes fear I'll not master any of it." },
+
+				{ Cue = "/VO/Medea_0260",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Nonsense, sorceress. You've always had a necromantic tendency, and, as I understand, a disposition toward dream. As for curses... I suppose I like how personal they are." },
+
+				{ Cue = "/VO/MelinoeField_4717", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "But the curses that you offer me each night tend to spread far and wide through the ranks of our foes... they don't {#Emph}seem {#Prev}particularly personal." },
+
+				{ Cue = "/VO/Medea_0261",
+					PreLineAnim = "Medea_Greet",
+					Text = "{#Emph}They're {#Prev}not the curses that most fascinate me, but the ones I can concoct as a result. You know the goddess Nemesis; with curses, I can wield her power for myself. Though speak not a word of this to her, or else..." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaAboutCuringCurses01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "EchoAboutNymphs01", "ArachneAboutCurse02" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaGift02" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/MelinoeField_4730", UsePlayerSource = true,
+					PreLineThreadedFunctionArgs = { Name = "MelTalkPensive01", WaitTime = 1, UsePlayerSource = true },
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Seeing as you have considerable expertise with curses, Lady Medea, I was wondering if I could ask about a curse that has been troubling a companion of mine." },
+
+				{ Cue = "/VO/Medea_0254",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Certainly not. Unless you think that it may be a curse that I administered myself. A curse of any quality is not to be discussed, unless of course you are Great Hecate herself. The rest of us ought never to dare." },
+
+				{ Cue = "/VO/MelinoeField_4731", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "But, are you certain? The curse I have in mind may not be quite as bad as you presume." },
+
+				{ Cue = "/VO/Medea_0255",
+					PreLineAnim = "Medea_Greet",
+					Text = "So too may it be worse than {#Emph}you {#Prev}presume. If you respect my expertise with curses, then respect my position on the subject, sorceress. I shall never bear the curses of others." },
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
@@ -748,6 +1049,70 @@
 					Text = "Thank you again for the gift, Lady Medea. This bit of fleece is extraordinary, isn't it... and very soft!" },
 				{ Cue = "/VO/Medea_0060",
 					Text = "You have the blackened tuft of wool I gave to you! It once shone golden as the sun. But I saw fit to modify its properties, to make it better serve sorceresses such as we..." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaAboutKeepsake02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "MedeaAboutKeepsake01" },
+					},
+					{
+						Path = { "CurrentRun", "TraitCache" },
+						HasAny = { "DamagedDamageBoostKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "ForceZeusBoonKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0252",
+					Text = "It's far too early in the night for that bit of Blackened Fleece to do you any good, you know. But, if you're merely trying to impress me by bringing it back... you {#Emph}have!" },
+
+				{ Cue = "/VO/MelinoeField_4729", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I've been meaning to ask you about it, and how it came to have such an intensity. No beast I've ever heard of had a coat like {#Emph}this." },
+
+				{ Cue = "/VO/Medea_0253",
+					PreLineAnim = "Medea_Scoff",
+					Text = "I prefer we not get into the long series of events that ultimately made this fleece the way it is. All you need know is that it should be useful if you shed some blood. Now do take it away." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaAboutCirceKeepsake01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "TraitCache" },
+						HasAny = { "BossMetaUpgradeKeepsake" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0577",
+					Text = "There's something {#Emph}horrid {#Prev}in the air, and I don't mean in a good way. {#Emph}Ah{#Prev}, you've one of my Aunt Circe's Crystal Figurines. The old enchantment on it, more specifically." },
+
+				{ Cue = "/VO/MelinoeField_4739", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Oh, my apologies, but... yes, this is a keepsake that I got from her. Should I avoid bringing it here?" },
+
+				{ Cue = "/VO/Medea_0578",
+					PreLineAnim = "Medea_Scoff",
+					Text = "I care not and shall not bring it up again. For me, her work was never right. But if it has some benefit for you, than I cannot deny that. Though I would smash it underfoot myself." },
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
@@ -806,6 +1171,37 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
 
+			MedeaAboutTalos01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "P_MiniBoss01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0266",
+					Text = "The Olympians must have their staunchest of defenders in the fray. Still leaning too much on Automatons for their own good, is what I'm hearing, though." },
+
+				{ Cue = "/VO/MelinoeField_4735", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "What you've heard sounds like what I might say. The Automatons of Mount Olympus make up for an almost complete lack of cognitive acuity with lots of adamantine strength. One called Talos is the worst of them." },
+
+				{ Cue = "/VO/Medea_0267",
+					PreLineAnim = "Medea_Scoff",
+					Text = "They still have Talos after all this time? Likely remodeled since we met; there wasn't too much left of him back then." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
 			MedeaAboutHecate01 =
 			{
 				PlayOnce = true,
@@ -829,6 +1225,177 @@
 					PreLineAnim = "Medea_Casting_Start",
 					PostLineAnim = "Medea_Casting_End",
 					Text = "We all wear veils, don't we, sorceress? Great Hecate, she merely puts aside all pretenses about it. Well, good to know that she is still herself. And I remain her humble servant, here." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutArtemis01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 3,
+						Path = { "EncountersOccurredCache" },
+						TableValuesToCount = { "ArtemisCombatN", "ArtemisCombatN2" },
+						Comparison = "==",
+						Value = 0,
+					},
+					{
+						Path = { "GameState", "EncountersOccurredCache" },
+						HasAny = { "ArtemisCombatN", "ArtemisCombatN2" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/MelinoeField_4727", UsePlayerSource = true,
+					PreLineThreadedFunctionArgs = { Name = "MelTalkPensive01", WaitTime = 1, UsePlayerSource = true },
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Have you happened to see Lady Artemis about? She's been hunting through our woods as well as in Ephyra here, though I've not seen her on the surface recently." },
+
+				{ Cue = "/VO/Medea_0250",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Well come to think I have detected the aroma of a living being recently, with a, how to put it, a pastoral sort of quality. I thought perhaps it was the Cyclops Shepherd but it might have been the goddess of the hunt!" },
+
+				{ Cue = "/VO/MelinoeField_4728", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Lady Medea, despite your heightened senses for the living and the dead, you can't distinguish between our graceful Artemis and that foul Cyclops?" },
+
+				{ Cue = "/VO/Medea_0251",
+					PreLineAnim = "Medea_Greet",
+					Text = "No, sorceress... because they each see fit to coat themselves from head to foot in furs, which makes them smell. You'll notice it henceforth now that I've called it out." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutCharon01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "CharonGift04", "MedeaGift04" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0264",
+					Text = "The Boatman Charon provides you with all manner of supplies, I know, but thus far I've not managed to persuade that out of him. From one sorceress to another... any advice?" },
+
+				{ Cue = "/VO/MelinoeField_4733", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "You're not the first to have some difficulty getting through to him, but for whatever reason, he and I seem to have a connection. I could entreat him on your behalf?" },
+
+				{ Cue = "/VO/Medea_0265",
+					PreLineAnim = "Medea_Scoff",
+					Text = "That would be positively dreadful, {#Emph}no! {#Prev}I'd rather lead the life of an ascetic than debase myself in begging favors. I shall work my way past his defenses yet." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaAboutCharon02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaAboutCharon01" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "TextLinesRecord", "MedeaAboutCharon01" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0273",
+					Text = "You know I finally managed to persuade the Boatman Charon to provide me with my share of his supplies! He's certainly a stubborn one." },
+
+				{ Cue = "/VO/MelinoeField_4734", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Oh, glad to hear it. I'm not certain why he withheld his wares from you to begin with. How did you finally persuade him?" },
+
+				{ Cue = "/VO/Medea_0274",
+					PreLineAnim = "Medea_Greet",
+					Text = "Well, you see, I really shouldn't say. And it's not like {#Emph}he's {#Prev}going to, either! You can't truly understand him, can you...?" },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutNyx01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NyxWithHecate01" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0595",
+					Text = "It ought be somewhat easier henceforth to meet our obligations to the will of Night now that Nyx herself is finally returned to us. You're largely to thank for that, I hear?" },
+
+				{ Cue = "/VO/MelinoeField_4721", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Nyx was held captive in the House of Hades along with my immediate family and more. It was an honor to have finally met... we owe her so much." },
+
+				{ Cue = "/VO/Medea_0596",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Well at the risk of minor blasphemy, I'd sooner say that she owes {#Emph}you {#Prev}now, sorceress. But, certainly if not for her, few aspects of my research would bear fruit." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutSelene01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "SeleneAboutMedea01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "SpellDrop" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0582",
+					Text = "I see the light on you; the power of Selene. I want to make perfectly clear I have no qualms with her. No need for her to strike me down and ruin all my work." },
+
+				{ Cue = "/VO/MelinoeField_4719", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Is there some incident that put the two of you at odds that I should be aware of, Lady Medea? I've been working closely with Sister Selene, so tell me if there's something I can do." },
+
+				{ Cue = "/VO/Medea_0583",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Unless you could persuade her to turn down that dare-I-say-it rather garish light a bit, then no, I don't presume you can. Sometimes I envy your acquaintances who live beneath the Earth..." },
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
@@ -866,6 +1433,77 @@
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
+			MedeaAboutHeracles02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaGift08", "HeraclesGift07", "MedeaAboutHeracles01", "HeraclesFieldAboutMedea01" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "SpawnRecord", "NPC_Heracles_01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0591",
+					Text = "That ever-sulking Heracles has kept storming about. Not posed you too much trouble, has he? I could lay more curses on him if you like, though fear diminishing returns." },
+
+				{ Cue = "/VO/MelinoeField_4741", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I think I can manage, though thank you for the offer. It sounds like you two know each other reasonably well." },
+
+				{ Cue = "/VO/Medea_0592",
+					PreLineAnim = "Medea_Scoff",
+					Text = "You've met us, sorceress! He and I are about as close as the Moon is to the Earth. But in keeping our distance, we've grown closer in a way. For even the Moon must come to rest at times." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutIcarus01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "IcarusGift06" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "SpawnRecord", "NPC_Icarus_01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0593",
+					Text = "What first I took to be a massive bird of prey appears to be a Shade, with manufactured wings! I did not quite believe my eyes. Have you encountered such a thing out there?" },
+
+				{ Cue = "/VO/MelinoeField_4742", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I think you probably mean Icarus, so yes; and he's with us! Has often helped me as I voyage through the Rift. And he's apprentice to Daedalus himself!" },
+
+				{ Cue = "/VO/Medea_0594",
+					PreLineAnim = "Medea_Bless",
+					Text = "Well, you sound quite enthusiastic about him! It's fortunate I hesitated, then, before I cursed his wings with rot. I imagine you would disapprove." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
 
 			MedeaAboutCirce01 =
 			{
@@ -891,6 +1529,44 @@
 				{ Cue = "/VO/Medea_0049",
 					PreLineAnim = "Medea_Scoff",
 					Text = "Circe was never willing to push our practice to the depths of what it can achieve. She would turn mortals into livestock; {#Emph}I {#Prev}would turn them dead. A differing approach is all, perhaps..." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaAboutCirce02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaGift06", "CirceGift06", "MedeaAboutCirce01", "CirceAboutMedea01" }
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/MelinoeField_4737", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "If you don't mind me asking, do you and Lady Circe not communicate at all anymore? I know the way to her isle, if you wanted to pay her a visit for any reason." },
+
+				{ Cue = "/VO/Medea_0575",
+					PreLineAnim = "Medea_Scoff",
+					Text = "My reasons for visiting my Aunt in her strange habitat would not be ones I would describe. Why do such thoughts even occur to you?" },
+
+				{ Cue = "/VO/MelinoeField_4738", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "It sounds as though you don't get on too well. I'm grateful to know my uncles and such on Olympus, so I thought... perhaps it might be good to see your aunt again." },
+
+				{ Cue = "/VO/Medea_0576",
+					PreLineAnim = "Medea_Bless",
+					Text = "All my existence, others have presumed to know what's good for me, including her. I recommend you not make that mistake yourself. I feel no obligation to my family by blood; I choose all those to whom I am attached." },
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
@@ -1209,6 +1885,107 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
 
+			MedeaAboutRain01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "RoomsEntered", "Q_Intro" }
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", },
+						HasAny = { "WetState" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0248",
+					Text = "It has been raining somewhat frequently of late. All the better to spread some of the plague about. Unless it isn't to your liking, sorceress?" },
+
+				{ Cue = "/VO/MelinoeField_4726", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I don't mind it; the rain, that is. I often don't even notice. And the weather here is positively placid in comparison to what the summit of Olympus has been like." },
+					
+				{ Cue = "/VO/Medea_0249",
+					PreLineAnim = "Medea_Bless",
+					Text = "Would that I could witness that myself. When it comes to my research, the more unlivable the surrounding conditions, the more expeditiously I get results." },
+
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutFamiliars01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = {
+							"FrogFamiliar",
+							"RavenFamiliar",
+							"CatFamiliar",
+							"HoundFamiliar",
+							"PolecatFamiliar",
+						},
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0229",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Medea_Salute", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "I spy a living creature other than yourself! They're quite uncommon in this city recently, notwithstanding birds of prey, of course. You must have multiple Familiars, I suppose?" },
+
+				{ Cue = "/VO/MelinoeField_4725", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Yes, so please keep this one clear of your experiments, Lady Medea. I sometimes wonder why you don't have a Familiar yourself, if but for the companionship." },
+					
+				{ Cue = "/VO/Medea_0230",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Well, I once attempted to enthrall one of the Bronzebeaks pecking at the carcasses out there, but that relationship did not last long. To look after the living can be such a liability..." },
+
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutHouse01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0246",
+					Text = "How is it in your father's House, I've always wondered, sorceress? He has the pick of the litter when it comes to the dead... the Shade of Orpheus performing songs and such!" },
+
+				{ Cue = "/VO/MelinoeField_4743", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "The House is undergoing renovation still, but even so its grandeur is unmatched. And Father does have many noble Shades in his employ... the hero Achilles, his royal guard; brave Theseus, the champion of Elysium..." },
+					
+				{ Cue = "/VO/Medea_0247",
+					PreLineAnim = "Medea_Greet",
+					Text = "Powerful Achilles...! I've always longed to meet with him, but as for young Theseus... I must have poisoned that particular relationship a while back. Ah, well!" },
+
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
 			MedeaAboutConcoctionQuest01 =
 			{
 				PlayOnce = true,
@@ -1319,11 +2096,7 @@
 					{
 						PathTrue = { "GameState", "RoomsEntered", "N_Boss02" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
@@ -1386,11 +2159,7 @@
 					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Polyphemus" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 1,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
@@ -1441,6 +2210,56 @@
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
+			MedeaLowHealth02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "LastStands", },
+						UseLength = true,
+						Comparison = "<=",
+						Value = 1,
+					},
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = "<=", Value = 0.33, },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0585",
+					Text = "I practically mistook you for the shambles of a corpse for how much lifeblood you appear to have already lost! Well, let me help you take vengeance at the {#Emph}least." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+			MedeaLowHealth03 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "LastStands", },
+						UseLength = true,
+						Comparison = "<=",
+						Value = 1,
+					},
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = "<=", Value = 0.33, },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0586",
+					Text = "Well you look positively hideous, if you'll forgive my candor, sorceress! What have all those decaying wretches out there done to you?" },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
 
 			MedeaAboutExperiments01 =
 			{
@@ -1471,6 +2290,27 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
 
+			MedeaAboutMoon01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "==",
+						Value = 5,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaWitchcraft,
+
+				{ Cue = "/VO/Medea_0584",
+					Text = "{#Emph}Ah{#Prev}, it's nice and dark for now at least! A new moon is my favored time of month... new beginnings, new opportunities... and very little light." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
 			MedeaPostTrueEnding01 =
 			{
 				PlayOnce = true,
@@ -1485,7 +2325,8 @@
 				OnQueuedFunctionArgs = PresetEventArgs.MedeaWitchcraft,
 
 				{ Cue = "/VO/Medea_0243",
-					PreLineAnim = "Medea_Bless",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Medea_Bless", WaitTime = 0.5, AngleNPCToHero = true, },
 					Text = "Great Hecate herself was generous enough to notify me of your latest exploits, sorceress. And I wouldn't have believed a word of it had I been told by {#Emph}any {#Prev}other being save for her. So then, the Titan Lord has truly been de-fanged?" },
 
 				{ Cue = "/VO/MelinoeField_4229", UsePlayerSource = true,
@@ -1519,6 +2360,9 @@
 				GameStateRequirements =
 				{
 					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "MedeaPostTrueEnding01", "MedeaGift08" },
 					},
@@ -1543,6 +2387,70 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
 
+			MedeaPostTrueEnding03 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaPostTrueEnding01", "ZeusPalacePostTrueEnding01", "MedeaGift08" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaWitchcraft,
+
+				{ Cue = "/VO/Medea_0597",
+					Text = "You noted traces of the greater threats we faced remain. How fare your efforts to dispel them all? Do tell if there is more that I could do." },
+
+				{ Cue = "/VO/MelinoeField_4722", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Oh I'd say it's coming along, thank you for the curses! I don't know how close we are to completion. I'm still unaccustomed to tasks where urgency isn't of the utmost importance." },
+
+				{ Cue = "/VO/Medea_0598",
+					PreLineAnim = "Medea_Scoff",
+					Text = "Impatience, haste, urgency... they're mostly mortal impulses, I think. A steady hand and bided time, now {#Emph}that {#Prev}is the province of the divine. I remain forever at your service, sorceress." },
+
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
+			MedeaAboutSayingLittle01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "MedeaGift08", "MedeaGrantsHiddenAspect01", "MedeaGrantsHypnosSpell02", "MedeaAboutConcoctionQuestComplete01", "MedeaAboutAltFight01" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearching,
+
+				{ Cue = "/VO/Medea_0277",
+					Text = "It's nice, you know? That we could speak like this. But from one sorceress to another, it sometimes is a pain to use one's breath! Lately I've been less inclined, at least." },
+
+				{ Cue = "/VO/MelinoeField_4724", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "A quick greeting is enough to liven up my evenings, Lady Medea. Or deaden them depending on your preference. We needn't ever chat for long." },
+
+				{ Cue = "/VO/Medea_0278",
+					PreLineAnim = "Medea_Salute",
+					Text = "Good. The deeper I get into my research, the less I wish to speak of it. Yet I do enjoy sharing the results." },
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
+
 			-- home events
 			MedeaHubFirstMeeting01 =
 			{
@@ -1562,14 +2470,11 @@
 						PathFalse = { "CurrentRun", "RoomsEntered", "N_Story01" },
 					},
 					{
-						Path = { "CurrentRun", "TextLinesRecord" },
-						HasNone = { "TrueEndingFinale01" },
-					},
-					{
 						Path = { "GameState", "UseRecord", "NPC_Medea_01" },
 						Comparison = ">=",
 						Value = 5,
 					},
+					NamedRequirementsFalse = { "NearTrueEnding", "HecateMissing" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.MedeaHubGreeting,
@@ -1585,10 +2490,12 @@
 					PreLineThreadedFunctionName = "PlayCharacterAnim",
 					PreLineThreadedFunctionArgs = { Name = "Medea_Scoff", WaitTime = 0.5, AngleNPCToHero = true, },
 					Text = "So many more Shades of the dead now linger here! And the earthy aroma, quite unlike before. These Crossroads changed since last I visited!" },
+
 				{ Cue = "/VO/Melinoe_2510", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "Welcome back to the abode, Lady Medea. What brings you here, and will you be staying with us for a little while?" },
+
 				{ Cue = "/VO/Medea_0066",
 					PreLineAnim = "Medea_Sprinkle",
 					Text = "No, I am Great Hecate's eyes upon the surface. But the night is young, and I've business with the Broker there; a surplus of Bones to exchange. See you above and below, sorceress." },
@@ -1597,7 +2504,68 @@
 					{
 						PreLineWait = 0.4,
 						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
 						{ Cue = "/VO/Melinoe_1256_B", Text = "See you." },
+					},
+				},
+			},
+
+			MedeaHubMeeting02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasAll = { "MedeaHubMeeting01", "MedeaGift04", "ZeusPalacePostTrueEnding01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = { "PolyphemusAboutAltFight01", "PolyphemusAboutAltFight01_B" },
+					},
+					{
+						Path = { "GameState", "CosmeticsPurchasedCountCache", "Total" },
+						Comparison = ">=",
+						Value = 20,
+					},
+					{
+						Path = { "GameState", "WorldUpgradesAdded" },
+						HasAll = { "WorldUpgradeGameStats", "WorldUpgradeRunHistory", "WorldUpgradeMusicPlayer" },
+					},
+					NamedRequirementsFalse = { "NearTrueEnding", "HecateMissing" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaHubGreeting,
+
+				{ Cue = "/VO/Medea_0279",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Medea_Scoff", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "This place is positively bustling with life...! It's a little overwhelming for me here if you must know. Are you accustomed to all this?" },
+
+				{ Cue = "/VO/Melinoe_4871", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Well, yes! Or at least I've been growing more accustomed, Lady Medea. Let me know if we can make your visit here more comfortable in any way." },
+
+				{ Cue = "/VO/Medea_0280",
+					PreLineAnim = "Medea_Bless",
+					Text = "Oh no, I don't think I'll be staying here for long. Once all my business with the Broker's settled up, I shall be on my way. But see you in Ephyra sometime soon?" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+						{ Cue = "/VO/Melinoe_0769", Text = "Of course." },
 					},
 				},
 			},
@@ -1987,6 +2955,24 @@
 				PrePortraitExitFunctionName = "MedeaCurseChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
 			},
+
+			MedeaDreamRun =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.MedeaResearchingRepeatable,
+
+				{ SkipDialogue = true, PostLineWait = 0, InputDelay = 0, BoxAnimation = "BlankObstacle", BoxExitAnimation = "Blank" },
+
+				PrePortraitExitFunctionName = "MedeaCurseChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.MedeaCurseChoices,
+			},
 		},
 
 		GiftTextLineSets =
@@ -2352,6 +3338,9 @@ GlobalVoiceLines.MedeaGreetingLines =
 			{
 				PathTrue = { "GameState", "ReachedTrueEnding" },
 			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" },
+			},
 		},
 		Cooldowns =
 		{
@@ -2393,6 +3382,9 @@ GlobalVoiceLines.MedeaGreetingLines =
 					PathTrue = { "GameState", "TextLinesRecord", "MedeaGift03" }
 				},
 				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
+				{
 					SumPrevRuns = 4,
 					IgnoreCurrentRun = true,
 					Path = { "RoomsEntered", "N_Story01" },
@@ -2407,6 +3399,9 @@ GlobalVoiceLines.MedeaGreetingLines =
 			{
 				{
 					PathTrue = { "GameState", "TextLinesRecord", "MedeaGift03" }
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 				{
 					SumPrevRuns = 4,
@@ -2842,6 +3837,23 @@ GlobalVoiceLines.MiscEndVoiceLines_Medea =
 				},
 			},
 		},
+	},
+	{
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunMedeaFirstBoonVO",
+		BreakIfPlayed = true,
+		PreLineWait = 0.65,
+		UsePlayerSource = true,
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun", },
+			},
+		},
+		TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+		{ Cue = "/VO/MelinoeField_5651", Text = "Dreams and curses intertwine..." },
 	},
 	{
 		BreakIfPlayed = true,

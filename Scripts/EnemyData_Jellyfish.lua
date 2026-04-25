@@ -3,7 +3,7 @@ UnitSetData.Jellyfish =
 
 	Jellyfish =
 	{
-		InheritFrom = { "OceanusUnitData", "BaseVulnerableEnemy" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "BaseVulnerableEnemy" },
 		RunHistoryKilledByName = "Octofish_Miniboss",
 
 		ActivateAnimation = "Enemy_Jellyfish_Spawn",
@@ -12,6 +12,8 @@ UnitSetData.Jellyfish =
 		HealthBarOffsetY = -140,
 		HealthBarType = "Small",
 		ArmorSparkAnimation = "HitSparkArmor_Small",
+		
+		StopAnimationsOnDeath = { "MedusaShadow", },
 
 		DamagedFxStyles =
 		{

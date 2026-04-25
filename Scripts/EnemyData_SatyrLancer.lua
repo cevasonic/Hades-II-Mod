@@ -2,7 +2,7 @@ UnitSetData.SatyrLancer =
 {
 	SatyrLancer =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy" },
 
 		ActivateAnimation = "Enemy_SatyrLancer_Spawn",
 		ActivateFx = "EnemyPreSpawnTerrainChronos",

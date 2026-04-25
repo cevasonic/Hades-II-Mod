@@ -80,7 +80,16 @@ function Heal( victim, triggerArgs )
 			thread( CallFunctionName, data.FunctionName, data.Args, triggerArgs.ActualHealAmount )
 		end
 		if not triggerArgs.Silent then
-			table.insert( SessionMapState.PresentationQueue, { FunctionName = "OnPlayerHealed", Source = CurrentRun.Hero, Args = triggerArgs, Threaded = true } )
+			local hasHeal = false
+			for _, presentationItem in pairs(SessionMapState.PresentationQueue) do
+				if not hasHeal and presentationItem.FunctionName and presentationItem.FunctionName == "OnPlayerHealed" then
+					presentationItem.Args.ActualHealAmount = presentationItem.Args.ActualHealAmount + triggerArgs.ActualHealAmount 
+					hasHeal = true
+				end
+			end
+			if not hasHeal then
+				table.insert( SessionMapState.PresentationQueue, { FunctionName = "OnPlayerHealed", Source = CurrentRun.Hero, Args = triggerArgs, Threaded = true } )
+			end
 			FrameState.RequestUpdateHealthUI = true
 		end
 

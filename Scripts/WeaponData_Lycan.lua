@@ -318,6 +318,7 @@ WeaponSetData =
 			RequireUnitLoS = true,
 			LoSBuffer = 80,
 			LoSEndBuffer = 32,
+			SkipIfTargetLocationBlocked = true,
 		},
 
 		Requirements =

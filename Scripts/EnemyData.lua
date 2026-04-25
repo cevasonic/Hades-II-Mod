@@ -155,6 +155,8 @@ UnitSetData.Enemies =
 			DeepInheritance = true,
 			
 			PostAggroAI = "AttackerAI",
+			StartAggroed = true,
+			SkipMapStateAggroTracking = true,
 		},
 		SpellSummonDefaultAIDataOverrides =
 		{
@@ -179,15 +181,6 @@ UnitSetData.Enemies =
 			CollisionReactionData.WallSlam,
 		},
 
-		Outline =
-		{
-			R = 255,
-			G = 255,
-			B = 0,
-			Opacity = 0.8,
-			Thickness = 2,
-			Threshold = 0.6,
-		},
 		IncomingDamageModifiers =
 		{
 			{
@@ -221,9 +214,6 @@ UnitSetData.Enemies =
 		ManualDeathAnimation = true,
 		
 		ClearChillOnDeath = true,
-
-		ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-		BossDifficultyShrineRequiredCount = 4,
 
 		IncomingDamageModifiers =
 		{
@@ -295,9 +285,14 @@ UnitSetData.Enemies =
 			-- Frenzy: 50% enemy attack and move speed
 			Frenzy =
 			{
+				ThreadedFunctionName = "AddEnemySpeedMultiplier",
+				ThreadedFunctionArgs = 
+				{
+					SpeedMultiplier = 1.5,
+					Additive = true,
+				},
 				DataOverrides =
 				{
-					EliteAdditionalSpeedMultiplier = 0.5,
 					AttachedAnimationName = "EliteUnitStatus2"
 				},
 				BlockAttributes = { "Homing", "Vacuuming" },
@@ -306,9 +301,13 @@ UnitSetData.Enemies =
 			-- HeavyArmor: 50% armor increase
 			HeavyArmor =
 			{
-				DataOverrides =
+				ThreadedFunctionName = "AddEnemyHealthMultiplier",
+				ThreadedFunctionArgs = 
 				{
 					HealthMultiplier = 1.5,
+				},
+				DataOverrides =
+				{
 					HealthBarType = "ExtraLarge",
 				},
 				RequiresFalseSuperElite = true,
@@ -415,9 +414,13 @@ UnitSetData.Enemies =
 			Massive =
 			{
 				ScaleMultiplier = 1.5,
-				DataOverrides =
+				ThreadedFunctionName = "AddEnemyHealthMultiplier",
+				ThreadedFunctionArgs = 
 				{
 					HealthMultiplier = 1.2,
+				},
+				DataOverrides =
+				{
 					HealthBarType = "Large",
 				},
 				AIDataOverrides =
@@ -553,8 +556,342 @@ UnitSetData.Enemies =
 		},
 	},
 
+	BaseFEnemy =
+	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.25,
+					MoneyMultiplier = 1.0,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.4,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.25,
+					MoneyMultiplier = 1.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.1,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 5,
+					MoneyMultiplier = 1.8,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 3,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 9,
+					MoneyMultiplier = 2.5,
+					SpeedMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 3,
+				},
+			},
+		},
+	},
+	BaseGEnemy =
+	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.7,
+					MoneyMultiplier = 0.85,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.84,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.25,
+					MoneyMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.4,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.75,
+					MoneyMultiplier = 1.6,
+					SpeedMultiplier = 1.1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 5,
+					MoneyMultiplier = 2.15,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2,
+				},
+			},
+		},
+	},
+	BaseHEnemy =
+	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.37,
+					MoneyMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.7,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.7,
+					MoneyMultiplier = 0.65,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.12,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.5,
+					MoneyMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.5,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.75,
+					MoneyMultiplier = 1.35,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.5,
+				},
+			},
+		},
+	},
+	BaseIEnemy =
+	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.2,
+					MoneyMultiplier = 0.7,
+					HealingMultiplier = 0.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.63,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.37,
+					MoneyMultiplier = 0.7,
+					HealingMultiplier = 0.37,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.0,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.9,
+					MoneyMultiplier = 0.7,
+					HealingMultiplier = 0.9,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.35,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.5,
+					MoneyMultiplier = 0.7,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.35,
+				},
+			},
+		},
+	},
+
+	BaseNEnemy =
+	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.83,
+					MoneyMultiplier = 1.0,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.8,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.5,
+					MoneyMultiplier = 1.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.2,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 3.3,
+					MoneyMultiplier = 1.8,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 6,
+					MoneyMultiplier = 2.5,
+					SpeedMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2,
+				},
+			},
+		},
+	},
 	BaseOEnemy =
 	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.46,
+					MoneyMultiplier = 0.85,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.48,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.83,
+					MoneyMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.8,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.8,
+					MoneyMultiplier = 1.6,
+					SpeedMultiplier = 1.1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.3,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 3.3,
+					MoneyMultiplier = 2.15,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.3,
+				},
+			},
+		},
+
 		MoneyDropOnDeath =
 		{
 			Chance = 0.7,
@@ -566,9 +903,60 @@ UnitSetData.Enemies =
 			ValuePerDifficultyMaxValueVariance = 1.3,
 		},
 	},
-
 	BasePEnemy =
 	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.25,
+					MoneyMultiplier = 0.45,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.4,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.46,
+					MoneyMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.64,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+					MoneyMultiplier = 0.9,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	--PlayerMultiplier = 1,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.8,
+					MoneyMultiplier = 1.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	--PlayerMultiplier = 1,
+				},
+			},
+		},
+
 		MoneyDropOnDeath =
 		{
 			Chance = 0.7,
@@ -580,9 +968,60 @@ UnitSetData.Enemies =
 			ValuePerDifficultyMaxValueVariance = 1.3,
 		},
 	},
-
 	BaseQEnemy =
 	{
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.125,
+					MoneyMultiplier = 1.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.4,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.25,
+					MoneyMultiplier = 1.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.64,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.55,
+					MoneyMultiplier = 1.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	--PlayerMultiplier = 1,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+					MoneyMultiplier = 1.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	--PlayerMultiplier = 1,
+				},
+			},
+		},
+
 		MoneyDropOnDeath =
 		{
 			Chance = 0.7,
@@ -1029,6 +1468,8 @@ UnitSetData.Enemies =
 		GenusName = "ThiefMineLayer",
 
 		RequiredSpawnPoint = "EnemyPoint",
+
+		StopAnimationsOnDeath = { "MedusaShadow", },
 
 		MaxHealth = 40,
 		HealthBarOffsetY = -135,

@@ -93,9 +93,8 @@ UnitSetData.NPC_Dora =
 							{ Cue = "/VO/Dora_0574", Text = "{#Emph}You dare?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs },
 							{ Cue = "/VO/Dora_0575", Text = "{#Emph}A curse upon you!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs },
 						},
-						ApplyEffectOnHero = "DoraSlow",
-						ApplyEffectOnHeroProperties = EffectData.DoraSlow.EffectData,
 						AddInteractBlock = "DoraDisappear",
+						EndFunctionName = "DoraStartDissipate",
 					},
 					Repeat = true,
 					RepeatBufferDistance = 10,
@@ -105,7 +104,7 @@ UnitSetData.NPC_Dora =
 						SetAlpha = 1.0,
 						Duration = 0.5,
 						RemoveInteractBlock = "DoraDisappear",
-						EndFunctionName = "DoraStopDissipateFx",
+						EndFunctionName = "DoraStopDissipate",
 					},
 				},
 			},
@@ -303,7 +302,7 @@ UnitSetData.NPC_Dora =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1698_2", "/VO/Melinoe_1699_2", "/VO/Melinoe_2785", "/VO/Melinoe_2786", "/VO/Melinoe_2788" },
+							IsAny = { "/VO/Melinoe_2785", "/VO/Melinoe_2786", "/VO/Melinoe_2788" },
 						},
 					},
 				},
@@ -312,7 +311,7 @@ UnitSetData.NPC_Dora =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1698_2", "/VO/Melinoe_1699_2" },
+							IsAny = { "/VO/Melinoe_2784" },
 						},
 					},
 				},
@@ -354,8 +353,6 @@ UnitSetData.NPC_Dora =
 				FunctionName = "DoraCheckForNewItems",
 			},
 		},
-
-		-- RepeatableTextLinesPlayChance = 0.5,
 
 		InteractTextLineSets =
 		{
@@ -410,6 +407,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
 						RequiredMinElapsedTime = 2,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0005", Text = "{#Emph}Then begone!",
 							PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs, },
 					},
@@ -454,6 +452,7 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						PreLineWait = 0.2,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0171", Text = "{#Emph}Mmmmmm {#Prev}OK fine." },
 					},
 					{
@@ -480,6 +479,11 @@ UnitSetData.NPC_Dora =
 						Comparison = ">=",
 						Value = 8,
 					},
+					{
+						Path = { "GameState", "CosmeticsPurchasedCountCache", "Total" },
+						Comparison = "<",
+						Value = 35,
+					},
 				},
 				{ Cue = "/VO/Melinoe_2021", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
@@ -499,6 +503,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						RequiredMinElapsedTime = 2,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0173", Text = "My {#Emph}purpose{#Prev}, Mel, is only to hang out." },
 					},
 				},
@@ -511,12 +516,24 @@ UnitSetData.NPC_Dora =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutCosmetics01" },
-					},
-					{
 						Path = { "GameState", "CosmeticsPurchasedCountCache", "Total" },
 						Comparison = ">=",
 						Value = 20,
+					},
+					OrRequirements =
+					{
+						{
+							{
+								PathTrue = { "GameState", "TextLinesRecord", "DoraAboutCosmetics01" },
+							},
+						},
+						{
+							{
+								Path = { "GameState", "CosmeticsPurchasedCountCache", "Total" },
+								Comparison = ">=",
+								Value = 35,
+							},
+						},
 					},
 				},
 				{ Cue = "/VO/Dora_0310",
@@ -548,7 +565,8 @@ UnitSetData.NPC_Dora =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutCosmetics01" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "DoraAboutCosmetics01", "DoraAboutCosmetics02" },
 					},
 					{
 						PathFromSource = true,
@@ -583,6 +601,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0309", Text = "Please no..." },
 					},
 				},
@@ -596,12 +615,12 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "DoraGift05" },
+						HasAll = { "DoraGift05", "DoraAboutCosmetics02" },
 					},
 					{
 						Path = { "GameState", "CosmeticsPurchasedCountCache", "Total" },
 						Comparison = ">=",
-						Value = 30,
+						Value = 35,
 					},
 				},
 				{ Cue = "/VO/Dora_0612",
@@ -625,6 +644,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.3,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0614", Text = "I don't know. Maybe." },
 					},
 				},
@@ -650,6 +670,7 @@ UnitSetData.NPC_Dora =
 							"Cosmetic_CollectableEris",
 							"Cosmetic_CollectableDora",
 							"Cosmetic_CollectableSelene",
+							"Cosmetic_CollectableHypnos",
 						},
 					},
 				},
@@ -675,7 +696,120 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.4,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0652", Text = "{#Emph}Mm-hmm." },
+					},
+				},
+			},
+			DoraAboutCosmetics06 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = {
+							"DoraAboutCosmetics04",
+							"DoraAboutCosmetics05",
+						}
+					},
+					{
+						Path = { "GameState", "CosmeticsPurchasedCountCache", "Total" },
+						Comparison = ">=",
+						Value = 158,
+					},
+				},
+				{ Cue = "/VO/Dora_0643",
+					Text = "So are we done? With the Renewal Project. Not much stuff left to get. Though, I guess you could keep switching it around." },
+				{ Cue = "/VO/Melinoe_5467", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "I almost didn't realize. Perhaps we are done for the moment with new furnishings and such. Look how far we've come!" },
+				{ Cue = "/VO/Dora_0644",
+					PostPortraitSetAnim = "Dora_Shrug",
+					Text = "Yeah... just chipping away bit by bit, one rug or table at a time, huh? Wow. Let's never do it again, though, I'm beat." },
+				{ Cue = "/VO/Melinoe_5468", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "That's the restless spirit in you talking." },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0645", Text = "Then it's time I put 'er to bed." },
+					},
+				},
+			},
+
+			DoraAboutDreamRunCosmetics01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsAny = { "Hub_PreRun"},
+					},
+					{
+						Path = { "GameState", "WorldUpgrades" },
+						CountOf =
+						{
+							"Cosmetic_SkellyFloor01c",
+							"Cosmetic_TrainingDummy01c",
+							"Cosmetic_ThanCutout",
+							"Cosmetic_AsteriusPlush",
+							"Cosmetic_DreamRug",
+							"Cosmetic_Poppies",
+							"Cosmetic_HypnosStatue",
+							"Cosmetic_StarJar",
+							"Cosmetic_DoraBench02",
+						},
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "LifetimeResourcesGained", "DreamPoints" },
+						Comparison = ">=",
+						Value = 30,
+					},
+				},
+				{ Cue = "/VO/Dora_0785",
+					Text = "Those new goods we got in stock... they're from the House of Hades, huh? Quality stuff! No wonder you wanted to save your family." },
+
+				{ Cue = "/VO/Melinoe_5888", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "Dora, for all factors that motivated me as I pursued my task, the opportunity to collect memorabilia from my rightful home was certainly not one of them! I just happen to enjoy it now." },
+
+				{ Cue = "/VO/Dora_0786",
+					PostPortraitSetAnim = "Dora_Shrug",
+					Text = "Hey, I'm not judging, and apparently neither are your acquaintances down there. Don't see how come they make you pay with those little gold star stickers though." },
+
+				{ Cue = "/VO/Melinoe_5889", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "I don't know all of the traditions yet either." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.3,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0787", Text = "Ah well, keep me posted." },
 					},
 				},
 			},
@@ -702,6 +836,9 @@ UnitSetData.NPC_Dora =
 					{
 						PathFalse = { "GameState", "RoomsEntered", "I_Intro" }
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				TeleportToId = 566841,
 
@@ -716,6 +853,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0306", Text = "I see everything is proceeding as planned..." },
 					},
 				},
@@ -759,6 +897,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0003", Text = "Yeah, you too." },
 					},
 				},
@@ -795,6 +934,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0190", Text = "{#Emph}<Gasp> {#Prev}Now we're talking..." },
 					},
 				},
@@ -828,7 +968,7 @@ UnitSetData.NPC_Dora =
 				{ Cue = "/VO/Melinoe_2018", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero", 
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Yes, thank you, Dora. I hope I didn't cause you any concern. Have you been by my side here all this time?" },
 				{ Cue = "/VO/Dora_0192",
 					PostPortraitSetAnim = "Dora_Shrug",
@@ -843,6 +983,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.3,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0152", Text = "Cut it out...!" },
 					},
 				},
@@ -895,7 +1036,7 @@ UnitSetData.NPC_Dora =
 				UseableOffSource = true,
 				SkipContextArt = true,
 				PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
+				-- PostBlockSpecialInteract = true,
 				GameStateRequirements =
 				{
 					{
@@ -934,6 +1075,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.4,
 						RequiredMinElapsedTime = 2,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0159", Text = "Maybe I will, maybe I won't." },
 					},
 				},
@@ -1010,6 +1152,7 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						PreLineWait = 0.35,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0163", Text = "{#Emph}Mmm{#Prev}, that's right." },
 					},
 				},
@@ -1051,6 +1194,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.45,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0052", Text = "Really? Well I hope {#Emph}that {#Prev}sticks!" },
 					},
 				},
@@ -1382,6 +1526,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.45,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0175", Text = "{#Emph}Ohh {#Prev}yeah." },
 					},
 				},
@@ -1458,6 +1603,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.4,
 						PreLineAnim = "Dora_Shrug",
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0344", Text = "Have fun being all cold and damp." },
 					},					
 				},
@@ -1533,6 +1679,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0297",
 							PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
 							Text = "I know, right?" },
@@ -1570,8 +1717,8 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
-						{ Cue = "/VO/Dora_0299",
-							Text = "Exciting! I was right here the whole time." },
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0299", Text = "Exciting! I was right here the whole time." },
 					},
 				},
 			},
@@ -1611,6 +1758,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
 						RequiredMinElapsedTime = 2,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0319", Text = "Oh! That's nothing new." },
 					},
 				},
@@ -1658,6 +1806,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.3,
 						PreLineAnim = "Dora_Shrug",
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0499", Text = "Well let me know if I can help!" },
 					},
 				},
@@ -1703,7 +1852,84 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.3,
 						PreLineAnim = "Dora_Shrug",
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0498", Text = "Well then he's not so scary after all." },
+					},
+				},
+			},
+
+			DoraAboutTyphonDeath01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TyphonDefeatedWithStormStop" },
+					},
+					{
+						PathTrue = { "CurrentRun", "TextLinesRecord", "ZeusPalaceAboutTyphonDeath01" },
+					},
+				},
+				{ Cue = "/VO/Dora_0782",
+					-- Portrait = "Portrait_Dora_Thoughtful_01",
+					Text = "Hey, you look awfully... something. And kind of in a hurry, but I want to know what happened if you don't mind telling me right quick. Though I reserve the right to not care." },
+
+				{ Cue = "/VO/Melinoe_5886", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Intense_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "The monster Typhon... last night I destroyed him. As in there's nothing left of him. We still have Chronos to contend with, but... Olympus is no longer in imminent peril. And we have the upper hand." },
+
+				{ Cue = "/VO/Dora_0783",
+					PostPortraitSetAnim = "Dora_Shrug",
+					Text = "Oh! Well, that's {#Emph}great{#Prev}, isn't it? Sounds like your big important task is almost done! That'll be a real load off, right?" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5887", Text = "We'll see... I have to go." },
+					},
+					{
+						PreLineWait = 0.3,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0784", Text = "Good luck, Mel." },
+					},
+				},
+			},
+			DoraAboutHecateKidnapped01 =
+			{
+				PlayOnce = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "HecateMissing" },
+				},
+				{ Cue = "/VO/Dora_0816",
+					Portrait = "Portrait_Dora_Thoughtful_01",
+					Text = "Hey is something up? Something's up. You don't {#Emph}have {#Prev}to tell me, but... I mean, you {#Emph}can {#Prev}if you want, I guess." },
+
+				{ Cue = "/VO/Melinoe_5890", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You can see right through me, can't you...? Someone I care about's in trouble. I have to help." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.25,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0817", Text = "Well then don't let {#Emph}me {#Prev}hold you up, get out of here." },
 					},
 				},
 			},
@@ -1743,6 +1969,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0036", Text = "Oh. Sure..." },
 					},
 				},
@@ -1844,8 +2071,8 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.35,
 						PreLineAnim = "Dora_Shrug",
 						ObjectType = "NPC_Dora_01",
-						{ Cue = "/VO/Dora_0294",
-							Text = "Yeah. All good." },
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0294", Text = "Yeah. All good." },
 					},
 				},
 			},
@@ -1965,6 +2192,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.5,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0323", Text = "{#Emph}Prometheus... hrm..." },
 					},
 				},
@@ -2030,6 +2258,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.5,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0323", Text = "{#Emph}Prometheus... hrm..." },
 					},
 				},
@@ -2087,6 +2316,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.46,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0327", Text = "{#Emph}Ah{#Prev}, just a feeling... but, it isn't great." },
 					},
 				},
@@ -2102,6 +2332,10 @@ UnitSetData.NPC_Dora =
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusAboutDora01" },
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/Melinoe_3711", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
@@ -2145,6 +2379,10 @@ UnitSetData.NPC_Dora =
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusAboutDora02" },
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/Melinoe_3715", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
@@ -2172,6 +2410,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0333", Text = "Oh yeah! It's gonna be something {#Emph}good..." },
 					},
 					{
@@ -2215,6 +2454,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.4,
 						PreLineAnim = "Dora_Shrug",
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0335", Text = "Don't worry so much, Mel!" },
 					},
 				},
@@ -2251,15 +2491,19 @@ UnitSetData.NPC_Dora =
 					},
 				},
 
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/Dora_0577",
 					PreLineWait = 0.35,
 					Portrait = "Portrait_Dora_Thoughtful_01",
 					Text = "...I remember everything... about why I {#Emph}forgot {#Prev}everything... {#Emph}I {#Prev}did something pretty bad, Mel." },
 
 				{ Cue = "/VO/Melinoe_4654", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "Whatever it was, you don't have to tell me, unless of course you wish to in which case I'm listening." },
+					Text = "Whatever it was, you don't have to tell me. Unless, of course, you wish to... in which case, I'm listening." },
 
 				{ Cue = "/VO/Dora_0578",
 					PreLineWait = 0.35,
@@ -2431,6 +2675,10 @@ UnitSetData.NPC_Dora =
 						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutMemories03" },
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/Melinoe_4665", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
@@ -2475,8 +2723,9 @@ UnitSetData.NPC_Dora =
 				PlayOnce = true,
 				UseableOffSource = true,
 				SkipContextArt = true,
-				GiftableOffSource = true,
-				PostBlockSpecialInteract = true,
+				--GiftableOffSource = true,
+				--PostBlockSpecialInteract = true,
+				SkipQuestStatusCheck = true,
 				GameStateRequirements =
 				{
 					{
@@ -2502,6 +2751,11 @@ UnitSetData.NPC_Dora =
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					-- major quest complete
+					PostLineThreadedFunctionName = "MajorQuestCompletedPresentation",
+					PostLineThreadedFunctionArgs = { Delay = 3.8, QuestName = "MajorQuestCompleted_Dora" },
+
 					Text = "Please don't make light of it, Dora. But confronting your past is better than erasing it, I think. For that, you're very brave." },
 
 				EndVoiceLines =
@@ -2666,8 +2920,8 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
-						{ Cue = "/VO/Dora_0291",
-							Text = "Or don't!" },
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0291", Text = "Or don't!" },
 					},
 				},
 			},
@@ -2718,12 +2972,12 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						UsePlayerSource = true,
-						RequiredMinElapsedTime = 3,
 						{ Cue = "/VO/Melinoe_0410", Text = "For the sense of accomplishment?" },
 					},
 					{
 						PreLineWait = 0.15,
-						RequiredMinElapsedTime = 3,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0041", Text = "{#Emph}Pffsh!" },
 					},
 				},
@@ -2791,13 +3045,12 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						UsePlayerSource = true,
-						RequiredMinElapsedTime = 3,
 						{ Cue = "/VO/Melinoe_4272", Text = "Or you could teach them?" },
 					},
 					{
 						PreLineWait = 0.4,
 						ObjectType = "NPC_Dora_01",
-						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0495", Text = "...Nah!" },
 					},
 				},
@@ -2859,7 +3112,7 @@ UnitSetData.NPC_Dora =
 				PlayOnce = true,
 				UseableOffSource = true,
 				SkipContextArt = true,
-				PostBlockSpecialInteract = true,
+				-- PostBlockSpecialInteract = true,
 				GameStateRequirements =
 				{
 					{
@@ -3055,6 +3308,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0188",
 							PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
 							Text = "{#Emph}Ho-hoh, wow! {#Prev}You're really into this stuff, huh?" },
@@ -3100,6 +3354,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0316", Text = "{#Emph}All that you see is my domain.",
 							PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs, },
 					},
@@ -3191,6 +3446,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.42,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0339", Text = "{#Emph}Ah! {#Prev}Go for it, then.",
 							PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 					},
@@ -3274,7 +3530,46 @@ UnitSetData.NPC_Dora =
 				{
 					PreLineWait = 0.35,
 					ObjectType = "NPC_Dora_01",
+					TriggerCooldowns = { "DoraAnyQuipSpeech" },
 					{ Cue = "/VO/Dora_0167", Text = "Well... at least you've got {#Emph}me." },
+				},
+			},
+			DoraAboutNightmares03 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "ClearedDreamRunsCache" },
+						Comparison = ">=",
+						Value = 2,
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
+					},
+				},
+
+				{ Cue = "/VO/Dora_0647",
+					Text = "Seems like you've been sleeping better lately. Not that I like watching you intently while you're out cold." },
+				{ Cue = "/VO/Melinoe_5469", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Mel_Hesitant_01", WaitTime = 4.2 },
+
+					Text = "Lately my dreams haven't troubled me as much for whatever reason. That's probably why. You... truly watch me sleep?" },
+				EndVoiceLines =
+				{
+					PreLineWait = 0.37,
+					ObjectType = "NPC_Dora_01",
+					PostPortraitSetAnim = "Dora_Shrug",
+					TriggerCooldowns = { "DoraAnyQuipSpeech" },
+					{ Cue = "/VO/Dora_0648", Text = "No. Just when I'm bored." },
 				},
 			},
 
@@ -3358,6 +3653,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0056", Text = "Lucky him." },
 					},
 				},
@@ -3392,7 +3688,8 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						PreLineWait = 0.45,
-						RequiredMinElapsedTime = 3,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0177", Text = "Yeah! Looks like we really put him up in style..." },
 					},
 				},
@@ -3495,21 +3792,131 @@ UnitSetData.NPC_Dora =
 				},
 				{ Cue = "/VO/Dora_0198",
 					Text = "Hey Mel! The good {#Emph}Commander {#Prev}there has offered to train me as one of his {#Emph}disciples. {#Prev}It's a big decision, so I'm kind of mulling it over..." },
+
 				{ Cue = "/VO/Melinoe_2025", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero", 
 					Text = "I've learned so much from him, Dora. Headmistress taught me my craft. But Commander Schelemeus taught me... {#Emph}erm..." },
+
 				EndVoiceLines =
 				{
 					{
 						PreLineWait = 0.4,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0199", Text = "How to beat up an old man...?" },
 					},
 					{
 						PreLineWait = 0.3,
 						UsePlayerSource = true,
 						{ Cue = "/VO/Melinoe_2026", Text = "No!" },
+					},
+				},
+			},
+			DoraAboutSkelly02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "DoraAboutSkelly01", "DoraGrantsCosmeticsShop01", "DoraGift06", "SkellyGift06" }
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsAny = { "Hub_PreRun"},
+					},
+					NamedRequirementsFalse = { "NearTrueEnding", "HecateMissing" },
+				},
+
+				{ Cue = "/VO/Melinoe_5893", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "So what did you decide, when it comes to the Commander's offer to train you as one of his disciples? Perhaps you'd make a great warrior." },
+
+				{ Cue = "/VO/Dora_0813",
+					PostPortraitSetAnim = "Dora_Shrug",
+					Text = "You're probably right, it's just I kind of have a lot going on right now? For one thing, I follow {#Emph}you {#Prev}around constantly. I don't want to bite off more than I can chew." },
+
+				{ Cue = "/VO/Melinoe_5894", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero", 
+					Text = "Restraint requires discipline. You know, you've come a long way from the listless Dora I recall. Even without the Commander's training." },
+
+				{ Cue = "/VO/Dora_0814",
+					Emote = "PortraitEmoteAnger",
+					Portrait = "Portrait_Dora_Spooky_01",
+					PostPortraitSetAnim = "DoraScary_Frighten",
+					Text = "{#Emph}Foolish witch! Speak no more of this again, lest I curse you and your line for two eternities, not merely one!" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.41,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5895", Text = "I regret my every word, Spirit." },
+					},
+					{
+						PreLineWait = 0.38,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0815", Text = "You better." },
+					},
+				},
+			},
+
+			DoraAboutTrainingGrounds01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "DoraGrantsCosmeticsShop01", "DoraWithSkelly01" }
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsAny = { "Hub_PreRun"},
+					},
+					NamedRequirementsFalse = { "NearTrueEnding", "HecateMissing" },
+				},
+
+				{ Cue = "/VO/Dora_0810",
+					PostPortraitSetAnim = "Dora_Shrug",
+					Text = "You know, it's kind of nice out here, considering we're not in a tent... quieter than the taverna, and those disciple-Shades by the Commander worship the ground I walk on." },
+
+				{ Cue = "/VO/Melinoe_5891", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero", 
+					Text = "I'm glad to hear that you've grown comfortable in these training grounds. Though as for the Commander's disciples, you haven't frightened them or anything, have you?" },
+
+				{ Cue = "/VO/Dora_0811",
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteAnger", Portrait = "Portrait_Dora_Spooky_01", WaitTime = 1.8 },
+					Text = "{#Emph}Ah{#Prev}, let's just say they know {#Emph}I can reduce them to the essence of agony itself, should they so much as dare to challenge me!" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5892", Text = "Please don't make a negative impression..." },
+					},
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Dora_01",
+						PreLineFunctionName = "GenericPresentation",
+						PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
+						{ Cue = "/VO/Dora_0812", Text = "{#Emph}Who, me?!" },
 					},
 				},
 			},
@@ -3555,6 +3962,53 @@ UnitSetData.NPC_Dora =
 				},
 			},
 
+			DoraAboutDreamRuns01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsAny = { "Hub_PreRun"},
+					},
+					{
+						Path = { "GameState", "RoomsEntered", "Dream_Intro" },
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				{ Cue = "/VO/Dora_0780",
+					Text = "Know what? If you keep passing out on that warm-blanket-looking thing over there, it means I finally get the tent all to myself! Good thinking, Mel." },
+
+				{ Cue = "/VO/Melinoe_5884", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Mel_Default_01", WaitTime = 5.6 },
+
+					Text = "Dora, I'm not merely {#Emph}passing out! {#Prev}It's a way for me to explore my own subconscious through my dreams! And I reserve the right to return to my tent whenever I wish." },
+
+				{ Cue = "/VO/Dora_0781",
+					PostPortraitSetAnim = "Dora_Shrug",
+					Text = "Sure. It's not like I was going to kick you out or anything. I'm just saying if you want to keep exploring your subconscious, I'm all for it." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						{ Cue = "/VO/Melinoe_5885", Text = "Appreciate your support." },
+					},
+				},
+			},
+
 			DoraAboutHeracles01 =
 			{
 				PlayOnce = true,
@@ -3585,6 +4039,8 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						PreLineWait = 0.45,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0195", Text = "Well, you thought wrong, my friend." },
 					},
 				},
@@ -3601,7 +4057,14 @@ UnitSetData.NPC_Dora =
 						Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01", },
 						IsAny = { "Choice_IcarusAccept" },
 					},
+					{
+						PathFromSource = true,
+						Path = { "DefaultCategoryIndex" },
+						Comparison = "==",
+						Value = 1,
+					},
 				},
+				TeleportToId = 741488,
 				{ Cue = "/VO/Dora_0615",
 					Text = "Hey, {#Emph}uh{#Prev}, you and that guy, one with the wings, what was his name? Thought he was long {#Emph}dead{#Prev}, though when {#Emph}I {#Prev}saw him here with you, he seemed, shall we say, very much alive? How'd he do that?" },
 
@@ -3624,6 +4087,8 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						PreLineWait = 0.32,
+						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0617", Text = "Trust me you have {#Emph}nothing {#Prev}to be ashamed of." },
 					},
 				},
@@ -3676,6 +4141,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0609", Text = "I do. Congratulations, Mel." },
 					},
 				},
@@ -3689,6 +4155,12 @@ UnitSetData.NPC_Dora =
 				{
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFromSource = true,
+						Path = { "DefaultCategoryIndex" },
+						Comparison = "==",
+						Value = 1,
 					},
 				},
 				{ Cue = "/VO/Dora_0623",
@@ -3726,6 +4198,7 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.38,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0626", Text = "{#Emph}Oh {#Prev}all right, I guess why not?" },
 					},
 				},
@@ -3770,7 +4243,53 @@ UnitSetData.NPC_Dora =
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Dora_01",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0629", Text = "Right. I'll believe it when it happens." },
+					},
+				},
+			},
+
+			DoraAboutLittleToSay01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				SkipContextArt = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll =
+						{
+							"DoraBathHouse03",
+							"DoraAboutCosmetics06",
+						},
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+
+				{ Cue = "/VO/Dora_0653",
+					Text = "Not much been going on lately. It's nice! I can look at you and it's like, {#Emph}boom{#Prev}, we had a whole conversation." },
+
+				{ Cue = "/VO/Melinoe_5472", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+
+					Text = "Once you're close enough with someone, you often needn't even exchange words to understand their feelings." },
+
+				{ Cue = "/VO/Dora_0654",
+					PostLineThreadedFunctionName = "MuteSpeaker",
+					Text = "{#Emph}Huh. {#Prev}I'm gonna try that out. So not a word if you can help it, OK?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5473", Text = "OK! I mean, {#Emph}mph." },
 					},
 				},
 			},
@@ -3872,6 +4391,7 @@ UnitSetData.NPC_Dora =
 						PreLineWait = 0.3,
 						ObjectType = "NPC_Dora_01",
 						PostLineFunctionName = "DoraTeleportExit",
+						TriggerCooldowns = { "DoraAnyQuipSpeech" },
 						{ Cue = "/VO/Dora_0184", Text = "{#Emph}Ah{#Prev}, come on..." },
 					},
 				},
@@ -3887,7 +4407,6 @@ UnitSetData.NPC_Dora =
 				GiftableOffSource = true,
 				GameStateRequirements =
 				{
-					Force = true,
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "DoraWithMoros01", "DoraGift08", "MorosGift08" },
@@ -4155,15 +4674,6 @@ UnitSetData.NPC_Dora =
 			{
 				SkipContextArt = true,
 				UseableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						PathFromSource = true,
-						Path = { "DefaultCategoryIndex" },
-						Comparison = "==",
-						Value = 1,
-					},
-				},
 				{ Cue = "/VO/Dora_0017",
 					Text = "Do what you got to do. I'm not even here." },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
@@ -4209,6 +4719,13 @@ UnitSetData.NPC_Dora =
 			{
 				SkipContextArt = true,
 				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+
 				{ Cue = "/VO/Dora_0021",
 					Text = "Hope your big task thing's been going all right!" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
@@ -4227,6 +4744,16 @@ UnitSetData.NPC_Dora =
 			{
 				SkipContextArt = true,
 				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFromSource = true,
+						Path = { "DefaultCategoryIndex" },
+						Comparison = "==",
+						Value = 1,
+					},
+				},
+
 				{ Cue = "/VO/Dora_0023",
 					Text = "{#Emph}Uhh{#Prev}, can I get a little privacy, here, Mel?" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
@@ -4236,6 +4763,16 @@ UnitSetData.NPC_Dora =
 			{
 				SkipContextArt = true,
 				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFromSource = true,
+						Path = { "DefaultCategoryIndex" },
+						Comparison = "==",
+						Value = 1,
+					},
+				},
+
 				{ Cue = "/VO/Dora_0024",
 					Text = "Sooner you get out of here, sooner I can go through all your stuff." },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
@@ -4531,7 +5068,7 @@ UnitSetData.NPC_Dora =
 				SkipContextArt = true,
 				UseableOffSource = true,
 				{ Cue = "/VO/Dora_0641",
-					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteAnger", Portrait = "Portrait_Dora_Spooky_01", WaitTime = 2.9 },
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteAnger", Portrait = "Portrait_Dora_Spooky_01", WaitTime = 2.0 },
 					Text = "One of the other Shades said hi to me earlier, {#Emph}for the first and final time!" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
 				StatusAnimation = false,
@@ -4848,6 +5385,9 @@ UnitSetData.NPC_Dora =
 						IsNone = { "Hub_PreRun"},
 						HintId = "Codex_DoraNotInMain",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_3814", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
@@ -4890,6 +5430,9 @@ UnitSetData.NPC_Dora =
 						IsNone = { "Hub_PreRun"},
 						HintId = "Codex_DoraNotInMain",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_3815", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
@@ -4931,6 +5474,9 @@ UnitSetData.NPC_Dora =
 						Path = { "CurrentHubRoom", "Name" },
 						IsNone = { "Hub_PreRun"},
 						HintId = "Codex_DoraNotInMain",
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
 					},
 				},
 				{ Cue = "/VO/Melinoe_3816", UsePlayerSource = true,
@@ -5043,6 +5589,147 @@ UnitSetData.NPC_Dora =
 						{ Cue = "/VO/Dora_0141", Text = "OK bye." },
 					},
 				},
+			},
+
+			DoraFishingRepeatable01 =
+			{
+				SkipContextArt = true,
+				Cost =
+				{
+					GiftPointsEpic = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "DoraFishingRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsNone = { "Hub_PreRun"},
+					},
+				},
+
+				-- start fishing
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0509",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						Text = "Need a fishing partner? Say no more. I am completely in." },
+
+					{ Cue = "/VO/Dora_0511",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						PostPortraitSetAnim = "Dora_Shrug",
+						Text = "Sure, I was just thinking why not pay a visit to the riverside again. Not that I'd go unless you asked." },
+
+					{ Cue = "/VO/Dora_0513",
+						SkipContextArt = true,
+						Emote = "PortraitEmoteAnger",
+
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Dora_Spooky_01",
+						PostPortraitSetAnim = "DoraScary_Frighten",
+						PortraitExitAnimation = "Portrait_Dora_Spooky_01_Exit",
+
+						Text = "{#Emph}All of the river's denizens shall come to know true fear!" },
+
+					{ Cue = "/VO/Dora_0082",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						PostPortraitSetAnim = "Dora_Shrug",
+						Text = "Oh hey, turns out there's a gap smack in the middle of my busy schedule right now! Lead the way." },
+				},
+
+				-- end fishing
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0510",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Even with no hands, I refuse to come back empty-handed after all that." },
+
+					{ Cue = "/VO/Dora_0512",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Did way too much thinking back there, but at least we got this." },
+
+					{ Cue = "/VO/Dora_0514",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Weird how it's possible to do something and nothing at the exact same time." },
+
+					{ Cue = "/VO/Dora_0101",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "You know, all in all, that was kind of OK! Thanks, Mel." },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
 			},
 
 			DoraBathHouse01 =
@@ -5175,7 +5862,7 @@ UnitSetData.NPC_Dora =
 					PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
 					PostPortraitSetAnim = "Dora_Shrug",
 					PostLineRemoveContextArt = true,
-					Text = "Mel, you know I like doing nothing. Sitting in the bathhouse with you? Well that's got to be the next best thing so, shall we?" },
+					Text = "Mel, you know I like doing nothing. Sitting in the hot springs with you? Well that's got to be the next best thing so, shall we?" },
 
 				{ Cue = "/VO/Dora_0065",
 					PreLineFunctionName = "BathHouseStartPresentation",
@@ -5352,6 +6039,150 @@ UnitSetData.NPC_Dora =
 				},
 			},
 
+			DoraBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				SkipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "DoraBathHouseRepeatable01", "DoraBathHouse03" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsNone = { "Hub_PreRun"},
+						HintId = "Codex_DoraNotInMain",
+					},
+				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0500",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						Text = "This night is pretty full, though I think I can squeeze that in." },
+
+					{ Cue = "/VO/Dora_0503",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						PostPortraitSetAnim = "Dora_Shrug",
+						Text = "Well if we've both got time to kill, then I guess why not." },
+
+					{ Cue = "/VO/Dora_0506",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						PostPortraitSetAnim = "Dora_Shrug",
+						Text = "{#Emph}Huh. {#Prev}Sure. The springs are one of my favorite places to just float." },
+				},
+
+				-- Mel in the bath
+				[2] = HeroRepeatableTextLines.BathHouseIntroTextLines,
+
+				-- Dora in the bath
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0501",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Bath_01",
+						PortraitExitAnimation = "Portrait_Dora_Bath_01_Exit",
+						Text = "...Being here sure brings back memories, you know? Mainly of the last time." },
+
+					{ Cue = "/VO/Dora_0504",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Bath_01",
+						PortraitExitAnimation = "Portrait_Dora_Bath_01_Exit",
+						Text = "...Sometimes I think this even beats floating around in the tent. Maybe I should haunt this place instead..." },
+
+					{ Cue = "/VO/Dora_0507",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Bath_01",
+						PortraitExitAnimation = "Portrait_Dora_Bath_01_Exit",
+						Text = "...I guess the upside of a bunch of aching muscles is you get to soothe them sitting in this thing." },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0502",
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "This is the part where I'm supposed to feel more refreshed or something, right?" },
+
+					{ Cue = "/VO/Dora_0505",
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Good times back there, Mel. Thanks for bringing me along." },
+
+					{ Cue = "/VO/Dora_0508",
+						PreLineWait = 0.25,
+						SkipContextArt = true,
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Now that was a good stretch of pointlessly existing back there." },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
+			},
+
 			-- taverna
 			DoraTaverna01 =
 			{
@@ -5461,6 +6292,157 @@ UnitSetData.NPC_Dora =
 
 			},
 
+			DoraTavernaRepeatable01 =
+			{
+				SkipContextArt = true,
+				Cost =
+				{
+					SuperGiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraBathHouse03" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "DoraTavernaRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						Path = { "CurrentHubRoom", "Name" },
+						IsNone = { "Hub_PreRun"},
+					},
+				},
+
+				-- before taverna
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0515",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						Text = "I wouldn't go to crowded places with just anybody, but with you, Mel? Sure." },
+
+					{ Cue = "/VO/Dora_0518",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						Text = "Don't see what makes this night Ambrosia-bottle-worthy, but hey, if you insist!" },
+
+					{ Cue = "/VO/Dora_0521",
+						PostLineRemoveContextArt = true,
+						Emote = "PortraitEmoteAnger",
+						Portrait = "Portrait_Dora_Spooky_01",
+						PostPortraitSetAnim = "DoraScary_Frighten",
+						PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteSparkly", Portrait = "Portrait_Dora_Default_01", WaitTime = 3.9 },
+						ExitPortraitImmediately = true, -- we don't know which portrait will be active
+
+						Text = "{#Emph}You dare make such demands of me, witch? {#Prev}Though sure, let's go, why not." },
+				},
+
+				-- at taverna
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0516",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						Text = "...I never used to think I'd fit in around here. But look at this place... seems like I fit in completely fine." },
+
+					{ Cue = "/VO/Dora_0519",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Emote = "PortraitEmoteAnger",
+						Portrait = "Portrait_Dora_Spooky_01",
+						PortraitExitAnimation = "Portrait_Dora_Spooky_01_Exit",
+						PostPortraitSetAnim = "DoraScary_Frighten",
+
+						Text = "{#Emph}...Pour your offering to me, witch, and I shall decide whether to accept it or condemn you to a thousand painful deaths!" },
+
+					{ Cue = "/VO/Dora_0522",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Dora_Default_01",
+						PortraitExitAnimation = "Portrait_Dora_Default_01_Exit",
+						Text = "...Shades from all over the place in here. Don't you dare introduce us. I like having an air of mystery!" },
+				},
+
+				-- after taverna
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Dora_0517",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.25,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "...That's more than enough being out in public for me for a little while, thanks! Though it was nice." },
+
+					{ Cue = "/VO/Dora_0520",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.25,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "...Thanks, Mel! Scary to think the taverna's started growing on me a little bit..." },
+
+					{ Cue = "/VO/Dora_0523",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						PostPortraitSetAnim = "Dora_Shrug",
+
+						Text = "...Well, that wasn't as bad as I thought it was going to be, and I didn't even think it'd be that bad!" },
+
+					{ Cue = "/VO/Dora_0100",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						PostPortraitSetAnim = "Dora_Shrug",
+
+						Text = "...I guess that was a little different from just being in the old tent..." },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Dora",
+			},
 		},
 
 		MissingDistanceTrigger =
@@ -5574,6 +6556,41 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 			},
 		},
 		{ Cue = "/VO/Dora_0129", Text = "{#Emph}Boo!!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs, },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.15,
+		PlayOnceFromTableThisRun = true,
+		ObjectType = "NPC_Dora_01",
+		GameStateRequirements =
+		{
+			{
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs = { IsAny = {
+					"DoraAboutTyphonDeath01",
+				}, },
+			},
+		},
+
+		{ Cue = "/VO/Dora_0532", Text = "Hey Mel.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.15,
+		PlayOnceFromTableThisRun = true,
+		ObjectType = "NPC_Dora_01",
+		GameStateRequirements =
+		{
+			{
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs = { IsAny = {
+					"DoraAboutHecateKidnapped01",
+				}, },
+			},
+		},
+		{ Cue = "/VO/Dora_0220", Text = "How's it going?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 	},
 	{
 		BreakIfPlayed = true,
@@ -5735,6 +6752,9 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 					Comparison = "~=",
 					Value = 2,
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			},
 		},
 		{ Cue = "/VO/Dora_0543", Text = "There's the {#Emph}Commander...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
@@ -5743,6 +6763,13 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 				{
 					Path = { "CurrentHubRoom", "Name" },
 					IsAny = { "Hub_PreRun"},
+				},
+				{
+					FunctionName = "RequiredAlive",
+					FunctionArgs = { Units = { "NPC_Skelly_01" } },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 			},
 		},
@@ -5788,6 +6815,9 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 			{
 				PathTrue = { "CurrentRun", "Cleared" }
 			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" },
+			},
 		},
 
 		{ Cue = "/VO/Dora_0229", Text = "Took you long enough.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
@@ -5815,6 +6845,33 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PlayOnceFromTableThisRun = true,
+		PreLineWait = 0.15,
+		ObjectType = "NPC_Dora_01",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentHubRoom", "Name" },
+				IsAny = { "Hub_PreRun"},
+			},
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/Dora_0772", Text = "Sleep OK?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+		{ Cue = "/VO/Dora_0773", Text = "You just wake up?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+		{ Cue = "/VO/Dora_0774", Text = "{#Emph}Hey{#Prev}, you're conscious.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
+			PlayFirst = true },
+		{ Cue = "/VO/Dora_0775", Text = "Get enough sleep?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+		{ Cue = "/VO/Dora_0776", Text = "Slept under the stars, huh.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+		{ Cue = "/VO/Dora_0777", Text = "It's nice out here.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+		{ Cue = "/VO/Dora_0778", Text = "The tent's been fine...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+		{ Cue = "/VO/Dora_0779", Text = "Rested up?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PlayOnceFromTableThisRun = true,
 		SuccessiveChanceToPlay = 0.5,
 		PreLineWait = 0.15,
 		ObjectType = "NPC_Dora_01",
@@ -5832,6 +6889,11 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 		{ Cue = "/VO/Dora_0222", Text = "So what's up?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 		{ Cue = "/VO/Dora_0223", Text = "What's going on?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 		{ Cue = "/VO/Dora_0224", Text = "Oh hey!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+		{ Cue = "/VO/Dora_0822", Text = "What's up?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+		{ Cue = "/VO/Dora_0823", Text = "How goes it?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+		{ Cue = "/VO/Dora_0824", Text = "Yeah?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+		{ Cue = "/VO/Dora_0825", Text = "Huh?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+
 		-- SGV
 		{ Cue = "/VO/Dora_0129", Text = "{#Emph}Boo!!",
 			PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
@@ -5862,6 +6924,14 @@ GlobalVoiceLines.DoraSummonedVoiceLines =
 		{ Cue = "/VO/Dora_0227", Text = "{#Emph}Fear me!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
 		},
 		{ Cue = "/VO/Dora_0228", Text = "{#Emph}Kneel before me!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		},
+		{ Cue = "/VO/Dora_0818", Text = "{#Emph}Raaah...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		},
+		{ Cue = "/VO/Dora_0819", Text = "{#Emph}Haaah!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		},
+		{ Cue = "/VO/Dora_0820", Text = "{#Emph}Yesss...?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		},
+		{ Cue = "/VO/Dora_0821", Text = "{#Emph}You...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
 		},
 	}
 }
@@ -5917,6 +6987,11 @@ GlobalVoiceLines.DoraHidingVoiceLines =
 	{ Cue = "/VO/Dora_0555", Text = "G'night." },
 	{ Cue = "/VO/Dora_0556", Text = "See you around!" },
 	{ Cue = "/VO/Dora_0557", Text = "'K later." },
+	{ Cue = "/VO/Dora_0826", Text = "All right." },
+	{ Cue = "/VO/Dora_0827", Text = "I'm out." },
+	{ Cue = "/VO/Dora_0828", Text = "OK!" },
+	{ Cue = "/VO/Dora_0829", Text = "Anyway." },
+
 	-- SGV
 	{
 		PreLineFunctionName = "GenericPresentation",
@@ -5963,6 +7038,26 @@ GlobalVoiceLines.DoraHidingVoiceLines =
 		PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
 		{ Cue = "/VO/Dora_0561", Text = "{#Emph}Vengeance...!" },
 	},
+	{
+		PreLineFunctionName = "GenericPresentation",
+		PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		{ Cue = "/VO/Dora_0830", Text = "{#Emph}Darkness..." },
+	},
+	{
+		PreLineFunctionName = "GenericPresentation",
+		PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		{ Cue = "/VO/Dora_0831", Text = "{#Emph}To ashes..." },
+	},
+	{
+		PreLineFunctionName = "GenericPresentation",
+		PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		{ Cue = "/VO/Dora_0832", Text = "{#Emph}To shadow..." },
+	},
+	{
+		PreLineFunctionName = "GenericPresentation",
+		PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+		{ Cue = "/VO/Dora_0833", Text = "{#Emph}Now, go..." },
+	},
 }
 GlobalVoiceLines.DoraCosmeticReactionVoiceLines =
 {
@@ -5972,33 +7067,7 @@ GlobalVoiceLines.DoraCosmeticReactionVoiceLines =
 	Queue = "Always",
 
 	{ Cue = "/VO/Dora_0257", Text = "Pretty spiffy.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
-	{ Cue = "/VO/Dora_0258", Text = "Guess it's OK...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
-		GameStateRequirements =
-		{
-			{
-				Path = { "LastLinePlayed" },
-				IsAny = { "/VO/Melinoe_1402" },
-			},
-		},
-	},
-	{ Cue = "/VO/Dora_0259", Text = "None whatsoever.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
-		GameStateRequirements =
-		{
-			{
-				Path = { "LastLinePlayed" },
-				IsAny = { "/VO/Melinoe_1403" },
-			},
-		},
-	},
-	{ Cue = "/VO/Dora_0260", Text = "I'm right here, Mel.",
-		GameStateRequirements =
-		{
-			{
-				Path = { "LastLinePlayed" },
-				IsAny = { "/VO/Melinoe_1404" },
-			},
-		},
-	},
+
 	{ Cue = "/VO/Dora_0261", Text = "Not too shabby.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 	{ Cue = "/VO/Dora_0262", Text = "There we go.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 	{ Cue = "/VO/Dora_0263", Text = "All set.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
@@ -6064,6 +7133,36 @@ GlobalVoiceLines.DoraRedecorationReactionVoiceLines =
 			},
 		},
 	},
+	{ Cue = "/VO/Dora_0258", Text = "Guess it's OK...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
+		PlayFirst = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "LastLinePlayed" },
+				IsAny = { "/VO/Melinoe_1401" },
+			},
+		},
+	},
+	{ Cue = "/VO/Dora_0259", Text = "None whatsoever.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
+		PlayFirst = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "LastLinePlayed" },
+				IsAny = { "/VO/Melinoe_1403" },
+			},
+		},
+	},
+	{ Cue = "/VO/Dora_0260", Text = "I'm right here, Mel.",
+		PlayFirst = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "LastLinePlayed" },
+				IsAny = { "/VO/Melinoe_1404" },
+			},
+		},
+	},
 	{ Cue = "/VO/Dora_0277", Text = "Changed your mind?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
 		GameStateRequirements =
 		{
@@ -6075,15 +7174,6 @@ GlobalVoiceLines.DoraRedecorationReactionVoiceLines =
 	},
 
 	-- SGV
-	{ Cue = "/VO/Dora_0254", Text = "{#Emph}Why not, indeed...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
-		GameStateRequirements =
-		{
-			{
-				Path = { "LastLinePlayed" },
-				IsAny = { "/VO/Melinoe_1400" },
-			},
-		},
-	},
 	{ Cue = "/VO/Dora_0255", Text = "{#Emph}It shall be done...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs },
 	{ Cue = "/VO/Dora_0256", Text = "{#Emph}If that is your will...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs },
 	{ Cue = "/VO/Dora_0378", Text = "{#Emph}If that is your will.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs },

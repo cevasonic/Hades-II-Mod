@@ -21,6 +21,8 @@ function OpenCosmeticsShopScreen( openedFrom, args )
 		return
 	end
 
+	local hasNewCosmetics = HasNewCosmeticsAvailable( openedFrom ) -- record this before updating ScreenViewRecord
+
 	local categoryName = screen.ItemCategories[screen.ActiveCategoryIndex].Name
 	CurrentRun.ScreenViewRecord[categoryName] = (CurrentRun.ScreenViewRecord[categoryName] or 0) + 1
 
@@ -28,7 +30,7 @@ function OpenCosmeticsShopScreen( openedFrom, args )
 		AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = openedFrom.ObjectId })
 		SetAnimation({ Name = "MelinoeSaluteToBrooding", DestinationId = CurrentRun.Hero.ObjectId })
 		if CurrentRun.ScreenViewRecord[categoryName] <= 1 then
-			thread( PlayVoiceLines, screen.CosmeticsOpenVoiceLines, true )
+			thread( PlayVoiceLines, screen.CosmeticsOpenVoiceLines, true, nil, { HasNewCosmetics = hasNewCosmetics } )
 		else
 			if CheckCooldown( "CanCosmeticSaluteDora", 25 ) then
 				thread( PlayVoiceLines, openedFrom.InteractVoiceLines or GlobalVoiceLines.SaluteVoiceLines, true, openedFrom )
@@ -147,7 +149,7 @@ function CosmeticShopUpdateVisibility( screen, args )
 
 		local button = CreateScreenComponent({
 			Name = "GhostAdminItem",
-			Group = screen.ComponentData.DefaultGroup,
+			Group = screen.ButtonGroupName,
 			X = itemLocationX,
 			Y = itemLocationY,
 			Alpha = 0.0,
@@ -176,7 +178,7 @@ function CosmeticShopUpdateVisibility( screen, args )
 			X = itemLocationX + screen.IconOffsetX,
 			Y = itemLocationY,
 			Scale = screen.IconScale,
-			Group = screen.ComponentData.DefaultGroup,
+			Group = screen.ButtonGroupName,
 			Animation = itemData.Icon,
 			Alpha = 0.0,
 		})
@@ -203,7 +205,7 @@ function CosmeticShopUpdateVisibility( screen, args )
 		})
 
 		if purchased then
-			local stateIcon = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, X = itemLocationX, Y = itemLocationY })
+			local stateIcon = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ButtonGroupName, X = itemLocationX, Y = itemLocationY })
 			table.insert( button.AssociatedIds, stateIcon.Id )
 			components[displayName.."StateIcon"] = stateIcon
 
@@ -226,7 +228,7 @@ function CosmeticShopUpdateVisibility( screen, args )
 			itemStateFormat.Text = stateText
 			CreateTextBox( itemStateFormat )
 		else
-			local pinIcon = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, Alpha = 0.0, })
+			local pinIcon = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ButtonGroupName, Alpha = 0.0, })
 			components[displayName.."PinIcon"] = pinIcon
 			table.insert( button.AssociatedIds, pinIcon.Id )
 			Attach({ Id = pinIcon.Id, DestinationId = button.Id, OffsetX = screen.PinOffsetX, OffsetY = UIData.PinIconListOffsetY })
@@ -241,7 +243,7 @@ function CosmeticShopUpdateVisibility( screen, args )
 			if not GameState.WorldUpgradesViewed[displayName] then
 				local newIcon = CreateScreenComponent({
 					Name = "BlankObstacle",
-					Group = screen.ComponentData.DefaultGroup,
+					Group = screen.ButtonGroupName,
 					Animation = "MusicPlayerNewTrack",
 					Alpha = 0.0,
 				})
@@ -333,7 +335,7 @@ function DoCosmeticShopPurchase( screen, button, args )
 end
 
 function HandleCosmeticShopReAdd( screen, button )
-	HandleCosmeticShopPurchase( screen, button, { ReAdd = true } )
+	HandleCosmeticShopPurchase( screen, button, { ReAdd = true, CategoryIndex = screen.ActiveCategoryIndex } )
 end
 
 function HandleCosmeticShopRemoval( screen, button )
@@ -461,6 +463,16 @@ function ActivateConditionalItem( itemData, args )
 			SetThingProperty({ Property = "StopsLight", Value = false, DestinationIds = itemData.DeactivateIds })
 		end
 	end
+	if itemData.SharedDeactivateIds ~= nil then
+		local deactivateIds = itemData.SharedDeactivateIds.Ids
+		SetAlpha({ Ids = deactivateIds, Fraction = 0 })
+		if itemData.ToggleCollision then
+			SetThingProperty({ Property = "StopsUnits", Value = false, DestinationIds = deactivateIds })
+		end
+		if itemData.ToggleShadows or itemData.ToggleCollision then
+			SetThingProperty({ Property = "StopsLight", Value = false, DestinationIds = deactivateIds })
+		end
+	end
 	if itemData.ActivateGroups ~= nil then
 		Activate({ Names = itemData.ActivateGroups })
 		SetAlpha({ Ids = GetIds({ Names = itemData.ActivateGroups }), Fraction = 1 })
@@ -560,6 +572,18 @@ function DeactivateConditionalItem( itemData, args )
 				SetThingProperty({ Property = "StopsLight", Value = "Default", DestinationIds = itemData.DeactivateIds })
 			end
 		end
+		if itemData.SharedDeactivateIds ~= nil then
+			local deactivateIds = itemData.SharedDeactivateIds.Ids
+			if not GameState.WorldUpgrades[itemData.SharedDeactivateIds.Cosmetic] then
+				SetAlpha({ Ids = deactivateIds, Fraction = 1 })
+				if itemData.ToggleCollision then
+					SetThingProperty({ Property = "StopsUnits", Value = "Default", DestinationIds = deactivateIds })
+				end
+				if itemData.ToggleShadows or itemData.ToggleCollision then
+					SetThingProperty({ Property = "StopsLight", Value = "Default", DestinationIds = deactivateIds })
+				end
+			end
+		end
 		if itemData.InspectPointId ~= nil and CurrentHubRoom.InspectPoints[itemData.InspectPointId] ~= nil then
 			local inspectPointData = CurrentHubRoom.InspectPoints[itemData.InspectPointId]
 			local hasUsed = false
@@ -587,11 +611,7 @@ end
 function HasNewCosmeticsAvailable( source, args )
 	args = args or {}
 
-	local categoryIndex = args.CategoryIndex
-	if categoryIndex == nil and ActiveScreens.CosmeticsShop ~= nil then
-		categoryIndex = ActiveScreens.CosmeticsShop.ActiveCategoryIndex
-	end
-
+	local categoryIndex = source.DefaultCategoryIndex
 	if categoryIndex ~= nil then
 		local category = ScreenData.CosmeticsShop.ItemCategories[categoryIndex]
 		for k, itemName in ipairs( category ) do
@@ -624,24 +644,4 @@ function CosmeticShopAllowViewItem( screen, category, cosmeticData )
 	end
 
 	return true
-end
-
-function HasUnpurchasedCosmetics( source, args )
-	args = args or {}
-
-	local categoryIndex = args.CategoryIndex
-	if categoryIndex == nil and ActiveScreens.CosmeticsShop ~= nil then
-		categoryIndex = ActiveScreens.CosmeticsShop.ActiveCategoryIndex
-	end
-
-	if categoryIndex ~= nil then
-		for k, itemName in ipairs( ScreenData.CosmeticsShop.ItemCategories[categoryIndex] ) do
-			local itemData = WorldUpgradeData[itemName]
-			if itemData ~= nil and not GameState.WorldUpgrades[itemName] and ( itemData.GameStateRequirements == nil or IsGameStateEligible( itemData, itemData.GameStateRequirements ) ) then
-				return true
-			end
-		end
-	end
-
-	return false
 end

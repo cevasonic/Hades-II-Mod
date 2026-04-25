@@ -122,6 +122,14 @@ OverwriteTableKeys( TraitData, {
 				}
 			}
 		},
+		OnDeactivationFunction = 
+		{
+			Name = "RemoveActivatedRarityBonus",
+			Args = 
+			{
+				RemovedKey = "RarityBonus",
+			}
+		},
 		StatLines =
 		{
 			"ElementalRarityStatDisplay",

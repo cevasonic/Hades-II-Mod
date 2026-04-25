@@ -73,6 +73,28 @@ ObstacleData =
 				RandomRemaining = true,
 				PreLineWait = 0.25,
 				PlayOnceFromTableThisRun = true,
+				ObjectType = "NPC_Circe_01",
+				SkipCooldownCheckIfNonePlayed = true,
+				GameStateRequirements = 
+				{
+					{
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "CirceSpokeRecently", Time = 5 },
+				},
+
+				{ Cue = "/VO/Circe_0310", Text = "{#Emph}Please{#Prev}, I insist!" },
+				{ Cue = "/VO/Circe_0311", Text = "Over here!" },
+				{ Cue = "/VO/Circe_0312", Text = "I've something for you first!", PlayFirst = true },
+				{ Cue = "/VO/Circe_0313", Text = "But you only just arrived!" },
+			},
+			{
+				BreakIfPlayed = true,
+				RandomRemaining = true,
+				PreLineWait = 0.25,
+				PlayOnceFromTableThisRun = true,
 				ObjectType = "NPC_Icarus_01",
 				SkipCooldownCheckIfNonePlayed = true,
 				GameStateRequirements =
@@ -137,6 +159,7 @@ ObstacleData =
 				{ Cue = "/VO/Athena_0123", Text = "I'm not to be ignored." },
 				{ Cue = "/VO/Athena_0124", Text = "Over here." },
 			},
+			{ GlobalVoiceLines = "HeraclesAttemptedExitVoiceLines" },
 			{ GlobalVoiceLines = "ErisAttemptedExitVoiceLines" },
 			{
 				BreakIfPlayed = true,
@@ -236,7 +259,7 @@ ObstacleData =
 		InheritFrom = { "ExitDoor", },
 		HideRewardPreview = true,
 
-		OnUnlockThreadedFunctionName = "AttemptUseDoor",
+		OnUnlockThreadedFunctionName = "AttemptUseAutoExitDoor",
 	},
 
 	ErebusExitDoor =
@@ -972,31 +995,8 @@ ObstacleData =
 		OnUsedFunctionName = "UseGardenPlot",
 		UseText = "UseGardenPlotPlant",
 		UseTextSpecial = "GardenPlotSpecial",
-		UseTextGift = "GardenPlotGift",
-		UseTextTalkAndGift = "GardenPlotHarvestAndGift",
 		UseTextTalkAndSpecial = "GardenPlotHarvestAndSpecial",
-		UseTextGiftAndSpecial = "GardenPlotGiftAndSpecial",
-		UseTextTalkGiftAndSpecial = "GardenPlotHarvestGiftAndSpecial",
-		CanReceiveGift = true,
 		GiftCategoryIndex = 3,
-		GiftFunctionName = "GiftGardenPlot",
-		GiftFunctionArgs =
-		{
-			Ticks = 4,
-		},
-		GiftGameStateRequirements =
-		{
-			{
-				PathFromSource = true,
-				PathTrue = { "SeedName" },
-			},
-			{
-				PathFromSource = true,
-				Path = { "GrowTimeRemaining" },
-				Comparison = ">=",
-				Value = 1,
-			},
-		},
 		SpecialInteractFunctionName = "PlantAdmirePresentation",
 		SpecialInteractGameStateRequirements =
 		{
@@ -1257,6 +1257,26 @@ ObstacleData =
 		},
 	},
 
+	HypnosCutout =
+	{
+		GetUseTextFunctionName = "GetDreamRunExitUseText",
+		OnUsedFunctionName = "AttemptUseDreamRunExit",
+		InteractDistance = 200,
+
+		DistanceTrigger =
+		{
+			PreTriggerWait = 0.1,
+			WithinDistance = 750,
+			VoiceLines =
+			{
+				{ GlobalVoiceLines = "HypnosStandeeSpottedVoiceLines" },
+			},
+		},
+
+		ExclusiveOnHitFunctionName = "HypnosCutoutHit",
+		LineHistoryNameKeepInDreamRun = true,
+	},
+
 	CrossroadsCatScratcher01 =
 	{
 		InheritFrom = { "BaseIndestructibleHitFx" },
@@ -1360,6 +1380,30 @@ ObstacleData =
 		{
 			[1] = { GlobalVoiceLines = "UsedFountainVoiceLines" },
 		},
+	},
+	
+	HealthFountainDream01 =
+	{
+		InheritFrom = { "HealthFountain" },
+		HealingSpentAnimation = "HealthFountainDream01_Empty",
+	},
+	
+	HealthFountainDream02 =
+	{
+		InheritFrom = { "HealthFountain" },
+		HealingSpentAnimation = "HealthFountainDream02_Empty",
+	},
+	
+	HealthFountainDream03 =
+	{
+		InheritFrom = { "HealthFountain" },
+		HealingSpentAnimation = "HealthFountainDream03_Empty",
+	},
+	
+	HealthFountainF =
+	{
+		InheritFrom = { "HealthFountain" },
+		HealingSpentAnimation = "HealthFountainF_Empty",
 	},
 	
 	HealthFountainF =
@@ -3197,6 +3241,7 @@ ObstacleData =
 		InheritFrom = { "EliteChallengeSwitch" },
 
 		ChallengeText = "ChallengeSwitch_TalentDropValue",
+		ChallengeTextFlipped = "ChallengeSwitch_TalentDropValue_Flipped",
 		ChallengeAvailableUseText = "UseChallengeSwitch_TalentDrop_Unlocked",
 		ChallengeResolvedUseText = "UseChallengeSwitch_RewardAvailable",
 		RewardType = "TalentDrop",
@@ -3211,6 +3256,7 @@ ObstacleData =
 		InheritFrom = { "EliteChallengeSwitch" },
 
 		ChallengeText = "ChallengeSwitch_MaxManaValue",
+		ChallengeTextFlipped = "ChallengeSwitch_MaxManaValue_Flipped",
 		ChallengeAvailableUseText = "UseChallengeSwitch_MaxMana_Unlocked",
 		ChallengeResolvedUseText = "UseChallengeSwitch_RewardAvailable",
 		RewardType = "MaxManaDrop",
@@ -4005,6 +4051,23 @@ ObstacleData =
 		SpawnDelay = 0.3,
 	},
 
+	HouseTerrainTransporter =
+	{
+		DistanceTriggers =
+		{
+			{
+				WithinDistance = 650,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "InfernalContractBoon" },
+					},
+				},
+				GlobalVoiceLines = "SpottedContractItemVoiceLines",
+			},
+		},
+	},
+
 	-- Walls
 	_Impassable_Tile64IsoUnitsOnly_Tall =
 	{
@@ -4061,7 +4124,7 @@ ObstacleData =
 					BreakIfPlayed = true,
 					SkipCooldownCheckIfNonePlayed = true,
 
-					{ Cue = "/VO/Hades_0351", Text = "Fates be merciful..." },
+					{ Cue = "/VO/Hades_0351", Text = "Fates be merciful...", LineHistoryColor = Color.HadesVoice, },
 				},
 			},
 		},
@@ -4091,7 +4154,7 @@ ObstacleData =
 						},
 					},
 
-					{ Cue = "/VO/Hades_0350", Text = "Nothing here. What of the throne...?" },
+					{ Cue = "/VO/Hades_0350", Text = "Nothing here. What of the throne...?", LineHistoryColor = Color.HadesVoice, },
 				},
 			},
 		},

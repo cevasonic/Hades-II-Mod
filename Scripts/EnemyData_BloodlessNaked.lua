@@ -2,7 +2,7 @@ UnitSetData.BloodlessNaked =
 {
 	BloodlessNaked =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseGEnemy", "BaseVulnerableEnemy" },
 
 		Material = "Bone",
 

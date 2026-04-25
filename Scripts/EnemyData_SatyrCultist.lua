@@ -2,7 +2,7 @@ UnitSetData.SatyrCultist =
 {
 	SatyrCultist =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 630,
 		HealthBarType = "Medium",
@@ -14,7 +14,8 @@ UnitSetData.SatyrCultist =
 		ActivateFxPreSpawn = "EnemySpawnBurstLargeChronos",
 		DeathAnimation = "Enemy_SatyrCultist_Death",
 		DeathFx = "EnemyDeathFxChronos",
-
+		IgnoreChillKillDeathAnimation = true,
+		
 		Groups = { "GroundEnemies" },
 		Material = "Organic",
 		IsAggroedSound = "/SFX/Enemy Sounds/SatyrCultist/EmoteAlerted",

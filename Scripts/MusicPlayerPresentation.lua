@@ -52,6 +52,18 @@ function MouseOffMusicPlayerItem( button )
 	UpdateMusicPlayerInteractionText( button.Screen )
 end
 
+function MusicPlayerClosedPresentation( screen, button )
+	PlaySound({ Name = screen.CloseSound or "/SFX/Menu Sounds/CauldronMenuCloseNew" })
+	SetAnimation({ DestinationId = screen.Components.ShopBackground.Id, Name = "MusicPlayerOut" })
+	if button.Id == screen.Components.CloseButton.Id then
+		SetAnimation({ Name = "MelTalkBrooding01ReturnToIdle", DestinationId = CurrentRun.Hero.ObjectId })
+		AddInteractBlock( screen.OpenedFrom, "MusicPlayerClosedPresentation" )
+		PanCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 0.8, FromCurrentLocation = true, Retarget = true, EaseIn = 0, EaseOut = 1.0 })
+		wait( 0.85 )
+		RemoveInteractBlock( screen.OpenedFrom, "MusicPlayerClosedPresentation" )
+	end
+end
+
 function MusicPlayerItemPurchasedPresentation( button )
 	PlaySound({ Name = "/SFX/Menu Sounds/ContractorItemPurchase" })
 	CreateAnimation({ Name = "ContractorSlotPurchase", DestinationId = button.Id, OffsetX = 0 })

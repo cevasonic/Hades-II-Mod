@@ -658,6 +658,7 @@ ScreenData.FamiliarShop =
 		{
 			"BackgroundDim",
 			"FamiliarShopBacking",
+			"FamiliarShopLeft",
 			"FamiliarShopAnimalBacking",
 			"ActionBarBackground",
 			"ResourceCostBacking",
@@ -685,13 +686,20 @@ ScreenData.FamiliarShop =
 			AlphaTargetDuration = 0.2,
 		},
 
-		FamiliarShopAnimalBacking =
+		FamiliarShopLeft =
 		{
-			X = ScreenCenterX + 540,
-			Y = ScreenCenterY,
+			AnimationName = "FamiliarScreenLeftIn",
+			X = 276,
+			Y = 461,
 			Alpha = 0.0,
 			AlphaTarget = 1.0,
 			AlphaTargetDuration = 0.2,
+		},
+
+		FamiliarShopAnimalBacking =
+		{
+			X = ScreenCenterX,
+			Y = ScreenCenterY,
 		},
 
 		TitleText = 

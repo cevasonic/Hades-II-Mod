@@ -67,7 +67,7 @@
 	PlaySound({ Name = "/SFX/StabSplatterEndSequence" })
 
 	BlockProjectileSpawns({ ExcludeWeaponName = "WeaponLob" })
-	ExpireProjectiles({ ExcludeNames = WeaponSets.ExpireProjectileExcludeProjectileNames, BlockSpawns = true })
+	ExpireProjectiles({ ExcludeNames = WeaponSets.ExpireProjectileExcludeProjectileNames, BlockSpawns = true, IncludeToAdd = true })
 	Destroy({ Ids = GetIdsByType({ Names = { "ManaDropZeus", "PowerDrinkDrop" }})})
 
 	for id, name in pairs(MapState.Reticles) do
@@ -151,9 +151,13 @@
 	wait( 5 )
 	thread( GenericPresentation, unit, { PreWait = 0.7, Id = victimId, SetAlpha = 0, Duration = 0.4, })
 
-	-- narrative outro
-	local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
-	PlayTextLines( unit, textLines )
+	if not CurrentRun.IsDreamRun then
+		-- narrative outro
+		local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
+		PlayTextLines( unit, textLines )
+	else
+		PreNarrativeUnequipAnimation()
+	end
 
 	FadeOut({ Duration = 0.5, Color = Color.Black })
 
@@ -163,10 +167,19 @@
 	PanCamera({ Id = victimId, Duration = 5.7, EaseOut = 0.5, OffsetY = -95, Retarget = true })
 
 	-- banner
-	local textMessage = "CerberusDefeatedMessage"
-	if deathPanSettings.BossDifficultyMessage and GetNumShrineUpgrades( "BossDifficultyShrineUpgrade" ) > 0 then
-		textMessage = deathPanSettings.BossDifficultyMessage
-	end	
+	local textMessage = deathPanSettings.Message
+	if unit.AltDeathMessageTextIds ~= nil then
+		local eligibleTextIds = {}
+		for k, altTextIdData in pairs( unit.AltDeathMessageTextIds ) do
+			if altTextIdData.GameStateRequirements == nil or IsGameStateEligible( altTextIdData, altTextIdData.GameStateRequirements ) then
+				table.insert( eligibleTextIds, altTextIdData.TextId )
+			end
+		end
+		if not IsEmpty( eligibleTextIds ) then
+			textMessage = GetRandomValue( eligibleTextIds )
+		end
+	end
+
 	thread( DisplayInfoBanner, nil, { 
 		Text = textMessage,
 		Delay = 0.75, 
@@ -245,8 +258,15 @@
 	CurrentRun.CurrentRoom.Encounter.BossKillPresentation = false
 	ToggleCombatControl( CombatControlsDefaults, true, "BossKill" )
 	SetThingProperty({ Property = "AllowAnyFire", Value = true, DestinationId = CurrentRun.Hero.ObjectId, DataValue = false })
+
+	if CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount then
+		SetPlayerInvulnerable( "DreamRunCleared" )
+		wait( 1.0 )
+		OpenRunClearScreen()
+	end
 end
 
+Using "GR2/CerberusDream_Color"
 function InfestedCerberusHorribleRaceConditionForTempPresentation( unit )
 	CreateAnimation({ Name = "CerbDeathTransitionFx", DestinationId = unit.ObjectId })
 	wait(3.0)
@@ -261,6 +281,11 @@ function InfestedCerberusHorribleRaceConditionForTempPresentation( unit )
   	StopAnimation({ Name = "CerbDeathTransitionFx", DestinationId = unit.ObjectId })
 	SetThingProperty({ Property = "GrannyTexture", Value = "", DestinationId = unit.ObjectId })
 	SetThingProperty({ Property = "GrannyModel", Value = "Cerberus_Mesh", DestinationId = unit.ObjectId })
+	if CurrentRun.IsDreamRun then
+		RemoveOutline({ Id = unit.ObjectId })
+		AddOutline({ Id = unit.ObjectId, R = 25, G = 200, B = 160, Opacity = 0.8, Thickness = 3, Threshold = 0.6, })
+		SetThingProperty({ Property = "GrannyTexture", Value = "GR2/CerberusDream_Color", DestinationId = unit.ObjectId })
+	end
 	SetThingProperty({ Property = "Graphic", Value = "Cerberus_Idle_Sitting", DestinationId = unit.ObjectId })
 	SetScale({ Id = unit.ObjectId, Fraction = 1.5, Duration = 0.0 })
 	SetAnimation({ DestinationId = unit.ObjectId, Name = "Cerberus_Idle_Sitting" })
@@ -345,7 +370,7 @@ function FieldsEncounterEndPresentation( encounter, currentRun )
 	wait( 0.1 )
 	CurrentRun.CurrentRoom.EncountersCleared = (CurrentRun.CurrentRoom.EncountersCleared or 0) + 1
 
-	thread( PlayVoiceLines, HeroVoiceLines.FieldsEncounterClearedVoiceLines, true )
+	thread( PlayVoiceLines, HeroVoiceLines.FieldsEncounterClearedVoiceLines, true, nil, { CurrentEncounter = encounter } )
 	
 	if encounter.RewardId then
 		thread( DirectionHintPresentation, MapState.RoomRequiredObjects[encounter.RewardId], { Cooldown = 0, Delay = 0 } )
@@ -381,15 +406,7 @@ function CerberusStageEnter(enemy, CurrentRun, aiStage)
 
 	local requirementEM =
 	{
-		{
-			FunctionName = "RequiredShrineLevel",
-			FunctionArgs =
-			{
-				ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-				Comparison = ">=",
-				Value = 3,
-			}
-		}
+		NamedRequirements = { "BossDifficultyActive" },
 	}
 
 	Activate({ Name = "SpawnPointsPhase2" })
@@ -399,8 +416,17 @@ function CerberusStageEnter(enemy, CurrentRun, aiStage)
 
 	if IsGameStateEligible( enemy, requirementEM ) then
 		local usedPoints = ShallowCopyTable( aiStage.TransitionArgs.TransitionRadialIds )
-
-		SetThingProperty({ Property = "GrannyTexture", Value = aiStage.TransitionArgs.GrannyTexture, DestinationId = enemy.ObjectId })
+		local swapTexture = aiStage.TransitionArgs.GrannyTexture
+		local dreamReqs =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" }
+			}
+		}
+		if IsGameStateEligible( enemy, dreamReqs ) then
+			swapTexture = aiStage.TransitionArgs.DreamGrannyTexture
+		end
+		SetThingProperty({ Property = "GrannyTexture", Value = swapTexture, DestinationId = enemy.ObjectId })
 		Teleport({ Id = enemy.ObjectId, DestinationId = RemoveRandomValue(usedPoints) })
 
 		thread(ProcessFireProjecile, enemy, { ProjectileName = "CerberusTransitionRadial", TargetId = aiStage.TransitionArgs.TransitionRadialInitialId, FireFromTarget = true, } )
@@ -480,7 +506,7 @@ function RoomEntrancePortalFields( currentRun, currentRoom )
 		SetAlpha({ Ids = nearbyGhostWalls, Fraction = 0, Duration = 0 })
 	end
 
-	RoomEntrancePortal( currentRun, currentRoom )
+	RoomEntrancePortal( currentRun, currentRoom, { SkipLocationBanner = true } )
 end
 
 function LeaveRoomHBossPresentation( currentRun, exitDoor )
@@ -709,7 +735,6 @@ function FieldsEncounterActivatedPresentation( rewardCage, args )
 end
 
 function FieldsEncounterStartPresentation( eventSource, args )
-	local survivalEncounter = eventSource
 
 	AdjustColorGrading({ Name = colorGrade or "Alert", Duration = 0 })
 	ScreenAnchors.FullscreenAlertFxAnchor = CreateScreenObstacle({ Name = "BlankObstacle", Group = "Scripting", X = ScreenCenterX, Y = ScreenCenterY })
@@ -763,7 +788,21 @@ function FieldsEncounterStartPresentation( eventSource, args )
 end
 
 function InfestedCerberusSetupPresentation( enemy )
-	SetAlpha({ Id = enemy.ObjectId, Fraction = 0, Duration = 0 })
+	local postEndingPresentationReqs =
+	{
+		{
+			PathTrue = { "GameState", "ReachedTrueEnding" },
+		},
+		{
+			PathFalse = { "CurrentRun", "IsDreamRun" },
+		},
+	}
+	if IsGameStateEligible( enemy, postEndingPresentationReqs ) then
+		SetAnimation({ DestinationId = enemy.ObjectId, Name = "Enemy_InfestedCerberus_HappyIdle" })
+	else
+		SetAlpha({ Id = enemy.ObjectId, Fraction = 0, Duration = 0 })
+	end
+	SetGoalAngle({ Id = enemy.ObjectId, Angle = 212, CompleteAngle = true })
 end
 
 function InfestedCerberusSpawnPresentation( enemy )
@@ -780,6 +819,15 @@ function InfestedCerberusSpawnPresentation( enemy )
 	PanCamera({ Ids = CurrentRun.Hero.ObjectId, Duration = 1.5 })
 	AdjustRadialBlurDistance({ Fraction = 0, Duration = 1.0 })
 	AdjustRadialBlurStrength({ Fraction = 0, Duration = 1.0 })
+end
+
+function InfestedCerberusSpawnPostEndingPresentation( enemy )
+	PanCamera({ Id = enemy.ObjectId, Duration = 2.0 })
+	SetAnimation({ DestinationId = enemy.ObjectId, Name = "Enemy_InfestedCerberus_HappyBark" })
+	wait(1.2)
+	SetAnimation({ DestinationId = enemy.ObjectId, Name = "Enemy_InfestedCerberus_HappyIdle_End" })
+	wait(1.5)
+	PanCamera({ Ids = CurrentRun.Hero.ObjectId, Duration = 1.5 })
 end
 
 function UseFieldsRewardFinderPresentation( source )

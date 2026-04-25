@@ -288,6 +288,7 @@ function HecatePolymorphApply( triggerArgs )
 		if MapState.BlinkDropTrail then	
 			TerminateBlinkTrail()
 		end
+		StopAnimation({ Names = { "AresMelBuff", "MelUnequipShovel", "MelUnequipShovelSparkle" }, DestinationId = CurrentRun.Hero.ObjectId, PreventChain = true, IncludeCreatedAnimations = true })
 		if SessionMapState.ThrowWeaponCharged then
 			ApplyDeferredThrowReversions( GetWeaponData( CurrentRun.Hero, "WeaponLobSpecial" ))
 		end
@@ -301,9 +302,14 @@ function HecatePolymorphApply( triggerArgs )
 		end
 		RunWeaponMethod({ Id = victim.ObjectId, Weapon = "All", Method = "cancelCharge" })
 		RunWeaponMethod({ Id = victim.ObjectId, Weapon = "All", Method = "ForceControlRelease" })
-		thread( PlayVoiceLines, GlobalVoiceLines.HecatePolymorphVoiceLines, true )
 		if MapState.EquippedWeapons.WeaponLob then
 			RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "WeaponLob", Method = "ArmProjectiles" })
+		end
+		if MapState.EquippedWeapons.WeaponAxe then
+			if not HeroHasTrait("AxeFreeSpinTrait") then
+				ExpireProjectiles({ Id = CurrentRun.Hero.ObjectId, Weapon = "ProjectileAxeSpin", CancelQueuedProjectilesOnId = CurrentRun.Hero.ObjectId })
+			end
+			EndAxeSpinDisable()
 		end
 		EndSpellTransform()
 		EndAllControlSwaps({ DestinationId = CurrentRun.Hero.ObjectId })
@@ -341,6 +347,7 @@ function HecatePolymorphApply( triggerArgs )
 		GameState.PolymorphRecord[victim.PolymorphType] = GameState.PolymorphRecord[victim.PolymorphType] or 0
 		GameState.PolymorphRecord[victim.PolymorphType] = GameState.PolymorphRecord[victim.PolymorphType] + 1
 
+		thread( PlayVoiceLines, GlobalVoiceLines.HecatePolymorphVoiceLines, true )
 		HecatePolymorphEquipWeapons({ PolymorphType = victim.PolymorphType })
 		PolymorphApplyPresentation( triggerArgs, { BossPolymorph = true, PolymorphType = victim.PolymorphType } )
 	else
@@ -373,6 +380,9 @@ function HecatePolymorphClear( triggerArgs )
 		if not IsEmpty(SessionMapState.ReadiedMassiveAttacks) then
 			AddReadiedMassiveAttackPolymorphPresentation()
 		end
+		if CurrentRun.CurrentRoom.BloodDropCount > 0 then
+			CreateAnimation({ Name = "AresMelBuff", DestinationId = CurrentRun.Hero.ObjectId })
+		end
 		victim.PolymorphType = nil
 	end
 end
@@ -392,6 +402,7 @@ function ChronosPolymorphApply( triggerArgs )
 		if MapState.BlinkDropTrail then	
 			TerminateBlinkTrail()
 		end
+		StopAnimation({ Name = "AresMelBuff", DestinationId = CurrentRun.Hero.ObjectId, PreventChain = true, IncludeCreatedAnimations = true })
 		if SessionMapState.ThrowWeaponCharged then
 			ApplyDeferredThrowReversions( GetWeaponData( CurrentRun.Hero, "WeaponLobSpecial" ))
 		end
@@ -407,6 +418,12 @@ function ChronosPolymorphApply( triggerArgs )
 		RunWeaponMethod({ Id = victim.ObjectId, Weapon = "All", Method = "ForceControlRelease" })
 		if MapState.EquippedWeapons.WeaponLob then
 			RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "WeaponLob", Method = "ArmProjectiles" })
+		end
+		if MapState.EquippedWeapons.WeaponAxe then
+			if not HeroHasTrait("AxeFreeSpinTrait") then
+				ExpireProjectiles({ Id = CurrentRun.Hero.ObjectId, Weapon = "ProjectileAxeSpin", CancelQueuedProjectilesOnId = CurrentRun.Hero.ObjectId })
+			end
+			EndAxeSpinDisable()
 		end
 		EndSpellTransform()
 		EndAllControlSwaps({ DestinationId = CurrentRun.Hero.ObjectId })
@@ -439,6 +456,10 @@ function ChronosPolymorphClear( triggerArgs )
 		if not IsEmpty(SessionMapState.ReadiedMassiveAttacks) then
 			AddReadiedMassiveAttackPolymorphPresentation()
 		end
+		if CurrentRun.CurrentRoom.BloodDropCount > 0 then
+			CreateAnimation({ Name = "AresMelBuff", DestinationId = CurrentRun.Hero.ObjectId })
+		end
+	
 	end
 end
 
@@ -548,10 +569,18 @@ function PolyphemusPlayerGrabApply( triggerArgs )
 	if MapState.EquippedWeapons.WeaponLob then
 		RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "WeaponLob", Method = "ArmProjectiles" })
 	end
+	if MapState.EquippedWeapons.WeaponAxe then
+		if not HeroHasTrait("AxeFreeSpinTrait") then
+			ExpireProjectiles({ Id = CurrentRun.Hero.ObjectId, Weapon = "ProjectileAxeSpin", CancelQueuedProjectilesOnId = CurrentRun.Hero.ObjectId })
+		end
+		EndAxeSpinDisable()
+	end
 	EndSpellTransform()
 	EndAllControlSwaps({ DestinationId = CurrentRun.Hero.ObjectId })
 
-	EndAutoSprint({ Halt = true })
+	EndAutoSprint({ Halt = true, EndWeapon = true })
+	SetWeaponProperty({ WeaponName = "WeaponSprint", DestinationId = CurrentRun.Hero.ObjectId, Property = "RequireControlRelease", Value = true, DataValue = false })
+	
 	PolyphemusPlayerGrabApplyPresentation( triggerArgs, { } )
 end
 
@@ -1386,6 +1415,12 @@ function FrenzyClear( triggerArgs )
 	end
 end
 
+function AresStatusApply( triggerArgs )
+	if not triggerArgs.Reapplied then
+		CheckGenerateAresSword( triggerArgs.Victim )
+	end
+end
+
 function TyphonWeakEffectApply( triggerArgs )
 	local victim = triggerArgs.Victim
 	local effectData = EffectData[triggerArgs.EffectName]
@@ -1434,18 +1469,7 @@ end
 
 
 function PotionBuffApply( triggerArgs )
-	local victim = triggerArgs.Victim
-	if not triggerArgs.Reapplied then
-		SessionMapState.PoseidonRegeneration = true
-		SessionMapState.ElapsedTimeMultiplierIgnores.PoseidonRegeneration = true
-		local trait = GetHeroTrait("PotionPoseidonTalent")
-		local traitArgs = trait.OnWeaponFiredFunctions.FunctionArgs
-		thread( ContinuousHealthRegeneration, traitArgs.HealPerSecond * CalculateHealingMultiplier())
-		thread( ContinuousManaRegeneration, traitArgs.ManaRegenPerSecond )
-	end
 end
 
 function PotionBuffClear( triggerArgs )
-	local victim = triggerArgs.Victim
-	SessionMapState.PoseidonRegeneration = nil
 end

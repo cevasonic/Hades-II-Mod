@@ -79,7 +79,7 @@ function WeaponShopPurchaseNoEquipPresentation( screen, button, saleData, weapon
 	HideCombatUI( "WeaponShopPurchaseNoEquipPresentation" )
 
 	UseableOff({ Id = button.Id, ForceHighlightOff = true })
-	thread( PlayVoiceLines, saleData.PreRevealVoiceLines or GlobalVoiceLines[saleData.PreRevealGlobalVoiceLines] or GlobalVoiceLines.WeaponUnlockGlobalVoiceLines )
+	thread( PlayVoiceLines, saleData.PreRevealVoiceLines or GlobalVoiceLines[saleData.PreRevealGlobalVoiceLines] )
 
 	SetAnimation({ Name = "MelTalkGifting01", DestinationId = CurrentRun.Hero.ObjectId, })
 
@@ -130,7 +130,7 @@ function WeaponShopPurchasePreActivatePresentation( screen, button, saleData, we
 	ShakeScreen({ Speed = 500, Distance = 5, Duration = 0.5, FalloffSpeed = 500 })
 	PlaySound({ Name = "/Leftovers/Menu Sounds/TextReveal2" })
 
-	thread( PlayVoiceLines, saleData.PreRevealVoiceLines or GlobalVoiceLines[saleData.PreRevealGlobalVoiceLines] or GlobalVoiceLines.WeaponUnlockGlobalVoiceLines )
+	thread( PlayVoiceLines, saleData.PreRevealVoiceLines or GlobalVoiceLines[saleData.PreRevealGlobalVoiceLines] )
 
 	wait( saleData.PanDuration or 1.0 )
 
@@ -201,6 +201,8 @@ function WeaponShopPurchasePostActivatePresentation( button, saleData, weaponKit
 	if weaponKit ~= nil then
 		if weaponKit.FirstTimeWeaponFire then
 			SetGoalAngle({ Id = CurrentRun.Hero.ObjectId, Angle = 325, CompleteAngle = true })
+			
+			SwapWeapon({ Name = weaponKit.Name, SwapWeaponName = weaponKit.FirstTimeWeaponFire, DestinationId = CurrentRun.Hero.ObjectId })
 			FireWeaponFromUnit({ Weapon = weaponKit.FirstTimeWeaponFire, Id = CurrentRun.Hero.ObjectId })
 		elseif weaponKit.FirstTimeEquipAnimation ~= nil then
 			SetGoalAngle({ Id = CurrentRun.Hero.ObjectId, Angle = 325, CompleteAngle = true })

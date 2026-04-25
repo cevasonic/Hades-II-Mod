@@ -122,6 +122,18 @@ BossDifficultyShrineEncounterMap =
 	},
 }
 
+BossDifficultyShrineEncounterBiomeMap =
+{
+	F = { Encounter = "BossHecate02" },
+	G = { Encounter = "BossScylla02" },
+	H = { Encounter = "BossInfestedCerberus02" },
+	I = { Encounter = "BossChronos02", OnlyRequireSeen = true },
+	N = { Encounter = "BossPolyphemus02" },
+	O = { Encounter = "BossEris02" },
+	P = { Encounter = "BossPrometheus02" },
+	Q = { Encounter = "BossTyphonHead02", OnlyRequireSeen = true },
+}
+
 BiomeTimeLimits =
 {
 	Penalty =
@@ -417,8 +429,6 @@ ScreenData.Shrine =
 		FreeFormSelectRepeatInterval = 0.1,
 	},
 
-	NoBountyAvailableText = "ShrineScreen_NoBountyAvailable",
-	NoBountyAvailableForWeaponText = "ShrineScreen_NoBountyAvailable_CurrentWeapon",
 	ZeroShrinePointsText = "ShrineScreen_BountyAvailable_ZeroPoints",
 	BelowShrinePointsText = "ShrineScreen_BountyAvailable_BelowPoints",
 	ExactShrinePointsText = "ShrineScreen_BountyAvailable_ExactPoints",	
@@ -710,7 +720,6 @@ ScreenData.Shrine =
 
 		ThermometerText = 
 		{
-			Text = "BelowShrineRewardThreshold",
 			X = 750,
 			Y = 737,
 			TextArgs =
@@ -1113,6 +1122,24 @@ ScreenData.Shrine =
 			{ Cue = "/VO/Nyx_0015", Text = "{#Emph}...Move in shadow..." },
 			{ Cue = "/VO/Nyx_0016", Text = "{#Emph}...We shall be feared..." },
 			{ Cue = "/VO/Nyx_0017", Text = "{#Emph}...Let them fear us..." },
+			{ Cue = "/VO/Nyx_0131", Text = "{#Emph}...Become the Fear..." },
+			{ Cue = "/VO/Nyx_0132", Text = "{#Emph}...Go farther still...",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "ShrineBountiesCompleted" },
+						UseLength = true,
+						Comparison = "<",
+						Value = 35,
+					},
+				},
+			},
+			{ Cue = "/VO/Nyx_0133", Text = "{#Emph}...Live as Nightmare..." },
+			{ Cue = "/VO/Nyx_0134", Text = "{#Emph}...Live in shadow..." },
+			{ Cue = "/VO/Nyx_0135", Text = "{#Emph}...Let Darkness spread..." },
+			{ Cue = "/VO/Nyx_0136", Text = "{#Emph}...This is my will..." },
+			{ Cue = "/VO/Nyx_0137", Text = "{#Emph}...The Arms grow strong..." },
+			{ Cue = "/VO/Nyx_0138", Text = "{#Emph}...The growing Fear..." },
 			{ Cue = "/VO/Nyx_0012", Text = "{#Emph}...You have done well...",
 				GameStateRequirements =
 				{
@@ -1122,6 +1149,34 @@ ScreenData.Shrine =
 						Comparison = ">=",
 						Value = 15,
 					},
+				},
+			},
+			{ Cue = "/VO/Nyx_0127", Text = "{#Emph}...My will is done...",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "AllShrineBountiesCompleted" },
+				},
+			},
+			{ Cue = "/VO/Nyx_0128", Text = "{#Emph}...The Oath, fulfilled...",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "AllShrineBountiesCompleted" },
+				},
+			},
+			{ Cue = "/VO/Nyx_0129", Text = "{#Emph}...You have done well...",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "AllShrineBountiesCompleted" },
+				},
+			},
+			{ Cue = "/VO/Nyx_0130", Text = "{#Emph}...Fear has spread...",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "AllShrineBountiesCompleted" },
 				},
 			},
 		},
@@ -1180,6 +1235,7 @@ ScreenData.Shrine =
 			{ Cue = "/VO/Melinoe_2867", Text = "The Testament of Night." },
 			{ Cue = "/VO/Melinoe_2868", Text = "Do not avert your gaze..." },
 			{ Cue = "/VO/Melinoe_1342", Text = "If I'm to serve the Night, I would know her will..." },
+			{ Cue = "/VO/Melinoe_3081", Text = "Conceal us, O Night..." },
 			{ Cue = "/VO/Melinoe_1344", Text = "I can deepen my connection with the Night..." },
 			{ Cue = "/VO/Melinoe_2862", Text = "{#Emph}In shadow, I serve; to shadow, I return.",
 				GameStateRequirements =

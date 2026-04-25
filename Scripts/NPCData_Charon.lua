@@ -17,6 +17,48 @@ UnitSetData.NPC_Charon =
 		SpeakerName = "Charon",
 		LoadPackages = { "Charon", },
 
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CharonDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+		},
+
 		SpecialInteractFunctionName = "SpecialInteractSalute",
 		SpecialInteractGameStateRequirements =
 		{
@@ -71,6 +113,35 @@ UnitSetData.NPC_Charon =
 					{
 						{
 							PathTrue = { "CurrentRun", "Hero", "IsDead" }
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4517", Text = "Hail, Captain.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "CharonAboutThessaly01" },
+						},
+						{
+							Path = { "CurrentRun", "CurrentRoom", "Name" },
+							IsAny = { "O_Shop01", "O_PreBoss01" }
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4518", Text = "Hail, Captain... if I may call you that, my lord?",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "CharonAboutThessaly01" },
+						},
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_4517" },
+						},
+						{
+							Path = { "CurrentRun", "CurrentRoom", "Name" },
+							IsAny = { "O_Shop01", "O_PreBoss01" }
 						},
 					},
 				},
@@ -188,12 +259,11 @@ UnitSetData.NPC_Charon =
 						PathTrue = { "GameState", "UseRecord", "CharonPointsDrop" },
 					},
 					NamedRequirements = { "MailboxUnlocked" },
-					NamedRequirementsFalse = { "ClearBeforeTrueEnding" },
+					NamedRequirementsFalse = { "ClearBeforeTrueEnding", "HecateMissing" },
 				},
 
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				GiftableOffSource = true,
 				TeleportToId = 566613,
@@ -230,6 +300,24 @@ UnitSetData.NPC_Charon =
 				PostBlockSpecialInteract = true,
 				AngleTowardTargetId = 589589,
 			},
+			NemesisWithCharon01 =
+			{
+				Partner = "NPC_Nemesis_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				PostBlockSpecialInteract = true,
+				AngleTowardTargetId = 589589,
+			},
+			NemesisWithCharon02 =
+			{
+				Partner = "NPC_Nemesis_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				PostBlockSpecialInteract = true,
+				AngleTowardTargetId = 589589,
+			},
 
 			CharonFirstMeeting =
 			{
@@ -237,6 +325,9 @@ UnitSetData.NPC_Charon =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
 					{
 						PathFalse = { "CurrentRun", "Hero", "IsDead" }
 					},
@@ -292,6 +383,47 @@ UnitSetData.NPC_Charon =
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Yes, Lord Charon. You'll have what Gold I may find, as I require what supplies you may spare." },
+			},
+
+			CharonAboutTipping01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "CharonGift04" },
+					},
+					{
+						Path = { "PrevRun", "RoomsEntered" },
+						HasAny = { "I_PreBoss01", "I_PreBoss02", },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "I_PreBoss01", "I_PreBoss02" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				{ Cue = "/VO/MelinoeField_4512", UsePlayerSource = true,
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "MelTalkPensive01", WaitTime = 1, UsePlayerSource = true },
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "When next we meet in Tartarus, could I not give to you what Gold I have remaining after making my purchases? As a sort of tip for your services. Otherwise it all washes away..." },
+
+				{ Cue = "/VO/Charon_0146",
+					Text = "{#Emph}Nnngggghhh, mmmm..." },
+				EndVoiceLines =
+				{
+					PreLineWait = 0.33,
+					UsePlayerSource = true,
+					{ Cue = "/VO/MelinoeField_4513", Text = "No goods, no Gold. Got it." },
+				},
 			},
 
 			CharonAboutSmuggling01 =
@@ -416,6 +548,42 @@ UnitSetData.NPC_Charon =
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "It's a pity we've so little opportunity to speak, Lord Charon. Though I'm grateful to be seeing you more frequently of late." },
+			},
+
+			CharonAboutSayingLittle01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "CharonGift08" },
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+				{ Cue = "/VO/MelinoeField_4515", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "MelTalkExplaining01", WaitTime = 1, UsePlayerSource = true },
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "We've found a rhythm to these meetings, haven't we? Though is there anything else I can do, my lord? Besides providing all the Gold and the occasional chat." },
+
+				{ Cue = "/VO/Charon_0149",
+					PreLineAnim = "Charon_Thanking",
+					Text = "{#Emph}Grrrrnnhhhhnnn..." },
+
+				EndVoiceLines =
+				{
+					PreLineWait = 0.33,
+					UsePlayerSource = true,
+					{ Cue = "/VO/MelinoeField_4516", Text = "Sounds like a no..." },
+				},
 			},
 
 			CharonAboutDanger01 =
@@ -2164,6 +2332,13 @@ UnitSetData.NPC_Charon =
 				UseableOffSource = true,
 				{ Cue = "/VO/Charon_0021",
 					Text = "{#Emph}Hhrrrrmmmmm...?" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Charon",
+			},
+			CharonChat20 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Charon_0025",
+					Text = "{#Emph}Aaaauuuuggghhh..." },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Charon",
 			},
 		},

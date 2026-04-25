@@ -5,6 +5,8 @@ OverwriteTableKeys( EncounterData,
 	{
 		EncounterType = "ArachneCombat",
 		SkipExitReadyCheckpoint = true,
+		RecordSpawnedEnemiesForBlockDeath = true,
+
 		RequireNotRoomReward = { "Boon", "SpellDrop", "Devotion", "HermesUpgrade", "WeaponUpgrade", "StackUpgrade", "TalentDrop" },
 
 		GameStateRequirements =
@@ -14,7 +16,7 @@ OverwriteTableKeys( EncounterData,
 			},
 			{
 				Path = { "CurrentRun", "EncountersOccurredBiomeCache" },
-				HasNone = { "ArachneCombatF", "ArachneCombatG", "ArachneCombatN" },
+				HasNone = { "ArachneCombatF", "ArachneCombatG" },
 			},
 			NamedRequirements = { "NoRecentArachneEncounter" },
 		},
@@ -235,7 +237,7 @@ OverwriteTableKeys( EncounterData,
 			}, 
 			{
 				Path = { "CurrentRun", "EncountersOccurredBiomeCache" },
-				HasNone = { "ArachneCombatF", "ArachneCombatG", "ArachneCombatN" },
+				HasNone = { "ArachneCombatF", "ArachneCombatG" },
 			},
 		},
 	},
@@ -252,10 +254,5 @@ OverwriteTableKeys( EncounterData,
 						  "ArachneCocoonLarge_G", },
 						  RequiredSpawnPointType = "EnemyPoint" } }
 		},
-	},
-
-	ArachneCombatN =
-	{
-		InheritFrom = { "BaseArachneCombat" },
 	},
 })

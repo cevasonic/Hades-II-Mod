@@ -2,7 +2,7 @@ UnitSetData.Talos =
 {
 	Talos =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseAutomaton","BaseVulnerableEnemy" },
+		InheritFrom = { "BaseBossEnemy", "BaseAutomaton", "BasePEnemy", "BaseVulnerableEnemy" },
 		
 		BlockRaiseDead = true,
 		IsBoss = false,
@@ -31,7 +31,59 @@ UnitSetData.Talos =
 		OnHitFunctionName = "CheckUnitInvulnerableHit",
 		InvulnerableHitFx = "InvincibleHitSpark",
 		InvulnerableHitImpactVelocity = 1000,
-		
+
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Talos_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TalosDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
 		StunAnimations = 
 		{
 		},

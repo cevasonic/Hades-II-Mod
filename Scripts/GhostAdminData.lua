@@ -40,11 +40,22 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 			},
 
 			{ Cue = "/VO/Melinoe_0508", Text = "Our cauldron..." },
-			{ Cue = "/VO/Melinoe_0509", Text = "Must be an incantation that can help...", PlayFirst = true },
 			{ Cue = "/VO/Melinoe_4330", Text = "Every possibility..." },
 			{ Cue = "/VO/Melinoe_4331", Text = "Our nightly ritual..." },
-			{ Cue = "/VO/Melinoe_4332", Text = "Pure potential..." },
 			{ Cue = "/VO/Melinoe_4333", Text = "Nice and warm..." },
+			{ Cue = "/VO/Melinoe_0509", Text = "Must be an incantation that can help...",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
+				}
+			},
+			{ Cue = "/VO/Melinoe_4332", Text = "Pure potential...",
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
+				}
+			},
 			{ Cue = "/VO/Melinoe_0510", Text = "What now...",
 				GameStateRequirements =
 				{
@@ -52,6 +63,7 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 						Path = { "CurrentRun", "TextLinesRecord" },
 						HasNone = { "ZeusPalaceAboutTyphonDeath01" },
 					},
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
 				}
 			},
 			{ Cue = "/VO/Melinoe_4327", Text = "What's to be done...",
@@ -61,6 +73,7 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 						Path = { "CurrentRun", "TextLinesRecord" },
 						HasNone = { "ZeusPalaceAboutTyphonDeath01" },
 					},
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
 				}
 			},
 			{ Cue = "/VO/Melinoe_4328", Text = "What's possible...",
@@ -70,6 +83,7 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 						Path = { "CurrentRun", "TextLinesRecord" },
 						HasNone = { "ZeusPalaceAboutTyphonDeath01" },
 					},
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
 				}
 			},
 			{ Cue = "/VO/Melinoe_4329", Text = "What can we do...",
@@ -79,6 +93,7 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 						Path = { "CurrentRun", "TextLinesRecord" },
 						HasNone = { "ZeusPalaceAboutTyphonDeath01" },
 					},
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
 				}
 			},
 			{ Cue = "/VO/Melinoe_0511", Text = "What to cast...",
@@ -88,6 +103,7 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 						Path = { "CurrentRun", "TextLinesRecord" },
 						HasNone = { "ZeusPalaceAboutTyphonDeath01" },
 					},
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
 				}
 			},
 			{ Cue = "/VO/Melinoe_4334", Text = "It's a new moon...",
@@ -106,6 +122,7 @@ OverwriteTableKeys( ScreenData.GhostAdmin,
 					{
 						PathTrue = { "GameState", "WorldUpgradesRevealed", "WorldUpgradeAltRunDoor" },
 					},
+					NamedRequirementsFalse = { "HasAllCauldronSpells" },
 				},
 			},
 		},
@@ -868,6 +885,22 @@ GlobalVoiceLines.CauldronReactionFollowUpVoiceLines =
 	{
 		PlayOnce = true,
 		BreakIfPlayed = true,
+		PreLineWait = 0.66,
+		ObjectType = "NPC_Hecate_01",
+		-- SuccessiveChanceToPlay = 0.5,
+		-- RequiredSourceValueFalse = "InPartnerConversation",
+		TriggerCooldowns = { "HecateSpokeRecently" },
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "WorldUpgradesAdded", "WorldUpgradeAltRunDoor" },
+			},
+		},
+
+		{ Cue = "/VO/Hecate_0920", Text = "The Fates shall not protect you there..." },
+	},
+	{
+		PlayOnce = true,
 		PreLineWait = 0.42,
 		UsePlayerSource = true,
 		GameStateRequirements =
@@ -890,23 +923,6 @@ GlobalVoiceLines.CauldronReactionFollowUpVoiceLines =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "WorldUpgradesAdded", "WorldUpgradeAltRunDoor" },
-			},
-		},
-
-		{ Cue = "/VO/Hecate_0920", Text = "The Fates shall not protect you there..." },
-	},
-	{
-		PlayOnce = true,
-		BreakIfPlayed = true,
-		PreLineWait = 0.66,
-		ObjectType = "NPC_Hecate_01",
-		-- SuccessiveChanceToPlay = 0.5,
-		-- RequiredSourceValueFalse = "InPartnerConversation",
-		TriggerCooldowns = { "HecateSpokeRecently" },
-		GameStateRequirements =
-		{
-			{
 				PathTrue = { "CurrentRun", "WorldUpgradesAdded", "WorldUpgradeSurfacePenaltyCure" },
 			},
 		},
@@ -914,7 +930,6 @@ GlobalVoiceLines.CauldronReactionFollowUpVoiceLines =
 		{ Cue = "/VO/Hecate_0921", Text = "Impressive, though your path shall still be fraught." },
 	},
 	{
-		Queue = "Always",
 		PlayOnce = true,
 		BreakIfPlayed = true,
 		PreLineWait = 3.0,
@@ -948,37 +963,4 @@ GlobalVoiceLines.CauldronReactionFollowUpVoiceLines =
 
 		{ Cue = "/VO/Hecate_0923", Text = "'Tis done. {#Emph}Death to Chronos..." },
 	},
-}
-
--- Cauldron -- Crossroads Cauldron
-GlobalVoiceLines.AboutToCastSpell =
-{
-	RandomRemaining = true,
-	BreakIfPlayed = true,
-	PreLineWait = 0.15,
-	SuccessiveChanceToPlay = 0.75,
-
-	{ Cue = "/VO/Melinoe_0178", Text = "Now..." },
-	{ Cue = "/VO/Melinoe_0179", Text = "All right." },
-}
-
--- Cauldron Alchemy
-GlobalVoiceLines.ResourceTransmutationVoiceLines =
-{
-	{
-		BreakIfPlayed = true,
-		RandomRemaining = true,
-		PreLineWait = 0.65,
-		UsePlayerSource = true,
-		Queue = "Always",
-		Cooldowns =
-		{
-			-- { "MelinoeAnyQuipSpeech" },
-		},
-	
-		{ Cue = "/VO/Melinoe_1352", Text = "Transmutation complete.", PlayFirst = true },
-		{ Cue = "/VO/Melinoe_1353", Text = "Transmutation succeeded." },
-		{ Cue = "/VO/Melinoe_1354", Text = "My will is manifest." },
-		{ Cue = "/VO/Melinoe_1355", Text = "Re-shaped by Chaos..." },
-	}
 }

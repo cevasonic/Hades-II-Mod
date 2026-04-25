@@ -45,7 +45,7 @@ OverwriteTableKeys( ProjectileData, {
 					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
-						IsAny = { "I_MiniBoss01" },
+						IsAny = { "I" },
 					},
 				},
 				Cooldowns =
@@ -56,8 +56,15 @@ OverwriteTableKeys( ProjectileData, {
 				TriggerCooldowns = { "MelinoeCombatQuipPlayed" },
 
 				{ Cue = "/VO/MelinoeField_2199", Text = "You'll rot here." },
-				{ Cue = "/VO/MelinoeField_2201", Text = "Die with your master!" },
 				{ Cue = "/VO/MelinoeField_2202", Text = "I'll bury you." },
+				{ Cue = "/VO/MelinoeField_2201", Text = "Die with your master!",
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "GameState", "ReachedTrueEnding" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_2200", Text = "Hades take you!",
 					GameStateRequirements =
 					{

@@ -148,12 +148,10 @@ OverwriteTableKeys( TraitData, {
 		PropertyChanges =
 		{	
 			{
-				WeaponNames = { "WeaponDagger", "WeaponDagger2", "WeaponDaggerDash", "WeaponDaggerMultiStab", "WeaponDaggerDouble", "WeaponDaggerBlink" },
-				WeaponProperty = "ChargeTime",
+				WeaponNames = {"WeaponDagger"},
 				BaseValue = 0.65,
-				ChangeType = "Multiply",
-				ExcludeLinked = true,
-				ReportValues = { ReportedWeaponMultiplier = "ChangeValue" },
+				SpeedPropertyChanges = true,
+				ReportValues = { ReportedWeaponMultiplier = "ChangeValue" }
 			},
 		},
 		ExtractValues =

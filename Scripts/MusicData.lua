@@ -8,6 +8,7 @@ MusicTrackData =
 	},
 	G =
 	{
+		-- with vocals
 		{
 			Name = "/Music/IrisMusicScylla1_MC",
 			GameStateRequirements =
@@ -85,11 +86,7 @@ MusicTrackData =
 				OrRequirements =
 				{
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 2,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					{
 						{
@@ -106,6 +103,19 @@ MusicTrackData =
 			{
 				NamedRequirements = { "ScyllaBalladUnlocked" },
 				NamedRequirementsFalse = { "ScyllaEMActiveAndNotCleared" },
+				OrRequirements =
+				{
+					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+					{
+						{
+							PathTrue = { "GameState", "ScyllaDefeatMusicRecord", "/Music/IrisMusicScylla4_MC" },
+						},
+					},
+				},
 			},
 		},
 	},
@@ -167,20 +177,16 @@ RoomStartMusicEvents =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "AudioState", "MusicName", },
+				IsAny = { "/Music/MusicRunstart_MC", },
 			},
 			{
 				PathFalse = { "CurrentRun", "Hero", "IsDead" }
 			},
 			{
-				Path = { "CurrentRun", "RunDepthCache" },
+				Path = { "CurrentRun", "BiomeDepthCache" },
 				Comparison = "==",
-				Value = 2,
-			},
-			{
-				-- Actually started in Erebus, not faked from a Bounty
-				Path = { "CurrentRun", "RoomsEntered" },
-				HasAny = { "F_Opening01", "F_Opening02", "F_Opening03", },
+				Value = 1,
 			},
 		},
 		MusicSection = 2,
@@ -189,20 +195,16 @@ RoomStartMusicEvents =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "AudioState", "MusicName", },
+				IsAny = { "/Music/MusicRunstart_MC", },
 			},
 			{
 				PathFalse = { "CurrentRun", "Hero", "IsDead" }
 			},
 			{
-				Path = { "CurrentRun", "RunDepthCache" },
+				Path = { "CurrentRun", "BiomeDepthCache" },
 				Comparison = "==",
-				Value = 3,
-			},
-			{
-				-- Actually started in Erebus, not faked from a Bounty
-				Path = { "CurrentRun", "RoomsEntered" },
-				HasAny = { "F_Opening01", "F_Opening02", "F_Opening03", },
+				Value = 2,
 			},
 		},
 		MusicSection = 3,
@@ -211,7 +213,8 @@ RoomStartMusicEvents =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+				IsAny = { "F", "H", "I" },
 			},
 			{
 				PathFalse = { "CurrentRun", "Hero", "IsDead" }
@@ -220,10 +223,6 @@ RoomStartMusicEvents =
 				Path = { "CurrentRun", "RunDepthCache" },
 				Comparison = ">",
 				Value = 3,
-			},
-			{
-				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
-				IsNone = { "Styx", "G", },
 			},
 			{
 				Path = { "AudioState", "MusicSection", },
@@ -241,7 +240,8 @@ RoomStartMusicEvents =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+				IsAny = { "F", "G", "H", "I" },
 			},
 			{
 				PathFalse = { "CurrentRun", "Hero", "IsDead" }
@@ -454,7 +454,8 @@ RoomStartMusicEvents =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "N" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+				IsAny = { "N", "N_SubRooms", "O", "P", "Q" },
 			},
 			{
 				PathFalse = { "CurrentRun", "Hero", "IsDead" }
@@ -548,9 +549,9 @@ CombatOverMusicEvents =
 		GameStateRequirements =
 		{
 			{
-				Path = { "CurrentRun", "RunDepthCache", },
+				Path = { "CurrentRun", "BiomeDepthCache", },
 				Comparison = ">=",
-				Value = 3,
+				Value = 2,
 			},
 			{
 				Path = { "AudioState", "MusicName", },

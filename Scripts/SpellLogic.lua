@@ -468,18 +468,35 @@ function PotionPoseidonDrops( weaponData, traitArgs, triggerArgs )
 	local dataProperties = EffectData[effectName].DataProperties 
 	dataProperties.Duration = traitArgs.Duration
 	ApplyEffect({ DestinationId = CurrentRun.Hero.ObjectId, Id = CurrentRun.Hero.ObjectId, EffectName = effectName, DataProperties = dataProperties })
+	
+	SessionMapState.PoseidonRegeneration = true
+	SessionMapState.ElapsedTimeMultiplierIgnores.PoseidonRegeneration = true
+	local trait = GetHeroTrait("PotionPoseidonTalent")
+	local traitArgs = trait.OnWeaponFiredFunctions.FunctionArgs
+	thread( ContinuousHealthRegeneration, traitArgs.HealPerSecond * CalculateHealingMultiplier())
+	thread( ContinuousManaRegeneration, traitArgs.ManaRegenPerSecond )
 
 	if traitArgs.Duration >= 3 then
 		wait(traitArgs.Duration - 3)
+		if CurrentRun.Hero.IsDead then
+			return
+		end
 		thread(PoseidonPotionWarnPresentation)
-		waitUnmodified(1)
+		wait(1, "PoseidonRegeneration")
+		if CurrentRun.Hero.IsDead then
+			return
+		end
 		thread(PoseidonPotionWarnPresentation)
-		waitUnmodified(1)
+		wait(1, "PoseidonRegeneration")
+		if CurrentRun.Hero.IsDead then
+			return
+		end
 		thread(PoseidonPotionWarnPresentation)
-		waitUnmodified(1)
+		wait(1, "PoseidonRegeneration")
 	else
-		wait(traitArgs.Duration)
-	end
+		wait(traitArgs.Duration, "PoseidonRegeneration")
+	end			
+	SessionMapState.PoseidonRegeneration = nil
 end
 
 
@@ -586,7 +603,7 @@ function SpellPrecharge( spellTrait, weaponName )
 	end
 	local data = GetWeaponData( CurrentRun.Hero, weaponName )
 	local manaSpendCost = GetManaSpendCost( data )
-	CurrentRun.SpellCharge = manaSpendCost * GetTotalHeroTraitValue( "SpellPreCharge" )
+	CurrentRun.SpellCharge = round(manaSpendCost * GetTotalHeroTraitValue( "SpellPreCharge" ))
 end
 
 function CheckPolymorphApply( triggerArgs )
@@ -881,6 +898,9 @@ function SummonCastTeleport( weaponData, traitArgs, triggerArgs )
 	if not triggerArgs.ProjectileX or not triggerArgs.ProjectileY then
 		return
 	end
+	if triggerArgs.UnitIdOverride then
+		return
+	end
 	local castProjectilePointId = SpawnObstacle({ Name = "InvisibleTarget", LocationX = triggerArgs.ProjectileX, LocationY = triggerArgs.ProjectileY, Group = "Scripting" })
 	local testPoint = SpawnObstacle({ Name = "InvisibleTarget", LocationX = triggerArgs.ProjectileX, LocationY = triggerArgs.ProjectileY, Group = "Scripting" })
 	
@@ -1149,24 +1169,19 @@ function SpellSummon( triggerArgs, weaponData )
 		ReserveMana(weaponData.ManaReservationCost, weaponData.Name )
 	end
 	DestroyOnDelay({ invaderSpawnPoint }, 0.1)
+
+	local outlineData = ShallowCopyTable( SpellDisplayData.SummonOutline )
+	outlineData.Id = newEnemy.ObjectId
 	if wasFirst and HeroHasTrait("SummonHeraTalent") then
 		local heraTrait = GetHeroTrait("SummonHeraTalent")
-		local outlineData = ShallowCopyTable(UnitSetData.Enemies.BaseVulnerableEnemy.Outline)
-		outlineData.Id = newEnemy.ObjectId
 		if heraTrait.AllyDataModifiers.OutlineColor then
 			outlineData.R = heraTrait.AllyDataModifiers.OutlineColor[1]
 			outlineData.G = heraTrait.AllyDataModifiers.OutlineColor[2]
 			outlineData.B = heraTrait.AllyDataModifiers.OutlineColor[3]
 		end
-		AddOutline( outlineData )
-	else
-		local outlineData = ShallowCopyTable(UnitSetData.Enemies.BaseVulnerableEnemy.Outline)
-		outlineData.Id = newEnemy.ObjectId
-		outlineData.R = Color.AlliedOutline[1]
-		outlineData.G = Color.AlliedOutline[2]
-		outlineData.B = Color.AlliedOutline[3]
-		AddOutline( outlineData )
 	end
+	AddOutline( outlineData )
+
 	if not HeroHasTrait("SummonPermanenceTalent") then
 		thread(EndSpellSummon, newEnemy, weaponData)
 	end
@@ -1668,27 +1683,10 @@ function SpellPotion( owner, weaponData, args )
 		if HasHeroTraitValue("PotionExCast") then
 			thread( PotionExCast ) 
 		end
-		if HeroHasTrait("HealRetaliateTalent")  then
-			local attacker = nil
-			local triggerArgs = { ManuallyTriggered = true, Victim = CurrentRun.Hero, DamageAmount = 10}
-			
-			if SessionMapState.LastHeroDamage and SessionMapState.LastHeroDamage.Attacker and not SessionMapState.LastHeroDamage.Attacker.IsDead then
-				attacker = SessionMapState.LastHeroDamage.Attacker
-				if SessionMapState.LastHeroDamage.Damage then
-					triggerArgs.DamageAmount = SessionMapState.LastHeroDamage.Damage
-				end
-			end
-			if not attacker then
-				local nearestId = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationName = "EnemyTeam", IgnoreInvulnerable = true, IgnoreHomingIneligible = true, StopsProjectiles = true })			
-				if ActiveEnemies[nearestId] and not ActiveEnemies[nearestId].IsDead then
-					attacker = ActiveEnemies[nearestId]
-				end
-			end
-			if attacker then
-				for i, functionData in pairs( GetHeroTraitValues("OnSelfDamagedFunction") ) do
-					thread( CallFunctionName, functionData.Name, attacker, functionData.FunctionArgs, triggerArgs )
-				end	
-			end
+		local retaliateTalent = GetHeroTrait("HealRetaliateTalent")
+		if retaliateTalent then
+			local count = retaliateTalent.HealRetaliateCount or 3
+			thread( PotionRetaliate, count )
 		end
 
 		if args.HealDelay then
@@ -1712,6 +1710,32 @@ function SpellPotion( owner, weaponData, args )
 	end
 	if traitData.RemainingUses <= 0 then
 		SetWeaponProperty({ WeaponName = weaponData.Name, DestinationId = CurrentRun.Hero.ObjectId, Property = "Enabled", Value = false })
+	end
+end
+
+function PotionRetaliate( count )
+	local attacker = nil
+	local triggerArgs = { ManuallyTriggered = true, Victim = CurrentRun.Hero, DamageAmount = 10}
+			
+	if SessionMapState.LastHeroDamage and SessionMapState.LastHeroDamage.Attacker and not SessionMapState.LastHeroDamage.Attacker.IsDead then
+		attacker = SessionMapState.LastHeroDamage.Attacker
+		if SessionMapState.LastHeroDamage.Damage then
+			triggerArgs.DamageAmount = SessionMapState.LastHeroDamage.Damage
+		end
+	end
+	for i=1, count do
+		if not attacker then
+			local nearestId = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationName = "EnemyTeam", IgnoreInvulnerable = true, IgnoreHomingIneligible = true, StopsProjectiles = true })			
+			if ActiveEnemies[nearestId] and not ActiveEnemies[nearestId].IsDead then
+				attacker = ActiveEnemies[nearestId]
+			end
+		end
+		if attacker then
+			for s, functionData in pairs( GetHeroTraitValues("OnSelfDamagedFunction") ) do
+				thread( CallFunctionName, functionData.Name, attacker, functionData.FunctionArgs, triggerArgs )
+			end	
+		end
+		wait(0.15)
 	end
 end
 
@@ -1811,6 +1835,7 @@ function LaserSpellFire(unit, weaponData, functionArgs, triggerArgs )
 			CreateProjectileFromUnit({ Name = startAoETrait.LaserStartProjectile, DestinationId = CurrentRun.Hero.ObjectId, Id = CurrentRun.Hero.ObjectId })
 		end
 		if not HeroHasTrait("LaserCrystalTalent") then
+			killTaggedThreads("LaserHoldDurationFalloff")
 			local dataProperties = DeepCopyTable( EffectData.LaserFireCancelable.DataProperties )
 			dataProperties.DisableRotate = GetConfigOptionValue({ Name = "UseMouse" }) 
 			ApplyEffect({ DestinationId = CurrentRun.Hero.ObjectId, Id = CurrentRun.Hero.ObjectId, EffectName = "LaserFireCancelable", DataProperties = dataProperties})	
@@ -1837,11 +1862,20 @@ function LaserSpellForceRelease( weaponData )
 	SetProjectileProperty({ WeaponName = "WeaponSpellLaser", DestinationId = CurrentRun.Hero.ObjectId, Property = "TotalFuse", Value = duration })
 	local duration = weaponData.MaxDuration + GetTotalHeroTraitValue("LaserDurationBonus")
 	if duration > 1 and GetTotalHeroTraitValue("DefenseDuringLaser") > 0 then
-		wait( duration - 1, RoomThreadName)
+		if SetThreadWait("LaserHoldDuration", duration - 1 ) then
+			return
+		end
+		wait( duration - 1, "LaserHoldDuration")
+		if not SessionMapState.LaserSpellDown then
+			return
+		end
 		CheckPlayerTempArmorFalloffPresentation("LaserDefense")
-		wait( 1, RoomThreadName)	
+		wait( 1, "LaserHoldDurationFalloff" )
 	else
-		wait( duration, RoomThreadName )
+		if SetThreadWait("LaserHoldDuration", duration) then
+			return
+		end
+		wait( duration , "LaserHoldDuration" )
 	end
 	SessionMapState.LaserTimeout = true
 	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "LaserFireCancelable"})
@@ -1939,6 +1973,7 @@ function LaserHoldClear()
 		local effectName = "LaserFireEndCancelable"
 		ApplyEffect({ DestinationId = CurrentRun.Hero.ObjectId, Id = CurrentRun.Hero.ObjectId, EffectName = effectName, DataProperties = EffectData[effectName].DataProperties })
 	end
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "LaserFireCancelable"})
 	SessionMapState.LaserTimeout = nil
 	local spellTrait = nil
 	for i, traitData in ipairs( CurrentRun.Hero.Traits ) do
@@ -2697,22 +2732,26 @@ function CheckMoonBeamConsecutiveDamage( victim, args, triggerArgs )
 end
 
 function CheckAutoMoonBeam(weaponData, functionArgs, triggerArgs )
-	if IsExWeapon( weaponData.Name, {Combat = true}, triggerArgs ) then
-	local sourceTrait = GetHeroTrait("SpellMoonBeamTrait")
-	local sourceWeaponData = GetWeaponData(CurrentRun.Hero, sourceTrait.PreEquipWeapons[1])
-	local functionArgs = sourceWeaponData.OnFiredFunctionArgs
-	FireWeaponWithinRange({
-			SourceId = CurrentRun.Hero.SourceId,
-			Range = functionArgs.Range,
-			SeekTarget = true, 
-			WeaponName = sourceWeaponData.Name,
-			ProjectileName = functionArgs.ProjectileName, 
-			DamageMultiplier = functionArgs.DamageMultiplier,
-			InitialDelay = functionArgs.Delay, 
-			RunFunctionNameOnTarget = "ApplyMoonBeamExVulnerability",
-			Delay = functionArgs.FollowUpDelay or 0.1, 
-			Targets = 1,
-			FireWithoutTarget = true })
+	local isExIndirectCast = false
+	if SessionMapState.ArmCast and weaponData.ArmedCastChargeStage then
+		isExIndirectCast = true
+	end
+	if IsExWeapon( weaponData.Name, {Combat = true}, triggerArgs ) or isExIndirectCast then
+		local sourceTrait = GetHeroTrait("SpellMoonBeamTrait")
+		local sourceWeaponData = GetWeaponData(CurrentRun.Hero, sourceTrait.PreEquipWeapons[1])
+		local functionArgs = sourceWeaponData.OnFiredFunctionArgs
+		FireWeaponWithinRange({
+				SourceId = CurrentRun.Hero.SourceId,
+				Range = functionArgs.Range,
+				SeekTarget = true, 
+				WeaponName = sourceWeaponData.Name,
+				ProjectileName = functionArgs.ProjectileName, 
+				DamageMultiplier = functionArgs.DamageMultiplier,
+				InitialDelay = functionArgs.Delay, 
+				RunFunctionNameOnTarget = "ApplyMoonBeamExVulnerability",
+				Delay = functionArgs.FollowUpDelay or 0.1, 
+				Targets = 1,
+				FireWithoutTarget = true })
 	end
 end
 

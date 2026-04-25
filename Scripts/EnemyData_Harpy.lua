@@ -221,30 +221,6 @@ UnitSetData.Harpy =
 		},
 	},
 
-	HarpyDropper_MiniBoss =
-	{
-		InheritFrom = { "Elite", "HarpyDropper" },
-		HealthBuffer = 1000,
-		IsAggroedSound = "/SFX/Enemy Sounds/HarpyDropper/EmoteTaunting",
-
-		HealthBarOffsetY = -350,
-
-		DefaultAIData =
-		{
-			DeepInheritance = true,
-		},
-
-		WeaponOptions = { "HarpySlice2", "HarpyFlap_Elite", "HarpyDashRight", "HarpyDashLeft",
-							 "HarpyWind_Elite",  "HarpyWind_Elite" },
-
-		HeraclesCombatMoneyValue = 8,
-		GeneratorData =
-		{
-			DifficultyRating = 225,
-			BlockEnemyTypes = {"HarpyDropper"}
-		},
-	},
-
 }
 
 OverwriteTableKeys( EnemyData, UnitSetData.Harpy )

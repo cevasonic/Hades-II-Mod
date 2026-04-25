@@ -257,8 +257,7 @@ WeaponSets =
 	"ProjectileSuitBombStraight",
 	},
 	ExpireProjectileExcludeProjectileNames =
-	{
-	"FamiliarLinkLaser",
+	{ 
 	"ProjectileLob",
 	"ProjectileLobCharged",
 	"LavaTileWeapon",
@@ -300,6 +299,13 @@ WeaponSets =
 	},
 	ExpireProjectileLastStandExcludeProjectileNames = 
 	{
+		"DemeterCastBlast",
+		"AresProjectile",
+		"ApolloCastRapid",
+		"ProjectileCast",
+		"WeaponCastProjectile",
+		"WeaponCastLob",
+		"WeaponCastProjectileHades",
 		"ProjectileSpellMeteor",
 		"PrometheusFireCircle",
 		"PrometheusFireCircleSmall",
@@ -394,6 +400,7 @@ WeaponSets =
 		"ProjectileAresSwordWake",
 		"ProjectileAresSwordCast",
 		"ProjectileAresSwordEx",
+		"ProjectileAresSwordGenerated",
 
 		"ArtemisCastVolley",
 		"ArtemisSupportingFire",

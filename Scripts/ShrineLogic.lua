@@ -367,7 +367,7 @@ end
 function CloseShrineUpgradeScreen( screen, button )
 
 	UpdateShrineAnimation( screen.ActiveBounty )
-	UpdateEscapeDoorForLimitGraspShrineUpgrade( nil, { EscapeDoorIds = { 420947, 555784 } } )
+	UpdateEscapeDoorForLimitGraspShrineUpgrade( nil, { EscapeDoorIds = { 420947, 555784, 780651 } } )
 	if screen.AnyChangeMade then
 		RequestPreRunLoadoutChangeSave()
 	end
@@ -798,6 +798,23 @@ function ErisCurseEnemySetup( trait, unit, args )
 	AddOutgoingDamageModifier( unit, { Name = "ErisCurse", GlobalMultiplier = CurrentRun.ErisCurseDamageMultiplier, } )
 end
 
+function AddEnemyHealthMultiplier(unit, args)
+	if args.Additive then
+		unit.HealthMultiplier = (unit.HealthMultiplier or 1.0) + (args.HealthMultiplier - 1)
+	else
+		unit.HealthMultiplier = (unit.HealthMultiplier or 1.0) * args.HealthMultiplier
+	end
+end
+
+function AddEnemySpeedMultiplier(unit, args)
+	unit.SpeedMultiplier = unit.SpeedMultiplier or 1
+	if args.Additive then
+		unit.SpeedMultiplier = (unit.SpeedMultiplier or 1.0) + (args.SpeedMultiplier - 1)
+	else
+		unit.SpeedMultiplier = (unit.SpeedMultiplier or 1.0) * args.SpeedMultiplier
+	end
+end
+
 function ErisCurseUpdate( trait, args )
 	local encounterAdditions = math.min( CurrentRun.EncounterDepth - (CurrentRun.ErisCurseStartingDepth or 0), args.MaxEncounterAdditions or 99 )
 
@@ -917,4 +934,31 @@ end
 
 function RemoveEnemyDamageShrineUpgrade( source, args )
 	RemoveIncomingDamageModifier( CurrentRun.Hero, "EnemyDamageShrineUpgrade" )
+end
+
+function IsBossDifficultyShrineUpgradeActive( source, args )
+	args = args or {}
+
+	if args.UseShrineUpgradesCache then
+		if (CurrentRun.ShrineUpgradesCache.BossDifficultyShrineUpgrade or 0) < CurrentRun.EnteredBiomes then
+			return false
+		end
+	else
+		if (GameState.ShrineUpgrades.BossDifficultyShrineUpgrade or 0) < CurrentRun.EnteredBiomes then
+			return false
+		end
+	end
+
+	if CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes > 0 then
+		-- Block VoR boss encounters in dream runs if they've never been seen before
+		local latestBiomeVisited = CurrentRun.BiomeVisitOrder[CurrentRun.EnteredBiomes]
+		local encounterMapData = BossDifficultyShrineEncounterBiomeMap[latestBiomeVisited]
+		if encounterMapData.OnlyRequireSeen then
+			return GameState.EncountersOccurredCache[encounterMapData.Encounter]
+		else
+			return GameState.EncountersCompletedCache[encounterMapData.Encounter]
+		end
+	end
+
+	return true
 end

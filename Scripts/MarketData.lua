@@ -280,7 +280,7 @@ ScreenData.MarketScreen =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna"}
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" }
 					},
 				},
 				BuyAmount = 1,

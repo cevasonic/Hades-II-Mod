@@ -2,7 +2,7 @@ UnitSetData.Lovesick =
 {
 	Lovesick =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 400,
 		HealthBarOffsetY = -230,

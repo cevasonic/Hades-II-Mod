@@ -2,7 +2,7 @@ UnitSetData.DespairElemental =
 {	
 	DespairElemental =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 		MaxHealth = 440,
 
 		HealthBarOffsetY = -260,

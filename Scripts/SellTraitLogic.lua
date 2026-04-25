@@ -320,7 +320,7 @@ function CreateSellButtons( screen )
 		end
 	end
 
-	UpdateStoreReroll( screen, CurrentRun.CurrentRoom.SellOption, "SellTraitScreenReroll" )
+	UpdateStoreReroll( screen, CurrentRun.CurrentRoom.SellOptions, "SellTraitScreenReroll" )
 
 end
 
@@ -371,7 +371,8 @@ function HandleSellChoiceSelection( screen, button )
 	if not IsEmpty( clearIds ) then
 		thread(DestroyOnDelay, clearIds, 1.25 )
 	end
-
+	
+	UpdateStoreReroll( screen, CurrentRun.CurrentRoom.SellOptions, "SellTraitScreenReroll" )
 
 end
 

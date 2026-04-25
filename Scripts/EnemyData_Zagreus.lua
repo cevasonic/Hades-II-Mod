@@ -14,17 +14,48 @@
 
 		MaxHealth = 10800,
 		HealthBarTextId = "Zagreus_Full",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Zagreus_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
 		InvulnerableFx = "nil",
 
 		OnDeathFunctionName = "ZagreusKillPresentation",
 		OnDeathFunctionArgs = { Message = "ChampionDefeatedMessage", StartPanTime = 1.0, EndPanTime = 4.0, FlashRed = true, MessageDelay = 0.5, StartSound = "/SFX/Player Sounds/PlayerDeath" },
 		DeathAnimation = "Enemy_Zagreus_Death_Start",
 		DeathAngle = 210,
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
 
 		DestroyDelay = 0.0,
 
 		AISetupDelay = 1.05,
 		
+		NeverDeferRootPresentation = true,
 		BlockPostBossMetaUpgrades = true,
 		SkipDamagedFx = true,
 		SkipUnitHitFlash = true,
@@ -45,6 +76,47 @@
 					Window = 1.0,
 					ComboBreakerCooldown = 9.5,
 					ForcedWeaponInterrupt = "ZagreusDoubleDashRetreat",
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "ZagreusPresentDream_Mesh",
+					SetAnimation = "Enemy_Zagreus_Spear_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyAttachmentTexture = { MeshName = "WeaponGigaros_Mesh", GrannyTexture = "GR2/WeaponGigarosDream_Color", },
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},
@@ -475,8 +547,10 @@
 				{ Cue = "/VO/Zagreus_0343", Text = "Let's... do this... again..." },
 				{ Cue = "/VO/Zagreus_0344", Text = "See... you... soon..." },
 				{ Cue = "/VO/Zagreus_0345", Text = "Down... we... go..." },
+				{ Cue = "/VO/Zagreus_0346", Text = "Down... I... go..." },
 				{ Cue = "/VO/Zagreus_0347", Text = "Don't... wait... up..." },
 				{ Cue = "/VO/Zagreus_0349", Text = "Well... done... Sis..." },
+				{ Cue = "/VO/Zagreus_0350", Text = "Can't... stay... here..." },
 				{ Cue = "/VO/Zagreus_0351", Text = "You... got... me..." },
 				{ Cue = "/VO/Zagreus_0413", Text = "Forgot something... at home..." },
 				{ Cue = "/VO/Zagreus_0415", Text = "Next stop... Tartarus..." },
@@ -511,6 +585,7 @@
 			{
 				{ Name = "BossVanquishedSpeech", Time = 60 },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
 			{ GlobalVoiceLines = "SeleneVictoryVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
@@ -524,6 +599,24 @@
 				{ Cue = "/VO/MelinoeField_4242", Text = "Well fought, Big Brother." },
 				{ Cue = "/VO/MelinoeField_4243", Text = "Does this mean I'm the Champion...?" },
 				{ Cue = "/VO/MelinoeField_4992", Text = "Took you down, Big Brother...", PlayFirst = true },
+				{ Cue = "/VO/MelinoeField_5604", Text = "We bicker a bit even in my dreams...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5603", Text = "I won this dream-match, Brother...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 			},
 		},
 
@@ -532,6 +625,7 @@
 			ZagreusBossFirstMeeting =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
 					--
@@ -600,6 +694,7 @@
 			ZagreusBossLostAgainstHim01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -610,7 +705,7 @@
 				},
 
 				{ Cue = "/VO/Zagreus_0149",
-					Portrait = "Portrait_ZagPresent_Defiant_01",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
 					PreLineAnim = "Zagreus_Talk_Start",
 					Text = "Got you quite decisively last time as I recall, Sister, so I am mildly surprised you'd dare to show your face again in such a competitive environment." },
 
@@ -627,9 +722,36 @@
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
 					Text = "I don't know, it's like I didn't miss a beat! Though why don't {#Emph}you {#Prev}be the judge of my {#Emph}physical and mental acuity {#Prev}in just a moment here." },
 			},
+			ZagreusBossLostAgainstHim02 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = ">",
+						Value = 0,
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_4613", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "You're as swift and strong as I've heard, though much more talkative. You're not taking this seriously, are you?" },
+
+				{ Cue = "/VO/Zagreus_0151",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					Text = "How dare you, Sister! Although perhaps it's your own seriousness holding you back, you ever think on that?" },
+			},
+
 			ZagreusBossWonAgainstHim01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -658,10 +780,35 @@
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
 					Text = "The Shades would never tolerate it any other way. Well let's make this a victory-or-defeat to never forget!" },
 			},
+			ZagreusBossWonAgainstHim02 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_4615", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+
+					Text = "Got you again last time, Big Brother! Think you can get me back, or shall the Champion of Elysium title transfer to me?" },
+
+				{ Cue = "/VO/Zagreus_0154",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					Text = "I do think I can get you back, and that title is {#Emph}not {#Prev}up for transfer, no. You should see how much of a pain it was to claim from the last guy!" },
+			},
 
 			ZagreusBossAboutSecurity01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/MelinoeField_4539", UsePlayerSource = true,
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
@@ -688,6 +835,7 @@
 			ZagreusBossAboutCrossroads01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0118",
 					PreLineAnim = "Zagreus_Talk_Start",
 					Portrait = "Portrait_ZagPresent_Empathetic_01",
@@ -709,6 +857,7 @@
 			ZagreusBossAboutGigaros01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -734,6 +883,7 @@
 			ZagreusBossAboutGigaros02 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -764,6 +914,7 @@
 			ZagreusBossAboutThanatosAspect01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
@@ -802,6 +953,7 @@
 			ZagreusBossAboutSurfacePenalty01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -836,6 +988,7 @@
 			ZagreusBossAboutKeepsake01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -862,6 +1015,7 @@
 			ZagreusBossAboutCirce01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -891,6 +1045,7 @@
 			ZagreusBossAboutCirce02 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -919,6 +1074,7 @@
 			ZagreusBossAboutHouse01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -954,6 +1110,7 @@
 			ZagreusBossAboutParents01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -991,6 +1148,7 @@
 			ZagreusBossAboutRelationships01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -998,6 +1156,7 @@
 						CountOf =
 						{
 							"MorosBecomingCloser01",
+							"MorosBecomingCloser01_B",
 							"ErisBecomingCloser01",
 							"NemesisPostCombatBecomingCloser01",
 							"IcarusBecomingCloser01",
@@ -1017,16 +1176,18 @@
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Oh, I suppose so, yes. Some of each. It's peaceful there. And I can see the Moon and stars under a canopy of trees... it even rains every so often." },
 
-				{ Cue = "/VO/Zagreus_0146",
+				{ Cue = "/VO/Zagreus_0491",
 					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
-					Text = "{#Emph}Mm{#Prev}, getting rained on. I've heard that's unpleasant but perhaps it's nice! You didn't really get to meet my friends or more-than-friends, though who knows? We have eternity. Unless we somehow manage to kill each other here first." },
+					Text = "{#Emph}Mm{#Prev}, getting rained on. Perhaps at some point I can brave the unpleasant weather and come visit, meet your friends or more-than-friends and all. We have eternity! Unless we somehow manage to kill each other here first." },
 			},
 
+			-- alt below
 			ZagreusBossAboutHypnosWakeUp01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1034,6 +1195,10 @@
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "AchillesTrueEnding01" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "ZagreusBossAboutHypnosWakeUp01_B", "HypnosDreamAboutMemories01" },
 					},
 				},
 				{ Cue = "/VO/Zagreus_0129",
@@ -1052,9 +1217,46 @@
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
 					Text = "I think so? He's still a bit frazzled from everything... perhaps keyed up from having overslept a bit. He still loves when I return to the House in failure, keeping track of all my deaths. So if you'd like to do him another favor, here's your shot!" },
 			},
+			ZagreusBossAboutHypnosWakeUp01_B =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HypnosFinalDreamMeeting01", "HypnosDreamAboutMemories01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "AchillesTrueEnding01" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "ZagreusBossAboutHypnosWakeUp01" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0129",
+					Text = "Hypnos recently returned to us! You've no idea how grateful he was to be back. Practically jumped right into my arms, although that might have been from abject fear." },
+
+				{ Cue = "/VO/MelinoeField_5292", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "He left in a bit of a rush, yes. I've seldom met someone so dedicated to their work. Has he been managing all right now that he's back?" },
+
+				{ Cue = "/VO/Zagreus_0485",
+					Portrait = "Portrait_ZagPresent_Empathetic_01",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					Text = "I think so? He's still a bit frazzled from everything... perhaps keyed up from having overslept a bit. He still loves when I return to the House in failure, keeping track of all my deaths. So if you'd like to do him another favor, here's your shot!" },
+			},
+
 			ZagreusBossAboutSkelly01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1086,6 +1288,7 @@
 			ZagreusBossAboutHomer01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1131,6 +1334,7 @@
 			ZagreusBossAboutShrine01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1156,9 +1360,88 @@
 					Text = "Oh, you did this {#Emph}somehow. {#Prev}Well fine! One of these days or nights I ought to fire up Father's old Pact of Punishment, and make {#Emph}you {#Prev}immensely strong, and we'll see how {#Emph}you {#Prev}like it!" },
 			},
 
+			ZagreusBossAboutSupportiveShade01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ExorcisedNames", "DieHardFanShade" },
+					},
+					{
+						-- PathTrue = { "GameState", "SpeechRecord", "/VO/Melinoe_5522" },
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4617", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					Text = "There's this one Shade I found in the Mourning Fields who I believe resided in Elysium before. Sounds like you may have met." },
+
+				{ Cue = "/VO/Zagreus_0139",
+					-- PreLineAnim = "Zagreus_Talk_Start",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Certainly possible, I've run into many Shades, Elysian and not. Can you be more specific? Name, disposition, attire?" },
+
+				{ Cue = "/VO/MelinoeField_4618", UsePlayerSource = true,
+					PreLineAnim = "MelinoeIdleWeaponless", PreLineAnimTarget = "Hero",
+					Text = "Name, unknown; disposition, rather encouraging; attire, entirely in red. From what I gathered, this one used to watch your many battles here." },
+
+				{ Cue = "/VO/Zagreus_0140",
+					-- Portrait = "Portrait_ZagPresent_Empathetic_01",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					Text = "Wait I think I know who you mean! You're talking about my biggest fan. Tell my good Shade I said cheers, will you?" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.45,
+						UsePlayerSource = true,
+						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+						{ Cue = "/VO/MelinoeField_4619", Text = "Sure thing, but first...!" },
+					},
+				},
+			},
+			ZagreusBossAboutSupportiveShade02 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ZagreusBossAboutSupportiveShade01" },
+					},
+					{
+						PathTrue = { "GameState", "SpeechRecord", "/VO/Melinoe_5525" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0141",
+					-- PreLineAnim = "Zagreus_Talk_Start",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					InputDelay = 5.0,
+					PreLineThreadedFunctionName = "DieHardShadeRevealPresentation",
+					Text = "My biggest fan is in the audience again! Cheers for mentioning I'm back to doing what I do best... defending the title of Champion of Elysium all for the sake of show." },
+
+				{ Cue = "/VO/MelinoeField_4620", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+
+					Text = "What makes you think that one particular Shade is your biggest fan? Perhaps it's me and I'm not letting on." },
+
+				{ Cue = "/VO/Zagreus_0142",
+					-- Portrait = "Portrait_ZagPresent_Empathetic_01",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					Text = "Come on, would my biggest fan attempt to slaughter me before these droves of onlookers? Only a fearsome daemon born of nightmare would do such an unconscionable thing!" },
+			},
+
 			ZagreusBossGrantsBondForged01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
 					{
@@ -1217,6 +1500,7 @@
 			ZagreusBossAboutSayingLittle01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1250,6 +1534,7 @@
 			-- repeatable / other general cases
 			ZagreusBossMiscStart01 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0176",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1259,6 +1544,7 @@
 			ZagreusBossMiscStart02 =
 			{
 				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1277,6 +1563,7 @@
 			ZagreusBossMiscStart03 =
 			{
 				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1298,6 +1585,7 @@
 			},
 			ZagreusBossMiscStart04 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0179",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1306,6 +1594,7 @@
 			},
 			ZagreusBossMiscStart05 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0180",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1314,6 +1603,7 @@
 			},
 			ZagreusBossMiscStart06 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0181",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1322,6 +1612,7 @@
 			},
 			ZagreusBossMiscStart07 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0182",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1331,6 +1622,7 @@
 			},
 			ZagreusBossMiscStart08 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0183",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1340,6 +1632,7 @@
 			},
 			ZagreusBossMiscStart09 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0184",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1348,6 +1641,7 @@
 			},
 			ZagreusBossMiscStart10 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0186",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1356,6 +1650,7 @@
 			},
 			ZagreusBossMiscStart11 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0187",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1364,6 +1659,7 @@
 			},
 			ZagreusBossMiscStart12 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0188",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1372,6 +1668,7 @@
 			},
 			ZagreusBossMiscStart13 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0189",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1382,6 +1679,7 @@
 			ZagreusBossMiscStart14 =
 			{
 				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1404,6 +1702,7 @@
 			ZagreusBossMiscStart15 =
 			{
 				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1421,6 +1720,7 @@
 			},
 			ZagreusBossMiscStart16 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0193",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1430,6 +1730,7 @@
 			},
 			ZagreusBossMiscStart17 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0194",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1439,6 +1740,7 @@
 			},
 			ZagreusBossMiscStart18 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0195",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
@@ -1448,6 +1750,7 @@
 			},
 			ZagreusBossMiscStart19 =
 			{
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1466,12 +1769,375 @@
 			},
 			ZagreusBossMiscStart20 =
 			{
+				SkipPreNarrativeUnequip = true,
 				{ Cue = "/VO/Zagreus_0204",
 					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
 					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
 					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
 					Portrait = "Portrait_ZagPresent_Defiant_01",
 					Text = "Far be it from me to disappoint all these expectant Shades, Sister!" },
+			},
+			ZagreusBossMiscStart21 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "LootTypeHistory" },
+						UseLength = true,
+						Comparison = ">=",
+						Value = 8,
+					},
+				},
+
+				{ Cue = "/VO/Zagreus_0185",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Hey, you have way more Boons than I do at the moment..." },
+			},
+			ZagreusBossMiscStart22 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "NPC_Medea_01" }
+					},
+				},
+
+				{ Cue = "/VO/Zagreus_0192",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "So, what awful curses and such you have in store this time?" },
+			},
+			ZagreusBossMiscStart23 =
+			{
+				SkipPreNarrativeUnequip = true,
+				{ Cue = "/VO/Zagreus_0194",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Come show me what the esteemed Schelemeus taught you." },
+			},
+			ZagreusBossMiscStart24 =
+			{
+				SkipPreNarrativeUnequip = true,
+				{ Cue = "/VO/Zagreus_0195",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Always a welcome break from my routine, Sister! Mostly." },
+			},
+			ZagreusBossMiscStart25 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponStaffSwing" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0196",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "That staff may have some reach, but my spear has this nasty pointy bit." },
+			},
+			ZagreusBossMiscStart26 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponDagger" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0197",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "{#Emph}Ooh {#Prev}I like those blades of yours! Just let me keep my limbs." },
+			},
+			ZagreusBossMiscStart27 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponTorch" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0198",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Those torches. {#Emph}Huh. {#Prev}You know I'm flame-resistant, don't you?" },
+			},
+			ZagreusBossMiscStart28 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "AxePerfectCriticalAspect", "AxeRallyAspect" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0199",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "You're not the first to cross through here with a gigantic axe, you know." },
+			},
+			ZagreusBossMiscStart29 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponLob" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "LobCloseAttackAspect" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0200",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "I don't much care for how that skull of yours is looking at me right now." },
+			},
+			ZagreusBossMiscStart30 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "Weapons" },
+						HasAny = { "WeaponLob", "WeaponSuit" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "LobCloseAttackAspect" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0201",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Oh, you're using {#Emph}that {#Prev}thing again. Well all right, fire at will." },
+			},
+			ZagreusBossMiscStart31 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxePerfectCriticalAspect" },
+					},
+				},
+				{ Cue = "/VO/Zagreus_0202",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Thanatos is going to want that scythe back at some point!" },
+			},
+			ZagreusBossMiscStart32 =
+			{
+				SkipPreNarrativeUnequip = true,
+				{ Cue = "/VO/Zagreus_0205",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "How good of you to visit once again, Melinoë! Now, to the death!" },
+			},
+			ZagreusBossMiscStart33 =
+			{
+				SkipPreNarrativeUnequip = true,
+				{ Cue = "/VO/Zagreus_0206",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "This is, more or less, exactly what I thought having a sibling would be like." },
+			},
+			ZagreusBossMiscStart34 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				{ Cue = "/VO/Zagreus_0207",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "Come to pay me back for last time? Well I accept Obols and that's it." },
+			},
+			ZagreusBossMiscStart35 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = ">",
+						Value = 0,
+					},
+				},
+				{ Cue = "/VO/Zagreus_0208",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Defiant_01",
+					Text = "I already know you don't give up easily, no need to keep this up on my account!" },
+			},
+			ZagreusBossMiscStart36 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = ">",
+						Value = 0,
+					},
+				},				
+				{ Cue = "/VO/Zagreus_0209",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "So this is how Father must have felt driving me back again and again." },
+			},
+			ZagreusBossMiscStart37 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = ">",
+						Value = 0,
+					},
+				},				
+				{ Cue = "/VO/Zagreus_0210",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "You beat our old decrepit grandfather, surely you can beat me?" },
+			},
+			ZagreusBossMiscStart38 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},				
+				{ Cue = "/VO/Zagreus_0211",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "My body and my ego both are well-accustomed to defeat, so come on!" },
+			},
+			ZagreusBossMiscStart39 =
+			{
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},				
+				{ Cue = "/VO/Zagreus_0212",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "Just be thankful I don't fight as fancy as I used to recently." },
+			},
+			ZagreusBossMiscStart40 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredConsecutiveClearsOfRoom",
+						FunctionArgs = { Name = "C_Boss01", Count = 3 },
+					},
+				},				
+				{ Cue = "/VO/Zagreus_0213",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "I'm used to losing repeatedly but this is getting a bit much." },
+			},
+			ZagreusBossMiscStart41 =
+			{
+				PlayFirst = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredConsecutiveClearsOfRoom",
+						FunctionArgs = { Name = "C_Boss01", Count = 2 },
+					},
+				},				
+				{ Cue = "/VO/Zagreus_0214",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					-- Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "I'll likely get you back at some point. Perhaps even this time!" },
+			},
+			ZagreusBossMiscStart42 =
+			{
+				SkipPreNarrativeUnequip = true,
+				{ Cue = "/VO/Zagreus_0215",
+					PreLineThreadedFunctionName = "PlayZagreusTauntAnim",
+					PostLineFunctionName = "StartZagreusBossFight", PreLineWait = 0.25,
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Portrait = "Portrait_ZagPresent_Empathetic_01",
+					Text = "Being trapped in a temporal prison for a while has not helped my fighting skills at all..." },
 			},
 		},
 
@@ -1662,6 +2328,96 @@
 					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
 					Text = "{#Emph}Ow{#Prev}, you are a nightmare, let me tell you... not a witch..." },
 			},
+			ZagreusBossMiscDefeat11 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EncounterClearStats", "BossZagreus01" }
+					},
+					{
+						PathFalse = { "CurrentRun", "EncounterClearStats", "BossZagreus01", "TookDamage" }
+					},
+				},
+
+				{ Cue = "/VO/Zagreus_0325",
+					Portrait = "Portrait_ZagPresent_Pained_01",
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
+					Text = "{#Emph}Rngh{#Prev}, I... didn't so much as... put a scratch on you...!" },
+			},
+			ZagreusBossMiscDefeat12 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EncounterClearStats", "BossZagreus01" }
+					},
+					{
+						PathFalse = { "CurrentRun", "EncounterClearStats", "BossZagreus01", "TookDamage" }
+					},
+				},
+
+				{ Cue = "/VO/Zagreus_0326",
+					Portrait = "Portrait_ZagPresent_Pained_01",
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
+					Text = "{#Emph}Augh{#Prev}, I must have hit you at some point back there... right?" },
+			},
+			ZagreusBossMiscDefeat13 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EncounterClearStats", "BossZagreus01" }
+					},
+					{
+						Path = { "CurrentRun", "EncounterClearStats", "BossZagreus01", "ClearTime" },
+						Comparison = "<=",
+						Value = 30.0
+					},
+				},
+
+				{ Cue = "/VO/Zagreus_0327",
+					Portrait = "Portrait_ZagPresent_Pained_01",
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
+					Text = "{#Emph}Augh{#Prev}, how did you... beat me so blasted quick...?" },
+			},
+			ZagreusBossMiscDefeat14 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EncounterClearStats", "BossZagreus01" }
+					},
+					{
+						Path = { "CurrentRun", "EncounterClearStats", "BossZagreus01", "ClearTime" },
+						Comparison = "<=",
+						Value = 30.0
+					},
+				},
+
+				{ Cue = "/VO/Zagreus_0328",
+					Portrait = "Portrait_ZagPresent_Pained_01",
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
+					Text = "{#Emph}Ow{#Prev}, what happened, you... destroyed me in no time at all..." },
+			},
+			ZagreusBossMiscDefeat15 =
+			{
+				{ Cue = "/VO/Zagreus_0329",
+					Portrait = "Portrait_ZagPresent_Pained_01",
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
+					Text = "{#Emph}Augh{#Prev}, all right, all right, you win this round... and I should go!" },
+			},
+			ZagreusBossMiscDefeat16 =
+			{
+				{ Cue = "/VO/Zagreus_0339",
+					Portrait = "Portrait_ZagPresent_Pained_01",
+					PreLineThreadedFunctionName = "PowerWordPresentation", PreLineThreadedFunctionArgs = { WaitTime = 1.0 },
+					Text = "{#Emph}Guh{#Prev}, well would you look at that... we're out of time!" },
+			},
 		},
 
 		Using = { GrannyModel = "WeaponGigaros_Mesh", },
@@ -1686,6 +2442,10 @@ GlobalVoiceLines.ZagreusRarifyVoiceLines =
 		},
 		{
 			PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "RarifyKeepsake" },
+		},
+		{
+			Path = { "GameState", "FatedStatus" },
+			IsNone = { "Unfated" },
 		},
 	},
 	Cooldowns =
@@ -1717,7 +2477,7 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 {
 	{
 		RandomRemaining = true,
-		PreLineWait = 0.3,
+		PreLineWait = 0.0,
 		ObjectType = "Zagreus",
 		PreLineAnim = "Zagreus_Greet",
 
@@ -1740,6 +2500,14 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 		{ Cue = "/VO/Zagreus_0172", Text = "Back again?" },
 		{ Cue = "/VO/Zagreus_0173", Text = "Why hello." },
 		{ Cue = "/VO/Zagreus_0174", Text = "I beg your pardon!" },
+		{ Cue = "/VO/Zagreus_0175", Text = "{#Emph}Ah{#Prev}, it's {#Emph}her!",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "ZagreusBossAboutHouse01" },
+				},
+			},
+		},
 		{ Cue = "/VO/Zagreus_0405", Text = "{#Emph}Hello...!",
 			PlayFirst = true,
 			GameStateRequirements =
@@ -1749,6 +2517,9 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 				},
 				{
 					PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "CirceEnlargeTrait" },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 			},
 		},
@@ -1762,6 +2533,9 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 				{
 					PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "CirceShrinkTrait" },
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			},
 		},
 		{ Cue = "/VO/Zagreus_0171", Text = "Back for more?",
@@ -1770,6 +2544,9 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 			{
 				{
 					PathTrue = { "GameState", "TextLinesRecord", "ZagreusBossFirstMeeting" },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 				{
 					Path = { "GameState", "LastBossHealthBarRecord", "Zagreus" },
@@ -1786,6 +2563,9 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 					PathTrue = { "GameState", "TextLinesRecord", "ZagreusBossFirstMeeting" },
 				},
 				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
+				{
 					SumPrevRuns = 5,
 					IgnoreCurrentRun = true,
 					Path = { "RoomsEntered", "C_Boss01" },
@@ -1796,16 +2576,32 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 		},
 	},
 	{
-		RandomRemaining = true,
-		SuccessiveChanceToPlay = 0.5,
-		SuccessiveChanceToPlayAll = 0.5,
 		PreLineWait = 0.5,
+		PlayOnce = true,
+		PlayOnceContext = "ZagreusBossFirstMeetingVO",
+		BreakIfPlayed = true,
 		GameStateRequirements =
 		{
 			--
 		},
 
-		{ Cue = "/VO/MelinoeField_4236", Text = "{#Emph}Wha... {#Prev}Brother!", PlayOnce = true, PlayOnceContext = "ZagreusBossFirstMeetingVO" },
+		{ Cue = "/VO/MelinoeField_4236", Text = "{#Emph}Wha... {#Prev}Brother!" },
+	},
+	{
+		PreLineWait = 0.5,
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunZagreusBossIntroVO",
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			}
+		},
+
+		{ Cue = "/VO/MelinoeField_5601", Text = "I met you in my dreams, I'll fight you in them!" },
+		{ Cue = "/VO/MelinoeField_5602", Text = "I used to dream of meeting you, you know!", PlayFirst = true },
 	},
 	{
 		RandomRemaining = true,
@@ -1828,6 +2624,7 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 		{ Cue = "/VO/MelinoeField_4999", Text = "Hello, Brother!" },
 		{ Cue = "/VO/MelinoeField_5000", Text = "Hi there...!" },
 		{ Cue = "/VO/MelinoeField_5001", Text = "{#Emph}Raaah!",
+			PreLineAnim = "MelTalkFlustered01",
 			GameStateRequirements =
 			{
 				{
@@ -1836,6 +2633,7 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 			},
 		},
 		{ Cue = "/VO/MelinoeField_5002", Text = "{#Emph}Hello{#Prev}, Brother...",
+			PreLineAnim = "MelTalkExplaining01Full",
 			GameStateRequirements =
 			{
 				{
@@ -1844,6 +2642,7 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 			},
 		},
 		{ Cue = "/VO/MelinoeField_5003", Text = "{#Emph}It is I!",
+			PreLineAnim = "MelTalkExplaining01Full",
 			GameStateRequirements =
 			{
 				{
@@ -1852,6 +2651,7 @@ GlobalVoiceLines.ZagreusBossGreetingLines =
 			},
 		},
 		{ Cue = "/VO/MelinoeField_5004", Text = "I have returned...!",
+			PreLineAnim = "MelTalkBroodingFull01",
 			GameStateRequirements =
 			{
 				{

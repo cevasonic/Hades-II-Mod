@@ -275,12 +275,6 @@ function ActivateForPriorityConversation( enemyName, enemyData, conversationName
 	if CurrentRun.AnimationState[newUnit.ObjectId] ~= nil then
 		SetAnimation({ DestinationId = newUnit.ObjectId, Name = CurrentRun.AnimationState[newUnit.ObjectId] })
 	end
-	if CurrentRun.EventState ~= nil then
-		local eventState = CurrentRun.EventState[newUnit.ObjectId]
-		if eventState ~= nil then
-			thread( CallFunctionName, eventState.FunctionName, newUnit, eventState.Args )
-		end
-	end
 	CurrentRun.ActivationRecord[id] = true
 	DebugPrint({ Text = "ActivateForPriorityConversation newUnit.Name = "..newUnit.Name })
 	return newUnit
@@ -346,12 +340,6 @@ function ActivateRotatingNPCs( eventSource, args )
 			RestoreMapStateObject( (CurrentHubRoom or CurrentRun.CurrentRoom).Name, newUnit )
 			if CurrentRun.AnimationState[newUnit.ObjectId] ~= nil then
 				SetAnimation({ DestinationId = newUnit.ObjectId, Name = CurrentRun.AnimationState[newUnit.ObjectId] })
-			end
-			if CurrentRun.EventState ~= nil then
-				local eventState = CurrentRun.EventState[newUnit.ObjectId]
-				if eventState ~= nil and eventState.FunctionName ~= nil and _G[eventState.FunctionName] ~= nil then
-					thread( CallFunctionName, eventState.FunctionName, newUnit, eventState.Args )
-				end
 			end
 
 			CurrentRun.ActivationRecord[id] = true
@@ -563,9 +551,7 @@ function HandleChallengeLoot( challengeSwitch, challengeEncounter )
 	end
 
 	if challengeSwitch.RewardType == "Money" then
-		local moneyMultiplier = GetTotalHeroTraitValue( "MoneyMultiplier", { IsMultiplier = true } )
-		local amount = round( challengeSwitch.CurrentValue * moneyMultiplier )
-		thread( GushMoney, { Amount = amount, LocationId = challengeSwitch.ObjectId, Radius = 50, Source = challengeSwitch.Name, Offset = dropOffset, PickupDelay = 0.4, } )
+		thread( GushMoney, { Amount = challengeSwitch.CurrentValue, LocationId = challengeSwitch.ObjectId, Radius = 50, Source = challengeSwitch.Name, Offset = dropOffset, PickupDelay = 0.4, } )
 	elseif challengeSwitch.RewardType == "Health" then
 		Heal( CurrentRun.Hero, { HealAmount = challengeSwitch.CurrentValue, Name = "HealthChallengeSwitch" } )
 	elseif challengeSwitch.RewardType == "MetaCurrency" then
@@ -625,9 +611,6 @@ function HandleChallengeLootDecay( challengeSwitch, challengeEncounter )
 		local ticks = 10
 		for i = 1, ticks do
 			local tickTime = (challengeEncounter.LootDecayInterval * intervalMultiplier) / ticks
-			if CurrentRun.CurrentRoom.ElapsedTimeMultiplier then
-				tickTime  = tickTime / CurrentRun.CurrentRoom.ElapsedTimeMultiplier
-			end
 			wait( tickTime, RoomThreadName )
 		end
 
@@ -930,21 +913,39 @@ function EchoChoice( source, args, screen )
 	source.BlockReroll = true
 	local options = ShallowCopyTable( args.UpgradeOptions )
 	local eligibleOptions = {}
-	for i, option in pairs(options) do
-		if TraitData[option.ItemName] and IsTraitEligible( TraitData[option.ItemName] ) then
-			table.insert(eligibleOptions, option)
+	local priorityOptions = {}
+	for i, option in pairs( options ) do
+		if option.GameStateRequirements == nil or IsGameStateEligible( source, option.GameStateRequirements ) then
+			option.Rarity = "Epic"
+			if option.PriorityRequirements ~= nil and IsGameStateEligible( source, option.PriorityRequirements ) then
+				table.insert( priorityOptions, option )
+			else
+				table.insert( eligibleOptions, option )
+			end
 		end
 	end
 	if not CurrentRun.LastReward then
 		CurrentRun.LastReward = { Type = "Consumable", Name = "MaxHealthDrop", DisplayName = "MaxHealthDrop" }
 	end
-
+	
 	for i = 1, 3 do
-		if not IsEmpty(eligibleOptions) then
+		local option = nil
+		if not IsEmpty( priorityOptions ) then
+			option = RemoveRandomValue( priorityOptions )
+			table.insert( source.UpgradeOptions, option )
+			option.SlotEntranceAnimation = option.PrioritySlotEntranceAnimation
+		elseif not IsEmpty(eligibleOptions) then
 			local option = RemoveRandomValue( eligibleOptions )
 			table.insert( source.UpgradeOptions, option )
 		end
 	end
+	
+	if CurrentRun.IsDreamRun then
+		for _, item in pairs(source.UpgradeOptions) do
+			item.Rarity = TraitRarityData.RarityUpgradeOrder[CurrentRun.EnteredBiomes]
+		end
+	end
+
 	if args.PortraitShift ~= nil then
 		args.PortraitShift.Id = screen.PortraitId
 		Move( args.PortraitShift )
@@ -988,6 +989,11 @@ function ArachneCostumeChoice( source, args, screen )
 				option = RemoveRandomValue( eligibleOptions )
 			end
 			table.insert( source.UpgradeOptions, option )
+		end
+	end
+	if CurrentRun.IsDreamRun then
+		for _, item in pairs(source.UpgradeOptions) do
+			item.Rarity = TraitRarityData.RarityUpgradeOrder[CurrentRun.EnteredBiomes]
 		end
 	end
 	if args.PortraitShift ~= nil then
@@ -1036,6 +1042,11 @@ function NarcissusBenefitChoice( source, args, screen )
 			table.insert( source.UpgradeOptions, option )
 		end
 	end
+	if CurrentRun.IsDreamRun then
+		for _, item in pairs(source.UpgradeOptions) do
+			item.Rarity = TraitRarityData.RarityUpgradeOrder[CurrentRun.EnteredBiomes]
+		end
+	end
 	if args.PortraitShift ~= nil then
 		args.PortraitShift.Id = screen.PortraitId
 		Move( args.PortraitShift )
@@ -1081,6 +1092,13 @@ function MedeaCurseChoice( source, args, screen )
 			table.insert( source.UpgradeOptions, option )
 		end
 	end
+
+	if CurrentRun.IsDreamRun then
+		for _, item in pairs(source.UpgradeOptions) do
+			item.Rarity = TraitRarityData.RarityUpgradeOrder[CurrentRun.EnteredBiomes]
+		end
+	end
+
 	if args.PortraitShift ~= nil then
 		args.PortraitShift.Id = screen.PortraitId
 		Move( args.PortraitShift )
@@ -1114,6 +1132,8 @@ function CirceBlessingChoice( source, args, screen )
 			end
 		end
 	end
+
+
 	for i = 1, 3 do
 		local option = nil
 		if not IsEmpty( priorityOptions ) then
@@ -1137,11 +1157,17 @@ function CirceBlessingChoice( source, args, screen )
 			end
 			SetTraitTextData( familiarTrait )
 			SessionMapState.OldFamiliarTrait = familiarTrait
-			
+			local multiplier = TraitData.DoubleFamiliarTrait.RarityLevels[option.Rarity].Multiplier
+			multiplier = multiplier + 1
 			local bonusStacks = TraitData[familiarTrait.Name].CirceBonusStacks or 0
-			local newFamiliarTrait = GetProcessedTraitData({ Unit = CurrentRun.Hero, TraitName = familiarTrait.Name, StackNum = ( familiarTrait.StackNum or 1 ) * (1 + TraitData.DoubleFamiliarTrait.AcquireFunctionArgs.BonusMultiplier) + bonusStacks })
+			local newFamiliarTrait = GetProcessedTraitData({ Unit = CurrentRun.Hero, TraitName = familiarTrait.Name, StackNum = ( familiarTrait.StackNum or 1 ) * multiplier + bonusStacks * (multiplier - 1) })
 			SetTraitTextData( newFamiliarTrait )
 			SessionMapState.NewFamiliarTrait = newFamiliarTrait
+			
+			if familiarTrait.FamiliarLastStandHealAmount ~= nil then
+				SessionMapState.OldFamiliarTrait.ExtractData.TooltipLastStandAmount = 1
+				SessionMapState.NewFamiliarTrait.ExtractData.TooltipLastStandAmount = multiplier
+			end
 			if TraitData[familiarTrait.Name] then
 				if TraitData[familiarTrait.Name].CirceStatLine then
 					SessionMapState.StatLine = TraitData[familiarTrait.Name].CirceStatLine
@@ -1149,6 +1175,13 @@ function CirceBlessingChoice( source, args, screen )
 			end
 		end
 	end
+	
+	if CurrentRun.IsDreamRun then
+		for _, item in pairs(source.UpgradeOptions) do
+			item.Rarity = TraitRarityData.RarityUpgradeOrder[CurrentRun.EnteredBiomes]
+		end
+	end
+
 	if args.PortraitShift ~= nil then
 		args.PortraitShift.Id = screen.PortraitId
 		Move( args.PortraitShift )
@@ -1195,6 +1228,13 @@ function IcarusBenefitChoice( source, args, screen )
 			table.insert( source.UpgradeOptions, option )
 		end
 	end
+	
+	if CurrentRun.IsDreamRun then
+		for _, item in pairs(source.UpgradeOptions) do
+			item.Rarity = TraitRarityData.RarityUpgradeOrder[CurrentRun.EnteredBiomes]
+		end
+	end
+
 	if args.PortraitShift ~= nil then
 		args.PortraitShift.Id = screen.PortraitId
 		Move( args.PortraitShift )
@@ -1296,6 +1336,7 @@ function PauseMenuTakeoverClosed()
 			return
 		end
 		if SessionMapState.PauseMenuTakeoverCue ~= nil then
+			SessionMapState.LastPauseMenuTakeoverCue = SessionMapState.PauseMenuTakeoverCue
 			SessionMapState.PauseMenuTakeoverCue = nil
 			wait( SessionMapState.PauseMenuTakeoverArgs.Cooldown, threadName )
 		end
@@ -1363,15 +1404,18 @@ function CirceRemoveShrineUpgrades( args )
 			shrineOptions[name] = true
 		end
 	end
+	local presentationIncrement = 0
 	while count > 0 and not IsEmpty( shrineOptions ) do
 		local shrineKey = GetRandomKey( shrineOptions )
+		shrineOptions[shrineKey] = nil
 		CurrentRun.ShrineUpgradesDisabled[shrineKey] = true
 		if MetaUpgradeData[shrineKey].OnDisabledFunctionName ~= nil then
 			CallFunctionName( MetaUpgradeData[shrineKey].OnDisabledFunctionName )
 		end
 		count = count - 1
+		presentationIncrement = presentationIncrement + 1
 		ShrineUpgradeExtractValues( shrineKey )
-		thread( CirceRemoveShrinePresentation, shrineKey, 1.0 )
+		thread( CirceRemoveShrinePresentation, shrineKey, 1 + presentationIncrement * 1.1  )
 	end
 end
 
@@ -1389,14 +1433,17 @@ function CircePetMultiplier( args, sourceTrait )
 	for _, traitData in ipairs( CurrentRun.Hero.Traits ) do
 		if traitData.FamiliarTrait then
 			if traitData.FamiliarLastStandHealAmount ~= nil then
-				AddLastStand({
-					Name = "LastStandFamiliar",
-					Icon = "ExtraLifeCatFamiliar",
-					InsertAtEnd = true,
-					IncreaseMax = true,
-					HealAmount = GetTotalHeroTraitValue( "FamiliarLastStandHealAmount" )
-				})
+				for i=1, args.BonusMultiplier do
+					AddLastStand({
+						Name = "LastStandFamiliar",
+						Icon = "ExtraLifeCatFamiliar",
+						InsertAtEnd = true,
+						IncreaseMax = true,
+						HealAmount = GetTotalHeroTraitValue( "FamiliarLastStandHealAmount" )
+					})
+				end
 				RecreateLifePips()
+				traitData.ReportedFamiliarLastStandAmount = args.BonusMultiplier + 1
 			else
 				table.insert( traitsToIncrease, traitData )
 			end
@@ -1404,7 +1451,7 @@ function CircePetMultiplier( args, sourceTrait )
 	end
 	for _, traitData in pairs( traitsToIncrease ) do
 		local bonusStacks = traitData.CirceBonusStacks or 0
-		IncreaseTraitLevel( traitData, round(( traitData.StackNum or 1 ) * args.BonusMultiplier + bonusStacks))
+		IncreaseTraitLevel( traitData, round(( traitData.StackNum or 1 ) * args.BonusMultiplier + bonusStacks * ( args.BonusMultiplier ) )) 
 	end
 end
 
@@ -1548,9 +1595,18 @@ function EchoLastRunBoon( args, sourceTraitData )
 
 	local prevRun = GameState.RunHistory[#GameState.RunHistory]
 	local eligibleTraits = {}
+	local rarityFloorActive = false
+	local trait = GetHeroTrait("ElementalRarityUpgradeBoon")
+	if trait and trait.Activated then
+		rarityFloorActive = true
+	end
+
 	for traitName, rarity in pairs( prevRun.TraitRarityCache or {} ) do
 		local traitData = TraitData[traitName] 
 		if not HeroHasTrait(traitName) and IsGodTrait( traitName, {ForShop = true, ForLastRunBoon = true } ) and IsTraitEligible( traitData ) and ( not traitData.Slot or not HeroSlotFilled( traitData.Slot )) and not traitData.ExcludeTraitFromLastRunBoonPool then
+			if rarityFloorActive and (not rarity or rarity == "Common") then
+				rarity = "Rare"
+			end
 			table.insert( eligibleTraits, {Name = traitName, Rarity = rarity } )
 		end
 	end
@@ -1855,11 +1911,8 @@ function SpawnZagContractRewards(room, args)
 		itemData.ZagContractItem = true
 		itemData.CostOverride = 0
 		local item = SpawnStoreItemInWorld( itemData, roomData.ZagContractRewardDestinationId )
-		if item.OnConsumedGlobalVoiceLines then
-			item.OnConsumedGlobalVoiceLines = "ClaimedContractItemVoiceLines"
-		end
 		item.IgnorePurchase = true
-		item.PickupVoiceLines = GlobalVoiceLines.ClaimedContractItemVoiceLines
+		item.ZagContractItem = true
 		SetObstacleProperty({ Property = "MagnetismWhileBlocked", Value = 0, DestinationId = item.ObjectId })
 		
 		CreateTextBox(

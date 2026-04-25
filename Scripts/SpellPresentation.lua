@@ -29,7 +29,13 @@ function SelectSpellPresentation( screen, button )
 	thread( PlayVoiceLines, voiceLines, true, screen.Source )
 
 	waitUnmodified( 0.1 )
-	SetAnimation({ Name = "SpellScreenOut", DestinationId = screen.Components.Background.Id })
+	
+	if not CurrentRun.IsDreamRun then
+		SetAnimation({ Name = "SpellScreenOut", DestinationId = screen.Components.Background.Id })
+	end
+	if CurrentRun.IsDreamRun then
+		SetAnimation({ Name = "SpellScreenDreamRunOut", DestinationId = screen.Components.Background.Id })
+	end
 end
 
 function SpellPotionUsedPresentation( owner, weaponData )
@@ -66,7 +72,7 @@ function SpellFailToFirePresentation( triggerArgs )
 		end
 		local manaSpendCost = GetManaSpendCost(GetWeaponData( CurrentRun.Hero, traitData.PreEquipWeapons[1]))
 		if CheckCountInWindow( "SpellFailedToFire", 1.0, 4 ) and CheckCooldown("AttackNotReady", 1.0) then
-			thread( PlayVoiceLines, HeroVoiceLines.SpellNotReadyVoiceLines, true )
+
 			if SessionMapState.BlockSpellCharge then
 				thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "UseBlockedByMisc", PreDelay = 0.35, Duration = 1.25, Cooldown = 2.0 } )
 			elseif existingTraitData.RemainingUses and existingTraitData.RemainingUses <= 0 then
@@ -77,7 +83,10 @@ function SpellFailToFirePresentation( triggerArgs )
 				thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "UseBlockedByMisc", PreDelay = 0.35, Duration = 1.25, Cooldown = 2.0 } )
 			elseif MapState.HostilePolymorph then
 				thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "UseBlockedByMisc", PreDelay = 0.35, Duration = 1.25, Cooldown = 2.0 } )
+			elseif CurrentRun.Hero.Weapons.WeaponAxe and ( CurrentRun.Hero.ActiveEffects.AxeSpinSelfChargeSlow or CurrentRun.Hero.ActiveEffects.AxeSpinSelfFireSlow ) then
+				thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "UseBlockedByMisc", PreDelay = 0.35, Duration = 1.25, Cooldown = 2.0 } )
 			else
+				thread( PlayVoiceLines, HeroVoiceLines.SpellNotReadyVoiceLines, true )
 				thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "Spell_NotReady", PreDelay = 0.35, Duration = 1.25, Cooldown = 2.0 } )
 			end
 			PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo", Id = traitData.AnchorId, ManagerCap = 54 })
@@ -95,11 +104,11 @@ function SpellReadyPresentation( traitData, delay )
 		TraitUIDeactivateTrait( traitData )
 		
 		StopAnimation({ Name = "HexReadyLoop", DestinationId = traitData.AnchorId })
-		CreateAnimation({ Name = "HexReadyFlash", DestinationId = traitData.AnchorId, GroupName = "Combat_Menu_TraitTray_Overlay_Additive" })	
-		CreateAnimation({ Name = "SpellReadyMelFx", DestinationId = CurrentRun.Hero.ObjectId, GroupName = "Combat_Menu_TraitTray_Overlay_Additive" })	
-		CreateAnimation({ Name = "HexReadyFlashLargeA", DestinationId = traitData.AnchorId, GroupName = "Combat_Menu_TraitTray_Overlay_Additive" })	
-		CreateAnimation({ Name = "HexReadyFlashLargeB", DestinationId = traitData.AnchorId, GroupName = "Combat_Menu_TraitTray_Overlay_Additive" })	
-		CreateAnimation({ Name = "HexReadyLoop", DestinationId = traitData.AnchorId, GroupName = "Combat_Menu_TraitTray_Overlay_Additive" })
+		CreateAnimation({ Name = "HexReadyFlash", DestinationId = traitData.AnchorId })	
+		CreateAnimation({ Name = "SpellReadyMelFx", DestinationId = CurrentRun.Hero.ObjectId })	
+		CreateAnimation({ Name = "HexReadyFlashLargeA", DestinationId = traitData.AnchorId })	
+		CreateAnimation({ Name = "HexReadyFlashLargeB", DestinationId = traitData.AnchorId })	
+		CreateAnimation({ Name = "HexReadyLoop", DestinationId = traitData.AnchorId })
 		if not SessionMapState.SpellWorldReadyFx then
 			SessionMapState.SpellWorldReadyFx = true
 			CreateAnimation({ Name = "SorceryReadyMoonLoopIn", DestinationId = CurrentRun.Hero.ObjectId })
@@ -239,7 +248,7 @@ function SpellActivateTrait( traitData )
 	end
 	if traitData.AnchorId then
 		StopAnimation({ Name = "HexReadyLoop", DestinationId = traitData.AnchorId })
-		CreateAnimation({ Name = "HexReadyLoop", DestinationId = traitData.AnchorId, GroupName = "Combat_Menu_TraitTray_Overlay_Additive" })
+		CreateAnimation({ Name = "HexReadyLoop", DestinationId = traitData.AnchorId })
 	end
 	if not SessionMapState.SpellWorldReadyFx then
 		SessionMapState.SpellWorldReadyFx = true
@@ -467,10 +476,12 @@ function DoFullSuperPresentation( godName )
 	AdjustRadialBlurDistance({ Fraction = 0.125, Duration = 0 })
 	AdjustRadialBlurStrength({ Fraction = 0, Duration = 0.03, Delay= 0 })
 	AdjustRadialBlurDistance({ Fraction = 0, Duration = 0.03, Delay= 0 })
-	-- audio
+
 	local sourceName = godName.."Upgrade"
 	local sourceData = LootData[sourceName]
 	local dummySource = { Name = sourceName, SubtitleColor = sourceData.SubtitleColor }
+
+	-- audio
 	thread( PlayVoiceLines, sourceData.FullSuperActivatedVoiceLines or HeroVoiceLines.FullSuperActivatedVoiceLines, nil, dummySource )
 	PlaySound({ Name = sourceData.ShoutActivationSound or "/Leftovers/SFX/MeteorStrikeShort" })
 	AudioState.ShoutEffectSoundId = PlaySound({ Name = "/SFX/WrathStartNoEmote", Id = CurrentRun.Hero.ObjectId })

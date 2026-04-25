@@ -342,6 +342,8 @@
 		OnEnemyDamagedFunction = { FunctionName = "RemoveMissileMark" },
 		NoTargetColor = { 142, 142, 142, 255 },
 		NoTargetHSV = { 1.0, -1.0, -0.5 },
+		ManualCheckDamageOnFire = true,
+		ManualCheckOnWeaponFired = true,
 
 		OnProjectileDeathFunctionArgs = 
 		{

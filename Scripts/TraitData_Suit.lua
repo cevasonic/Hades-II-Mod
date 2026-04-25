@@ -693,6 +693,33 @@
 			WeaponSuitRanged = 
 			{
 				BlockEarlySwap = true,
+
+				Sounds =
+				{
+					FireSounds =
+					{
+						{ Name = "/SFX/Player Sounds/MelinoeSuitSpecialPreLaunch" },
+					},
+					FireStageSounds = 
+					{
+						{ Name = "/SFX/Player Sounds/MelinoeSuitSpecialLaunch" },
+						{ Name = "/VO/MelinoeEmotes/EmotePowerAttackingSuit" },
+					},
+					ImpactSounds =
+					{
+						Invulnerable = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Armored = "/SFX/Player Sounds/ZagreusShieldRicochet",
+						Bone = "/SFX/ArrowMetalBoneSmash",
+						Brick = "/SFX/ArrowMetalStoneClang",
+						Stone = "/SFX/ArrowMetalStoneClang",
+						Organic = "/SFX/ArrowImpactSplatter",
+						StoneObstacle = "/SFX/ArrowWallHitClankSmall",
+						BrickObstacle = "/SFX/ArrowWallHitClankSmall",
+						MetalObstacle = "/SFX/ArrowWallHitClankSmall",
+						BushObstacle = "/Leftovers/World Sounds/LeavesRustle",
+						Shell = "/SFX/ShellImpact",
+					},
+				},
 			}
 		},
 		PropertyChanges = 

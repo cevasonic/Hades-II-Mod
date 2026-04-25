@@ -13,6 +13,8 @@ ScreenData.RunHistory =
 		"RunHistoryInSurfaceFail",
 		"RunHistoryInChaos",
 		"RunHistoryInChaosFail",
+		"RunHistoryInDream",
+		"RunHistoryInDreamFail",
 	},
 
 	OutAnimations =
@@ -23,6 +25,8 @@ ScreenData.RunHistory =
 		"RunHistoryOutSurfaceFail",
 		"RunHistoryOutChaos",
 		"RunHistoryOutChaosFail",
+		"RunHistoryOutDream",
+		"RunHistoryOutDreamFail",
 	},
 
 	TransitionFromBlankAnimations =
@@ -33,6 +37,8 @@ ScreenData.RunHistory =
 		"RunHistoryTransitionBlankToSurfaceFail",
 		"RunHistoryTransitionBlankToChaos",
 		"RunHistoryTransitionBlankToChaosFail",
+		"RunHistoryTransitionBlankToDream",
+		"RunHistoryTransitionBlankToDreamFail",
 	},
 
 	TransitionToBlankAnimations =
@@ -43,6 +49,8 @@ ScreenData.RunHistory =
 		"RunHistoryTransitionSurfaceFailToBlank",
 		"RunHistoryTransitionChaosToBlank",
 		"RunHistoryTransitionChaosFailToBlank",
+		"RunHistoryTransitionDreamToBlank",
+		"RunHistoryTransitionDreamFailToBlank",
 	},
 
 	ItemStartX = 95,
@@ -339,6 +347,22 @@ ScreenData.RunHistory =
 			},
 		},
 
+		DreamRunSubtitleResultText =
+		{
+			X = 752,
+			Y = 528,
+			TextArgs =
+			{
+				FontSize = 21,
+				OffsetX = 0, OffsetY = -2,
+				Color = { 150, 225, 200, 180 },
+				TextSymbolScale = 0.9,
+				Font = "P22UndergroundSCMedium",
+				ShadowBlur = 0, ShadowColor = {0,0,0,0}, ShadowOffset={0, 3},
+				Justification = "Center",
+			},
+		},
+
 		TimeText =
 		{
 			X = 758,
@@ -626,6 +650,10 @@ RunResultData =
 	SurfaceFail = 4,
 	BountySuccess = 5,
 	BountyFail = 6,
+	UnderworldRandomBountySuccess = 7,
+	SurfaceRandomBountySuccess = 8,
+	DreamSuccess = 9,
+	DreamFail = 10,
 }
 
 -- RunHistory Screen

@@ -57,6 +57,9 @@ ProcessTraitDataBlacklist = ToLookup(
 	"WeaponDataOverride",
 	"ConsumedVoiceLines",
 	"OnSpawnVoiceLines",
+	"GiftTextLineSets",
+	"InteractTextLineSets",
+	"UpgradeMenuOpenVoiceLines",
 	"UseFunctionNames",
 	"UseFunctionArgs",
 	"PurchaseRequirements",
@@ -85,9 +88,9 @@ LinkedTraitData =
 	ApolloBlindTraits = { "ApolloCastBoon", "ApolloSprintBoon", "ApolloRetaliateBoon", "BlindChanceBoon", },
 
 	AresCoreTraits = { "AresWeaponBoon", "AresSpecialBoon", "AresCastBoon", "AresSprintBoon", "AresManaBoon" },
-	AresRendTraits = { "AresWeaponBoon", "AresSpecialBoon" },
-	AresBloodDropTraits = { "AresManaBoon", "BloodDropRevengeBoon", "RendBloodDropBoon" },
-	AresSwordTraits = { "AresCastBoon", "AresSprintBoon", "OmegaDelayedDamageBoon" },
+	AresRendTraits = { "AresWeaponBoon", "AresSpecialBoon" }, -- FireballRendBoon
+	AresBloodDropTraits = { "AresManaBoon", "BloodDropRevengeBoon" },
+	AresSwordTraits = { "AresCastBoon", "AresSprintBoon", "OmegaDelayedDamageBoon", "RendBloodDropBoon" },
 
 	DemeterCoreTraits = { "DemeterWeaponBoon", "DemeterSpecialBoon", "DemeterCastBoon", "DemeterSprintBoon", "DemeterManaBoon" },
 	DemeterRootTraits = { "DemeterWeaponBoon", "DemeterSpecialBoon", "DemeterCastBoon", },
@@ -209,7 +212,7 @@ TraitRequirements =
 
 		OneFromEachSet =
 		{
-			{ "HestiaCastBoon" },
+			LinkedTraitData.HestiaBurnTraits,
 			{ "BurnExplodeBoon", "BurnArmorBoon", "BurnStackBoon", "OmegaZeroBurnBoon", },
 			{ "CastProjectileBoon", "FireballManaSpecialBoon", },
 		},
@@ -247,14 +250,14 @@ TraitRequirements =
 
 	-- Ares
 	
-	RendBloodDropBoon = { OneOf = LinkedTraitData.AresRendTraits, },
+	RendBloodDropBoon = { OneOf = CombineTables(LinkedTraitData.AresRendTraits, LinkedTraitData.AresBloodDropTraits) },
 	AresStatusDoubleDamageBoon = { OneOf = LinkedTraitData.AresRendTraits, },
 	AresExCastBoon = { OneOf = LinkedTraitData.CastTraits, },
 	DoubleBloodDropBoon =
 	{
 		OneFromEachSet =
 		{
-			{ "AresWeaponBoon", "AresSpecialBoon", "AresCastBoon", "AresSprintBoon", },
+			LinkedTraitData.AresRendTraits,
 			LinkedTraitData.AresBloodDropTraits,
 			{ "AresExCastBoon",  "AresStatusDoubleDamageBoon", "MissingHealthCritBoon", "LowHealthLifestealBoon", "OmegaDelayedDamageBoon", },
 		},
@@ -288,7 +291,6 @@ TraitRequirements =
 			"BloodDropRevengeBoon",
 			"MissingHealthCritBoon",
 			"AresStatusDoubleDamageBoon",
-			"RendBloodDropBoon",
 			-- Duos
 			"DoubleSplashBoon",
 			"BloodManaBurstBoon",
@@ -582,7 +584,7 @@ TraitRequirements =
 	{
 		OneFromEachSet = 
 		{
-			{ "AresCastBoon", "AresExCastBoon", },
+			{ "AresCastBoon", "AresExCastBoon", "OmegaDelayedDamageBoon" },
 			LinkedTraitData.DemeterCoreTraits,
 		}
 	},
@@ -1011,6 +1013,26 @@ TraitSetData.Base =
 			Name = "LoadResourcesForPendingDeliveryItem",
 			Args = {},
 		},
+	},
+
+	ForceCommonAppearanceTrait = 
+	{
+		CustomRarityColor = Color.White,
+		CustomRarityName = " ",
+		InfoBackingAnimation = "BoonSlotBase",
+		Frame = "Common",
+		UpgradeChoiceBackingAnimation = "BoonSlotBase",
+		DebugOnly = true,
+	},
+	
+	ForceDuoAppearanceTrait = 
+	{
+		CustomRarityColor = Color.BoonPatchDuo,
+		CustomRarityName = "Duo",
+		InfoBackingAnimation = "BoonSlotDuo",
+		Frame = "Duo",
+		UpgradeChoiceBackingAnimation = "BoonSlotDuo",
+		DebugOnly = true,
 	},
 
 	ChaosCurseTrait =

@@ -35,7 +35,7 @@ OverwriteTableKeys( EncounterData,
 		SkipCombatBeginsVoiceLines = true,
 		RequireCompletedIntro = true,
 		PreSpawnEnemies = false,
-		TimerBlock = "ThanatosEncounter",
+		TimerBlock = "HeraclesEncounter",
 		BlockHighlightEliteTypes = true,
 
 		CanEncounterSkip = false,

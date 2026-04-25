@@ -14,6 +14,7 @@ UnitSetData.NPC_Hermes =
 		EmoteOffsetX = 50,
 
 		SpeakerName = "Hermes",
+		LoadPackages = { "Hermes", },
 		Speaker = "NPC_Hermes_01",
 		ThemeMusic = "/Music/ArtemisTheme_MC",
 		InvincibubbleScale = 1.0,
@@ -26,6 +27,68 @@ UnitSetData.NPC_Hermes =
 		NarrativeTextColor = Color.DialogueTextLight,
 		NameplateSpeakerNameColor = Color.DialogueSpeakerNameOlympian,
 		NameplateDescriptionColor = {145, 45, 90, 255},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					BlockInteract = true,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "HermesDream_Mesh",
+					SetAnimation = "Hermes_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+		},
 
 		ActivateRequirements =
 		{
@@ -151,9 +214,11 @@ UnitSetData.NPC_Hermes =
 
 			{ Cue = "/VO/Hermes_0146", Text = "Anytime...!" },
 			{ Cue = "/VO/Hermes_0147", Text = "Hey, {#Emph}erm...?", PlayFirst = true },
+			{ Cue = "/VO/Hermes_0408", Text = "Too slow!" },
 			{ Cue = "/VO/Hermes_0148", Text = "Hello?" },
 			{ Cue = "/VO/Hermes_0149", Text = "Come on already, M..." },
-			{ Cue = "/VO/Hermes_0144", Text = "Nope!" },
+			{ Cue = "/VO/Hermes_0144", Text = "Nope." },
+			{ Cue = "/VO/Hermes_0409", Text = "Nope!" },
 			{ Cue = "/VO/Hermes_0145", Text = "{#Emph}Mm-mm." },
 		},
 
@@ -254,7 +319,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -314,7 +378,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -361,7 +424,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -408,7 +470,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -442,7 +503,6 @@ UnitSetData.NPC_Hermes =
 					PreLineAnim = "Hermes_Explaining",
 					Text = "Yep, more or less! They figure that if we have to take on Typhon, and we do, this is the perfect spot! After all, it's a long way down from the summit. A {#Emph}quick {#Prev}way down, mind!" },
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -485,7 +545,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -539,7 +598,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -606,7 +664,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -646,7 +703,6 @@ UnitSetData.NPC_Hermes =
 					PreLineAnim = "Hermes_Explaining",
 					Text = "Oh that is grim. Although you know what else is? This {#Emph}entire {#Prev}situation we're in. I mean, {#Emph}look {#Prev}at this place! So how about we both get out of here?" },
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -695,7 +751,6 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
 			},
@@ -756,9 +811,182 @@ UnitSetData.NPC_Hermes =
 					},
 				},
 
-				-- EndGlobalVoiceLines = "HermesSendOffVoiceLines",
 				EndFunctionName = "RemoveHermesInPerson",
 				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
+			},
+
+			HermesFieldAboutGold01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "Q_PreBoss01" },
+					},
+					{
+						Path = { "GameState", "EnemyKills", "TyphonHead" },
+						Comparison = ">=",
+						Value = 2,
+					},
+					OrRequirements =
+					{
+						-- currently low on money
+						{
+							{
+								Path = { "GameState", "Resources", "Money" },
+								Comparison = "<=",
+								Value = 200,
+							},
+						},
+						-- Hermes already queued this conversation
+						{
+							{
+								PathFromSource = true,
+								Path = { "NextInteractLines", "Name" },
+								IsAny = { "HermesFieldAboutGold01" },
+							},
+						},
+					},
+				},
+
+				{ Cue = "/VO/Hermes_0267",
+					Portrait = "Portrait_Hermes_InPerson_01",
+					Speaker = "HermesUpgrade",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Hermes_Greeting", WaitTime = 0.2, AngleNPCToHero = true },
+					Text = "Not too much coin you've got there, M. I'd spot you some, it's just that my professional associate, he's very strict about not passing it about unnecessarily and all." },
+
+				{ Cue = "/VO/MelinoeField_4222", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Oh that's all right. I really ought be able to withstand the rage of Typhon with or without these very tempting wares." },
+
+				{ Cue = "/VO/Hermes_0268",
+					Portrait = "Portrait_Hermes_InPerson_01",
+					Speaker = "HermesUpgrade",
+					PreLineAnim = "Hermes_Explaining",
+
+					Text = "Now {#Emph}that's {#Prev}an attitude! Might be just a little overconfident there, mind, but then again you've taken down some monsters once or twice!" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.32,
+						UsePlayerSource = true,
+						{ Cue = "/VO/MelinoeField_4223", Text = "And it's time for some more." },
+					},
+				},
+
+				EndFunctionName = "RemoveHermesInPerson",
+				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
+			},
+
+			HermesFieldAboutLittleToSay01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "Q_PreBoss01" },
+					},
+				},
+
+				{ Cue = "/VO/Hermes_0387",
+					Portrait = "Portrait_Hermes_InPerson_01",
+					Speaker = "HermesUpgrade",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Hermes_Greeting", WaitTime = 0.2, AngleNPCToHero = true },
+					Text = "It's getting busier for me again, M, so I'll likely need to keep these little conversations nice and quick." },
+
+				{ Cue = "/VO/MelinoeField_4227", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Of course, Lord Hermes. I don't expect you to take time out of your schedule just for my sake. Do as you must." },
+
+				{ Cue = "/VO/Hermes_0388",
+					Portrait = "Portrait_Hermes_InPerson_01",
+					Speaker = "HermesUpgrade",
+					PreLineAnim = "Hermes_Explaining",
+					Text = "I always do, but I did want to tell you cheers again, for coming all this way not just tonight but when I asked you in the first place, way back when. See you when you stop by, all right? Briefly, but still." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.32,
+						UsePlayerSource = true,
+						{ Cue = "/VO/MelinoeField_4228", Text = "See you!" },
+					},
+				},
+
+				EndFunctionName = "RemoveHermesInPerson",
+				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 0.6 },
+			},
+
+			-- partner conversations
+			HermesWithHecate01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				Partner = "NPC_Hecate_01",
+				UseText = "UseListenNPC",
+				SkipPreEventFunction = true,
+				AngleTowardTargetId = 556921,
+				InteractDistance = 400,
+
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll =
+						{
+							"NyxWithHecate01",
+							"NemesisWithHecate02",
+						},
+					},
+					{
+						PathFalse = { "CurrentRun", "TextLinesRecord", "FatesEpilogue01" }
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HermesHubGreeting,
+				OnQueuedThreadedFunctionName = "CenterInteractRange",
+
+				{ Cue = "/VO/Hermes_0293",
+					Text = "What can I say? It's been a real pleasure, Hec. Always has. Cheers for taking me into the fold and all, and I'll be keeping you informed. You've got my guarantee!" },
+
+				{ Cue = "/VO/Hecate_0875", Source = "NPC_Hecate_01",
+					PreLineAnim = "HecateHubGreet", PreLineAnimTarget = 556921,
+					Portrait = "Portrait_Hec_Default_01", 
+					Text = "And you've my gratitude, Hermes. If not for you, we would have been entirely caught out, and things would have gone worse. Shall you be visiting more frequently henceforth?" },
+
+				{ Cue = "/VO/Hermes_0294",
+					Text = "Don't think I can just yet, Pop doesn't want me running off so much, the family's got a lot of messages they want to send. But I'll keep well in touch with you and M, all right?" },
+
+				EndVoiceLines =
+				{
+					PreLineWait = 0.4,
+					ObjectType = "NPC_Hecate_01",
+					{ Cue = "/VO/Hecate_0876", Text = "Of course. Then hurry back." },
+				},
+
+				EndFunctionName = "RemoveHermesInPerson",
+				EndFunctionArgs = { SkipBoonDrop = true, WaitTime = 1.0 },
 			},
 
 		},
@@ -858,6 +1086,8 @@ GlobalVoiceLines.HermesFirstSpawnVoiceLines =
 						"HermesFieldAboutCharon01",
 						"HermesFieldAboutBusiness01",
 						"HermesFieldAboutSupport01",
+						"HermesFieldAboutGold01",
+						"HermesFieldAboutLittleToSay01",
 					},
 				},
 			},
@@ -881,6 +1111,8 @@ GlobalVoiceLines.HermesFirstSpawnVoiceLines =
 			{ Cue = "/VO/Hermes_0233", Text = "See anything you like?" },
 			{ Cue = "/VO/Hermes_0232", Text = "How about a resupply?" },
 			{ Cue = "/VO/Hermes_0229", Text = "What'll it be?" },
+			{ Cue = "/VO/Hermes_0230", Text = "Something you need?" },
+			{ Cue = "/VO/Hermes_0231", Text = "May I take your order?" },
 		},
 		{
 			RandomRemaining = true,
@@ -965,6 +1197,181 @@ GlobalVoiceLines.HermesFirstSpawnVoiceLines =
 				},
 			},
 		},
+		{ Cue = "/VO/Hermes_0299", Text = "Hey, look at you, you're rich!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 1400,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0300", Text = "Hey look at all that Gold you've got!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 1400,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0301", Text = "Don't need all that Gold weighing you down!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 1400,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0302", Text = "You won't be needing all that Gold!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 1200,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0303", Text = "Did Dionysus really pay you back...?",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 1400,
+				},
+				{
+					PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "BankBoon" },
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0304", Text = "Looks like Paid Dues didn't leave you much to spare!",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = "<=",
+					Value = 400,
+				},
+				{
+					PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "TimeStopLastStandBoon" },
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0305", Text = "Should be able to get whatever you need!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 1200,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0306", Text = "How about a little shopping prior to the fight?",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 500,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0307", Text = "A little low on coin there aren't you M?",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = "<=",
+					Value = 200,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0308", Text = "Spent all your hard-earned coin already, M?",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = "<=",
+					Value = 200,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0309", Text = "This must be one of those time pockets Gramps set up!",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "ReachedTrueEnding" },
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0310", Text = "All proceeds go to my professional associate!" },
+		{ Cue = "/VO/Hermes_0311", Text = "Here's the latest haul, just take your pick!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 500,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0312", Text = "Let's see if we can get you back in fighting shape!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "LastStands" },
+					UseLength = true,
+					Comparison = "<=",
+					Value = 1,
+				},
+				{
+					FunctionName = "RequiredHealthFraction",
+					FunctionArgs = { Comparison = "<=", Value = 0.3, },
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0313", Text = "Typhon's past due for a little payback isn't he?",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "LastBossHealthBarRecord", "TyphonHead" },
+					Comparison = ">",
+					Value = 0,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0314", Text = "Just take your time here, M, or breeze on through!" },
+		{ Cue = "/VO/Hermes_0315", Text = "Can't stay for long here, M, though take your pick!" },
+		{ Cue = "/VO/Hermes_0316", Text = "You probably could take that Typhon down again!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "LastBossHealthBarRecord", "TyphonHead" },
+					Comparison = "<=",
+					Value = 0,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0317", Text = "Stock up on everything you can then go on through!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "GameState", "Resources", "Money" },
+					Comparison = ">=",
+					Value = 800,
+				},
+			},
+		},
+		{ Cue = "/VO/Hermes_0318", Text = "Not your first Typhon! Just make sure he's not your last." },
 	},
 	{
 		RandomRemaining = true,
@@ -998,12 +1405,17 @@ GlobalVoiceLines.HermesFirstSpawnVoiceLines =
 		{ Cue = "/VO/Hermes_0154", Text = "Be safe out there!" },
 		{ Cue = "/VO/Hermes_0155", Text = "See you!" },
 		{ Cue = "/VO/Hermes_0203", Text = "Take care!" },
+		{ Cue = "/VO/Hermes_0204", Text = "Shine on!" },
 		{ Cue = "/VO/Hermes_0205", Text = "Fight on!" },
 		{ Cue = "/VO/Hermes_0206", Text = "Go get 'em!" },
 		{ Cue = "/VO/Hermes_0152", Text = "You got this!" },
 		{ Cue = "/VO/Hermes_0183", Text = "I'm off!" },
+		{ Cue = "/VO/Hermes_0353", Text = "Right I'm off!" },
+		{ Cue = "/VO/Hermes_0354", Text = "See you M!" },
+		{ Cue = "/VO/Hermes_0355", Text = "Taking off!" },
+		{ Cue = "/VO/Hermes_0356", Text = "Later M!" },
+		{ Cue = "/VO/Hermes_0357", Text = "Got to go!" },
 	},
-
 	{
 		RandomRemaining = true,
 		BreakIfPlayed = true,
@@ -1077,26 +1489,7 @@ GlobalVoiceLines.SpecialDeliveryVoiceLines =
 		{ Cue = "/VO/Hermes_0344", Text = "Dropping off!" },
 		{ Cue = "/VO/Hermes_0345", Text = "For you!" },
 		{ Cue = "/VO/Hermes_0346", Text = "Package, M!" },
-		{ Cue = "/VO/Hermes_0342", Text = "Hey, look who!",
-			PlayFirst = true,
-			GameStateRequirements =
-			{
-				{
-					FunctionName = "RequiredAlive",
-					FunctionArgs = { Units = { "NPC_Charon_01" }, },
-				},
-			},
-		},
-		{ Cue = "/VO/Hermes_0343", Text = "Hey mate!",
-			PlayFirst = true,
-			GameStateRequirements =
-			{
-				{
-					FunctionName = "RequiredAlive",
-					FunctionArgs = { Units = { "NPC_Charon_01" }, },
-				},
-			},
-		},
+		{ Cue = "/VO/Hermes_0342", Text = "Hey, look who!" },
 	},
 }
 GlobalVoiceLines.HermesHarvestReactionVoiceLines =
@@ -1126,6 +1519,29 @@ GlobalVoiceLines.HermesHarvestReactionVoiceLines =
 	{ Cue = "/VO/Hermes_0246", Text = "No need to help clean up!" },
 	{ Cue = "/VO/Hermes_0247", Text = "Find anything?" },
 	{ Cue = "/VO/Hermes_0248", Text = "That's on the house!" },
+	{ Cue = "/VO/Hermes_0359", Text = "Finder's fee?" },
+	{ Cue = "/VO/Hermes_0360", Text = "Sure, why not!" },
+	{ Cue = "/VO/Hermes_0361", Text = "What is that stuff?" },
+	{ Cue = "/VO/Hermes_0362", Text = "Have at it!" },
+}
+GlobalVoiceLines.HermesExorcismReactionVoiceLines =
+{
+	RandomRemaining = true,
+	BreakIfPlayed = true,
+	PreLineWait = 0.65,
+	SuccessiveChanceToPlayAll = 0.5,
+	ObjectType = "NPC_Hermes_01",
+	Cooldowns =
+	{
+		{ Name = "HermesSpokeRecently", Time = 4 },
+	},
+
+	{ Cue = "/VO/Hermes_0381", Text = "I used to do that.", PlayFirst = true },
+	{ Cue = "/VO/Hermes_0382", Text = "That's {#Emph}my {#Prev}job!" },
+	{ Cue = "/VO/Hermes_0383", Text = "One for the cause." },
+	{ Cue = "/VO/Hermes_0384", Text = "Well done." },
+	{ Cue = "/VO/Hermes_0385", Text = "I'll keep an eye on 'em." },
+	{ Cue = "/VO/Hermes_0386", Text = "Safe travels!" },
 }
 GlobalVoiceLines.HermesPurchaseReactionVoiceLines =
 {
@@ -1156,6 +1572,12 @@ GlobalVoiceLines.HermesPurchaseReactionVoiceLines =
 	{ Cue = "/VO/Hermes_0239", Text = "Deal!" },
 	{ Cue = "/VO/Hermes_0240", Text = "More Gold!" },
 	{ Cue = "/VO/Hermes_0137", Text = "Pleasure doing business!" },
+	{ Cue = "/VO/Hermes_0319", Text = "Sold!" },
+	{ Cue = "/VO/Hermes_0320", Text = "It's a deal!" },
+	{ Cue = "/VO/Hermes_0321", Text = "Deal." },
+	{ Cue = "/VO/Hermes_0322", Text = "{#Emph}Cha-ching!" },
+	{ Cue = "/VO/Hermes_0323", Text = "It'll be worth it!" },
+	{ Cue = "/VO/Hermes_0324", Text = "Service charge." },
 	{ Cue = "/VO/Hermes_0236", Text = "Anything else?",
 		PlayFirst = true,
 		GameStateRequirements =
@@ -1196,26 +1618,10 @@ GlobalVoiceLines.HermesNoMoneyReactionVoiceLines =
 	{ Cue = "/VO/Hermes_0243", Text = "Blame my professional associate not me!", PlayFirst = true },
 	{ Cue = "/VO/Hermes_0244", Text = "Don't have the Gold?" },
 	{ Cue = "/VO/Hermes_0142", Text = "Can't do that, M." },
-}
-GlobalVoiceLines.HermesSendOffVoiceLines =
-{
-	RandomRemaining = true,
-	BreakIfPlayed = true,
-	PreLineWait = 0.35,
-	SuccessiveChanceToPlay = 0.75,
-	SuccessiveChanceToPlayAll = 0.5,
-	ObjectType = "NPC_Hermes_01",
-
-	{ Cue = "/VO/Hermes_0203", Text = "Take care!" },
-	{ Cue = "/VO/Hermes_0204", Text = "Shine on!" },
-	{ Cue = "/VO/Hermes_0205", Text = "Fight on!" },
-	{ Cue = "/VO/Hermes_0206", Text = "Go get 'em!" },
-	{ Cue = "/VO/Hermes_0150", Text = "Be seeing you around!" },
-	{ Cue = "/VO/Hermes_0151", Text = "So long for now!" },
-	{ Cue = "/VO/Hermes_0152", Text = "You got this!" },
-	{ Cue = "/VO/Hermes_0153", Text = "Bye now!" },
-	{ Cue = "/VO/Hermes_0154", Text = "Be safe out there!" },
-	{ Cue = "/VO/Hermes_0155", Text = "See you!" },
+	{ Cue = "/VO/Hermes_0325", Text = "Oh no...!" },
+	{ Cue = "/VO/Hermes_0326", Text = "I'd spot you if I could..." },
+	{ Cue = "/VO/Hermes_0327", Text = "No Gold?" },
+	{ Cue = "/VO/Hermes_0328", Text = "{#Emph}Tsk, ah." },
 }
 
 OverwriteTableKeys( EnemyData, UnitSetData.NPC_Hermes )

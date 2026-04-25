@@ -93,26 +93,6 @@ RewardData =
 							{ Name = "MelinoeAnyQuipSpeech" },
 						},
 
-						{ Cue = "/VO/MelinoeField_1549", Text = "Five chambers left...",
-							GameStateRequirements =
-							{
-								{
-									Path = { "CurrentRun", "RemainingClockworkGoals", },
-									Comparison = ">=",
-									Value = 5,
-								},
-							},
-						},
-						{ Cue = "/VO/MelinoeField_1550", Text = "Five chambers to go...",
-							GameStateRequirements =
-							{
-								{
-									Path = { "CurrentRun", "RemainingClockworkGoals", },
-									Comparison = ">=",
-									Value = 5,
-								},
-							},
-						},
 						{ Cue = "/VO/MelinoeField_1551", Text = "Four more chambers...",
 							GameStateRequirements =
 							{

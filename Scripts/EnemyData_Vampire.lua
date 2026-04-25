@@ -3,7 +3,7 @@ UnitSetData.Vampire =
 	
 	Vampire =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 
 		Groups = { "FlyingEnemies", "GroundEnemies" },
 		Material = "Bone",

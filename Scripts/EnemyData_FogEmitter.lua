@@ -2,7 +2,7 @@ UnitSetData.FogEmitter =
 {
 	FogEmitter =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 
 		ActivateFx = "EnemyPreSpawnTerrainLarge",
 		ActivateFx2 = "EnemyPreSpawnStandingLarge",
@@ -137,7 +137,7 @@ UnitSetData.FogEmitter =
 
 	FogEmitter2 =
 	{
-		InheritFrom = { "FogEmitter", },
+		InheritFrom = { "BaseHEnemy", "FogEmitter", },
 		MaxHealth = 730,
 
 		ActivateAnimation = "Enemy_FogEmitter_Spawn_Quick",
@@ -195,6 +195,7 @@ UnitSetData.FogEmitter =
 			BlockSolo = true,
 			BlockEnemyTypes = {"FogEmitter"}
 		},
+		BlacklistAfterFirstAppearance = true,
 	}
 }
 

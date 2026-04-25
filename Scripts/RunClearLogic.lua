@@ -10,7 +10,10 @@ function OpenRunClearScreen()
 
 	local prevRecordTime = nil
 	local prevRecordShrinePoints = nil
-	if CurrentRun.BiomesReached.F then
+	if CurrentRun.IsDreamRun then
+		prevRecordTime = -999999
+		prevRecordShrinePoints = 999999
+	elseif CurrentRun.BiomesReached.F then
 		prevRecordTime = GameState.FastestUnderworldClearTimeCache
 		prevRecordShrinePoints = GameState.HighestShrinePointClearUnderworldCache
 	else
@@ -20,13 +23,21 @@ function OpenRunClearScreen()
 
 	RecordRunCleared()
 
+	if CurrentRun.IsDreamRun then
+		LoadVoiceBanks( { Name = "Hypnos" }, nil, true )
+	end
 	thread( PlayVoiceLines, HeroVoiceLines.RunClearedVoiceLines )
 
 	local screen = DeepCopyTable( ScreenData.RunClear )
 	screen.DamageDealtStartX = ScreenWidth - screen.DamageDealtRightOffset
 	screen.DamageDealtStartY = screen.DamageDealtStartY + (ScreenCenterNativeOffsetY * 2)
 	screen.DamageTakenStartY = screen.DamageTakenStartY + (ScreenCenterNativeOffsetY * 2)
-	if CurrentRun.BiomesReached.Q then
+
+	if CurrentRun.IsDreamRun then
+		screen.ComponentData.VictoryBackground.Animation = "VictoryScreenIllustration_Dream"
+		screen.ComponentData.TitleText = screen.ComponentData.DreamRunTitleText
+		screen.ComponentData.RunClearMessageText = screen.ComponentData.DreamRunClearMessageText
+	elseif CurrentRun.BiomesReached.Q then
 		screen.ComponentData.VictoryBackground.Animation = "VictoryScreenIllustration_Surface"
 		screen.ComponentData.TitleText = screen.ComponentData.SurfaceTitleText
 		screen.ComponentData.RunClearMessageText = screen.ComponentData.SurfaceRunClearMessageText
@@ -39,6 +50,8 @@ function OpenRunClearScreen()
 	screen.ComponentData.UnderworldRunClearMessageText = nil
 	screen.ComponentData.SurfaceTitleText = nil
 	screen.ComponentData.SurfaceRunClearMessageText = nil
+	screen.ComponentData.DreamRunTitleText = nil
+	screen.ComponentData.DreamRunClearMessageText = nil
 
 	local args = {}
 	HideMoneyUI( args )
@@ -52,7 +65,6 @@ function OpenRunClearScreen()
 
 	OnScreenOpened( screen )
 	CreateScreenFromData( screen, screen.ComponentData )
-	OnScreenOpened( screen )
 	FrameState.RequestUpdateHealthUI = true
 
 	local components = screen.Components
@@ -64,6 +76,8 @@ function OpenRunClearScreen()
 			SetAnimation({ DestinationId = components.BadgeRankIcon.Id, Name = badgeData.Icon })
 		end
 	end
+
+	TraitTrayScreenClose( ActiveScreens.TraitTrayScreen )
 
 	wait( 0.3 )
 
@@ -197,7 +211,11 @@ function OpenRunClearScreen()
 
 	-- Clear Message
 	local message = nil
-	if CurrentRun.ActiveBounty then
+	local tooltipData = nil
+	if CurrentRun.IsDreamRun then
+		message = "ClearDreamRun"
+		tooltipData = GetVisitedBiomeIcons( CurrentRun )
+	elseif CurrentRun.ActiveBounty then
 		message = CurrentRun.ActiveBounty
 	else
 		local messageData = GetRandomEligiblePrioritizedItem( GameData.RunClearMessageData, screen.MessagePriorities, GameState.PlayedRunClearMessages, GameState.RemainingRunClearMessages )
@@ -207,7 +225,7 @@ function OpenRunClearScreen()
 			CurrentRun.VictoryMessage = message
 		end
 	end
-	RunClearMessagePresentation( screen, message )
+	RunClearMessagePresentation( screen, message, tooltipData )
 
 	killTaggedThreads( CombatUI.HideThreadName )
 	RemoveInputBlock({ Name = "OpenRunClearScreen" })

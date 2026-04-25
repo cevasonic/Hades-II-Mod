@@ -371,15 +371,7 @@ WeaponSetData =
 
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 4,
-				},
-			}
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		AIData =
@@ -1139,15 +1131,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1236,15 +1220,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1327,15 +1303,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1715,15 +1683,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1990,15 +1950,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -2430,15 +2382,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = "<",
-								Value = 4,
-							},
-						},
+						NamedRequirementsFalse = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -2735,15 +2679,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -2816,15 +2752,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -3028,15 +2956,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -3094,7 +3014,7 @@ WeaponSetData =
 
 		Sounds =
 		{
-			FireSounds =
+			WeaponFireSounds =
 			{
 				{ Name = "/SFX/Enemy Sounds/Chronos/EmotePowerAttackingRanged" },
 				{ Name = "/SFX/Enemy Sounds/CorruptedCerberus/CerberusGroundSlam" },
@@ -3244,15 +3164,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{

@@ -500,6 +500,7 @@ AchievementData =
 					"FamiliarCostume_FrogChthonic",
 					"FamiliarCostume_FrogCute",
 					"FamiliarCostume_FrogMoon",
+					"FamiliarCostume_FrogHell",
 					"FamiliarCostume_FrogNightmare",
 				},
 			},
@@ -510,6 +511,7 @@ AchievementData =
 					"FamiliarCostume_CatChthonic",
 					"FamiliarCostume_CatHell",
 					"FamiliarCostume_CatMoon",
+					"FamiliarCostume_CatChaos",
 					"FamiliarCostume_CatNightmare",
 				},
 			},
@@ -520,6 +522,7 @@ AchievementData =
 					"FamiliarCostume_RavenChthonic",
 					"FamiliarCostume_RavenCute",
 					"FamiliarCostume_RavenMoon",
+					"FamiliarCostume_RavenHell",
 					"FamiliarCostume_RavenNightmare",
 				},
 			},
@@ -530,6 +533,7 @@ AchievementData =
 					"FamiliarCostume_HoundChaos",
 					"FamiliarCostume_HoundHell",
 					"FamiliarCostume_HoundMoon",
+					"FamiliarCostume_HoundCute",
 					"FamiliarCostume_HoundNightmare",
 				},
 			},
@@ -540,6 +544,7 @@ AchievementData =
 					"FamiliarCostume_PolecatChthonic",
 					"FamiliarCostume_PolecatCute",
 					"FamiliarCostume_PolecatHell",
+					"FamiliarCostume_PolecatMoon",
 					"FamiliarCostume_PolecatNightmare",
 				},
 			},
@@ -576,8 +581,13 @@ AchievementData =
 		CompleteGameStateRequirements =
 		{
 			{
-				Path = { "CurrentRun", "RoomsEntered", },
-				HasAny = { "I_Boss01" },
+				Path = { "CurrentRun", "EnteredBiomes", },
+				Comparison = ">=",
+				Value = 4,
+			},
+			{
+				Path = { "CurrentRun", "CurrentRoom", "Name" },
+				IsAny = { "F_Boss01", "F_Boss02", "G_Boss01", "G_Boss02", "H_Boss01", "H_Boss02", "I_Boss01", "N_Boss01", "N_Boss02", "O_Boss01", "O_Boss02", "P_Boss01", "Q_Boss01", "Q_Boss02" },
 			},
 			{
 				Path = { "CurrentRun", "Hero", "TraitDictionary" },

@@ -110,11 +110,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_0781", Text = "The Sorceress." },
+				{ Cue = "/VO/Melinoe_0781", Text = "The Sorceress." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -172,12 +175,15 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2983", Text = "The Wayward Son." },
+				{ Cue = "/VO/Melinoe_2983", Text = "The Wayward Son." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -228,11 +234,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_1147", Text = "The Huntress." },
+				{ Cue = "/VO/Melinoe_1147", Text = "The Huntress." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -282,13 +291,16 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_0997", Text = "Eternity." },
-			{ Cue = "/VO/Melinoe_0785", Text = "Eternity." },
+				{ Cue = "/VO/Melinoe_0997", Text = "Eternity." },
+				{ Cue = "/VO/Melinoe_0785", Text = "Eternity." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -339,12 +351,15 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2791", Text = "The Moon." },
+				{ Cue = "/VO/Melinoe_2791", Text = "The Moon." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -406,12 +421,15 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2984", Text = "The Furies." },
+				{ Cue = "/VO/Melinoe_2984", Text = "The Furies." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -461,11 +479,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_4022", Text = "Persistence." },
+				{ Cue = "/VO/Melinoe_4022", Text = "Persistence." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -522,12 +543,15 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_0998", Text = "The Messenger." },
+				{ Cue = "/VO/Melinoe_0998", Text = "The Messenger." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -578,12 +602,15 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2985", Text = "The Unseen." },
+				{ Cue = "/VO/Melinoe_2985", Text = "The Unseen." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -634,12 +661,15 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2987", Text = "Night." },
+				{ Cue = "/VO/Melinoe_2987", Text = "Night." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -690,13 +720,16 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				RandomRemaining = true,
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_0996", Text = "The Swift Runner." },
-			{ Cue = "/VO/Melinoe_0784", Text = "The Swift Runner." },
+				{ Cue = "/VO/Melinoe_0996", Text = "The Swift Runner." },
+				{ Cue = "/VO/Melinoe_0784", Text = "The Swift Runner." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -748,11 +781,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_1455", Text = "Death." },
+				{ Cue = "/VO/Melinoe_1455", Text = "Death." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -810,12 +846,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2986", Text = "The Centaur." },
+				{ Cue = "/VO/Melinoe_2986", Text = "The Centaur." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -865,11 +903,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2789", Text = "Origination." },
+				{ Cue = "/VO/Melinoe_2789", Text = "Origination." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -917,11 +958,14 @@ MetaUpgradeCardData =
 		},
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_1459", Text = "The Lovers." },
+				{ Cue = "/VO/Melinoe_1459", Text = "The Lovers." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -974,11 +1018,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_4067", Text = "The Enchantress." },
+				{ Cue = "/VO/Melinoe_4067", Text = "The Enchantress." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1030,11 +1077,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2792", Text = "The Boatman." },
+				{ Cue = "/VO/Melinoe_2792", Text = "The Boatman." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1081,15 +1131,18 @@ MetaUpgradeCardData =
 			{ CardUpgradePoints = 5, MixerNBoss = 2 },
 		},
 
+		OnUpgradedFunctionName = "UpgradeMetaToRunUses",
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2989", Text = "The Artificer." },
+				{ Cue = "/VO/Melinoe_2989", Text = "The Artificer." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1140,11 +1193,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_1460", Text = "Excellence." },
+				{ Cue = "/VO/Melinoe_1460", Text = "Excellence." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1200,11 +1256,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2790", Text = "The Queen." },
+				{ Cue = "/VO/Melinoe_2790", Text = "The Queen." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1259,11 +1318,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_1456", Text = "The Fates." },
+				{ Cue = "/VO/Melinoe_1456", Text = "The Fates." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1322,11 +1384,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_1457", Text = "The Champions." },
+				{ Cue = "/VO/Melinoe_1457", Text = "The Champions." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1378,12 +1443,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2988", Text = "Strength." },
+				{ Cue = "/VO/Melinoe_2988", Text = "Strength." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1441,12 +1508,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2990", Text = "Divinity." },
+				{ Cue = "/VO/Melinoe_2990", Text = "Divinity." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{
@@ -1503,12 +1572,14 @@ MetaUpgradeCardData =
 
 		UnlockedCardVoiceLines =
 		{
-			RandomRemaining = true,
-			PreLineWait = 0.65,
-			UsePlayerSource = true,
-			SkipAnim = true,
+			{
+				PreLineWait = 0.65,
+				UsePlayerSource = true,
+				SkipAnim = true,
 
-			{ Cue = "/VO/Melinoe_2991", Text = "Judgment." },
+				{ Cue = "/VO/Melinoe_2991", Text = "Judgment." },
+			},
+			{ GlobalVoiceLines = "AllCardsUnlockedVoiceLines" },
 		},
 		EquipVoiceLines =
 		{

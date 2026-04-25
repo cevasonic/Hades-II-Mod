@@ -402,6 +402,15 @@ OverwriteTableKeys( TraitData, {
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Demeter",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			{
 				FalseTraitName = "LobCloseAttackAspect",			
@@ -1728,9 +1737,9 @@ OverwriteTableKeys( TraitData, {
 					BaseValue = 1.0,
 					AbsoluteStackValues = 
 					{
-						[1] = 0.6,
-						[2] = 0.4,
-						[3] = 0.2,
+						[1] = 0.5,
+						[2] = 0.5,
+						[3] = 0.25,
 					},
 				},
 				BlastRadiusMultiplier = 1,
@@ -1813,6 +1822,12 @@ OverwriteTableKeys( TraitData, {
 			{
 				Path = { "CurrentRun", "CurrentRoom" },
 				HasNone = { "BlockGiftBoons" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ActiveBounty" },
+			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun", },
 			},
 		},
 
@@ -2273,11 +2288,7 @@ OverwriteTableKeys( TraitData, {
 					{
 						GameStateRequirement = 
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 3,
-							},
+							NamedRequirements = { "BossDifficultyActive" },
 						}
 					}
 				},

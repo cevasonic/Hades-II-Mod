@@ -369,7 +369,6 @@
 			Duration = 5,
 			Cooldown = 0.5,
 			Amount = 20,
-			IsVulnerabilityEffect = true,
 			RefreshOnExpireWithEffect = "RefreshBurn"
 		},
 	},
@@ -471,15 +470,16 @@
 	
 		EffectData = {
 			Duration = 1.0,
-			IsVulnerabilityEffect = true,
 			IgnoreName = "_PlayerUnit",
 
 			ElapsedTimeMultiplier = 0.01,
 			ExpiringTimeThreshold = 1,
 			ExpiringModifierFalloff = 1,
 		},
-		--OnApplyFunctionName = "FreezeFrameApply",
-		--OnClearFunctionName = "FreezeFrameClear",
+
+		StunAnimationType = "Default",
+		OnApplyFunctionName = "OnHitStunApply",
+		OnClearFunctionName = "OnHitStunClear",
 	},
 	CastVacuumStun =
 	{
@@ -487,7 +487,6 @@
 	
 		EffectData = {
 			Duration = 1.0,
-			IsVulnerabilityEffect = false,
 			IgnoreName = "_PlayerUnit"
 		},
 		OnApplyFunctionName = "FreezeFrameApply",
@@ -1198,7 +1197,6 @@
 			Type = "DAMAGE_TAKEN",
 			Duration = 10,
 			Modifier = 1.3,
-			IsVulnerabilityEffect = true,
 			IgnoreName = "_PlayerUnit"
 		}
 	},
@@ -1209,7 +1207,6 @@
 			Type = "DAMAGE_TAKEN",
 			Duration = 0.3,
 			Modifier = 0.3,
-			IsVulnerabilityEffect = true,
 			IgnoreName = "_PlayerUnit"
 		}
 	},
@@ -1984,7 +1981,6 @@ WeaponEffectData =
 			ChangeType = "ADD",
 			Duration = 1.6,
 			Modifier = 0.1,
-			IsVulnerabilityEffect = true,
 		}
 	},
 

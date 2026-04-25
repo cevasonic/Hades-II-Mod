@@ -2,7 +2,7 @@ UnitSetData.SirenDrummer =
 {
 	SirenDrummer =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseGEnemy", "BaseVulnerableEnemy"},
 		--Portrait = "Portrait_Scylla_Default_01",
 		Groups = { "NPCs", "GroundEnemies" },
 		AnimOffsetZ = 260,
@@ -34,14 +34,111 @@ UnitSetData.SirenDrummer =
 		MusicStem = "Drums",
 		MusicStemOff = true,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.7,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.0,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.75,
+					SpeedMultiplier = 1.1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.9,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 5,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.75,
+				},
+			},
+		},
+
 		SetupEvents =
 		{
 			{
 				FunctionName = "OverwriteSelf",
 				Args =
 				{
-					GrannyTexture = "GR2/SirenDrummerEM_Color",
-					GrannyAttachmentTexture = { MeshName = "SirensInstrumentDrums_Mesh", GrannyTexture = "GR2/DrumsEM_Color", },
+					DreamBiomeData =
+					{
+						[1] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.7,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.0,
+							},
+						},
+						[2] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 1.25,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.25,
+							},
+						},
+						[3] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 2.75,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.9,
+							},
+						},
+						[4] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 5,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 2.75,
+							},
+						},
+					},
 					OnDamagedEvents =
 					{
 						{
@@ -58,22 +155,80 @@ UnitSetData.SirenDrummer =
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 2,
-						},
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
 					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/SirenDrummerEM_Color",
+					GrannyAttachmentTexture = { MeshName = "SirensInstrumentDrums_Mesh", GrannyTexture = "GR2/DrumsEM_Color", },
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/SirenDrummerDream_Color",
+					GrannyAttachmentTexture = { MeshName = "SirensInstrumentDrums_Mesh", GrannyTexture = "GR2/DrumsDream_Color", },
+				},
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/SirenDrummerEMDream_Color",
+					GrannyAttachmentTexture = { MeshName = "SirensInstrumentDrums_Mesh", GrannyTexture = "GR2/DrumsEMDream_Color", },
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
 				},
 			},
 			{
 				FunctionName = "PickSpawnAngle",
 			},
 		},
-		BossDifficultyShrineRequiredCount = 2,
 
 		OnDeathFunctionName = "SirenKillPresentation",
 		OnDeathThreadedFunctionName = "RemoveScyllaFightSpotlight",
@@ -203,7 +358,7 @@ UnitSetData.SirenDrummer =
 
 						{ Cue = "/VO/Scylla_0156", Text = "Roxy, {#Emph}what?" },
 						{ Cue = "/VO/Scylla_0157", Text = "Come {#Emph}on{#Prev}, Rox!" },
-						{ Cue = "/VO/Scylla_0161", Text = "Our {#Emph}percussion!" },
+						{ Cue = "/VO/Scylla_0161", Text = "Our {#Emph}percussion!", PlayFirst = true },
 						{ Cue = "/VO/Scylla_0162", Text = "The {#Emph}drums!" },
 						{ Cue = "/VO/Scylla_0388", Text = "Roxy...!" },
 						{ Cue = "/VO/Scylla_0389", Text = "{#Emph}Really{#Prev}, Roxy?" },
@@ -269,7 +424,7 @@ UnitSetData.SirenDrummer =
 				{ Cue = "/VO/Scylla_0180", Text = "Roxy!!" },
 				{ Cue = "/VO/Scylla_0181", Text = "{#Emph}Ngh, dammit{#Prev}, Roxy!" },
 			},
-			[2] = { GlobalVoiceLines = "ScyllaSirenDeathReactionVoiceLines" },
+			{ GlobalVoiceLines = "ScyllaSirenDeathReactionVoiceLines" },
 		},		
 	},
 	

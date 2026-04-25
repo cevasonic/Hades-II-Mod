@@ -182,6 +182,8 @@
 		{
 			ValidWeaponMultiplier = 1.35,
 			ValidWeapons = WeaponSets.HeroRangedWeapons,
+			ValidProjectiles = WeaponSets.CastProjectileNames,
+			WeaponOrProjectileRequirement = true,
 			ReportValues = { ReportedWeaponMultiplier = "ValidWeaponMultiplier"}
 		},
 		StatLines = 
@@ -304,6 +306,9 @@
 		{
 			{
 				PathTrue = { "GameState", "TextLinesRecord", "ChaosFirstPickUp" },
+			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" },
 			},
 		},
 		Icon = "Shop_Lamp",

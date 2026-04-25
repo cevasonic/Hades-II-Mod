@@ -10,6 +10,7 @@ UnitSetData.NPC_Dionysus =
 		{
 			SkipInteractAnim = true,
 			SkipSound = true,
+			SkipBoonInteractPresentation = true,
 			ResetUseText = true,
 			PackageName = "NPC_Dionysus_01",
 			PreserveContextArt = true,
@@ -54,6 +55,54 @@ UnitSetData.NPC_Dionysus =
 		Icon = "BoonSymbolDionysus",
 		LootColor = {200, 0, 255, 255},
 		LightingColor = {200, 0, 255, 255},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				Threaded = true,
+				FunctionName = "AmbientChatting",
+				Args = PresetEventArgs.DionysusFeasting,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/DionysusDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
 		Traits = 
 		{
 			"CastLobBoon",
@@ -76,6 +125,22 @@ UnitSetData.NPC_Dionysus =
 
 		UpgradeMenuOpenVoiceLines =
 		{
+			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunDionysusIntroVO",
+				BreakIfPlayed = true,
+				PreLineWait = 0.9,
+				UsePlayerSource = true,
+				AllowTalkOverTextLines = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun", },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5655", Text = "If only I could learn to let go as you have, Dionysus..." },
+			},
 			{
 				RandomRemaining = true,
 				BreakIfPlayed = true,
@@ -121,7 +186,8 @@ UnitSetData.NPC_Dionysus =
 					GameStateRequirements =
 					{
 						{
-							PathTrue = { "CurrentRun", "TextLinesRecord", "DionysusAboutPrometheus01" },
+							Path = { "CurrentRun", "TextLinesRecord" },
+							HasAny = { "DionysusAboutPrometheus01", "DionysusAboutPrometheus01_B" },
 						},
 					},
 				},
@@ -141,6 +207,14 @@ UnitSetData.NPC_Dionysus =
 						},
 					},
 				},
+				{ Cue = "/VO/MelinoeField_4476", Text = "If I ever encounter him, sure.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "TextLinesRecord", "DionysusAboutPanAspect01" },
+						},
+					},
+				},
 			},
 			{
 				BreakIfPlayed = true,
@@ -153,6 +227,10 @@ UnitSetData.NPC_Dionysus =
 				GameStateRequirements =
 				{
 					--
+				},
+				Cooldowns =
+				{
+					{ Name = "DionysusOfferSpeech", Time = 8 },
 				},
 				
 				{ Cue = "/VO/Dionysus_0084", Text = "Get a load of these.", PlayFirst = true },
@@ -507,6 +585,46 @@ UnitSetData.NPC_Dionysus =
 					Text = "Oh I'll hold you to that, if I can remember you said it! For now though cheers to your success and all, and may your warring wrap up peaceably and soon!" },
 			},
 
+			DionysusAboutRelationships01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DionysusGift07" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						CountOf =
+						{
+							"MorosBecomingCloser01",
+							"MorosBecomingCloser01_B",
+							"NemesisPostCombatBecomingCloser01",
+							"IcarusBecomingCloser01",
+							"ErisBecomingCloser01",
+						},
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0300",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Got anybody special in your life or what Mel baby, 'cause if you just let me know, I'll get 'em in! Can easily spare one or two more invitations here!" },
+
+				{ Cue = "/VO/MelinoeField_4759", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I appreciate the offer, thanks. I'm not bound in the way Lord Uncle Zeus and Queen Hera are if that's what you mean, but have most of my needs fulfilled." },
+
+				{ Cue = "/VO/Dionysus_0301",
+					PreLineAnim = "Dionysus_Eager",
+					Text = "Well that's a way to put it. I like having all {#Emph}my {#Prev}needs met too! Long as you're also getting your {#Emph}desires {#Prev}met, but anyway, your mate or mates are welcome to stop by!" },
+			},
+
 			DionysusLowHealth01 =
 			{
 				PlayOnce = true,
@@ -674,6 +792,82 @@ UnitSetData.NPC_Dionysus =
 				{ Cue = "/VO/Dionysus_0190",
 					PreLineAnim = "Dionysus_Shrug",
 					Text = "Oh that they were but now I'm here where it's amazing too! Things never stay the same for very long, got to enjoy them while they last. Nothing lasts forever! Except us!" },
+			},
+			DionysusAboutPolecatFamiliar01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "PolecatFamiliar" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0227",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Hey, it's that polecat, she's with you? Seen her pawing on the mountain here and there, just lying low, the same as me and everybody here! She got a name?" },
+
+				{ Cue = "/VO/MelinoeField_4753", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Portrait = "Portrait_Mel_Proud_01",
+					Text = "Oh yes, I'd like to introduce you to Gale, who is a rather independent sort and has been helping scout ahead a bit. I'm impressed you knew her for a polecat right away!" },
+
+				{ Cue = "/VO/Dionysus_0228",
+					PreLineAnim = "Dionysus_Shrug",
+					Text = "Oh I know animals, Mel baby! Why, I'm an animal myself, all of us are! Though we'll try not to act like it with Gale. And don't worry about Maena here either, she doesn't bite! Hard." },
+			},
+
+			DionysusAboutLeopard01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DionysusGift07" }
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/MelinoeField_4754", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Quite an impressive cat beside you there. How did you manage to domesticate her? I thought such creatures tended to roam free." },
+				{ Cue = "/VO/Dionysus_0231",
+					Emote = "PortraitEmoteSurprise",
+					PreLineAnim = "Dionysus_Surprise",
+					Text = "{#Emph}Domesticate {#Prev}her, Mel baby, you ought to know that Maena here, she is as {#Emph}wild {#Prev}as they come! And believe me I have known a {#Emph}lot {#Prev}of leopards in my time!" },
+			},
+
+			DionysusAboutPanAspect01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "DaggerHomingThrowAspect" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0229",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Surprise", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "{#Emph}Whoa{#Prev}, watch with those knives, Mel baby, wouldn't want you accidentally sticking it to someone here! Though, {#Emph}wait wait wait{#Prev}, I've seen those two before..." },
+
+				{ Cue = "/VO/MelinoeField_4475", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Perhaps you know these blades from when they belonged to the nature god called Pan. Though I didn't steal them or anything! And I'll be careful." },
+
+				{ Cue = "/VO/Dionysus_0230",
+					PreLineAnim = "Dionysus_Eager",
+					Emote = "PortraitEmoteSurprise",
+					Text = "Oh, yeah, {#Emph}Paaan! {#Prev}I love Pan, he is {#Emph}wild{#Prev}, and he really gets {#Emph}around! {#Prev}Even once helped Dad out with his Typhon problem way back when. You tell him I said hey! Pan, not Dad." },
 			},
 
 			DionysusAboutAutomatons01 =
@@ -981,6 +1175,59 @@ UnitSetData.NPC_Dionysus =
 					Text = "I mean, {#Emph}yeah! {#Prev}Circe, huh, I know that name! Sounds like she knows a trick or two! Maybe she'll get an invite to the next one of {#Emph}these!" },
 			},
 
+			DionysusAboutCirce02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "CirceEnlargeTrait" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0246",
+					Emote = "PortraitEmoteSurprise",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Surprise", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Hey look at you, Mel baby, you are {#Emph}huge! {#Prev}I {#Emph}like {#Prev}it! Once knew some Amazons about your size, they were a {#Emph}real {#Prev}handful, if you know what I mean!" },
+				{ Cue = "/VO/MelinoeField_4755", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I think I do know, yes, now that you've helpfully reminded me how I have temporarily increased in size. It offers me a tactical advantage for the night." },
+				{ Cue = "/VO/Dionysus_0247",
+					PreLineAnim = "Dionysus_Eager",
+					Text = "Oh I am positively sure it does! And if my Amazonian companions were here they would wholeheartedly agree. And probably demand you wrestle them." },
+			},
+			DionysusAboutCirce03 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "CirceShrinkTrait" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0248",
+					Emote = "PortraitEmoteSurprise",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Surprise", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "{#Emph}Aw{#Prev}, look how {#Emph}little {#Prev}you are, baby! {#Emph}Ahem {#Prev}that's sounding a bit rude, when I say {#Emph}baby {#Prev}you know I don't mean it like {#Emph}that!" },
+				{ Cue = "/VO/MelinoeField_4756", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "That's quite all right. I know my reduced stature may be off-putting. All part of the advantage it affords." },
+				{ Cue = "/VO/Dionysus_0249",
+					PreLineAnim = "Dionysus_Eager",
+					Text = "Well I like 'em in every shape and size, it isn't all the same, it's all {#Emph}different! {#Prev}Small? Cool. Bigger? {#Emph}Great! {#Prev}I'm all about variety!" },
+			},
+
 			DionysusAboutPrometheus01 =
 			{
 				PlayOnce = true,
@@ -988,14 +1235,17 @@ UnitSetData.NPC_Dionysus =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DionysusAboutPrometheus01_B" },
+					},
+					{
 						SumPrevRuns = 3,
 						-- IgnoreCurrentRun = true,
 						Path = { "RoomsEntered", "P_Boss01" },
 						Comparison = ">=",
 						Value = 1,
-					},
-					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
@@ -1020,6 +1270,49 @@ UnitSetData.NPC_Dionysus =
 					Emote = "PortraitEmoteCheerful",
 					Text = "{#Emph}Hahahaha{#Prev}, come on, baby, it can't be {#Emph}all {#Prev}that bad! What's he going to do, cook our food with the flame he took from Dad? Tell you what, next time you see him, tell him to stop by!" },
 			},
+			DionysusAboutPrometheus01_B =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DionysusAboutPrometheus01" },
+					},
+					{
+						SumPrevRuns = 3,
+						-- IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "P_Boss01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/MelinoeField_5278", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Have you had any run-ins with the Titan Prometheus? Chronos was in league with him. He's been causing quite a commotion, all told." },
+				{ Cue = "/VO/Dionysus_0164",
+					PreLineWait = 0.1,
+					Emote = "PortraitEmoteSurprise",
+					PreLineAnim = "Dionysus_Surprise",
+					Text = "{#Emph}Prometheus{#Prev}, he's {#Emph}back?! {#Prev}I must be out of the loop. Thought he was still strapped to some mountainside, getting his innards gnawed at by an Eagle, something nasty of the sort!" },
+				{ Cue = "/VO/MelinoeField_5279", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "That did supposedly occur, but he is definitely back, personally leading the vanguard that was trying to tear Olympus apart. And he's still out there, sowing dissent." },
+				{ Cue = "/VO/Dionysus_0165",
+					PreLineAnim = "Dionysus_Laugh",
+					Emote = "PortraitEmoteCheerful",
+					Text = "{#Emph}Hahahaha{#Prev}, come on, baby, it can't be {#Emph}all {#Prev}that bad! What's he going to do, cook our food with the flame he took from Dad? Tell you what, next time you see him, tell him to stop by!" },
+			},
+
 			DionysusAboutPrometheus02 =
 			{
 				PlayOnce = true,
@@ -1028,7 +1321,11 @@ UnitSetData.NPC_Dionysus =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "DionysusAboutPrometheus01", "DionysusGift03" }
+						HasAny = { "DionysusAboutPrometheus01", "DionysusAboutPrometheus01_B" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "DionysusGift03" }
 					},
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
@@ -1074,6 +1371,73 @@ UnitSetData.NPC_Dionysus =
 					Text = "You got it half right. See, I don't like to worry about the things I can't control! {#Emph}Wine{#Prev}, I can control. The quality of this feast, I {#Emph}can {#Prev}control! But all the in-fighting? {#Emph}Heh. {#Prev}Plenty of other gods who specialize in {#Emph}that." },
 			},
 
+			DionysusAboutHeracles01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "DionysusGift05", "HeraclesGift05" },
+					},
+					{
+						Path = { "GameState", "EncountersOccurredCache" },
+						HasAny = { "HeraclesCombatP", "HeraclesCombatP2" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "EncountersOccurredCache" },
+						TableValuesToCount = { "HeraclesCombatIntro", "HeraclesCombatN", "HeraclesCombatN2", "HeraclesCombatO", "HeraclesCombatO2", "HeraclesCombatP", "HeraclesCombatP2" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/MelinoeField_3682", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Does mighty Heracles ever stop by? He seems to do much of the heavy lifting out on the front lines and probably could use the break... though might bring down the mood." },
+
+				{ Cue = "/VO/Dionysus_0191",
+					PreLineAnim = "Dionysus_Greeting",
+					Text = "Oh believe me I have invited him don't know {#Emph}how {#Prev}many times but he won't {#Emph}budge{#Prev}, big man like that, I mean it figures, yeah? He's all obsessed with {#Emph}laboring away{#Prev}, won't cut loose even for a bit! Though maybe he'll listen to you..." },
+
+				{ Cue = "/VO/MelinoeField_3683", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "What, to join you for a drink and a splash in the hot springs? Why would Heracles possibly listen to {#Emph}me {#Prev}if your own powers of persuasion haven't been sufficient?" },
+
+				{ Cue = "/VO/Dionysus_0192",
+					PreLineAnim = "Dionysus_Eager",
+					Emote = "PortraitEmoteCheerful",
+					Text = "Cause you're a {#Emph}girl{#Prev}, baby! You've got the voice, and the thing you do with your hair, the whole {#Emph}I'm-so-innocent {#Prev}act, it's enough to drive somebody wild! So {#Emph}ask {#Prev}him, yeah?" },
+			},
+			DionysusAboutHeracles02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Heracles_01", }, Alive = true },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0254",
+					PreLineAnim = "Dionysus_Eager",
+					Text = "Old Heracles decided to stop by, you see him there?! He's like a big old ox! Hop in the bath with him, go on, I want to see you try! Unless you did already and I missed it, {#Emph}eugh..." },
+			},
+
 			DionysusAboutTyphon01 =
 			{
 				PlayOnce = true,
@@ -1108,6 +1472,61 @@ UnitSetData.NPC_Dionysus =
 					Text = "{#Emph}Oh no! Typhon's out there, come to ruin everything! Whatever will we do?! Hahaha{#Prev}, see that, baby? Nobody {#Emph}cares! {#Prev}Whatever happens, happens! And we're gonna feast until it does, no matter what! Nice try with that one, though." },
 			},
 
+			DionysusAboutApollo01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "UseRecord", "ApolloUpgrade" },
+						Comparison = ">=",
+						Value = 2,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0250",
+					Text = "Hey you didn't tell Apollo anything about what's going on in here, did you? Because I, {#Emph}erm{#Prev}, I have not sent him an invite yet. I know he's busy wanting to be left alone!" },
+				{ Cue = "/VO/MelinoeField_4757", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Lord Apollo has been gracious to support me with his Boons, but no, I've not informed him or any of your relatives about your feasting. That's your business not mine." },
+				{ Cue = "/VO/Dionysus_0251",
+					PreLineAnim = "Dionysus_Eager",
+					Text = "{#Emph}Whew{#Prev}, cheers! He likes to keep things squeaky clean, you know, but I prefer it any other way! Something about you made me think of him but probably I'm just out of my mind!" },
+			},
+
+			DionysusAboutTimePassing01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 6,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "P_Story01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0252",
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteSurprise", DoShake = true, WaitTime = 2.5 },
+					Text = "Now then what sort of nymph are {#Emph}you? {#Prev}Oh wait wait wait, Mel baby, I know {#Emph}you{#Prev}, just how long has it been?!" },
+				{ Cue = "/VO/MelinoeField_4758", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Certainly it's been some nights, to have induced a lapse of memory. How have you fared, along with all your guests?" },
+				{ Cue = "/VO/Dionysus_0253",
+					PreLineAnim = "Dionysus_Shrug",
+					Text = "Oh we've been good as grapes here, yeah? Each night's a journey through the {#Emph}mind! {#Prev}Here, think on one of {#Emph}these!" },
+			},
+
 			DionysusAboutAmbrosia01 =
 			{
 				PlayOnce = true,
@@ -1122,7 +1541,8 @@ UnitSetData.NPC_Dionysus =
 				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
 
 				{ Cue = "/VO/Dionysus_0237",
-					PreLineAnim = "Dionysus_Eager",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
+
 					Text = "Say, any leads on finding us a box of good bottles of Ambrosia yet or what? We're down to our {#Emph}emergency ration {#Prev}here, making it {#Emph}last. {#Prev}I'm trying to keep everybody {#Emph}calm!" },
 				{ Cue = "/VO/MelinoeField_4480", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Hesitant_01",
@@ -1152,7 +1572,8 @@ UnitSetData.NPC_Dionysus =
 				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
 
 				{ Cue = "/VO/Dionysus_0239",
-					PreLineAnim = "Dionysus_Eager",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
+
 					Text = "Oh hey! The mountain finally stopped shaking for a bit and I remembered what I wanted you to know! A {#Emph}box of bottles of Ambrosia{#Prev}, that's just four of them at once. Technical term!" },
 
 				{ Cue = "/VO/MelinoeField_4481", UsePlayerSource = true,
@@ -1170,6 +1591,45 @@ UnitSetData.NPC_Dionysus =
 					PostLineThreadedFunctionArgs = { Delay = 0.25 },
 
 					Text = "Come on look, how many {#Emph}guests {#Prev}I have... no single bottle's going to do! But now you know what we need to survive. I'll be counting on you, Mel baby!" },
+			},
+			DionysusAboutAmbrosia03 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DionysusGift07" }
+					},
+					{
+						SumPrevRuns = 8,
+						Path = { "TextLinesRecord", "DionysusGift07" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0244",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Laugh", WaitTime = 0.5, AngleNPCToHero = true, },
+					PreLineFunctionName = "OverwriteSelf",
+					PreLineFunctionArgs = { BoonRaritiesOverride = { Epic = 1 } },
+
+					Text = "Oh you should have seen it, baby, the Ambrosia that you brought, it kicked things up like you would not {#Emph}believe!" },
+
+				{ Cue = "/VO/MelinoeField_4485", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I can imagine! Though things don't seem that different than before. Have you depleted the entire box already?" },
+
+				{ Cue = "/VO/Dionysus_0245",
+					Emote = "PortraitEmoteSurprise",
+					PreLineAnim = "Dionysus_Surprise",
+					Text = "{#Emph}No! {#Prev}I mean... not really! I mean, maybe. But I have got a lead on a reserve so vast that we won't need donations anymore. And for {#Emph}you{#Prev}, I've got a little something extra {#Emph}here." },
 			},
 
 			DionysusPostTrueEnding01 =
@@ -1323,6 +1783,37 @@ UnitSetData.NPC_Dionysus =
 					PreLineAnim = "Dionysus_Laugh",
 					Emote = "PortraitEmoteSurprise",
 					Text = "{#Emph}You're {#Prev}thinking maybe all the other gods will end up feasting {#Emph}here! {#Prev}Then we'll have better things to do than pushing mortalkind around. And it'll be a {#Emph}prophecy fulfilled!" },
+			},
+
+			DionysusAboutSayingLittle01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DionysusGift07" }
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0266",
+					Text = "Mel baby, we're past the small-talk stage of our relationship, so we should take the next big step: {#Emph}smaller talk!" },
+
+				{ Cue = "/VO/MelinoeField_4494", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "And what exactly is the difference between small and smaller talk? Do we lower our voices?" },
+
+				{ Cue = "/VO/Dionysus_0267",
+					PreLineAnim = "Dionysus_Eager",
+					Text = "Even better, we will hardly talk at all! The bond we share speaks volumes anyway! It's {#Emph}great{#Prev}, just try it, ready? {#Emph}Go!" },
 			},
 
 			-- Repeatable
@@ -1618,6 +2109,149 @@ UnitSetData.NPC_Dionysus =
 				{ Cue = "/VO/Dionysus_0031",
 					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
 					Text = "Oh you missed a {#Emph}real {#Prev}good time last night... or might have been the night before..." },
+			},
+			DionysusChat27 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0278",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Everybody! It's the Zag man's sister, let's all give her a warm welcome, yeah?" },
+			},
+			DionysusChat28 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0279",
+					Text = "Oh you missed such a good time, baby, but more good times are always to be had!" },
+			},
+			DionysusChat29 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0280",
+					Text = "Just be cool, Mel baby, everybody's doing their thing so let's do ours here, yeah?" },
+			},
+			DionysusChat30 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0281",
+					Text = "Think I've got one of your favorites somewhere, is it maybe one of these?" },
+			},
+			DionysusChat31 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0282",
+					Text = "You want to be your best out there, so take a breather and recharge a bit, you know?" },
+			},
+			DionysusChat32 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0283",
+					Text = "Sure I can get you Boons and all but let me know if I can get you a massage!" },
+			},
+			DionysusChat33 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "P_Story01" },
+					},
+				},
+
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0284",
+					Text = "Weren't you just here, baby, or have we been feasting all night long?" },
+			},
+			DionysusChat34 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0285",
+					Text = "Remember, don't let on to anybody that we're here, they'll never understand!" },
+			},
+			DionysusChat35 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0286",
+					Text = "Do let me know if I can get you anything besides the usual stuff, yeah?" },
+			},
+			DionysusChat36 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0287",
+					Text = "Whatever you're craving, we probably have it somewhere around here!" },
+			},
+			DionysusChat37 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0288",
+					Text = "Don't look now but one of the Satyrs there, I think he fancies you!" },
+			},
+			DionysusChat38 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0289",
+					Text = "So cool of you stop by our exclusive get-together here, always a treat, baby!" },
+			},
+			DionysusChat39 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0290",
+					Text = "See all the Nymphs and Satyrs there? Hey I could make an introduction if you like!" },
+			},
+			DionysusChat40 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.DionysusFeasting,
+
+				{ Cue = "/VO/Dionysus_0291",
+					PreLineThreadedFunctionArgs = { Name = "Dionysus_Eager", WaitTime = 0.5, AngleNPCToHero = true, },
+					Emote = "PortraitEmoteCheerful",
+					Text = "{#Emph}Whoa-hoho{#Prev}, either I had a few too many there... or I just haven't had enough!" },
 			},
 
 		},
@@ -1999,9 +2633,9 @@ GlobalVoiceLines.DionysusFeastingLines =
 			},
 		},
 
-		{ Cue = "/VO/Dionysus_0032", Text = "{#Emph}Hahaha, yeah! {#Prev}Come, everybody, let's have another round!" },
-		{ Cue = "/VO/Dionysus_0033", Text = "...So I would like to propose {#Emph}another {#Prev}toast. To all of you! {#Emph}Cheers!!" },
-		{ Cue = "/VO/Dionysus_0034", Text = "...So I would like to propose {#Emph}another {#Prev}toast? To feasting! {#Emph}Cheers!!",
+		{ Cue = "/VO/Dionysus_0032", TextLimit = 300, Text = "{#Emph}Hahaha, yeah! {#Prev}Come, everybody, let's have another round!" },
+		{ Cue = "/VO/Dionysus_0033", TextLimit = 300, Text = "...So I would like to propose {#Emph}another {#Prev}toast. To all of you! {#Emph}Cheers!!" },
+		{ Cue = "/VO/Dionysus_0034", TextLimit = 300, Text = "...So I would like to propose {#Emph}another {#Prev}toast? To feasting! {#Emph}Cheers!!",
 			GameStateRequirements =
 			{
 				{
@@ -2009,29 +2643,29 @@ GlobalVoiceLines.DionysusFeastingLines =
 				},
 			},
 		},
-		{ Cue = "/VO/Dionysus_0035", Text = "Now come, my friends, drink up, like there's no tomorrow!" },
-		{ Cue = "/VO/Dionysus_0036", Text = "...another round, you say? Well I don't see why not! {#Emph}Ah, haha!" },
-		{ Cue = "/VO/Dionysus_0037", Text = "Don't anybody worry about a thing, we've got it all under control!" },
-		{ Cue = "/VO/Dionysus_0038", Text = "Enjoying that one, yeah? Well we've got plenty more, just let me know!" },
-		{ Cue = "/VO/Dionysus_0039", Text = "Looking good, mate! Yeah, the water's fine! How's the drink, you need another yet, or what?" },
-		{ Cue = "/VO/Dionysus_0040", Text = "Oh don't you know it, mate! This here is where the {#Emph}real {#Prev}action on the mountain is!" },
-		{ Cue = "/VO/Dionysus_0041", Text = "Drink! Drink! Drink! Drink! Drink! Drink! Drink! {#Emph}Hehe, yeah!" },
-		{ Cue = "/VO/Dionysus_0042", Text = "So you know what I say? I say, Dad... {#Emph}hah. {#Prev}I say Dad, what if I just don't want to? And he says, {#Emph}Then get out of my sight! {#Prev}So I say, {#Emph}Outta sight? All right! Hahahaha!" },
-		{ Cue = "/VO/Dionysus_0043", PlayFirst = true, Text = "So I say, can't we just, you know, invite him over to a feast and hash things out over a cup of wine, yeah? And {#Emph}they {#Prev}all look at {#Emph}me {#Prev}like I'm completely daft, {#Emph}hahaha, hahahaha." },
-		{ Cue = "/VO/Dionysus_0213", Text = "Hey look man let's {#Emph}not {#Prev}talk about that sort of thing in here, let's just {#Emph}relax! {#Prev}No need to get all down about that stuff!" },
-		{ Cue = "/VO/Dionysus_0214", Text = "I ever tell you lot about the time I traveled east, across the seas? There's quite an island over there, good people too. You ever been to other parts or what?" },
-		{ Cue = "/VO/Dionysus_0215", Text = "How many times do I have to say it, let's not talk about our mothers, this is polite company we're keeping! That's a {#Emph}naughty {#Prev}subject for a different sort of feast, you know?" },
-		{ Cue = "/VO/Dionysus_0216", Text = "I mean {#Emph}really{#Prev}, what's to fear from Titans, are they gonna rip me up limb from limb? Well I can't die man, I'll just put myself together... and then have another drink!" },
-		{ Cue = "/VO/Dionysus_0217", Text = "{#Emph}Hahahahaha, naughty{#Prev}, now be quiet everyone, I think that's her again, be on your best behavior yeah?" },
-		{ Cue = "/VO/Dionysus_0292", Text = "{#Emph}Huh{#Prev}, what you on about, man, she did {#Emph}what? {#Prev}You're pulling my leg, I don't believe a word of it, {#Emph}hahaha!" },
-		{ Cue = "/VO/Dionysus_0293", Text = "All right, come on now, I don't even {#Emph}want {#Prev}to know what's happening out there. What's really {#Emph}happening {#Prev}is here!" },
-		{ Cue = "/VO/Dionysus_0294", Text = "Come on you've got to keep your hooves inside the pool, yeah? Or I'll have no choice but to go in and drag you out!" },
-		{ Cue = "/VO/Dionysus_0295", Text = "Hey now, come on, that isn't cool! Although you want to know what {#Emph}is? Haha{#Prev}, I think you do, {#Emph}hahaha!" },
-		{ Cue = "/VO/Dionysus_0296", Text = "{#Emph}Whew{#Prev}, it's getting kind of hot in here! Or maybe it's you Nymphs there in the corner, yeah? Oh I {#Emph}see {#Prev}you!" },
-		{ Cue = "/VO/Dionysus_0297", Text = "Hey wait I think I heard someone come in. Hey {#Emph}erm, hello?" },
-		{ Cue = "/VO/Dionysus_0298", Text = "Whoa {#Emph}easy {#Prev}there, no biting, Maena, I keep telling you that is a {#Emph}Satyr! Not {#Prev}a goat!" },
-		{ Cue = "/VO/Dionysus_0299", Text = "...The temperature all right for everyone, got everything you need? How about another drink, we're good on food...?" },
-		{ Cue = "/VO/Dionysus_0218", Text = "So I say, can't we just, wait... have I not already told this one before? You'll tell me if I did? Or if you don't remember, that's cool! Neither do I, {#Emph}haha. {#Prev}What were we on about?",
+		{ Cue = "/VO/Dionysus_0035", TextLimit = 300, Text = "Now come, my friends, drink up, like there's no tomorrow!" },
+		{ Cue = "/VO/Dionysus_0036", TextLimit = 300, Text = "...another round, you say? Well I don't see why not! {#Emph}Ah, haha!" },
+		{ Cue = "/VO/Dionysus_0037", TextLimit = 300, Text = "Don't anybody worry about a thing, we've got it all under control!" },
+		{ Cue = "/VO/Dionysus_0038", TextLimit = 300, Text = "Enjoying that one, yeah? Well we've got plenty more, just let me know!" },
+		{ Cue = "/VO/Dionysus_0039", TextLimit = 300, Text = "Looking good, mate! Yeah, the water's fine! How's the drink, you need another yet, or what?" },
+		{ Cue = "/VO/Dionysus_0040", TextLimit = 300, Text = "Oh don't you know it, mate! This here is where the {#Emph}real {#Prev}action on the mountain is!" },
+		{ Cue = "/VO/Dionysus_0041", TextLimit = 300, Text = "Drink! Drink! Drink! Drink! Drink! Drink! Drink! {#Emph}Hehe, yeah!" },
+		{ Cue = "/VO/Dionysus_0042", TextLimit = 300, Text = "So you know what I say? I say, Dad... {#Emph}hah. {#Prev}I say Dad, what if I just don't want to? And he says, {#Emph}Then get out of my sight! {#Prev}So I say, {#Emph}Outta sight? All right! Hahahaha!" },
+		{ Cue = "/VO/Dionysus_0043", PlayFirst = true, TextLimit = 300, Text = "So I say, can't we just, you know, invite him over to a feast and hash things out over a cup of wine, yeah? And {#Emph}they {#Prev}all look at {#Emph}me {#Prev}like I'm completely daft, {#Emph}hahaha, hahahaha." },
+		{ Cue = "/VO/Dionysus_0213", TextLimit = 300, Text = "Hey look man let's {#Emph}not {#Prev}talk about that sort of thing in here, let's just {#Emph}relax! {#Prev}No need to get all down about that stuff!" },
+		{ Cue = "/VO/Dionysus_0214", TextLimit = 300, Text = "I ever tell you lot about the time I traveled east, across the seas? There's quite an island over there, good people too. You ever been to other parts or what?" },
+		{ Cue = "/VO/Dionysus_0215", TextLimit = 300, Text = "How many times do I have to say it, let's not talk about our mothers, this is polite company we're keeping! That's a {#Emph}naughty {#Prev}subject for a different sort of feast, you know?" },
+		{ Cue = "/VO/Dionysus_0216", TextLimit = 300, Text = "I mean {#Emph}really{#Prev}, what's to fear from Titans, are they gonna rip me up limb from limb? Well I can't die man, I'll just put myself together... and then have another drink!" },
+		{ Cue = "/VO/Dionysus_0217", TextLimit = 300, Text = "{#Emph}Hahahahaha, naughty{#Prev}, now be quiet everyone, I think that's her again, be on your best behavior yeah?" },
+		{ Cue = "/VO/Dionysus_0292", TextLimit = 300, Text = "{#Emph}Huh{#Prev}, what you on about, man, she did {#Emph}what? {#Prev}You're pulling my leg, I don't believe a word of it, {#Emph}hahaha!" },
+		{ Cue = "/VO/Dionysus_0293", TextLimit = 300, Text = "All right, come on now, I don't even {#Emph}want {#Prev}to know what's happening out there. What's really {#Emph}happening {#Prev}is here!" },
+		{ Cue = "/VO/Dionysus_0294", TextLimit = 300, Text = "Come on you've got to keep your hooves inside the pool, yeah? Or I'll have no choice but to go in and drag you out!" },
+		{ Cue = "/VO/Dionysus_0295", TextLimit = 300, Text = "Hey now, come on, that isn't cool! Although you want to know what {#Emph}is? Haha{#Prev}, I think you do, {#Emph}hahaha!" },
+		{ Cue = "/VO/Dionysus_0296", TextLimit = 300, Text = "{#Emph}Whew{#Prev}, it's getting kind of hot in here! Or maybe it's you Nymphs there in the corner, yeah? Oh I {#Emph}see {#Prev}you!" },
+		{ Cue = "/VO/Dionysus_0297", TextLimit = 300, Text = "Hey wait I think I heard someone come in. Hey {#Emph}erm, hello?" },
+		{ Cue = "/VO/Dionysus_0298", TextLimit = 300, Text = "Whoa {#Emph}easy {#Prev}there, no biting, Maena, I keep telling you that is a {#Emph}Satyr! Not {#Prev}a goat!" },
+		{ Cue = "/VO/Dionysus_0299", TextLimit = 300, Text = "...The temperature all right for everyone, got everything you need? How about another drink, we're good on food...?" },
+		{ Cue = "/VO/Dionysus_0218", TextLimit = 300, Text = "So I say, can't we just, wait... have I not already told this one before? You'll tell me if I did? Or if you don't remember, that's cool! Neither do I, {#Emph}haha. {#Prev}What were we on about?",
 			GameStateRequirements =
 			{
 				{
@@ -2138,6 +2772,103 @@ GlobalVoiceLines.MiscEndVoiceLines_Dionysus =
 		--
 	},
 	{ GlobalVoiceLines = "ThankingCharacterVoiceLines" },
+}
+
+GlobalVoiceLines.DionysusReRollReactionVoiceLines =
+{
+	BreakIfPlayed = true,
+	RandomRemaining = true,
+	PreLineWait = 0.65,
+	ObjectType = "NPC_Dionysus_01",
+	GameStateRequirements =
+	{
+		{
+			Path = { "CurrentLootData", "Name" },
+			IsAny = { "NPC_Dionysus_01" },
+		},
+		{
+			Path = { "CurrentRun", "SpeechRecord" },
+			HasNone = {
+				"/VO/Dionysus_0075",
+				"/VO/Dionysus_0076",
+				"/VO/Dionysus_0079",
+				"/VO/Dionysus_0080",
+				"/VO/Dionysus_0082",
+				"/VO/Dionysus_0083"
+			},
+		},
+	},
+	Cooldowns =
+	{
+		{ Name = "DionysusOfferSpeech", Time = 30 },
+	},
+	
+	{ Cue = "/VO/Dionysus_0075", Text = "Let's see here...",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Dionysus_0075",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Dionysus_0076", Text = "What have we got...",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Dionysus_0076",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Dionysus_0079", Text = "Any of these?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Dionysus_0079",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Dionysus_0080", Text = "How 'bout one of these?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Dionysus_0080",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Dionysus_0082", Text = "What do you feel like?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Dionysus_0082",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Dionysus_0083", Text = "One of these?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Dionysus_0083"
+				},
+			},
+		},
+	},
 }
 
 OverwriteTableKeys( EnemyData, UnitSetData.NPC_Dionysus )

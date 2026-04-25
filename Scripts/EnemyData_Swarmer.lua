@@ -2,7 +2,7 @@ UnitSetData.Swarmer =
 {
 	Swarmer =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseGEnemy", "BaseVulnerableEnemy" },
 		GenusName = "Swarmer",
 		PreferredSpawnPoint = "EnemyPointMelee",
 		Groups = { "FlyingEnemies" },
@@ -97,7 +97,7 @@ UnitSetData.Swarmer =
 	
 	SwarmerClockwork =
 	{
-		InheritFrom = { "Swarmer" },
+		InheritFrom = { "BaseIEnemy", "Swarmer" },
 		MaxHealth = 225,
 		HealthBarType = "Medium",
 		HealthBarOffsetY = -150,

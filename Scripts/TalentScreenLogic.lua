@@ -1,5 +1,6 @@
-﻿function OpenTalentScreen( args, spellItem )
+﻿function OpenTalentScreen( args, spellItem, contextArgs )
 	args = args or {}
+	contextArgs = contextArgs or {}
 	local screenName = "TalentScreen"
 	if not args.ReadOnly and spellItem and spellItem.AddTalentPoints then
 		local talentPoints = ( spellItem.AddTalentPoints - 1 ) or 0
@@ -17,7 +18,9 @@
 		AddTimerBlock( CurrentRun, "OpenTalentScreen" )
 		LootPickupPresentation( spellItem )
 		RecordConsumableItem( spellItem )
-		MapState.RoomRequiredObjects[spellItem.ObjectId] = nil
+		if not contextArgs.WillDuplicate then
+			MapState.RoomRequiredObjects[spellItem.ObjectId] = nil
+		end
 		SetAlpha({ Id = spellItem.ObjectId, Fraction = 0, Duration = 0 })
 		RemoveScreenEdgeIndicator( spellItem )
 		RemoveTimerBlock( CurrentRun, "OpenTalentScreen" )
@@ -26,6 +29,9 @@
 	local screen = DeepCopyTable( ScreenData[screenName] )
 	screen.ReadOnly = args.ReadOnly
 	screen.StartingTalentPoints = CurrentRun.NumTalentPoints
+	if CurrentRun.IsDreamRun then
+		screen.ComponentData.BackgroundImage.AnimationName = "TalentScreenDreamRunIn"
+	end
 	if screen.ReadOnly then
 		screen.BlockPause = true
 	end
@@ -228,11 +234,17 @@ function CreateTalentTreeIcons( screen, args )
 			talentObject.LinkObjects = {}
 			if talent.LinkTo then
 				for q, linkToIndex in pairs( talent.LinkTo ) do
-					local anim = nil
+					local anim = "Blank"
 					local linkGroupName = nil
 					if talent.Invested then
-						anim = "TalentTreeLineUnlocked"
-						linkGroupName = "Combat_Menu_Overlay_Additive"
+						local nextComponent = components["TalentObject"..(i+1).."_"..linkToIndex]
+						if nextComponent and (nextComponent.Data.Invested or nextComponent.Data.QueuedInvested) then
+							anim = "TalentTreeLineUnlocked"
+							linkGroupName = "Combat_Menu_Overlay_Additive"
+						else
+							anim = "TalentTreeLineAvailable"
+							linkGroupName = "Combat_Menu_Overlay_Additive"
+						end
 					else
 						anim = "TalentTreeLineLocked"
 						linkGroupName = "Combat_Menu_Overlay_Backing"
@@ -244,7 +256,7 @@ function CreateTalentTreeIcons( screen, args )
 						AlphaTargetDuration = 0.6,
 					})
 					table.insert( components.LinkObjects, linkObject.Id)
-					table.insert( talentObject.LinkObjects, linkObject.Id)
+					talentObject.LinkObjects[linkToIndex] = linkObject.Id
 					SetAngle({ Id = linkObject.Id, Angle = GetAngleBetween( { Id = linkObject.Id, DestinationId = components.TalentIdsDictionary[(i+1).."_"..linkToIndex] })})
 					SetScaleX({ Id = linkObject.Id, Fraction = GetDistance({ Id = linkObject.Id, DestinationId = components.TalentIdsDictionary[(i+1).."_"..linkToIndex]}) / 200 })			
 				end
@@ -326,8 +338,22 @@ function UpdateTalentButtons( screen, skipUsableCheck )
 					AlphaTargetDuration = 0.6,
 				})				
 				talentObject.BadgeId = animation.Id
-				for _, linkId in pairs( talentObject.LinkObjects ) do
-					SetAnimation({ DestinationId = linkId, Name = "TalentTreeLineUnlocked" })
+				for linkToIndex, linkId in pairs( talentObject.LinkObjects ) do
+					local linkToItem = components["TalentObject"..(i+1).."_"..linkToIndex]
+					if linkToItem and ( linkToItem.Data.Invested or linkToItem.Data.QueuedInvested ) then
+						SetAnimation({ DestinationId = linkId, Name = "TalentTreeLineUnlocked" })
+					else
+						SetAnimation({ DestinationId = linkId, Name = "TalentTreeLineAvailable" })
+					end
+				end
+				
+				if not IsEmpty( talentObject.Data.LinkFrom) then
+					for _, linkFromIndex in pairs( talentObject.Data.LinkFrom ) do					
+						local linkFromItem = components["TalentObject"..(i-1).."_"..linkFromIndex]
+						if linkFromItem and ( linkFromItem.Data.Bidirectional or talentObject.Data.Bidirectional ) and not ( linkFromItem.Data.Invested or linkFromItem.Data.QueuedInvested ) then
+							SetAnimation({ DestinationId = linkFromItem.LinkObjects[s], Name = "TalentTreeLineAvailable" })						
+						end
+					end
 				end
 				table.insert( talentPriorSelectedIds, talentObject.Id )
 			elseif not talentObject.Data.Invested then
@@ -360,7 +386,7 @@ function UpdateTalentButtons( screen, skipUsableCheck )
 		end
 	end
 
-	SetColor({ Ids = colorWhiteIds, Color = Color.White })
+	SetColor({ Ids = colorWhiteIds, Color = screen.TalentNextAvailable })
 	SetColor({ Ids = talentPriorSelectedIds, Color = screen.TalentPriorSelected })
 	SetColor({ Ids = talentInactiveIds, Color = screen.TalentInactive })
 
@@ -461,10 +487,11 @@ function TryCloseTalentTree( screen, button )
 			table.insert( screen.QueuedTalents, screen.SelectedTalent )
 			screen.SelectedTalent.QueuedInvested = true
 		end
-		
+	
+		RecreateTalentTree( screen, button )
+
 		if CurrentRun.NumTalentPoints and CurrentRun.NumTalentPoints > 0 then
 			CurrentRun.NumTalentPoints = CurrentRun.NumTalentPoints - 1
-			RecreateTalentTree( screen, button )
 			UpdateAdditionalTalentPointButton( screen )
 			if not screen.AllInvested then
 				return
@@ -496,7 +523,11 @@ function TryCloseTalentTree( screen, button )
 	SetConfigOption({ Name = "ExclusiveInteractGroup", Value = nil })
 	UpdateTalentPointInvestedCache()
 	wait( 0.3 ) -- Let confirm animation play
-	SetAnimation({ Name = "TalentScreenOut", DestinationId = screen.Components.BackgroundImage.Id })
+	if CurrentRun.IsDreamRun then
+		SetAnimation({ Name = "TalentScreenDreamRunOut", DestinationId = screen.Components.BackgroundImage.Id })
+	else
+		SetAnimation({ Name = "TalentScreenOut", DestinationId = screen.Components.BackgroundImage.Id })
+	end
 	OnScreenCloseStarted( screen )
 
 	if screen.Source and screen.Source.DestroySourceOnClose then

@@ -36,7 +36,7 @@ function OpenFamiliarCostumeScreen( openedFrom, args )
 	
 	local components = screen.Components
 
-	SetAnimation({ DestinationId = components.FamiliarShopAnimalBacking.Id, Name = openedFrom.FamiliarShopGraphic })
+	SetAnimation({ DestinationId = components.FamiliarShopAnimalBacking.Id, Name = openedFrom.FamiliarScreenAnimationName })
 
 	FamiliarCostumeScreenOpenedPresentation( screen, args )
 

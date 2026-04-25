@@ -405,6 +405,15 @@ OverwriteTableKeys( TraitData, {
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Hera",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			{
 				WeaponName = "WeaponLob",
@@ -1993,6 +2002,17 @@ OverwriteTableKeys( TraitData, {
 		{
 			{
 				FunctionName = "HasSuperchargeableBoon",
+				FunctionArgs = 
+				{
+					MinCooldown = 2,
+					ExtractKey = "UnmodifiedCooldown",
+					TraitNamesLookup =
+					{
+						HephaestusWeaponBoon = true,
+						HephaestusSpecialBoon = true,
+						HephaestusSprintBoon = true,
+					}
+				}
 			},
 		},
 		Icon = "Boon_Hera_36",
@@ -2195,6 +2215,16 @@ OverwriteTableKeys( TraitData, {
 				{ "ElementalDamageFloorBoon", "ElementalDodgeBoon" },
 				-- Water
 				{ "ElementalHealthBoon", "ElementalDamageCapBoon" },
+			},
+			AdditionalTraitRequirements = 
+			{
+				ElementalOlympianDamageBoon = 
+				{
+					{ 
+						Path = { "GameState", "TextLinesRecord", },
+						HasAll = { "AresFirstPickUp", },
+					}
+				}
 			},
 		},
 		StatLines =

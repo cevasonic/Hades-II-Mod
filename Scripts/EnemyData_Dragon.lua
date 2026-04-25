@@ -71,6 +71,7 @@ UnitSetData.Dragon =
 			DeepInheritance = true,
 
 			MoveSuccessDistance = 1,
+			PreMoveAnimation = "Enemy_Dragon_Idle",
 		},
 
 		WeaponOptions =
@@ -208,7 +209,7 @@ UnitSetData.Dragon =
 
 	Dragon_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "Dragon" },
+		InheritFrom = { "SuperElite", "BaseQEnemy", "Dragon" },
 		GenusName = "Dragon",
 		MaxHealth = 3000,
 		HealthBuffer = 6000,
@@ -235,6 +236,11 @@ UnitSetData.Dragon =
 			{
 				"DragonBreath_MiniBoss_Ally"
 			},
+		},
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
 		},
 
 		WeaponOptions =

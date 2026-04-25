@@ -270,6 +270,7 @@ ScreenData.DebugConversations =
 {
 	Name = "DebugConversations",
 	BlockPause = true,
+	SkipQuestStatusCheck = true,
 	Components = {},
 
 	OpenSound = "/Leftovers/Menu Sounds/InfoPanelInURSA",

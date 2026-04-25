@@ -902,6 +902,9 @@ OverwriteTableKeys( ObstacleData, {
 		OnUsedFunctionName = "UseGodStatueTrap",
 		UseText = "UseStatue",
 
+		DamageTextStartColor = Color.TrapDamageLight,
+		DamageTextColor = Color.TrapDamage,
+
 		DefaultAIData = {},
 
 		WeaponName = "ZeusStatueChasingStorm",
@@ -912,6 +915,126 @@ OverwriteTableKeys( ObstacleData, {
 			{
 				FunctionName = "SetDepletedAnimIfUnuseable",
 			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 0.4,
+						},
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "EnteredBiomes", },
+						Comparison = "==",
+						Value = 1,
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 0.6,
+						},
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "EnteredBiomes", },
+						Comparison = "==",
+						Value = 2,
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 1,
+						},
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "EnteredBiomes", },
+						Comparison = "==",
+						Value = 3,
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 1,
+						},
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "EnteredBiomes", },
+						Comparison = "==",
+						Value = 4,
+					},
+				},
+			},
+		},
+
+
+		OutgoingDamageModifiers =
+		{
+			{
+				PlayerMultiplier = 0,
+			},
+			{
+				NonPlayerMultiplier = 1,
+			},
+		},
+		
+		ProjectilesCollideWithGroups =
+		{
+			"EnemyTeam",
 		},
 
 		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
@@ -941,7 +1064,6 @@ OverwriteTableKeys( ObstacleData, {
 		{
 			PreTriggerWait = 0.1,
 			WithinDistance = 650,
-			RecheckRequirementsPostWait = true,
 			GameStateRequirements =
 			{
 				{
@@ -950,16 +1072,9 @@ OverwriteTableKeys( ObstacleData, {
 				{
 					PathFalse = { "GameState", "SpeechRecord", "/VO/MelinoeField_2993" }
 				},
-				{
-					Path = { "RequiredKillEnemies" },
-					UseLength = true,
-					Comparison = ">",
-					Value = 0,
-				},
 			},
 			VoiceLines = { GlobalVoiceLines = "ActiveStatueSpottedVoiceLines" },
 		},
-
 	},
 
 	StatueTrap_Hestia =

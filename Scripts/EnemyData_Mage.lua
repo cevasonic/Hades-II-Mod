@@ -2,7 +2,7 @@
 {
 	Mage =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 80,
 		HealthBarOffsetY = -200,

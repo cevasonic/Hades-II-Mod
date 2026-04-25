@@ -61,7 +61,12 @@ end
 
 function CloseMusicPlayerScreen( screen, button )
 	killTaggedThreads( "MusicPlayerShufflePulse" )
-	CloseGhostAdminScreen( screen, button )
+	OnScreenCloseStarted( screen )
+	thread( MusicPlayerClosedPresentation, screen, button )
+	CloseScreen( GetAllIds( screen.Components ), 0, screen )
+	AltAspectRatioFramesHide()
+	OnScreenCloseFinished( screen )
+	ShowCombatUI( screen.Name )
 end
 
 function MusicPlayerUpdateButtonStatus( screen, button, args )

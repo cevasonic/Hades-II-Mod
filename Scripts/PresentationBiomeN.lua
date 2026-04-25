@@ -513,20 +513,7 @@ end
 
 function ChooseMedeaIntroPresentation( room, args )
 	wait( 0.01 )
-
-	-- queue the boss intro text lines before checking requirements
-	local enemy = nil
-	if args.ProcessTextLinesIds ~= nil then
-		for k, id in ipairs( args.ProcessTextLinesIds ) do
-			if ActiveEnemies[id] ~= nil then
-				enemy = ActiveEnemies[id]
-				enemy.QueuedBossIntroTextLines = GetRandomEligibleTextLines( enemy, enemy.BossIntroTextLineSets, GetNarrativeDataValue( enemy, "BossIntroTextLinePriorities" ) )
-				break
-			end
-		end
-	end
-
-	if enemy ~= nil and IsGameStateEligible( enemy, args.AlreadyPresentRequirements ) then
+	if IsGameStateEligible( room, args.AlreadyPresentRequirements ) then
 		MedeaIntroPresentation_AlreadyPresent( room, args )
 	else
 		MedeaIntroPresentation( room, args )
@@ -550,4 +537,10 @@ end
 
 function DestroyEphyraBarrier( room, args )
 	Destroy({ Ids = GetIds({ Names = args.Groups }) })
+end
+
+function PolyphemusBossDreamRunIntro( source, args )
+	wait( 0.6 )
+	PlayPolyphemusTauntAnim( source )
+	wait( 0.3 )
 end

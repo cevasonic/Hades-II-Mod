@@ -2,8 +2,28 @@ OverwriteTableKeys( TraitData, {
 	-- Echo
 	BaseEcho = 
 	{
+		InheritFrom = { "ForceCommonAppearanceTrait" },
 		IsEchoBoon = true,
 		DebugOnly = true,
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 1
+			},
+		},
 	},
 	
 	EchoLastReward =
@@ -62,15 +82,36 @@ OverwriteTableKeys( TraitData, {
 	{
 		InheritFrom = { "BaseEcho" },
 		Icon = "Boon_Echo_03",
+		Hidden = true,
 		GameStateRequirements =
 		{
 			NamedRequirements = { "MissingLastStand", },
 		},
-		Hidden = true,
+
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 0.7/0.5,
+			},
+		},
+
 		AcquireFunctionName = "EchoRefillLastStands",
 		AcquireFunctionArgs = 
 		{
-			StartFraction = 0.5,
+			StartFraction = { BaseValue = 0.5, },
 			Decay = 0.1,
 			ReportValues = 
 			{ 
@@ -104,6 +145,25 @@ OverwriteTableKeys( TraitData, {
 	DiminishingDodgeBoon = 
 	{
 		InheritFrom = { "BaseEcho" },
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 0.7/0.5
+			},
+		},
 		Icon = "Boon_Echo_01",
 		SetupFunction = 
 		{
@@ -118,8 +178,8 @@ OverwriteTableKeys( TraitData, {
 				Cooldown = 0.2,
 			},
 		},
-		InitialDodgeChance = 0.5,
-		CurrentDodgeChance = 0.5,
+		InitialDodgeChance = { BaseValue = 0.5 },
+		CurrentDodgeChance = { BaseValue = 0.5 },
 		Decay = 0.02,
 		
 		TrayStatLines = 
@@ -152,12 +212,31 @@ OverwriteTableKeys( TraitData, {
 	DiminishingHealthAndManaBoon = 
 	{
 		InheritFrom = { "BaseEcho" },
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 0.8/0.6
+			},
+		},
 		Icon = "Boon_Echo_02",
 		StatMultiplier = 0,
 		AcquireFunctionName = "EchoIncreaseStats",
 		AcquireFunctionArgs = 
 		{
-			StartFraction = 0.60,
+			StartFraction = { BaseValue = 0.6 },
 			Decay = 0.05,
 			ReportValues = 
 			{ 
@@ -221,7 +300,7 @@ OverwriteTableKeys( TraitData, {
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" },
+				PathTrue = { "GameState", "TextLinesRecord", "EchoGrantsNewTrait01" },
 			},
 			{
 				Path = { "CurrentRun", "Hero", "TraitDictionary" },
@@ -231,7 +310,7 @@ OverwriteTableKeys( TraitData, {
 		CodexGameStateRequirements =
 		{
 			{
-				PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" },
+				PathTrue = { "GameState", "TextLinesRecord", "EchoGrantsNewTrait01" },
 			},
 		},
 		CustomTrayText = "EchoRepeatKeepsakeBoon_Tray",

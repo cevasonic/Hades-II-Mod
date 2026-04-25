@@ -28,6 +28,7 @@ WeaponSetData =
 			PreAttackEndShake = true,
 
 			AttackDistance = 320,
+			AttackDistanceScaleY = 0.75,
 			LoSBuffer = 55,
 			RequireUnitLoS = true,
 

@@ -2,7 +2,7 @@ UnitSetData.CorruptedShadeMedium =
 {
 	CorruptedShadeMedium =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 		DeathAnimation = "EnemyDeathFxCorruptedShade_Medium",
 		MaxHealth = 350,
 		HealthBarOffsetY = -180,

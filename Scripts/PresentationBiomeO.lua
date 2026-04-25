@@ -100,6 +100,7 @@ end
 
 function ErisKillPresentation( unit, args )
 	RecordEncounterClearStats()
+	thread( PlayVoiceLines, unit.ErisDeathVoiceLines, nil, unit )
 	ClipEvent({ Icon = "steam_combat", Title = GetDisplayName({ Text = args.Message }), Description = "", StartOffset = 0.0, Duration = 5.0 })
 
 	local allBossesDead = true
@@ -245,8 +246,16 @@ function ErisKillPresentation( unit, args )
 	wait( cameraPanTime )
 
 	local textMessage = deathPanSettings.Message
-	if deathPanSettings.BossDifficultyMessage and GetNumShrineUpgrades( "BossDifficultyShrineUpgrade" ) > 0 then
-		textMessage = deathPanSettings.BossDifficultyMessage
+	if unit.AltDeathMessageTextIds ~= nil then
+		local eligibleTextIds = {}
+		for k, altTextIdData in pairs( unit.AltDeathMessageTextIds ) do
+			if altTextIdData.GameStateRequirements == nil or IsGameStateEligible( altTextIdData, altTextIdData.GameStateRequirements ) then
+				table.insert( eligibleTextIds, altTextIdData.TextId )
+			end
+		end
+		if not IsEmpty( eligibleTextIds ) then
+			textMessage = GetRandomValue( eligibleTextIds )
+		end
 	end
 
 	thread( DisplayInfoBanner, nil, { 
@@ -259,10 +268,6 @@ function ErisKillPresentation( unit, args )
 		AnimationName = "InfoBannerBossKillIn",
 		AnimationOutName = "InfoBannerBossKillOut",
 		Duration = 3.75 } )
-
-	if deathPanSettings.BatsAfterDeath then
-		thread( SendCritters, { MinCount = 80, MaxCount = 90, StartX = 0, StartY = 300, MinAngle = 75, MaxAngle = 115, MinSpeed = 400, MaxSpeed = 2000, MinInterval = 0.03, MaxInterval = 0.1, GroupName = "CrazyDeathBats" } )
-	end
 
 	CreateAnimation({ DestinationId = victimId, Name = "ErisDeathHandsFxIn", Group = "Combat_Menu_Overlay_Additive" })
 	local grabSoundId = PlaySound({ Name = "/SFX/Player Sounds/MelMagicalChargeLoop" })
@@ -326,12 +331,20 @@ function ErisKillPresentation( unit, args )
 	CurrentRun.CurrentRoom.Encounter.BossKillPresentation = false
 	ToggleCombatControl( CombatControlsDefaults, true, "BossKill" )
 	SetThingProperty({ Property = "AllowAnyFire", Value = true, DestinationId = CurrentRun.Hero.ObjectId, DataValue = false })
+
+	if CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount then
+		SetPlayerInvulnerable( "DreamRunCleared" )
+		wait( 0.5 )
+		OpenRunClearScreen()
+	end
 end
 
 function PlayErisTauntAnim( source, args )
 	if source ~= nil then
-		SetAnimation({ Name = "Enemy_Eris_HubToCombatIdle", DestinationId = source.ObjectId })
-		wait(1.2)
+		if not CurrentRun.IsDreamRun then
+			SetAnimation({ Name = "Enemy_Eris_HubToCombatIdle", DestinationId = source.ObjectId })
+			wait(1.2)
+		end
 		SetAnimation({ Name = "Enemy_Eris_Reload_PreFight", DestinationId = source.ObjectId })
 	end
 end
@@ -539,7 +552,15 @@ function RoomEntranceBossShips( currentRun, currentRoom, args )
 	local roomIntroSequenceDuration = roomData.IntroSequenceDuration or 0.3
 	local roomIntroPanDuration = roomData.IntroPanDuration or 1.5
 
-	SetAnimation({ Name = args.BossIntroAnimation, DestinationId = args.BossId })
+
+	if CurrentRun.IsDreamRun then
+		StartBossRoomMusic()
+		SetAnimation({ Name = args.DreamBossIntroAnimation, DestinationId = args.BossId })
+		roomIntroSequenceDuration = args.DreamIntroSequenceDuration or roomIntroSequenceDuration
+		roomIntroPanDuration = args.DreamIntroPanDuration or roomIntroPanDuration
+	else
+		SetAnimation({ Name = args.BossIntroAnimation, DestinationId = args.BossId })
+	end
 
 	HideCombatUI("BossEntrance")
 	wait(0.03)
@@ -583,18 +604,15 @@ function RoomEntranceBossShips( currentRun, currentRoom, args )
 
 	wait(0.03)
 
-	if roomData.ThreadEnterVoiceLines then
-
-		thread( PlayVoiceLines, encounterData.EnterVoiceLines or roomData.EnterVoiceLines, true )
-		thread( PlayVoiceLines, GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true )
-		wait( roomIntroSequenceDuration )
-
-	else
+	if not CurrentRun.IsDreamRun then
 		if PlayVoiceLines( encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true ) then
 			wait(0.3)
 		else
 			wait(1.8)
 		end
+	else
+		thread( PlayVoiceLines, roomData.EnterDreamVoiceLines or encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
+		wait( args.DreamEnterWait or 0 )
 	end
 
 	--wait( roomIntroSequenceDuration )
@@ -768,8 +786,7 @@ function ShipsEndOilFires()
 	ExpireProjectiles({ Names = { "OilPuddleFire", "OilPuddleFire02", "OilPuddleFire03", "OilPuddleFire04" } })
 	ExpireProjectiles({ Names = { "OilPuddleFireFlying", "OilPuddleFire02Flying", "OilPuddleFire03Flying", "OilPuddleFire04Flying" } })
 
-	local oilPuddleIds = GetIdsByType({ Names = { "OilPuddle", "OilPuddle02", "OilPuddle03", "OilPuddle04" } })
-	for k, id in pairs(oilPuddleIds) do
+	for k, id in pairs( MapState.OilPuddleIds ) do
 		DouseFire(id)
 	end
 end
@@ -862,7 +879,7 @@ end
 
 function UseShipWheelForward( wheel )
 	
-	if not IsEmpty( MapState.RoomRequiredObjects ) then
+	if HasRoomRequiredObject() then
 		thread( CannotUseDoorPresentation, wheel )
 		return
 	end
@@ -883,7 +900,7 @@ end
 
 function UseShipWheelLeft( wheel )
 	
-	if not IsEmpty( MapState.RoomRequiredObjects ) then
+	if HasRoomRequiredObject() then
 		thread( CannotUseDoorPresentation, wheel )
 		return
 	end
@@ -905,7 +922,7 @@ end
 
 function UseShipWheelRight( wheel )
 	
-	if not IsEmpty( MapState.RoomRequiredObjects ) then
+	if HasRoomRequiredObject() then
 		thread( CannotUseDoorPresentation, wheel )
 		return
 	end
@@ -970,4 +987,9 @@ function DestroyShipWheelPresentation( wheel )
 	if AudioState.MusicSection == 0 then
 		SetMusicSection( 1 )
 	end
+end
+
+function ErisBossDreamRunIntro( source, args )
+	PlayErisTauntAnim( source )
+	wait(1.0)
 end

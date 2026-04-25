@@ -15,6 +15,7 @@ end
 function CosmeticsShopScreenClosedPresentation( screen, button )
 	local components = screen.Components
 	PlaySound({ Name = screen.CloseSound or "/SFX/Menu Sounds/CauldronMenuCloseNew" })
+	SetAnimation({ DestinationId = components.BackgroundBack.Id, Name = screen.ItemCategories[screen.ActiveCategoryIndex].BackingAnimationOut })
 	SetAnimation({ DestinationId = components.InfoBoxBacking.Id, Name = "GhostAdminScreenCauldronScrollOut" }) --nopkg
 	SetAnimation({ DestinationId = screen.Components.DoraPortrait.Id, Name = "Portrait_Dora_Hardhat_Exit" })
 	if button.Id == screen.Components.CloseButton.Id then
@@ -33,9 +34,9 @@ function PreActivateCosmeticPresentation( screen, button, saleData, args )
 	MapState.CosmeticPresentationActive = true
 
 	if args.ReAdd then
-		thread( PlayVoiceLines, saleData.CosmeticReAddedVoiceLines or GlobalVoiceLines.CosmeticReAddedVoiceLines )
+		thread( PlayVoiceLines, saleData.CosmeticReAddedVoiceLines or GlobalVoiceLines.CosmeticReAddedVoiceLines, nil, nil, args )
 	elseif args.Removal then
-		thread( PlayVoiceLines, saleData.CosmeticRemovedVoiceLines or GlobalVoiceLines.CosmeticRemovedVoiceLines )
+		thread( PlayVoiceLines, saleData.CosmeticRemovedVoiceLines or GlobalVoiceLines.CosmeticRemovedVoiceLines, nil, nil, args )
 	else
 		thread( PlayVoiceLines, saleData.PreRevealVoiceLines )
 	end

@@ -31,6 +31,7 @@ OverwriteTableKeys( EncounterData,
 		SkipIntroEncounterCheck = true,
 		EncounterType = "Devotion",
 		DelayedStart = true,
+		NeverDelayManaRegen = true,
 
 		StartRoomUnthreadedEvents =
 		{

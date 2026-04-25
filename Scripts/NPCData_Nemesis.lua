@@ -23,6 +23,7 @@
 		Icon = "NemesisRewardFinderIcon",
 		ExcludeFromDamageDealtRecord = true,
 		BecomingCloserFunctionName = "BecomingCloserNemesisPresentation",
+		BecomingCloserRepeatableFunctionName = "BecomingCloserNemesisRepeatablePresentation",
 
 		BathEnterSound1 = "/SFX/ArmorIdleSFX",
 		BathEnterSound2 = "/SFX/ArmorIdleSFX2",
@@ -35,6 +36,48 @@
 		},
 
 		PreferredSpawnPoint = "EnemyPoint",
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/NemesisDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+		},
 
 		ShopEventData = 
 		{
@@ -85,14 +128,55 @@
 				PreLineWait = 0.3,
 				UsePlayerSource = true,
 				PlayOnceThisRun = true,
-				-- RandomRemaining = true,
+				RandomRemaining = true,
 				SuccessiveChanceToPlay = 0.33,
 				Cooldowns =
 				{
 					{ Name = "MelinoeSaluteSpeech", Time = 4 },
 				},
 
-				{ Cue = "/VO/Melinoe_1712", Text = "Death to Chronos?" },
+				{ Cue = "/VO/Melinoe_1712", Text = "Death to Chronos?",
+					GameStateRequirements =
+					{
+						OrRequirements =
+						{
+							{
+								{
+									PathFalse = { "GameState", "TextLinesRecord", "TrueEnding01" },
+								},
+							},
+							{
+								{
+									PathTrue = { "GameState", "SpeechRecord", "/VO/Chronos_1058" },
+								},
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/Melinoe_0025", Text = "Together we shine.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+						},
+					},
+				},
+				{ Cue = "/VO/Melinoe_0573", Text = "Together we shine...",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+						},
+					},
+				},
+				{ Cue = "/VO/Melinoe_1697", Text = "Together we shine.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+						},
+					},
+				},
 			},
 			{ GlobalVoiceLines = "SaluteVoiceLines" },
 			{
@@ -159,7 +243,7 @@
 						},
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
+							IsAny = { "/VO/Melinoe_2785", "/VO/Melinoe_2786" },
 						},
 					},
 				},
@@ -168,7 +252,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699" },
+							IsAny = { "/VO/Melinoe_2784" },
 						},
 					},
 				},
@@ -186,7 +270,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1700" },
+							IsAny = { "/VO/Melinoe_1700_2" },
 						},
 					},
 				},
@@ -195,7 +279,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
+							IsAny = { "/VO/Melinoe_2785", "/VO/Melinoe_2786" },
 						},
 					},
 				},
@@ -205,7 +289,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
+							IsAny = { "/VO/Melinoe_2785", "/VO/Melinoe_2786" },
 						},
 					},
 				},
@@ -218,7 +302,7 @@
 						},
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1701", "/VO/Melinoe_1703" },
+							IsAny = { "/VO/Melinoe_2785", "/VO/Melinoe_2786" },
 						},
 					},
 				},
@@ -227,7 +311,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1705", "/VO/Melinoe_1709" },
+							IsAny = { "/VO/Melinoe_2787", "/VO/Melinoe_2788" },
 						},
 					},
 				},
@@ -237,7 +321,24 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1705", "/VO/Melinoe_1709" },
+							IsAny = { "/VO/Melinoe_2787", "/VO/Melinoe_2788" },
+						},
+					},
+				},
+				{ Cue = "/VO/Nemesis_0469", Text = "Together we shine...",
+					PreLineAnim = "Nemesis_Hub_Salute",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "ReachedTrueEnding" },
+						},
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Melinoe_0025", "/VO/Melinoe_0573", "/VO/Melinoe_1697" },
 						},
 					},
 				},
@@ -253,7 +354,6 @@
 		{
 			{
 				UsePlayerSource = true,
-				RandomRemaining = true,
 				BreakIfPlayed = true,
 				PreLineWait = 0.5,
 				PlayOnce = true,
@@ -270,7 +370,6 @@
 			},
 			{
 				UsePlayerSource = true,
-				RandomRemaining = true,
 				BreakIfPlayed = true,
 				PreLineWait = 0.95,
 				PlayOnce = true,
@@ -347,6 +446,28 @@
 				{ Cue = "/VO/NemesisField_0245", Text = "Get set to fight, or get out of the way." },
 				{ Cue = "/VO/NemesisField_0246", Text = "Good, could use more Gold." },
 				{ Cue = "/VO/NemesisField_0247", Text = "Had a feeling you'd show up." },
+
+				{ Cue = "/VO/NemesisField_0538", Text = "Your Gold or mine." },
+				{ Cue = "/VO/NemesisField_0539", Text = "How about a friendly wager?" },
+				{ Cue = "/VO/NemesisField_0540", Text = "Was right behind you." },
+				{ Cue = "/VO/NemesisField_0541", Text = "I was here first." },
+				{ Cue = "/VO/NemesisField_0543", Text = "Need a hand?" },
+				{ Cue = "/VO/NemesisField_0544", Text = "Somebody's gonna pay." },
+				{ Cue = "/VO/NemesisField_0545", Text = "On your guard." },
+				{ Cue = "/VO/NemesisField_0546", Text = "Eyes open." },
+				{ Cue = "/VO/NemesisField_0542", Text = "Thought I'd drop in.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisGift06" }
+						},
+						{
+							Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+							IsAny = { "H" },
+						},
+					},
+				},
 				{ Cue = "/VO/NemesisField_0537", Text = "Surprise.",
 					PlayFirst = true,
 					GameStateRequirements =
@@ -357,6 +478,27 @@
 						},
 					},
 				},
+			},
+			{
+				UsePlayerSource = true,
+				BreakIfPlayed = true,
+				PreLineWait = 0.5,
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunNemesisFieldIntroVO",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
+						IsNone = { "NemesisRandomEvent" },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				{ Cue = "/VO/MelinoeField_5658", Text = "Not the first I've dreamt of Nemesis." },
+				{ Cue = "/VO/MelinoeField_5659", Text = "Dreaming of Nemesis again..." },
 			},
 		},
 
@@ -369,6 +511,10 @@
 				{
 					{
 						PathFalse = { "CurrentRun", "TextLinesRecord", "NemesisCombatFirstIntro" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+						HasNone = { "/VO/MelinoeField_5658", "/VO/MelinoeField_5659" },
 					},
 				},
 				Cooldowns =
@@ -391,7 +537,84 @@
 				{ Cue = "/VO/NemesisField_0260", Text = "Come on in." },
 				{ Cue = "/VO/NemesisField_0261", Text = "Here comes the reckoning." },
 				{ Cue = "/VO/NemesisField_0262", Text = "I'll make them come around." },
-				{ Cue = "/VO/NemesisField_0263", Text = "Make yourself useful." },
+				{ Cue = "/VO/NemesisField_0547", Text = "Let's go." },
+				{ Cue = "/VO/NemesisField_0549", Text = "Come on." },
+				{ Cue = "/VO/NemesisField_0263", Text = "Make yourself useful.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/NemesisField_0257" },
+						},
+						{
+							PathFalse = { "GameState", "TextLinesRecord", "NemesisGift08" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0548", Text = "Let's see it.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisGift07" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0553", Text = "Let's make this quick.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisGift07" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0554", Text = "Show me.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisGift08" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0552", Text = "Save some for me.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0550", Text = "After you.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0551", Text = "Get to it.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0555", Text = "Like we trained.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisGift09" }
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0556", Text = "Get 'em.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisGift09" }
+						},
+					},
+				},
 			},
 			{
 				UsePlayerSource = true,
@@ -456,6 +679,106 @@
 						{
 							Path = { "LastLinePlayed" },
 							IsAny = { "/VO/NemesisField_0263" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4864", Text = "Going.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0547" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4865", Text = "Here it is.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0548" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4866", Text = "Here we go.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0549" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4867", Text = "Why thank you.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0550" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4868", Text = "Yes ma'am.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0551" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4869", Text = "Perhaps.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0552" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4870", Text = "Absolutely.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0553" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4871", Text = "Watch.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0554" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4872", Text = "Mostly.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0555" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4873", Text = "On it.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/NemesisField_0556" },
 						},
 					},
 				},
@@ -1320,8 +1643,7 @@
 						Value = 2,
 					},
 					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "HecateAboutStormStop01", "HecateAboutStormStop01_B", "HecateAboutChronosBossW04" },
+						PathTrue = { "GameState", "TextLinesRecord", "HecateAboutStormStop01" },
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -1454,6 +1776,7 @@
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "NemesisAboutChronosNightmare02" },
 					},
+					NamedRequirementsFalse = { "ReachedEpilogue" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
@@ -1515,6 +1838,55 @@
 				},
 			},
 
+			NemesisAboutTartarus01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisPostCombatAboutTartarus03" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisPostTrueEndingTimeStopped01" },
+					},					
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+
+				{ Cue = "/VO/Melinoe_4466", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "How fare you down in Tartarus now that you've found a filthy tunnel entrance in? Your brute-force efforts to bring death to Chronos bearing any fruit?" },
+
+				{ Cue = "/VO/Nemesis_0349",
+					PreLineAnim = "Nemesis_Hub_Greet",
+					Text = "No. Still haven't found a way into the House. Been running into lots of Satyrs, though. Thinning the herd, as they say." },
+
+				{ Cue = "/VO/Melinoe_4467", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Well at least you're helping carve a path for me! Though, that's probably the last thing you want. You won't stop until you take the Titan down yourself." },
+
+				{ Cue = "/VO/Nemesis_0350",
+					Text = "Don't plan on stopping after or before." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_0017", Text = "Not a doubt in my mind." },
+					},
+					{
+						PreLineWait = 0.3,
+						ObjectType = "NPC_Nemesis_01",
+						{ Cue = "/VO/Nemesis_0356", Text = "{#Emph}<Scoff>" },
+					},
+				},
+			},
+
 			NemesisAboutGoldenAge01 =
 			{
 				PlayOnce = true,
@@ -1562,7 +1934,6 @@
 					{
 						PreLineWait = 0.45,
 						UsePlayerSource = true,
-						-- Fine.
 						{ Cue = "/VO/Melinoe_0616", Text = "Fine." },
 					},
 				},
@@ -2051,7 +2422,10 @@
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
 					{
-						PathTrue = { "CurrentRun", "UseRecord", "NPC_Nyx_Story_01" },
+						SumPrevRuns = 2,
+						Path = { "UseRecord", "NPC_Nyx_Story_01" },
+						Comparison = ">=",
+						Value = 1,
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -2128,6 +2502,8 @@
 
 			NemesisAboutHecate01 =
 			{
+				PlayOnce = true,
+				UseableOffSource = true,
 				GameStateRequirements =
 				{
 					{
@@ -2137,15 +2513,19 @@
 						PathFalse = { "GameState", "TextLinesRecord", "NemesisWithHecate02" },
 					},
 				},
-				PlayOnce = true,
-				UseableOffSource = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+
 				{ Cue = "/VO/Melinoe_1552", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "So, just how much trouble are you in for mouthing off to Headmistress, Nem? That was utterly disrespectful, even for you." },
+					Text = "So just how much trouble are you in for mouthing off to Headmistress, Nem? That was utterly disrespectful, even for you." },
+
 				{ Cue = "/VO/Nemesis_0057",
 					PreLineAnim = "Nemesis_Hub_Greet",
 					Text = "{#Emph}Heh! {#Prev}Well, looks like I've got a lot more guard duty ahead of me. But it was worth it. Help balance out you sucking up to her all the time." },
+
 				{ Cue = "/VO/Melinoe_1553", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
@@ -2158,8 +2538,6 @@
 						{ Cue = "/VO/Nemesis_0058", Text = "You're just a tool to her, you know." },
 					},
 				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
 			},
 			NemesisAboutHecate02 =
 			{
@@ -3200,6 +3578,9 @@
 						Path = { "CurrentRun", "TraitRarityCache", "DeathVengeanceKeepsake" },
 						IsAny = { "Epic", "Heroic" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
@@ -3243,7 +3624,7 @@
 
 				{ Cue = "/VO/Nemesis_0347",
 					Portrait = "Portrait_Nemesis_Averted_01",
-					Text = "You're more conceited than Narcissus. Saw those statues of you in the Training Grounds. You'll have to work a whole lot harder to look like that." },
+					Text = "You're more conceited than Narcissus. Saw those statues of you in the training grounds. You'll have to work a whole lot harder to look like that." },
 				{ Cue = "/VO/Melinoe_4464", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					Emote = "PortraitEmoteSurprise",
@@ -3572,7 +3953,7 @@
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "NemesisBathHouse03", "MorosTaverna02", },
+						HasAll = { "NemesisBathHouse03", "MorosTaverna02" },
 					},
 					{
 						FunctionName = "RequireRunsSinceTextLines",
@@ -3843,14 +4224,27 @@
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisWithHecate02" },
 					},
+					OrRequirements =
 					{
-						Path = { "CurrentRun", "EncountersOccurredCache" },
-						HasAny = {
-							"NemesisCombatF",
-							"NemesisCombatG",
-							"NemesisCombatH",
-							"NemesisCombatI",
-							"NemesisRandomEvent",
+						{
+							{
+								Path = { "CurrentRun", "EncountersOccurredCache" },
+								HasAny = {
+									"NemesisCombatF",
+									"NemesisCombatG",
+									"NemesisCombatH",
+									"NemesisCombatI",
+								},
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "EncountersOccurredBiomeCache" },
+								HasAny =
+								{
+									"NemesisRandomEvent",
+								},
+							},
 						},
 					},
 				},
@@ -4069,7 +4463,20 @@
 				UseableOffSource = true,
 				StatusAnimation = false,
 				PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
+				-- PostBlockSpecialInteract = true,
+				UseText = "UseListenNPC",
+			},
+
+			ArtemisWithNemesis01 =
+			{
+				Partner = "NPC_Artemis_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				AngleTowardTargetId = 561502,
+				-- Nemesis talks first
+				-- StatusAnimation = false,
+				PreBlockSpecialInteract = true,
+				-- PostBlockSpecialInteract = true,
 				UseText = "UseListenNPC",
 			},
 
@@ -4091,18 +4498,15 @@
 						HasAll = { "NemesisGift01", "HypnosGift01" },
 					},
 					{
-						PathTrue = { "GameState", "UseRecord", "NPC_Hypnos_01" },
+						PathFalse = { "GameState", "TextLinesRecord", "HypnosFinalDreamMeeting01" },
 					},
-
-					-- @ true ending
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						PathTrue = { "GameState", "UseRecord", "NPC_Hypnos_01" },
 					},
 				},
 
 				PlayOnce = true,
 				-- BlockDistanceTriggers = true,
-				-- IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				-- GiftableOffSource = true,
 				TeleportToId = 566612,
@@ -4154,7 +4558,6 @@
 				},
 				StatusAnimation = false,
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 566613,
 				AngleTowardTargetId = 556921,
@@ -4203,7 +4606,6 @@
 				},
 				StatusAnimation = false,
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 566613,
 				AngleTowardTargetId = 556921,
@@ -4268,7 +4670,6 @@
 				},
 				-- UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				TeleportToId = 560612,
 				TeleportOffsetX = 130,
 				TeleportOffsetY = 130,
@@ -4316,7 +4717,6 @@
 				},
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				TeleportToId = 560612,
 				TeleportOffsetX = 130,
 				TeleportOffsetY = 130,
@@ -4371,10 +4771,17 @@
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "NemesisGift08", "MorosGift08" }
 					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "MorosBecomingCloser01", },
+						IsNone = { "Choice_MorosDecline" },
+					},
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsNone = { "Choice_NemesisDecline" },
+					},
 				},
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				TeleportToId = 560612,
 				TeleportOffsetX = 130,
 				TeleportOffsetY = 130,
@@ -4455,7 +4862,6 @@
 					},
 				},
 				-- BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 590426,
 				AngleTowardTargetId = 585573,
@@ -4519,7 +4925,6 @@
 					},
 				},
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 590426,
 				AngleTowardTargetId = 585573,
@@ -4557,6 +4962,108 @@
 				},
 			},
 
+			NemesisWithCharon01 =
+			{
+				Partner = "NPC_Charon_01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "CharonGift03", "NemesisGift03" },
+					},
+				},
+
+				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				SkipPreEventFunction = true,
+				-- StatusAnimation = false,
+				TeleportToId = 589589,
+				TeleportOffsetX = 20,
+				TeleportOffsetY = 80,
+				AngleTowardTargetId = 557743,
+				InteractDistance = 300,
+
+				{ Cue = "/VO/Nemesis_0440",
+					PreLineWait = 0.35,
+					PreLineAnim = "Nemesis_Hub_Glare_Start",
+					Text = "...Charon, get it through your skull, this is not what I ordered. You gonna give me a refund or not?" },
+
+				{ Cue = "/VO/Charon_0139",
+					Portrait = "Portrait_Charon_Default_01", Speaker = "NPC_Charon_01",
+					Text = "{#Emph}Nrrnnn, rrnnngghhhhh..." },
+
+				{ Cue = "/VO/Nemesis_0441",
+					PreLineAnim = "Nemesis_Hub_Glare_End",
+					Text = "You even listening to a word I'm saying? {#Emph}Ungh{#Prev}, why do I bother." },
+			},
+			NemesisWithCharon02 =
+			{
+				Partner = "NPC_Charon_01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "CharonGift05", "NemesisGift05", "NemesisPostCombatFirstMeeting" }
+					},
+					{
+						Path = { "CurrentRun", "EncountersOccurredCache" },
+						HasAny =
+						{
+							"NemesisCombatF",
+							"NemesisCombatG",
+							"NemesisCombatH",
+							"NemesisCombatI",
+						},
+					},
+					{
+						FunctionName = "RequireRunsSinceTextLines",
+						FunctionArgs = { TextLines = { "NemesisWithCharon01" }, Min = 5 },
+					},
+				},
+
+				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				SkipPreEventFunction = true,
+				-- StatusAnimation = false,
+				TeleportToId = 589589,
+				TeleportOffsetX = 20,
+				TeleportOffsetY = 80,
+				AngleTowardTargetId = 557743,
+				InteractDistance = 300,
+
+				{ Cue = "/VO/Nemesis_0442",
+					PreLineWait = 0.35,
+					PreLineAnim = "Nemesis_Hub_Glare_Start",
+					Text = "...Which one of us brought you more Gold? You can tell me. Give me a sign. Nod twice if it's me." },
+
+				{ Cue = "/VO/Charon_0140",
+					PreLineAnim = "Charon_Thanking",
+					PreLineAnimTarget = 557743,
+					Portrait = "Portrait_Charon_Default_01", Speaker = "NPC_Charon_01",
+					Text = "{#Emph}Hrrnnnngghh, grrrr..." },
+
+				{ Cue = "/VO/Nemesis_0443",
+					PreLineAnim = "Nemesis_Hub_Glare_End",
+					Text = "That looked like one nod... or maybe it was two..." },
+			},
+
 			NemesisWithIcarus01 =
 			{
 				Partner = "NPC_Icarus_01",
@@ -4576,7 +5083,6 @@
 					},
 				},
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 743557,
 				TeleportOffsetY = 50,
@@ -4969,10 +5475,14 @@
 			},
 			NemesisChat29 =
 			{
+				PlayFirst = true,
 				GameStateRequirements =
 				{
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift03" },
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 				UseableOffSource = true,
@@ -5026,13 +5536,286 @@
 				GameStateRequirements =
 				{
 					{
-						-- PathTrue = { "GameState", "TextLinesRecord", "NemesisGift03" },
+						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 				UseableOffSource = true,
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
 				{ Cue = "/VO/Nemesis_0011",
 					Text = "Ready to give up, tell Hecate I'm still available." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat32 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						Path = { "CurrentRun", "EncountersOccurredCache" },
+						HasNone = {
+							"NemesisCombatI",
+						},
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0459",
+					Text = "Got back not so long ago myself, though didn't do so well." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat33 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 8,
+					},
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "CurrentRun", "EncountersOccurredCache" },
+								HasAny = {
+									"NemesisCombatF",
+									"NemesisCombatG",
+									"NemesisCombatH",
+									"NemesisCombatI",
+								},
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "EncountersOccurredBiomeCache" },
+								HasAny =
+								{
+									"NemesisRandomEvent",
+								},
+							},
+						}
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0460",
+					Text = "Maybe see you out there again tonight if you haven't had enough." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat34 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 4,
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0461",
+					Text = "Haven't seen you out there in a few nights, so maybe we're due." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat35 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 4,
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0462",
+					Text = "Sticking to the surface for a while or will I see you out there?" },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat36 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 3,
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0463",
+					Text = "Things looking any better on the surface recently or what?" },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat37 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NemesisPostTrueEndingTimeStopped01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0464",
+					Text = "Took care of things in Tartarus while you were busy topside." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat38 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NemesisPostCombatAboutTartarus03" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 4,
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0465",
+					Text = "Leave the Underworld to me, and go take care of things up top." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat39 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NemesisPostTrueEndingTimeStopped01" },
+					},
+					{
+						SumPrevRuns = 2,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 2,
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0466",
+					Text = "I can handle Chronos again if you want to deal with Typhon instead." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat40 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NemesisPostTrueEndingTimeStopped01" },
+					},
+					{
+						SumPrevRuns = 2,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 2,
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0467",
+					Text = "I'll be sticking to the Underworld if you want to head up top instead." },
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
+			},
+			NemesisChat41 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NemesisBathHouse03" },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "CurrentRun", "EncountersOccurredCache" },
+								HasAny = {
+									"NemesisCombatF",
+									"NemesisCombatG",
+									"NemesisCombatH",
+									"NemesisCombatI",
+								},
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "EncountersOccurredBiomeCache" },
+								HasAny =
+								{
+									"NemesisRandomEvent",
+								},
+							},
+						},
+					},
+				},
+				UseableOffSource = true,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+				{ Cue = "/VO/Nemesis_0468",
+					Text = "Get back out there, and maybe I'll catch up once I take care of a few things." },
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.NemesisGreeting,
 			},
@@ -5059,6 +5842,9 @@
 					},
 					{
 						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_0022", UsePlayerSource = true,
@@ -5551,6 +6337,51 @@
 
 			},
 
+			NemesisTavernaDecline01 =
+			{
+				PlayOnce = true,
+				SkipGiftPresentationPost = true,
+				Cost =
+				{
+					SuperGiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift09" },
+					},
+					{
+						PathTrue = { "GameState", "UseRecord", "NPC_Nemesis_01" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
+						IsNone = { "Shop" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},	
+				{ Cue = "/VO/Nemesis_0390",
+					PreLineWait = 0.35,
+					PostLineThreadedFunctionName = "SuperGiftPointRefundPresentation",
+					Text = "Thought I told you no Ambrosia anymore. Don't ask again." },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5874", Text = "OK, OK..." },
+					},
+				},
+			},
+
 			NemesisBathHouse01 =
 			{
 				PauseMusicPlayerMusic = true,
@@ -5875,6 +6706,170 @@
 
 			},
 
+			NemesisBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "NemesisBathHouseRepeatable01", "NemesisBathHouse03" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+						HintId = "Codex_DoesntWantGiftHint",
+					},
+				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Nemesis_0375",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Nemesis_Averted_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Averted_01_Exit",
+						Text = "Was just thinking how I wouldn't mind hitting the springs again, so, yeah." },
+
+					{ Cue = "/VO/Nemesis_0378",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "A visit to the springs does sound good. Though we better make it quick." },
+
+					{ Cue = "/VO/Nemesis_0381",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "Shouldn't be too long I guess, though need your help to get this suit out of the way." },
+				},
+
+				-- Mel in the bath
+				[2] = HeroRepeatableTextLines.BathHouseIntroTextLines,
+
+				-- Nemesis in the bath
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Nemesis_0376",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Nemesis_Bath_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Bath_01_Exit",
+						Text = "...Not much is worth taking the suit off for but this is up there for me." },
+
+					{ Cue = "/VO/Nemesis_0379",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Nemesis_Bath_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Bath_01_Exit",
+						Text = "{#Emph}...Whew. {#Prev}Can practically feel all the knots in my shoulders melting away." },
+
+					{ Cue = "/VO/Nemesis_0382",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Nemesis_Bath_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Bath_01_Exit",
+						Text = "...Guess it wouldn't be fair if I could just do all my guard duty right here." },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Nemesis_0377",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "...Guess I'm good to go here for a while after that." },
+
+					{ Cue = "/VO/Nemesis_0380",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "...Must have needed that back there more than I thought." },
+
+					{ Cue = "/VO/Nemesis_0383",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "...Hate having to get out of there but if that's the trade-off, fine." },
+
+					{ Cue = "/VO/Nemesis_0200",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "...Well, back to standing around... right over here." },
+
+					{ Cue = "/VO/Nemesis_0201",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "...What do you know, nothing whatsoever happened here while we were out." },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+			},
+
 			NemesisBathHouseDecline01 =
 			{
 				PlayOnce = true,
@@ -5903,7 +6898,7 @@
 						HintId = "Codex_TimePassesGiftUsed",
 					},
 					{
-						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
 					},
 				},
 				EndVoiceLines =
@@ -5950,7 +6945,7 @@
 						HintId = "Codex_TimePassesGiftUsed",
 					},
 					{
-						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
 					},
 				},
 				{ Cue = "/VO/Melinoe_0684", UsePlayerSource = true,
@@ -6061,6 +7056,154 @@
 
 			},
 
+			NemesisFishingRepeatable01 =
+			{
+				Cost =
+				{
+					GiftPointsEpic = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "NemesisFishingRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+
+				-- start fishing
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Nemesis_0384",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "Not too much going on right now, so I think I can sneak a break. Why not." },
+
+					{ Cue = "/VO/Nemesis_0386",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "Why not. Could always use a little walk to stretch my legs a bit." },
+
+					{ Cue = "/VO/Nemesis_0388",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "Might be a bit too clear that I got nothing better to do right now, but sure." },
+
+					{ Cue = "/VO/Nemesis_0173",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "Could stand over here, or stand over there, don't think it makes much of a difference at this point." },
+
+					{ Cue = "/VO/Nemesis_0174",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Nemesis_Default_01",
+						PortraitExitAnimation = "Portrait_Nemesis_Default_01_Exit",
+						Text = "It's quiet anyway, and change of scenery'd be good for me right now. So yeah, why not." },
+				},
+
+				-- end fishing
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Nemesis_0385",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Well, least keeping watch over there beats keeping watch over here." },
+
+					{ Cue = "/VO/Nemesis_0387",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Confirming that the river's totally secure, if anybody's interested in my report." },
+
+					{ Cue = "/VO/Nemesis_0389",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						Portrait = "Portrait_Nemesis_Averted_01",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Think I needed that just as a change of pace from everything." },
+
+					{ Cue = "/VO/Nemesis_0223",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Not going to make a habit of doing this, but once in a while is all right." },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Nemesis",
+			},
 		},
 
 		MissingDistanceTrigger =
@@ -6214,6 +7357,14 @@
 			{ Cue = "/VO/NemesisField_0281", Text = "Gone." },
 			{ Cue = "/VO/NemesisField_0282", Text = "What else." },
 			{ Cue = "/VO/NemesisField_0283", Text = "Remember that." },
+			{ Cue = "/VO/NemesisField_0557", Text = "Deserved that." },
+			{ Cue = "/VO/NemesisField_0558", Text = "Get me?" },
+			{ Cue = "/VO/NemesisField_0559", Text = "Down." },
+			{ Cue = "/VO/NemesisField_0560", Text = "Dead." },
+			{ Cue = "/VO/NemesisField_0561", Text = "Dead. Again." },
+			{ Cue = "/VO/NemesisField_0562", Text = "{#Emph}<Scoff>" },
+			{ Cue = "/VO/NemesisField_0563", Text = "Next." },
+			{ Cue = "/VO/NemesisField_0564", Text = "Come on!" },
 		},
 		KillStolenVoiceLines =
 		{
@@ -6232,7 +7383,25 @@
 			{ Cue = "/VO/NemesisField_0292", Text = "Show off." },
 			{ Cue = "/VO/NemesisField_0293", Text = "Come on..." },
 			{ Cue = "/VO/NemesisField_0294", Text = "Damn it." },
-			{ Cue = "/VO/NemesisField_0295", Text = "Get your own." },
+			{ Cue = "/VO/NemesisField_0570", Text = "Shove it." },
+			{ Cue = "/VO/NemesisField_0571", Text = "What..." },
+			{ Cue = "/VO/NemesisField_0572", Text = "{#Emph}<Scoff>" },
+			{ Cue = "/VO/NemesisField_0295", Text = "Get your own.",
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "CurrentRoom", "SpeechRecord", "/VO/NemesisField_0569" },
+					},
+				},
+			},
+			{ Cue = "/VO/NemesisField_0569", Text = "Get your own!",
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "CurrentRoom", "SpeechRecord", "/VO/NemesisField_0295" },
+					},
+				},
+			},
 		},
 		EncounterEndVoiceLines =
 		{
@@ -6251,6 +7420,45 @@
 			{ Cue = "/VO/NemesisField_0345", Text = "Easy." },
 			{ Cue = "/VO/NemesisField_0346", Text = "Got what they deserved." },
 			{ Cue = "/VO/NemesisField_0347", Text = "Still here?" },
+			{ Cue = "/VO/NemesisField_0621", Text = "Done." },
+			{ Cue = "/VO/NemesisField_0622", Text = "None left." },
+			{ Cue = "/VO/NemesisField_0623", Text = "All gone." },
+			{ Cue = "/VO/NemesisField_0624", Text = "We're done." },
+			{ Cue = "/VO/NemesisField_0625", Text = "That's it?" },
+			{ Cue = "/VO/NemesisField_0626", Text = "Was quick." },
+			{ Cue = "/VO/NemesisField_0616", Text = "Better.",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},
+			},
+			{ Cue = "/VO/NemesisField_0627", Text = "The will of Night is done." ,
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 8,
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NyxWithNemesis01", "NemesisBathHouse03", "NemesisPostCombatAboutShrine02" },
+					},
+				}
+			},
+			{ Cue = "/VO/NemesisField_0628", Text = "Mother would be proud.",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NyxWithNemesis01", "NemesisBathHouse03" },
+					},
+				}
+			},
 		},
 
 		EncounterWonVoiceLines =
@@ -6267,7 +7475,65 @@
 			{ Cue = "/VO/NemesisField_0353", Text = "You and your damn magick." },
 			{ Cue = "/VO/NemesisField_0354", Text = "Got me again, somehow." },
 			{ Cue = "/VO/NemesisField_0355", Text = "Take the damn Gold." },
-			{ Cue = "/VO/NemesisField_0356", Text = "Fair's fair." },
+			{ Cue = "/VO/NemesisField_0632", Text = "Here, then." },
+			{ Cue = "/VO/NemesisField_0356", Text = "Fair's fair.",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift07" }
+					}
+				},
+			},
+			{ Cue = "/VO/NemesisField_0629", Text = "Lost again...?",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 8,
+					},
+				},
+			},
+			{ Cue = "/VO/NemesisField_0630", Text = "{#Emph}Eugh{#Prev}, again.",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 8,
+					},
+				},
+			},
+			{ Cue = "/VO/NemesisField_0631", Text = "Just great.",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 8,
+					},
+				},
+			},
+			{ Cue = "/VO/NemesisField_0633", Text = "You deserve this...",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" }
+					}
+				},
+			},
+			{ Cue = "/VO/NemesisField_0634", Text = "Take it, then.",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift06" }
+					}
+				},
+			},
+
 		},
 		EncounterWonBigVoiceLines =
 		{
@@ -6292,6 +7558,20 @@
 				{ Cue = "/VO/NemesisField_0360", Text = "Clearly underestimated you..." },
 				{ Cue = "/VO/NemesisField_0361", Text = "Made me look like a fool..." },
 				{ Cue = "/VO/NemesisField_0362", Text = "{#Emph}Ugh{#Prev}, that was terrible..." },
+				{ Cue = "/VO/NemesisField_0636", Text = "Can't believe it..." },
+				{ Cue = "/VO/NemesisField_0637", Text = "Unbelievable..." },
+				{ Cue = "/VO/NemesisField_0638", Text = "Crushed me..." },
+				{ Cue = "/VO/NemesisField_0639", Text = "Terrible..." },
+				{ Cue = "/VO/NemesisField_0640", Text = "Way off tonight..." },
+				{ Cue = "/VO/NemesisField_0635", Text = "Got in my head...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisPostCombatBecomingCloser01" },
+						},
+					},
+				},
 			},
 		},
 		EncounterTiedVoiceLines =
@@ -6306,6 +7586,27 @@
 			{ Cue = "/VO/NemesisField_0375", Text = "Nobody wins this time." },
 			{ Cue = "/VO/NemesisField_0376", Text = "Another draw I guess." },
 			{ Cue = "/VO/NemesisField_0377", Text = "Dead even huh?" },
+			{ Cue = "/VO/NemesisField_0645", Text = "Another tie." },
+			{ Cue = "/VO/NemesisField_0646", Text = "You copying me?",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpeechRecord" },
+						CountOf =
+						{
+							"/VO/NemesisField_0372",
+							"/VO/NemesisField_0373",
+							"/VO/NemesisField_0374",
+							"/VO/NemesisField_0375",
+							"/VO/NemesisField_0376",
+							"/VO/NemesisField_0377",
+							"/VO/NemesisField_0645",
+						},
+						Comparison = ">=",
+						Value = 5,
+					},
+				},
+			},
 		},
 		EncounterLostVoiceLines =
 		{
@@ -6313,7 +7614,7 @@
 				UsePlayerSource = true,
 				RandomRemaining = true,
 				PreLineWait = 0.4,
-				SuccessiveChanceToPlay = 0.15,
+				SuccessiveChanceToPlayAll = 0.15,
 
 				{ Cue = "/VO/MelinoeField_0050", Text = "I lost..." },
 				{ Cue = "/VO/MelinoeField_0051", Text = "I failed..." },
@@ -6334,6 +7635,10 @@
 				{ Cue = "/VO/NemesisField_0370", Text = "Looks like I win again." },
 				{ Cue = "/VO/NemesisField_0371", Text = "Fair's fair..." },
 				{ Cue = "/VO/NemesisField_0307", Text = "Warned you." },
+				{ Cue = "/VO/NemesisField_0641", Text = "I win, give it up." },
+				{ Cue = "/VO/NemesisField_0642", Text = "Give up the Gold." },
+				{ Cue = "/VO/NemesisField_0643", Text = "Let's have the Gold." },
+				{ Cue = "/VO/NemesisField_0644", Text = "Lost fair and square." },
 			},
 		},
 
@@ -6387,6 +7692,10 @@
 				{ Cue = "/VO/NemesisField_0221", Text = "Watch it." },
 				{ Cue = "/VO/NemesisField_0222", Text = "Please." },
 				{ Cue = "/VO/NemesisField_0223", Text = "You little..." },
+				-- { Cue = "/VO/NemesisField_0320", Text = "Hey!" },
+				{ Cue = "/VO/NemesisField_0321", Text = "Watch it!" },
+				{ Cue = "/VO/NemesisField_0323", Text = "Cut that out!" },
+				{ Cue = "/VO/NemesisField_0324", Text = "Why you..." },
 				{ Cue = "/VO/Nemesis_0085", Text = "{#Emph}Hah." },
 				{ Cue = "/VO/Nemesis_0104", Text = "{#Emph}Urgh..." },
 				{ Cue = "/VO/Nemesis_0105", Text = "{#Emph}Tsch." },
@@ -6430,42 +7739,186 @@
 			},
 		},
 
-		ResistedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 0.35,
-			TriggerCooldowns = { "NemesisAnyQuipSpeech" },
-			Cooldowns =
-			{
-				{ Name = "NemesisHitRecentlySpeech", Time = 25 },
-			},
-
-			{ Cue = "/VO/NemesisField_0320", Text = "Hey!" },
-			{ Cue = "/VO/NemesisField_0321", Text = "Watch it!", PlayFirst = true },
-			-- { Cue = "/VO/NemesisField_0322", Text = "Turn me back!" },
-			{ Cue = "/VO/NemesisField_0323", Text = "Cut that out!" },
-			{ Cue = "/VO/NemesisField_0324", Text = "Why you..." },
-			-- { Cue = "/VO/NemesisField_0325", Text = "Oh come on..." },
-		},
-
 		GivingItemVoiceLines =
 		{
+			{
+				BreakIfPlayed = true,
+				PreLineWait = 0.45,
+				SuccessiveChanceToPlay = 0.5,
+				UsePlayerSource = true,
+				
+				{ Cue = "/VO/MelinoeField_4964", Text = "Same. Bye Nem.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem01", },
+							IsAny = { "Choice_NemesisAccept" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4966", Text = "Time well spent.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem03", },
+							IsAny = { "Choice_NemesisAccept" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4967", Text = "I hadn't noticed.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem04", },
+							IsAny = { "Choice_NemesisAccept" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4968", Text = "We should.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem05", },
+							IsAny = { "Choice_NemesisAccept" },
+						},
+					},
+				},
+			},
+			{
+				BreakIfPlayed = true,
+				RandomRemaining = true,
+				PreLineWait = 0.85,
+				AllowTalkOverTextLines = true,
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem01", },
+								IsAny = { "Choice_NemesisDecline" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem02", },
+								IsAny = { "Choice_NemesisDecline" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem03", },
+								IsAny = { "Choice_NemesisDecline" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem04", },
+								IsAny = { "Choice_NemesisDecline" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem05", },
+								IsAny = { "Choice_NemesisDecline" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem06", },
+								IsAny = { "Choice_NemesisDecline" },
+							},
+						},
+					}
+				},
+
+				{ Cue = "/VO/NemesisField_0090", Text = "Suit yourself." },
+				{ Cue = "/VO/NemesisField_0091", Text = "Your loss." },
+				{ Cue = "/VO/NemesisField_0092", Text = "{#Emph}Eh." },
+				{ Cue = "/VO/NemesisField_0093", Text = "Fine." },
+				{ Cue = "/VO/NemesisField_0094", Text = "Figures." },
+				{ Cue = "/VO/NemesisField_0533", Text = "All right then." },
+			},
+			{
+				BreakIfPlayed = true,
+				RandomRemaining = true,
+				PreLineWait = 0.85,
+				AllowTalkOverTextLines = true,
+				RecheckRequirementsPostWait = true,
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem01", },
+								IsAny = { "Choice_NemesisAccept" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem02", },
+								IsAny = { "Choice_NemesisAccept" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem03", },
+								IsAny = { "Choice_NemesisAccept" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem04", },
+								IsAny = { "Choice_NemesisAccept" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem05", },
+								IsAny = { "Choice_NemesisAccept" },
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "TextLinesChoiceRecord", "NemesisBecomingCloserGetFreeItem06", },
+								IsAny = { "Choice_NemesisAccept" },
+							},
+						},
+					}
+				},
+				Cooldowns =
+				{
+					{ Name = "MelNemQuippedRecently", Time = 4 },
+				},
+
+				{ Cue = "/VO/NemesisField_0057", Text = "Here." },
+				{ Cue = "/VO/NemesisField_0060", Text = "There you go." },
+				{ Cue = "/VO/NemesisField_0061", Text = "Yours." },
+				{ Cue = "/VO/NemesisField_0062", Text = "All yours." },
+				{ Cue = "/VO/NemesisField_0064", Text = "Enjoy." },
+				{ Cue = "/VO/NemesisField_0065", Text = "Surprise." },
+				{ Cue = "/VO/NemesisField_0523", Text = "For you." },
+				{ Cue = "/VO/NemesisField_0526", Text = "Thank me later." },
+				{ Cue = "/VO/NemesisField_0531", Text = "We're even." },
+				{ Cue = "/VO/NemesisField_0633", Text = "You deserve this." },
+			},
 			{
 				RandomRemaining = true,
 				PreLineWait = 0.25,
 				SuccessiveChanceToPlayAll = 0.66,
 				AllowTalkOverTextLines = true,
+				RecheckRequirementsPostWait = true,
 				GameStateRequirements =
 				{
 					{
 						Path = { "CurrentRun", "CurrentRoom", "TextLinesRecord" },
 						HasNone = { "NemesisGetFreeItemIntro01", "NemesisGetFreeItemIntro02", "NemesisPostCombatBecomingCloser01" },
-					}
+					},
 				},
 				Cooldowns =
 				{
-					-- { Name = "NemesisAnyQuipSpeech", Time = 10 },
+					{ Name = "MelNemQuippedRecently", Time = 4 },
 				},
 
 				{ Cue = "/VO/NemesisField_0055", Text = "Catch.", PlayFirst = true },
@@ -6481,6 +7934,10 @@
 				{ Cue = "/VO/NemesisField_0065", Text = "Surprise." },
 				{ Cue = "/VO/NemesisField_0066", Text = "Take it." },
 				{ Cue = "/VO/NemesisField_0067", Text = "One of these." },
+				{ Cue = "/VO/NemesisField_0523", Text = "For you." },
+				{ Cue = "/VO/NemesisField_0524", Text = "Have at it." },
+				{ Cue = "/VO/NemesisField_0525", Text = "Go on." },
+				{ Cue = "/VO/NemesisField_0526", Text = "Thank me later." },
 			},
 			{
 				RandomRemaining = true,
@@ -6532,6 +7989,8 @@
 				{ Cue = "/VO/NemesisField_0087", Text = "Smart." },
 				{ Cue = "/VO/NemesisField_0088", Text = "Hand it over." },
 				{ Cue = "/VO/NemesisField_0089", Text = "Then it's settled." },
+				{ Cue = "/VO/NemesisField_0530", Text = "Sold." },
+				{ Cue = "/VO/NemesisField_0531", Text = "We're even." },
 			},
 		},
 		DealDeclinedVoiceLines =
@@ -6549,11 +8008,13 @@
 				{ Cue = "/VO/NemesisField_0092", Text = "{#Emph}Eh." },
 				{ Cue = "/VO/NemesisField_0093", Text = "Fine." },
 				{ Cue = "/VO/NemesisField_0094", Text = "Figures." },
-				{ Cue = "/VO/NemesisField_0095", Text = "Don't have enough do you." },
+				{ Cue = "/VO/NemesisField_0095", Text = "Don't have enough, do you." },
 				{ Cue = "/VO/NemesisField_0096", Text = "Not good enough, huh." },
 				{ Cue = "/VO/NemesisField_0097", Text = "No difference anyway." },
 				{ Cue = "/VO/NemesisField_0098", Text = "Then get out of here." },
 				{ Cue = "/VO/NemesisField_0099", Text = "Go on then." },
+				{ Cue = "/VO/NemesisField_0532", Text = "Whatever." },
+				{ Cue = "/VO/NemesisField_0533", Text = "All right then." },
 			},
 		},
 
@@ -6591,8 +8052,7 @@
 		},
 		HitDeclinedVoiceLines =
 		{
-			[1] = { GlobalVoiceLines = "NemesisDealDeclineVoiceLines" },
-			[2] =
+			{ GlobalVoiceLines = "NemesisDealDeclineVoiceLines" },
 			{
 				RandomRemaining = true,
 				PreLineWait = 0.8,
@@ -6699,8 +8159,7 @@
 		},
 		PlayerLostDamageContestVoiceLines =
 		{
-			[1] = { GlobalVoiceLines = "NegativeReactionVoiceLines" },
-			[2] =
+			{ GlobalVoiceLines = "NegativeReactionVoiceLines" },
 			{
 				RandomRemaining = true,
 				PreLineWait = 1.0,
@@ -6785,6 +8244,9 @@
 					Path = { "CurrentRun", "TextLinesRecord" },
 					HasNone = { "NemesisPostCombatBecomingCloser01" },
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			},
 			{
 				RandomRemaining = true,
@@ -6817,6 +8279,61 @@
 				{ Cue = "/VO/Nemesis_0163", Text = "{#Emph}Ugh." },
 				{ Cue = "/VO/Nemesis_0164", Text = "Get lost." },
 				{ Cue = "/VO/Nemesis_0165", Text = "Go." },
+				{ Cue = "/VO/NemesisField_0604", Text = "Don't wait up." },
+				{ Cue = "/VO/NemesisField_0603", Text = "Going in.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+							IsAny = { "G" },
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0602", Text = "Hell's this...?",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "CurrentRoom", "NemesisTakeExitRecord", "TrialUpgrade" },
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0601", Text = "Interesting...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/NemesisField_0602" },
+						},
+						{
+							PathTrue = { "CurrentRun", "CurrentRoom", "NemesisTakeExitRecord", "TrialUpgrade" },
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0605", Text = "Chaos calls...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "NemesisAboutChaos01" },
+						},
+						{
+							PathTrue = { "CurrentRun", "CurrentRoom", "NemesisTakeExitRecord", "TrialUpgrade" },
+						},
+					},
+				},
+				{ Cue = "/VO/NemesisField_0606", Text = "Might as well.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/NemesisField_0602" },
+						},
+						{
+							PathTrue = { "CurrentRun", "CurrentRoom", "NemesisTakeExitRecord", "TrialUpgrade" },
+						},
+					},
+				},
 			},
 			{
 				UsePlayerSource = true,
@@ -7077,7 +8594,7 @@ VariantSetData.NPC_Nemesis_01 =
 				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
 
 				{ Cue = "/VO/NemesisField_0046",
-					Text = "So much useless junk lying around. Here, ought to be {#Emph}you {#Prev}cleaning it up, not me.",
+					Text = "So much useless junk lying around. Here, ought to be you cleaning it up, not me.",
 					PreLineFunctionName = "NPCRewardDropPreProcess",
 					PostLineFunctionName = "NPCRewardDrop",
 					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
@@ -7119,6 +8636,9 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisWithHecate02" },
+					},
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -7143,6 +8663,9 @@ VariantSetData.NPC_Nemesis_01 =
 				PreEventFunctionName = "AngleNPCToHero",
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
@@ -7173,7 +8696,8 @@ VariantSetData.NPC_Nemesis_01 =
 						IsNone = { "H_Bridge01" },
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "NemesisWithHecate02" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "NemesisWithHecate02", "NemesisBathHouse03" },
 					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -7222,6 +8746,9 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift06" },
+					},
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -7246,6 +8773,9 @@ VariantSetData.NPC_Nemesis_01 =
 				PreEventFunctionName = "AngleNPCToHero",
 				GameStateRequirements =
 				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift06" },
+					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
@@ -7272,6 +8802,9 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -7284,6 +8817,952 @@ VariantSetData.NPC_Nemesis_01 =
 					PreLineFunctionName = "NPCRewardDropPreProcess",
 					PostLineFunctionName = "NPCRewardDrop",
 					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+				},
+			},
+
+			NemesisGetFreeItem11 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0518",
+					Text = "Don't really need this but thought I'd hang onto it for you.",
+					PreLineFunctionName = "NPCRewardDropPreProcess",
+					PostLineFunctionName = "NPCRewardDrop",
+					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+				},
+			},
+			NemesisGetFreeItem12 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0519",
+					Text = "Little treat for you, Princess. Not Nectar but it's something.",
+					PreLineFunctionName = "NPCRewardDropPreProcess",
+					PostLineFunctionName = "NPCRewardDrop",
+					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+				},
+			},
+			NemesisGetFreeItem13 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0520",
+					Text = "Feeling generous so won't be charging you a single coin for this.",
+					PreLineFunctionName = "NPCRewardDropPreProcess",
+					PostLineFunctionName = "NPCRewardDrop",
+					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+				},
+			},
+			NemesisGetFreeItem14 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0521",
+					Text = "Never know what to do with these except hand them to you.",
+					PreLineFunctionName = "NPCRewardDropPreProcess",
+					PostLineFunctionName = "NPCRewardDrop",
+					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+				},
+			},
+			NemesisGetFreeItem15 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "H", "I" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0522",
+					Text = "Almost there. This should help you go the rest of the way.",
+					PreLineFunctionName = "NPCRewardDropPreProcess",
+					PostLineFunctionName = "NPCRewardDrop",
+					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+				},
+			},
+
+			-- relationship repeatable
+			NemesisBecomingCloserGetFreeItem01 =
+			{
+				PlayFirst = true,
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsAny = { "Choice_NemesisAccept" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					{
+						PathFalse = { "GameState", "IsDreamRun" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "OverwriteSelf",
+						Args =
+						{
+							UseIneligibleText = "NPCUseTextTalkLocked",
+							OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+							OnUsedGameStateRequirements =
+							{
+								NamedRequirements = { "NemesisBecomingCloserUsable" },
+							},
+						},
+					},
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.NemesisRandomEventGreeting,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0460",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "Think there's something wrong with my suit. Got time to take a look?" },
+
+				{
+					Text = "Choice_NemesisBecomingCloser01",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					IgnoreRawText = true,
+					IsNarration = true,
+					IgnoreContinueArrow = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					KeepContextArt = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_NemesisDecline",
+
+							{ Cue = "/VO/MelinoeField_5334",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+
+								PreLineWait = 0.35,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Oh, now just isn't a good time..." },
+						},
+						{
+							ChoiceText = "Choice_NemesisAccept",
+							-- go straight to the Intermission Presentation without a Mel response
+
+							{ Cue = "/VO/MelinoeField_5298",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+								PostLineRemoveContextArt = true,
+
+								PreLineWait = 0.35,
+
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Nemesis", Repeatable = true, TimeTicks = 10 },
+
+								Text = "Yes, let me help you with that." },
+
+							-- INTERMISSION PRESENTATION
+
+							{ Cue = "/VO/MelinoeField_5299", UsePlayerSource = true,
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+								Text = "...Your suit still seems to be in proper working order." },
+
+							{ Cue = "/VO/NemesisField_0461",
+								EndSecretMusic = true,
+
+								PreLineWait = 0.35,
+								Portrait = "Portrait_Nemesis_Flushed_01",
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Better. Should hold me over for a little while." },
+						},
+					},
+				},
+			},
+			NemesisBecomingCloserGetFreeItem02 =
+			{
+				PlayFirst = true,
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsAny = { "Choice_NemesisAccept" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					{
+						PathFalse = { "GameState", "IsDreamRun" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "OverwriteSelf",
+						Args =
+						{
+							UseIneligibleText = "NPCUseTextTalkLocked",
+							OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+							OnUsedGameStateRequirements =
+							{
+								NamedRequirements = { "NemesisBecomingCloserUsable" },
+							},
+						},
+					},
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.NemesisRandomEventGreeting,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0462",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "Like it when it's this quiet. Nobody's here but us. We could... I mean..." },
+
+				{
+					Text = "Choice_NemesisBecomingCloser01",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					IgnoreRawText = true,
+					IsNarration = true,
+					IgnoreContinueArrow = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					KeepContextArt = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_NemesisDecline",
+
+							{ Cue = "/VO/MelinoeField_5336",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Vulnerable_01",
+								ExitPortraitImmediately = true,
+
+								PreLineWait = 0.35,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "I'm in a bit of a rush tonight is all..." },
+						},
+						{
+							ChoiceText = "Choice_NemesisAccept",
+							-- go straight to the Intermission Presentation without a Mel response
+
+							{ Cue = "/VO/MelinoeField_5300",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+								PostLineRemoveContextArt = true,
+
+								PreLineWait = 0.35,
+
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Nemesis", Repeatable = true, TimeTicks = 10 },
+
+								Text = "You don't need to say anything, Nem..." },
+
+							-- INTERMISSION PRESENTATION
+							{ Cue = "/VO/NemesisField_0463",
+
+								Portrait = "Portrait_Nemesis_Flushed_01",
+
+								Text = "...Guess breaktime's over but good running into you." },
+
+							{ Cue = "/VO/MelinoeField_5301", UsePlayerSource = true,
+								PreLineWait = 0.35,
+
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+								EndSecretMusic = true,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "...Important to take breaks from time to time, right?" },
+						},
+					},
+				},
+			},
+			NemesisBecomingCloserGetFreeItem03 =
+			{
+				PlayFirst = true,
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsAny = { "Choice_NemesisAccept" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					{
+						PathFalse = { "GameState", "IsDreamRun" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "OverwriteSelf",
+						Args =
+						{
+							UseIneligibleText = "NPCUseTextTalkLocked",
+							OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+							OnUsedGameStateRequirements =
+							{
+								NamedRequirements = { "NemesisBecomingCloserUsable" },
+							},
+						},
+					},
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.NemesisRandomEventGreeting,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0464",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "Was just about to go but had a feeling you'd show up. Want to stay a bit?" },
+
+				{
+					Text = "Choice_NemesisBecomingCloser01",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					IgnoreRawText = true,
+					IsNarration = true,
+					IgnoreContinueArrow = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					KeepContextArt = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_NemesisDecline",
+
+							{ Cue = "/VO/MelinoeField_5337",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Vulnerable_01",
+								ExitPortraitImmediately = true,
+
+								PreLineWait = 0.35,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "I can't right now, sorry..." },
+						},
+						{
+							ChoiceText = "Choice_NemesisAccept",
+							-- go straight to the Intermission Presentation without a Mel response
+
+							{ Cue = "/VO/MelinoeField_5302",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+								PostLineRemoveContextArt = true,
+
+								PreLineWait = 0.35,
+
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Nemesis", Repeatable = true, TimeTicks = 10 },
+
+								Text = "Yes, I think I do." },
+
+							-- INTERMISSION PRESENTATION
+
+							{ Cue = "/VO/MelinoeField_5303", UsePlayerSource = true,
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+								Text = "...It's nice taking it slow once in a while, isn't it?" },
+
+							{ Cue = "/VO/NemesisField_0465",
+								EndSecretMusic = true,
+
+								PreLineWait = 0.35,
+								Portrait = "Portrait_Nemesis_Flushed_01",
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Should probably get on with it, though least we took some time." },
+						},
+					},
+				},
+			},
+			NemesisBecomingCloserGetFreeItem04 =
+			{
+				PlayFirst = true,
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsAny = { "Choice_NemesisAccept" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					{
+						PathFalse = { "GameState", "IsDreamRun" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "OverwriteSelf",
+						Args =
+						{
+							UseIneligibleText = "NPCUseTextTalkLocked",
+							OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+							OnUsedGameStateRequirements =
+							{
+								NamedRequirements = { "NemesisBecomingCloserUsable" },
+							},
+						},
+					},
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.NemesisRandomEventGreeting,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0466",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "Hey if you're not in any hurry, it's been quiet around here, so..." },
+
+				{
+					Text = "Choice_NemesisBecomingCloser01",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					IgnoreRawText = true,
+					IsNarration = true,
+					IgnoreContinueArrow = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					KeepContextArt = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_NemesisDecline",
+
+							{ Cue = "/VO/MelinoeField_5341",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Vulnerable_01",
+								ExitPortraitImmediately = true,
+
+								PreLineWait = 0.35,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Sorry but this isn't a good time." },
+						},
+						{
+							ChoiceText = "Choice_NemesisAccept",
+							-- go straight to the Intermission Presentation without a Mel response
+
+							{ Cue = "/VO/MelinoeField_5304",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+								PostLineRemoveContextArt = true,
+
+								PreLineWait = 0.35,
+
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Nemesis", Repeatable = true, TimeTicks = 10 },
+
+								Text = "Not in any real hurry, no..." },
+
+							-- INTERMISSION PRESENTATION
+
+							{ Cue = "/VO/MelinoeField_5305", UsePlayerSource = true,
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+								Text = "...{#Emph}Whew. {#Prev}I suppose we should get on with it." },
+
+							{ Cue = "/VO/NemesisField_0467",
+								EndSecretMusic = true,
+
+								PreLineWait = 0.35,
+								Portrait = "Portrait_Nemesis_Flushed_01",
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "{#Emph}Hm. {#Prev}Nice place when it's not crawling with things needing to be killed." },
+						},
+					},
+				},
+			},
+			NemesisBecomingCloserGetFreeItem05 =
+			{
+				PlayFirst = true,
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsAny = { "Choice_NemesisAccept" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					{
+						PathFalse = { "GameState", "IsDreamRun" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "OverwriteSelf",
+						Args =
+						{
+							UseIneligibleText = "NPCUseTextTalkLocked",
+							OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+							OnUsedGameStateRequirements =
+							{
+								NamedRequirements = { "NemesisBecomingCloserUsable" },
+							},
+						},
+					},
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.NemesisRandomEventGreeting,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0468",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "Don't have to hurry off. No one's going to notice if you're back a little late." },
+
+				{
+					Text = "Choice_NemesisBecomingCloser01",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					IgnoreRawText = true,
+					IsNarration = true,
+					IgnoreContinueArrow = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					KeepContextArt = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_NemesisDecline",
+
+							{ Cue = "/VO/MelinoeField_5335",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Vulnerable_01",
+								ExitPortraitImmediately = true,
+
+								PreLineWait = 0.35,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "I'd better not. Perhaps some other time." },
+						},
+						{
+							ChoiceText = "Choice_NemesisAccept",
+							-- go straight to the Intermission Presentation without a Mel response
+
+							{ Cue = "/VO/MelinoeField_5306",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+								PostLineRemoveContextArt = true,
+
+								PreLineWait = 0.35,
+
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Nemesis", Repeatable = true, TimeTicks = 10 },
+
+								Text = "I don't need much convincing, Nem." },
+
+							-- INTERMISSION PRESENTATION
+
+							{ Cue = "/VO/MelinoeField_5307", UsePlayerSource = true,
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+								Text = "...Well as you said, no need to rush." },
+
+							{ Cue = "/VO/NemesisField_0469",
+								EndSecretMusic = true,
+
+								PreLineWait = 0.35,
+								Portrait = "Portrait_Nemesis_Flushed_01",
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Both ought to get back to it, but should do this again." },
+						},
+					},
+				},
+			},
+			NemesisBecomingCloserGetFreeItem06 =
+			{
+				PlayFirst = true,
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "NemesisPostCombatBecomingCloser01", },
+						IsAny = { "Choice_NemesisAccept" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					{
+						PathFalse = { "GameState", "IsDreamRun" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "OverwriteSelf",
+						Args =
+						{
+							UseIneligibleText = "NPCUseTextTalkLocked",
+							OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+							OnUsedGameStateRequirements =
+							{
+								NamedRequirements = { "NemesisBecomingCloserUsable" },
+							},
+						},
+					},
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.NemesisRandomEventGreeting,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0470",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "{#Emph}Augh{#Prev}, got something stuck here in my suit and need to get it out. You mind?" },
+
+				{
+					Text = "Choice_NemesisBecomingCloser01",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					IgnoreRawText = true,
+					IsNarration = true,
+					IgnoreContinueArrow = true,
+					BoxAnimation = "NarrationBubbleRomance",
+					BoxExitAnimation = "NarrationBubbleRomanceOut",
+					DisableCharacterFadeColorLag = true,
+					KeepContextArt = true,
+					TextOffsetY = 0,
+					PreContentSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					Choices =
+					{
+						{
+							ChoiceText = "Choice_NemesisDecline",
+
+							{ Cue = "/VO/MelinoeField_5339",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Vulnerable_01",
+								ExitPortraitImmediately = true,
+
+								PreLineWait = 0.35,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Forgive me, but not tonight." },
+						},
+						{
+							ChoiceText = "Choice_NemesisAccept",
+							-- go straight to the Intermission Presentation without a Mel response
+
+							{ Cue = "/VO/MelinoeField_5308",
+								UsePlayerSource = true,
+								Portrait = "Portrait_Mel_Empathetic_01",
+								ExitPortraitImmediately = true,
+								PostLineRemoveContextArt = true,
+
+								PreLineWait = 0.35,
+
+								PostLineFunctionName = "BecomingCloserPresentation",
+								PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", Partner = "Nemesis", Repeatable = true, TimeTicks = 10 },
+
+								Text = "Don't mind at all. Let's have ourselves a look." },
+
+							-- INTERMISSION PRESENTATION
+							{ Cue = "/VO/NemesisField_0471",
+
+								Portrait = "Portrait_Nemesis_Flushed_01",
+
+								Text = "...Feels much more comfortable for now, so thanks." },
+
+							{ Cue = "/VO/MelinoeField_5309", UsePlayerSource = true,
+								PreLineWait = 0.35,
+
+								Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+								PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+								PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+								EndSecretMusic = true,
+
+								PreLineFunctionName = "NPCRewardDropPreProcess",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
+								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
+
+								Text = "Should be all better for a while, I think." },
+						},
+					},
 				},
 			},
 
@@ -7319,256 +9798,6 @@ VariantSetData.NPC_Nemesis_01 =
 					Text = "You haven't seen a gentle-looking Nymph nearby, have you? She's often here on this bridge." },
 				{ Cue = "/VO/NemesisField_0436",
 					Text = "Might be I scared her off. Got more important things to do than chasing Nymphs. Anyway, go on. The spirits in this place won't like us making nice.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge01 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0045",
-					Text = "You need all the help you can get, so here! Don't need this anyway.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge02 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0046",
-					Text = "So much useless junk lying around. Here, ought to be {#Emph}you {#Prev}cleaning it up, not me.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge03 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-
-				{ Cue = "/VO/NemesisField_0047",
-					Text = "Won't be needing this at all, but you look like you will.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
-				},
-			},
-			NemesisGetFreeItemBridge04 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0048",
-					Text = "Pretend you never saw me, and I didn't make things easier for you.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge05 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0049",
-					Text = "Wow, you really showed them, didn't you. And earned a handsome prize.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge06 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0050",
-					Text = "Best keep your mouth shut about this next time you and Hecate catch up.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge07 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0051",
-					Text = "We'll see who gets there first. Here, I'll even give you a boost.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge08 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0052",
-					Text = "You travel lighter than me, so here, why don't we balance out the load.",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge09 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0053",
-					Text = "Was just about to throw this out when you came along...",
-					PreLineFunctionName = "NPCRewardDropPreProcess",
-					PostLineFunctionName = "NPCRewardDrop",
-					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
-				},
-			},
-			NemesisGetFreeItemBridge10 =
-			{
-				RoomUseableOffSource = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				-- PreBlockSpecialInteract = true,
-				PostBlockSpecialInteract = true,
-				PreEventFunctionName = "AngleNPCToHero",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "H_Bridge01" },
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
-
-				{ Cue = "/VO/NemesisField_0054",
-					Text = "No way you'll get there first. Even give you a head start.",
 					PreLineFunctionName = "NPCRewardDropPreProcess",
 					PostLineFunctionName = "NPCRewardDrop",
 					PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemPremiumArgs,
@@ -7877,12 +10106,90 @@ VariantSetData.NPC_Nemesis_01 =
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
 
 				{ Cue = "/VO/NemesisField_0079",
 					Text = "Could shake you down for all your Gold, but wouldn't be fair.",
+				},
+				PrePortraitExitFunctionName = "NemesisTradeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisBuyItemChoices,
+			},
+			NemesisBuyItem11 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0527",
+					Text = "Special offer for you, Princess. Pay now, or it's gone.",
+				},
+				PrePortraitExitFunctionName = "NemesisTradeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisBuyItemChoices,
+			},
+			NemesisBuyItem12 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0528",
+					Text = "Could use a little extra coin and you could probably use this.",
+				},
+				PrePortraitExitFunctionName = "NemesisTradeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisBuyItemChoices,
+			},
+			NemesisBuyItem13 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift07" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0529",
+					Text = "Imagine I'm Charon and got just the thing you need.",
 				},
 				PrePortraitExitFunctionName = "NemesisTradeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisBuyItemChoices,
@@ -7953,6 +10260,8 @@ VariantSetData.NPC_Nemesis_01 =
 							"NemesisTakeDamageForItem08",
 							"NemesisTakeDamageForItem09",
 							"NemesisTakeDamageForItem10",
+							"NemesisTakeDamageForItem11",
+							"NemesisTakeDamageForItem12",
 						},
 					},
 					{
@@ -7967,10 +10276,12 @@ VariantSetData.NPC_Nemesis_01 =
 					AngleTowardHero = true,
 					PreLineAnim = "Nemesis_Hub_Glare_Start",
 					Text = "You following me or something? Not used to running into you this many times per night. Find your own path." },
+
 				{ Cue = "/VO/MelinoeField_1971", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Find my {#Emph}own {#Prev}path? You mean {#Emph}besides {#Prev}the one our Headmistress and Master Tactician endlessly toiled to refine to maximize my chances of success?" },
+
 				{ Cue = "/VO/NemesisField_0434",
 					PreLineAnim = "Nemesis_Hub_Glare_End",
 					Text = "Just stay out of my way. But first, how about you let me take a good clean swing at you, since you've been mouthing off?",
@@ -8193,6 +10504,9 @@ VariantSetData.NPC_Nemesis_01 =
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
 					NamedRequirements = { "NoHitShieldAvailable", },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
@@ -8215,6 +10529,9 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -8225,6 +10542,62 @@ VariantSetData.NPC_Nemesis_01 =
 
 				{ Cue = "/VO/NemesisField_0111",
 					Text = "Thinking if you can't take a hit from me, you don't have a chance.",
+				},
+				PrePortraitExitFunctionName = "NemesisTradeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisTakeDamageForItemChoices,
+			},
+			NemesisTakeDamageForItem11 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					NamedRequirements = { "NoHitShieldAvailable", },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0534",
+					Text = "You could always take a hit, Princess. So how about now?",
+				},
+				PrePortraitExitFunctionName = "NemesisTradeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisTakeDamageForItemChoices,
+			},
+			NemesisTakeDamageForItem12 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					NamedRequirements = { "NoHitShieldAvailable", },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+
+				{ Cue = "/VO/NemesisField_0535",
+					Text = "Want to know just how hard I got hit cleaning this place?",
 				},
 				PrePortraitExitFunctionName = "NemesisTradeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.NemesisTakeDamageForItemChoices,
@@ -8630,6 +11003,9 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -8679,6 +11055,9 @@ VariantSetData.NPC_Nemesis_01 =
 				PreEventFunctionName = "AngleNPCToHero",
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
@@ -8780,6 +11159,9 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -8805,6 +11187,39 @@ VariantSetData.NPC_Nemesis_01 =
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "H_Bridge01" },
+					},
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 4,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
+				SkipClearRoomRequiredObject = true,
+
+				{ Cue = "/VO/NemesisField_0155",
+					Text = "Getting stronger, but you'll never be at my level. Go on, try me.",
+					PostLineFunctionName = "StartNemesisDamageContest",
+					PostLineFunctionArgs = PresetEventArgs.NemesisDamageContestArgs,
+				},
+			},
+			NemesisDamageContest11 =
+			{
+				RoomUseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "H_Bridge01" },
 					},
@@ -8818,8 +11233,8 @@ VariantSetData.NPC_Nemesis_01 =
 				OnQueuedFunctionArgs = PresetEventArgs.NemesisRandomEventGreeting,
 				SkipClearRoomRequiredObject = true,
 
-				{ Cue = "/VO/NemesisField_0155",
-					Text = "Getting stronger, but you'll never be at my level. Go on, try me.",
+				{ Cue = "/VO/NemesisField_0536",
+					Text = "You've been getting stronger, but can't always tell by how much. So show me.",
 					PostLineFunctionName = "StartNemesisDamageContest",
 					PostLineFunctionArgs = PresetEventArgs.NemesisDamageContestArgs,
 				},
@@ -9015,7 +11430,19 @@ VariantSetData.NPC_Nemesis_01 =
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "NemesisPostCombatAboutRelationship02" },
 					},
-					NamedRequirements = { "NoRecentBecomingCloserEvent" },
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone =
+						{
+							"MorosBecomingCloserChat01",
+							"MorosBecomingCloserChat02",
+							"MorosBecomingCloserChat03",
+							"MorosBecomingCloserChat04",
+							"MorosBecomingCloserChat05",
+							"MorosBecomingCloserChat06",
+						},
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
 					NamedRequirementsFalse = { "NearTrueEnding" },
 				},
 				{ Cue = "/VO/MelinoeField_4082", UsePlayerSource = true,
@@ -9023,6 +11450,52 @@ VariantSetData.NPC_Nemesis_01 =
 					Text = "Well, you ready to break a sweat again, Nem?" },
 				{ Cue = "/VO/NemesisField_0479",
 					Text = "Don't insult me else I'll take more than your Gold after this. Now come on." },
+			},
+
+			NemesisPreCombatAboutShrine01 =
+			{
+				PlayFirst = true,
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 18,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0481",
+					Text = "Brutal night. Had to work my ass off getting to this point. Everything's hitting back hard. This better not be your doing." },
+
+				{ Cue = "/VO/MelinoeField_4083", UsePlayerSource = true,
+					Text = "Technically it's the Oath of the Unseen's doing rather than mine. What's the matter, don't you want your mother's wishes to be fulfilled?" },
+
+				{ Cue = "/VO/NemesisField_0482",
+					Text = "So it {#Emph}was {#Prev}you, messing with the Oath. You're insane, you know that? Now here they come. You better be ready." },
+			},
+			NemesisPreCombatAboutShrine02 =
+			{
+				PlayFirst = true,
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisPreCombatAboutShrine01" }
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 22,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0485",
+					Text = "Scary out there, isn't it, Princess? Didn't take my advice about the Oath, huh. Decided more Fear was for the best." },
+
+				{ Cue = "/VO/MelinoeField_4085", UsePlayerSource = true,
+					Text = "I didn't think the Fear would get to you, Nemesis! Tell me, what are you so afraid of? You can handle anything." },
+
+				{ Cue = "/VO/NemesisField_0486",
+					Text = "I can handle a lot. But I'm not insane enough to think I can handle {#Emph}anything. {#Prev}Whatever, no time to chat, they're coming." },
 			},
 
 			-- Repeatable
@@ -9160,7 +11633,7 @@ VariantSetData.NPC_Nemesis_01 =
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisCombatFirstIntro" },
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord "},
+						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
 						HasNone =
 						{
 							"/VO/NemesisField_0243",
@@ -9180,7 +11653,7 @@ VariantSetData.NPC_Nemesis_01 =
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisCombatFirstIntro" },
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord "},
+						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
 						HasNone =
 						{
 							"/VO/NemesisField_0243",
@@ -9222,7 +11695,7 @@ VariantSetData.NPC_Nemesis_01 =
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisCombatFirstIntro" },
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord "},
+						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
 						HasNone =
 						{
 							"/VO/NemesisField_0243",
@@ -9242,7 +11715,7 @@ VariantSetData.NPC_Nemesis_01 =
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisCombatFirstIntro" },
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord "},
+						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
 						HasNone =
 						{
 							"/VO/NemesisField_0243",
@@ -9273,7 +11746,7 @@ VariantSetData.NPC_Nemesis_01 =
 						PathTrue = { "GameState", "TextLinesRecord", "NemesisCombatFirstIntro" },
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord "},
+						Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
 						HasNone =
 						{
 							"/VO/NemesisField_0243",
@@ -9327,6 +11800,317 @@ VariantSetData.NPC_Nemesis_01 =
 				},
 				{ Cue = "/VO/NemesisField_0480",
 					Text = "So this is where the {#Emph}real {#Prev}magick happens, huh. Let's see what the best of the Titan's armies have to offer." },
+			},
+
+			NemesisCombatMiscStart23 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "F" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0496",
+					Text = "Guess we're the ones haunting these woods at this point." },
+			},
+			NemesisCombatMiscStart24 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "G" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0497",
+					Text = "Split some of these fish freaks with me, or should I just take your gold?" },
+			},
+			NemesisCombatMiscStart25 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "H" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0498",
+					Text = "Not everybody in the Fields deserves to be here, but right now it can't be helped." },
+			},
+			NemesisCombatMiscStart26 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "I" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0500",
+					Text = "I can take care of this myself but it's more interesting if {#Emph}you {#Prev}get in the way." },
+			},
+			NemesisCombatMiscStart27 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponDagger" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0501",
+					Text = "Hey, no fair. How come you get two blades when I only get one?" },
+			},
+			NemesisCombatMiscStart28 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "AxeRallyAspect", "AxePerfectCriticalAspect" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0502",
+					Text = "That axe looks a little big for you. Just the way you like it, huh?" },
+			},
+			NemesisCombatMiscStart29 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponLob" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "LobCloseAttackAspect" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0503",
+					Text = "Using that skull again. Not a real weapon but whatever works." },
+			},
+			NemesisCombatMiscStart30 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxePerfectCriticalAspect" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0504",
+					Text = "Hey, it's my brother's scythe. Let's see if you're any better with it than he was." },
+			},
+			NemesisCombatMiscStart31 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponAxe" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "AxeArmCastAspect" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0505",
+					Text = "Charon used to lug that axe around. Must be sucking up to him again." },
+			},
+			NemesisCombatMiscStart32 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "Weapons", "WeaponSuit" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0506",
+					Text = "Not a proper suit of armor you've got on but it's a start." },
+			},
+			NemesisCombatMiscStart33 =
+			{
+				{ Cue = "/VO/NemesisField_0507",
+					Text = "What do you say we make things interesting again, Princess?" },
+			},
+			NemesisCombatMiscStart34 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0508",
+					Text = "Sure beats standing around in the Crossroads. Especially when I get your Gold." },
+			},
+			NemesisCombatMiscStart35 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0509",
+					Text = "Better move those legs, Princess, else I'm taking all your Gold." },
+			},
+			NemesisCombatMiscStart36 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						Path = { "GameState", "LastObjectiveFailedRun", "NemesisBet" },
+						Comparison = "<",
+						ValuePath = { "GameState", "CompletedRunsCache" },
+						ValuePathAddition = -5,
+					},
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 12,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0510",
+					Text = "Got to say these wagers haven't worked out well for me lately." },
+			},
+			NemesisCombatMiscStart37 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift05" },
+					},
+					{
+						Path = { "GameState", "LastObjectiveFailedRun", "NemesisBet" },
+						Comparison = "<",
+						ValuePath = { "GameState", "CompletedRunsCache" },
+						ValuePathAddition = -3,
+					},
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 10,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0511",
+					Text = "All this Gold is gonna go to Charon anyway, so what's it matter who gets more." },
+			},
+			NemesisCombatMiscStart38 =
+			{
+				{ Cue = "/VO/NemesisField_0512",
+					Text = "Stand around and watch me work, or fight. Same difference either way." },
+			},
+			NemesisCombatMiscStart39 =
+			{
+				{ Cue = "/VO/NemesisField_0513",
+					Text = "You think your scrawny ass is going to beat me kill for kill right here and now?" },
+			},
+			NemesisCombatMiscStart40 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift04" },
+					},
+					{
+						Path = { "GameState", "LastObjectiveFailedRun", "NemesisBet" },
+						Comparison = "<",
+						ValuePath = { "GameState", "CompletedRunsCache" },
+						ValuePathAddition = -5,
+					},
+					{
+						Path = { "GameState", "ObjectivesCompleted", "NemesisBet" },
+						Comparison = ">=",
+						Value = 8,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0514",
+					Text = "Been far too long since I took all your Gold, Princess." },
+			},
+			NemesisCombatMiscStart41 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisGift06" },
+					},
+					{
+						SumPrevRuns = 5,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 5,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0515",
+					Text = "Not seen you down here in a bit. Been too busy up top?" },
+			},
+			NemesisCombatMiscStart42 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisBathHouse03" },
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 20,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0516",
+					Text = "Practically taste the Fear in the air. Let's make them fear {#Emph}us." },
+			},
+			NemesisCombatMiscStart43 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 24,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0517",
+					Text = "You and that Oath making things a lot harder than they need to be." },
 			},
 		},
 
@@ -9433,6 +12217,9 @@ VariantSetData.NPC_Nemesis_01 =
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsAny = { "G", },
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisWithHecate02" }
+					},
 				},
 				{ Cue = "/VO/MelinoeField_0019", UsePlayerSource = true,
 					PreLineThreadedFunctionName = "PlayCharacterAnim",
@@ -9480,6 +12267,133 @@ VariantSetData.NPC_Nemesis_01 =
 						UsePlayerSource = true,
 						RequiredMinElapsedTime = 2,
 						{ Cue = "/VO/MelinoeField_3633", Text = "Nor I." },
+					},
+				},
+			},
+
+			NemesisPostCombatAboutSelene01 =
+			{
+				PlayOnce = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsToTalk",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "WeaponsFiredRecord" },
+						HasAny =
+						{
+							"WeaponSpellLaser",
+							"WeaponSpellPolymorph",
+							"WeaponSpellSummon", 
+							"WeaponSpellTimeSlow",
+							"WeaponSpellPotion",
+							"WeaponSpellMeteor",
+							"WeaponSpellTransform",
+							"WeaponSpellLeap",
+						},
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "F" },
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "SpellDrop" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "SeleneAboutNemesis01", "SeleneAboutNemesis02" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0490",
+					Text = "Been working with Selene, huh? Never thought her moon-magick was worth much, not from all the way up there. My blade... whenever I need it, I can use it." },
+
+				{ Cue = "/VO/MelinoeField_4088", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Whatever works, right? I'm not here to try and persuade you about magick, Nemesis. You already made up your mind. Though, you and Selene don't get on too well, do you...?" },
+
+				{ Cue = "/VO/NemesisField_0491",
+					Text = "Not even one of Nyx's own and she still favored her. Maybe because she was always a suck-up like you are." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.36,
+						UsePlayerSource = true,
+						{ Cue = "/VO/MelinoeField_4089", Text = "She probably heard that, you know." },
+					},
+					{
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Nemesis_01",
+						{ Cue = "/VO/NemesisField_0492", Text = "You're a suck-up, Selene!" },
+					},
+				},
+			},
+			NemesisPostCombatAboutSelene02 =
+			{
+				PlayOnce = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsToTalk",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "F" },
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "SpellDrop" },
+					},
+					{
+						Path = { "GameState", "UseRecord", "SpellDrop" },
+						Comparison = ">=",
+						Value = 14,
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "NemesisPostCombatAboutSelene01" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "TextLinesRecord", "NemesisPostCombatAboutSelene01" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+				},
+				{ Cue = "/VO/NemesisField_0493",
+					Text = "Selene really helped you out in all of this, huh. Helped {#Emph}us {#Prev}out, I mean. Thought she'd just quietly look down from on high but she really got in there." },
+
+				{ Cue = "/VO/MelinoeField_4090", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I don't know what we would have done if not for her. Besides lending me her strength night after night, she was instrumental in coordinating with our contacts on the surface." },
+
+				{ Cue = "/VO/NemesisField_0494",
+					Portrait = "Portrait_Nemesis_Averted_01",
+					Text = "We daughters of Nyx don't always treat each other very well. Fighting for Mother's affection, or whatever's going through our heads. Anyway... I misjudged her." },
+
+				{ Cue = "/VO/MelinoeField_4091", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I think you should tell her, not me. She's probably listening." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Nemesis_01",
+						{ Cue = "/VO/NemesisField_0495", Text = "I misjudged you, Selene...! Sorry about that." },
 					},
 				},
 			},
@@ -9584,7 +12498,8 @@ VariantSetData.NPC_Nemesis_01 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
-				StatusAnimation = "StatusIconWantsToTalk",
+				PreBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
 				PreEventFunctionName = "AngleNPCToHero",
 				GameStateRequirements =
 				{
@@ -9592,15 +12507,21 @@ VariantSetData.NPC_Nemesis_01 =
 						PathFalse = { "CurrentRun", "TextLinesRecord", "NemesisPostCombatAboutRelationship02" }
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
-						IsNone = { "H" },
-					},
-					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "NemesisPostCombatAboutRelationship02" },
 					},
 					NamedRequirements = { "NoRecentBecomingCloserEvent" },
 					NamedRequirementsFalse = { "NearTrueEnding" },
+				},
+				OnQueuedFunctionName = "OverwriteSelf",
+				OnQueuedFunctionArgs =
+				{
+					UseIneligibleText = "NPCUseTextTalkLocked",
+					OnUsedFailedPresentation = "NemesisInteractionBlockedPresentation",
+					OnUsedGameStateRequirements =
+					{
+						NamedRequirements = { "NemesisBecomingCloserUsable" },
+					},
 				},
 
 				{ Cue = "/VO/NemesisField_0447",
@@ -9676,7 +12597,7 @@ VariantSetData.NPC_Nemesis_01 =
 								Portrait = "Portrait_Nemesis_Averted_01",
 
 								PreLineFunctionName = "NPCRewardDropPreProcess",
-								PostLineFunctionName = "NPCRewardDrop",
+								PostLineThreadedFunctionName = "NPCRewardDrop",
 								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
 
 								Text = "I do. Forget I asked. Least we got to talk like this. Should get going, but... be seeing you around." },
@@ -9724,11 +12645,8 @@ VariantSetData.NPC_Nemesis_01 =
 								Portrait = "Portrait_Nemesis_Flushed_01",
 
 								PreLineFunctionName = "NPCRewardDropPreProcess",
-								PostLineFunctionName = "NPCRewardDrop",
+								PostLineThreadedFunctionName = "NPCRewardDropPostIntermission",
 								PostLineFunctionArgs = PresetEventArgs.NemesisGetFreeItemArgs,
-
-								PostLineThreadedFunctionName = "InCombatTextEvent",
-								PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
 
 								Text = "Was just enough for now. Should get going, though could always do this again should the need arise." },
 						},
@@ -9823,6 +12741,9 @@ VariantSetData.NPC_Nemesis_01 =
 				PreEventFunctionName = "AngleNPCToHero",
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
 					{
 						PathTrue = { "GameState", "RoomsEntered", "H_Boss01" },
 					},
@@ -10126,9 +13047,6 @@ VariantSetData.NPC_Nemesis_01 =
 					{
 						PathTrue = { "CurrentRun", "ObjectivesCompleted", "NemesisBet" },
 					},
-					{
-						PathFalse = { "CurrentRun", "ObjectivesFailed", "NemesisBet" },
-					},
 				},
 
 				{ Cue = "/VO/NemesisField_0427",
@@ -10207,12 +13125,104 @@ VariantSetData.NPC_Nemesis_01 =
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsNone = { "H" },
 					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisBathHouse03" }
+					},
 				},
 
 				{ Cue = "/VO/NemesisField_0196",
-					Text = "Quit stalling. Sooner you fail, sooner I'll get to show you how it's done.",
+					Text = "Quit stalling. Sooner you fail, sooner I'll get to show you how it's done." },
+			},
+
+			NemesisPostCombatAboutShrine01 =
+			{
+				PlayOnce = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsToTalk",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NemesisPreCombatAboutShrine01" },
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 18,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0483",
+					Text = "What do you even get out of making things harder on yourself like this?" },
+
+				{ Cue = "/VO/MelinoeField_4084", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Funny question coming from someone who squeezes into the most uncomfortable suit of armor yet devised. Enacting the Testaments of Night is worth a bit of added effort." },
+
+				{ Cue = "/VO/NemesisField_0484",
+					Text = "You're just trying to feed her weapons, make them and you stronger. Don't get greedy. Never ends well." },
+			},
+			NemesisPostCombatAboutShrine02 =
+			{
+				PlayOnce = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				-- PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsToTalk",
+				PreEventFunctionName = "AngleNPCToHero",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NemesisPreCombatAboutShrine02", "NemesisGift07" },
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 22,
+					},
+				},
+
+				{ Cue = "/VO/NemesisField_0487",
+					Text = "Well, we made it. You realize when you mess with the Oath you're not just making things worse for you, but for me?" },
+
+				{ Cue = "/VO/MelinoeField_4086", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Oh I don't know about {#Emph}worse. {#Prev}We serve the realm. It was never going to be easy. I'm surprised you'd want it to be." },
+
+				{ Cue = "/VO/NemesisField_0488",
+					AngleTowardHero = true,
+					PreLineAnim = "Nemesis_Hub_Glare_Start",
+					PostLineAnim = "Nemesis_Hub_Glare_End",
+					Text = "What I want, Princess, is for it be {#Emph}just right. {#Prev}So I can do what needs to be done without failing more than I have to." },
+
+				{ Cue = "/VO/MelinoeField_4087",
+					Portrait = "Portrait_Mel_Proud_01",
+					UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "It's not a failure if you learn from it." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Nemesis_01",
+						{ Cue = "/VO/NemesisField_0489", Text = "I've learned enough." },
+					},
 				},
 			},
+
 
 		},
 	},
@@ -10291,7 +13301,90 @@ VariantSetData.NPC_Nemesis_01 =
 					Text = "Get in line. I was here first.",
 				},
 			},
-
+			NemesisShopping05 =
+			{
+				UseableOffSource = true,
+				-- InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					-- None
+				},
+				{ Cue = "/VO/NemesisField_0607",
+					Text = "Talk later. Counting through my Gold.",
+				},
+			},
+			NemesisShopping06 =
+			{
+				UseableOffSource = true,
+				-- InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					-- None
+				},
+				{ Cue = "/VO/NemesisField_0608",
+					Text = "Last chance to stock up for a while.",
+				},
+			},
+			NemesisShopping07 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				-- InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NemesisWithHecate02" }
+					},
+				},
+				{ Cue = "/VO/NemesisField_0609",
+					Text = "Charon keeps his mouth shut and you better do the same.",
+				},
+			},
+			NemesisShopping08 =
+			{
+				UseableOffSource = true,
+				-- InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					-- None
+				},
+				{ Cue = "/VO/NemesisField_0610",
+					Text = "Go about your business like I'm not even here.",
+				},
+			},
+			NemesisShopping09 =
+			{
+				UseableOffSource = true,
+				-- InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "CharonGift07", "NemesisGift07" },
+					},
+				},
+				{ Cue = "/VO/NemesisField_0611",
+					Text = "Spending some quality time with my brother here.",
+				},
+			},
+			NemesisShopping10 =
+			{
+				UseableOffSource = true,
+				-- InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+				GameStateRequirements =
+				{
+					-- None
+				},
+				{ Cue = "/VO/NemesisField_0612",
+					Text = "You'll get more out of Charon here than me.",
+				},
+			},
 		}
 	},
 }
@@ -10336,7 +13429,7 @@ GlobalVoiceLines.NemesisGatherReactionVoiceLines =
 			{
 				PathFalse = { "CurrentRun", "Hero", "IsDead" }
 			},
-		},		
+		},
 		Cooldowns =
 		{
 			{ Name = "NemesisAnyQuipSpeech", Time = 10 },

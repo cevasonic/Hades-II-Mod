@@ -17,12 +17,15 @@ function RelationshipAdvancedPresentation( source, args )
 
 	wait( args.Delay )
 
-	local backgroundDimId = CreateScreenObstacle({ Name = "rectangle01", X = ScreenCenterX, Y = ScreenCenterY, Group = "Combat_Menu_TraitTray", Scale = 4.0, ScaleX = ScreenScaleX, ScaleY = ScreenScaleY })
-	SetColor({ Id = backgroundDimId, Color = Color.Black, Duration = 0 })
-	SetAlpha({ Id = backgroundDimId, Fraction = 0.0, Duration = 0 })
-	SetAlpha({ Id = backgroundDimId, Fraction = 0.8, Duration = 0.3 })
+	local backgroundDimId = args.BackgroundDimId
+	if backgroundDimId == nil then
+		backgroundDimId = CreateScreenObstacle({ Name = "rectangle01", X = ScreenCenterX, Y = ScreenCenterY, Group = "Combat_Menu_TraitTray", Scale = 4.0, ScaleX = ScreenScaleX, ScaleY = ScreenScaleY })
+		SetColor({ Id = backgroundDimId, Color = Color.Black, Duration = 0 })
+		SetAlpha({ Id = backgroundDimId, Fraction = 0.0, Duration = 0 })
+		SetAlpha({ Id = backgroundDimId, Fraction = 0.8, Duration = 0.3 })
 
-	PlaySound({ Name = "/Leftovers/Menu Sounds/EmoteExcitement" })
+		PlaySound({ Name = "/Leftovers/Menu Sounds/EmoteExcitement" })
+	end
 
 	SessionMapState.BlockInfoBanners = false
 	thread( DisplayInfoBanner, nil, {
@@ -84,7 +87,7 @@ function RelationshipAdvancedPresentation( source, args )
 
 	SetAlpha({ Ids = { heartId, lockId, backgroundDimId }, Fraction = 0, Duration = 0.2 })
 	wait( 0.8 )
-	Destroy({ Id = { heartId, lockId, backgroundDimId } })
+	Destroy({ Ids = { heartId, lockId, backgroundDimId } })
 
 	thread( ShowCodexUpdate )
 
@@ -153,6 +156,7 @@ end
 function ReceivedGiftPresentation( npc, giftAnimation )
 	PlaySound({ Name = "/Leftovers/SFX/StaminaRefilled" })
 	thread( PlayVoiceLines, GlobalVoiceLines.FamiliarUpgradedGlobalVoiceLines, true, nil, { FamiliarName = npc.Name } )
+	thread( PlayVoiceLines, GlobalVoiceLines.GiftGivenVoiceLines, true, nil, { NPCName = npc.Name } )
 
 	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = npc.ObjectId })
 	SetAnimation({ Name = "MelTalkGifting01", DestinationId = CurrentRun.Hero.ObjectId })

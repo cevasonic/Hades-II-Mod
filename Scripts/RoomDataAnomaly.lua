@@ -29,6 +29,7 @@ RoomSetData.Anomaly =
 		NextRoomResumeMusic = true,
 
 		LocationText = "Location_BiomeAnomaly",
+		DreamLocationText = "Location_BiomeAnomaly_Dream",
 		SaveProfileLocationText = "Location_BiomeAnomaly",
 
 		EntranceFunctionName = "AnomalyEntrancePresentation",

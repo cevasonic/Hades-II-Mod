@@ -258,6 +258,7 @@ KeywordList =
 	"CharHades",
 	"CharNyx",
 	"CharSelene",
+	"CharArtemis",
 	"CharSkelly",
 	"CharChaos",
 	"CharCharon",

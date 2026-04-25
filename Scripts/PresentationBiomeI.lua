@@ -44,7 +44,7 @@ function ChronosKillPresentation( unit, args )
 
 	SetPlayerInvulnerable( "ChronosKillPresentation" )
 	AddInputBlock({ Name = "ChronosKillPresentation" })
-	AddTimerBlock( CurrentRun, "ChronosKillPresentation" )
+	AddTimerBlock( CurrentRun, "InterBiome" )
 	CurrentRun.CurrentRoom.Encounter.BossKillPresentation = true
 	if IsScreenOpen("Codex") then
 		CloseCodexScreen()
@@ -54,7 +54,7 @@ function ChronosKillPresentation( unit, args )
 		TraitTrayScreenClose( ActiveScreens.TraitTrayScreen, nil, { IgnoreHUDShow = true } )
 	end
 
-	if GetNumShrineUpgrades("BossDifficultyShrineUpgrade") >= 4 or unit.CurrentPhase == 3 then
+	if IsBossDifficultyShrineUpgradeActive() or unit.CurrentPhase == 3 then
 		SetMusicSection( 5 )
 	else
 		SetMusicSection( 3 )
@@ -78,9 +78,11 @@ function ChronosKillPresentation( unit, args )
 		wait( 4.0, RoomThreadName )
 	end
 
-	local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
-	unit.TextLinesUseWeaponIdle = nil
-	PlayTextLines( unit, textLines )
+	if not CurrentRun.IsDreamRun then
+		local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
+		unit.TextLinesUseWeaponIdle = nil
+		PlayTextLines( unit, textLines )
+	end
 	if IsGameStateEligible( unit, args.GigarosKillRequirements ) then
 		ChronosGigarosKillPresentation( unit, args )
 		unit.DeathAnimation = args.GigarosKillDeathAnimation or unit.DeathAnimation
@@ -125,8 +127,10 @@ function ChronosKillPresentation( unit, args )
 	Move({ Id = chronosParticleEmitter, Distance = 200, Angle = 90, Duration = 5 })
 
 	GenericBossKillPresentation( unit, args )
-	SetAnimation({ Name = "MelinoeEquip", DestinationId = CurrentRun.Hero.ObjectId })
-
+	
+	if not HeroHasTrait("TorchAutofireAspect") and not CurrentRun.IsDreamRun then
+		SetAnimation({ Name = "MelinoeEquip", DestinationId = CurrentRun.Hero.ObjectId })
+	end
 	-- AdjustColorGrading({ Name = "Desaturated", Duration = 0.75 })
 	PlaySound({ Name = "/SFX/TimeSlowStart" })
 	
@@ -142,7 +146,9 @@ function ChronosKillPresentation( unit, args )
 	RemoveInputBlock({ Name = "ChronosKillPresentation" })
 	CurrentRun.CurrentRoom.Encounter.BossKillPresentation = false
 	
-	OpenRunClearScreen()
+	if not CurrentRun.IsDreamRun or (CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount) then
+		OpenRunClearScreen()
+	end
 	ClearCameraClamp({ LerpTime = 1.0 }) -- the map bounds are more restrictive during the fight
 
 end
@@ -293,13 +299,15 @@ function TartarusChamberMoverPresentation( usee, args, user )
 	local unequipAnimation = GetEquippedWeaponValue("UnequipAnimation") or "MelinoeIdleWeaponless"
   	SetAnimation({ Name = unequipAnimation, DestinationId = CurrentRun.Hero.ObjectId })
 
+	PlaySound({ Name = "/SFX/Enemy Sounds/Hades/HadesReappear", Id = usee.ObjectId })
+
   	wait( 0.7 )
 	
 	AdjustFullscreenBloom({ Name = "DesaturatedLight", Duration = 0.9 })
 	local vignetteAName = "NightmareVignetteLoop"
 	local loopingSoundId = nil
 
-	if not GameState.ReachedTrueEnding then
+	if not GameState.ReachedTrueEnding and not CurrentRun.IsDreamRun then
 		thread( DoRumble, { { ScreenPreWait = 0.02, LeftFraction = 0.13, Duration = 1.5 }, } )
 		ScreenAnchors.FullscreenAlertFxAnchor = CreateScreenObstacle({ Name = "BlankObstacle", Group = "Events", X = ScreenCenterX, Y = ScreenCenterY })
 		if ConfigOptionCache.GraphicsQualityPreset == "GraphicsQualityPreset_Low" then
@@ -339,7 +347,7 @@ function TartarusChamberMoverPresentation( usee, args, user )
 	AdjustFullscreenBloom({ Name = "Off", Duration = 1 })
 
 
-	if not GameState.ReachedTrueEnding then
+	if not GameState.ReachedTrueEnding and not CurrentRun.IsDreamRun then
 		wait(0.3)
 		StopAnimation({ Name = "MelHPostBossHandFxLeft", DestinationId = CurrentRun.Hero.ObjectId })
 		StopAnimation({ Name = "MelHPostBossHandFxRight", DestinationId = CurrentRun.Hero.ObjectId })
@@ -352,7 +360,7 @@ function TartarusChamberMoverPresentation( usee, args, user )
 	AdjustRadialBlurDistance({ Fraction = 0, Duration = 1 })
 	AdjustRadialBlurStrength({ Fraction = 0, Duration = 1 })
 
-	if not GameState.ReachedTrueEnding then
+	if not GameState.ReachedTrueEnding and not CurrentRun.IsDreamRun then
 		StopAnimation({ Name = vignetteAName, DestinationId = ScreenAnchors.FullscreenAlertFxAnchor })
 		StopAnimation({ Name = "NightmareEdgeFxSpawner", DestinationId = CurrentRun.Hero.ObjectId })
 	end
@@ -366,15 +374,20 @@ function TartarusChamberMoverPresentation( usee, args, user )
 	PlaySound({ Name = "/Leftovers/SFX/LightOn", Id = usee.ObjectId, Delay = 0.75 })
 	PlaySound({ Name = "/Leftovers/SFX/LightOn", Id = usee.ObjectId })
 
-	wait( 1.0 )
-	thread( InCombatText, usee.ObjectId, "ChamberMoverUsed", 2.0, { ShadowScaleX = 1.2, PreDelay = 0.5 } )
-	PlaySound({ Name = "/SFX/Enemy Sounds/Hades/Hades360Swipe", Id = usee.ObjectId })
+	if not CurrentRun.IsDreamRun then
+		wait( 1.0 )
+		thread( InCombatText, usee.ObjectId, "ChamberMoverUsed", 2.0, { ShadowScaleX = 1.2, PreDelay = 0.5 } )
+		PlaySound({ Name = "/SFX/Enemy Sounds/Hades/Hades360Swipe", Id = usee.ObjectId })
+	end
 
 	SetAlpha({ Ids = usee.RewardPreviewIconIds, Fraction = 1.0, Duration = 0.25, EaseIn = 0, EaseOut = 1 })
 	SetAnimation({ DestinationIds = usee.RewardPreviewIconIds, Name = "ClockworkCountdown"..(CurrentRun.RemainingClockworkGoals or 0) })
 	thread( DoRumble, { { ScreenPreWait = 0.02, LeftFraction = 0.19, Duration = 0.45 }, } )
 	
-	wait( 1.50 )
+	if not CurrentRun.IsDreamRun then
+		wait( 1.0 )
+	end
+	wait( 0.5 )
 
 	AdjustColorGrading({ Name = "Off", Duration = 0.45 })
 	AdjustFullscreenBloom({ Name = "Off", Duration = 0.45 })
@@ -416,7 +429,7 @@ function RoomEntranceChronos( currentRun, currentRoom, args )
 	local roomData = RoomData[currentRoom.Name] or currentRoom
 	local encounterData = EncounterData[currentRoom.Encounter.Name] or currentRoom.Encounter
 
-	if not GameState.ReachedTrueEnding then
+	if not GameState.ReachedTrueEnding or CurrentRun.IsDreamRun then
 		FadeOut({ Duration = 0.0, Color = Color.ChronosSand })
 		AdjustColorGrading({ Name = "Off", Duration = 0.0 })
 	end
@@ -433,7 +446,7 @@ function RoomEntranceChronos( currentRun, currentRoom, args )
 
 	wait(0.03)
 
-	if GameState.ReachedTrueEnding then
+	if GameState.ReachedTrueEnding and not CurrentRun.IsDreamRun then
 		FadeIn({ Duration = 0.1 })
 		FullScreenFadeInAnimation( "RoomTransitionOut_TimeWarp" )
 		CreateAnimation({ Name = "SandPortalOpenClose", DestinationId = CurrentRun.Hero.ObjectId })
@@ -459,15 +472,24 @@ function RoomEntranceChronos( currentRun, currentRoom, args )
 
 	SetAlpha({ Id = currentRun.Hero.ObjectId, Fraction = 1.0, Duration = 0.0 })
 
-	local chronos = ActiveEnemies[609246]
-	if chronos ~= nil then
-		chronos.QueuedBossIntroTextLines = GetRandomEligibleTextLines( chronos, chronos.BossIntroTextLineSets, GetNarrativeDataValue( chronos, "BossIntroTextLinePriorities" ) )
+	if not CurrentRun.IsDreamRun then
+		thread( PlayVoiceLines, encounterData.EnterVoiceLines or roomData.EnterVoiceLines, true, nil )
+		thread( PlayVoiceLines, GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
+	else
+		thread( PlayVoiceLines, roomData.EnterDreamVoiceLines or encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
 	end
 
-	thread( PlayVoiceLines, encounterData.EnterVoiceLines or roomData.EnterVoiceLines, true, nil, { Chronos = chronos } )
-	thread( PlayVoiceLines, GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
-
-	thread( DisplayInfoBanner, nil, { Text = "Location_IBoss01", AnimationName = "InfoBannerTartarusIn", AnimationOutName = "InfoBannerTartarusOut", Delay = 1.0, Color = Color.White, FadeColor = Color.Red } )
+	thread( DisplayBiomeLocationBanner, nil,
+	{
+		Text = "Location_IBoss01",
+		DreamText = "Location_IBoss01_Dream",
+		SkipDreamSubtitle = true,
+		AnimationName = "InfoBannerTartarusIn",
+		AnimationOutName = "InfoBannerTartarusOut",
+		Delay = 1.0,
+		Color = Color.White,
+		FadeColor = Color.Red,
+	} )
 	CheckCodexUnlock( "Biomes", "BiomeHouse" )
 
 	wait(0.1)
@@ -498,7 +520,11 @@ function RoomEntranceChronos( currentRun, currentRoom, args )
 	wait( 1.0 )
 	StartFinalBossChronosIntroMusic()
 
-	wait( 2.9 )
+	if CurrentRun.IsDreamRun then
+		wait( 0.7 )
+	else
+		wait( 2.9 )
+	end
 
 	UnblockCombatUI("BossEntrance")
 end
@@ -686,7 +712,7 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 	thread( PlayVoiceLines, boss.PhaseEndedVoiceLines, nil, boss )
 
 	boss.CurrentPhase = boss.CurrentPhase + 1
-	if boss.CurrentPhase == 2 then
+	if boss.CurrentPhase > 1 then
 		AddTimerBlock( CurrentRun, "ChronosTransition")
 	end
 	Stop({ Id = boss.ObjectId })
@@ -714,6 +740,7 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 	
 	Destroy({ Ids = GetIdsByType({ Names = { "ManaDropZeus", "PowerDrinkDrop" }})})
 	ClearAllEffects( boss ) 
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "Inked" })
 	if not IsEmpty( boss.StopAnimationsOnHitStun ) then
 		StopAnimation({ Names = boss.StopAnimationsOnHitStun, DestinationId = boss.ObjectId, PreventChain = true })
 	end
@@ -735,13 +762,15 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 		wait( 1.25, boss.AIThreadName )
 	end
 
-	local textLines = GetRandomEligibleTextLines( boss, boss.BossPhaseChangeTextLineSets, GetNarrativeDataValue( boss, "BossPhaseChangeTextLinePriorities" ) )
-	boss.TextLinesUseWeaponIdle = true
-
 	if boss.CurrentPhase == 3 then
 		SetMusicSection( 1 )
 	end
-	PlayTextLines( boss, textLines )
+
+	if not CurrentRun.IsDreamRun then
+		local textLines = GetRandomEligibleTextLines( boss, boss.BossPhaseChangeTextLineSets, GetNarrativeDataValue( boss, "BossPhaseChangeTextLinePriorities" ) )
+		boss.TextLinesUseWeaponIdle = true
+		PlayTextLines( boss, textLines )
+	end
 
 	thread( PlayVoiceLines, boss.NextPhaseVoiceLines, nil, boss )
 
@@ -782,6 +811,11 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 			SessionMapState.ManaDropId = nil
 		end
 
+		if SessionMapState.DrinkDropId then
+			Destroy({ Id = SessionMapState.DrinkDropId })
+			SessionMapState.DrinkDropId = nil
+		end
+
 		Activate({ Name = "SpawnPointsPhase2" })
 		AddToGroup({ Ids = GetIds({ Name = "SpawnPointsPhase1" }), Name = "InactiveSpawnPoints", DrawGroup = true })
 		CurrentRun.CurrentRoom.SpawnPoints = {}
@@ -811,6 +845,11 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 		if SessionMapState.ManaDropId then
 			Destroy({ Id = SessionMapState.ManaDropId })
 			SessionMapState.ManaDropId = nil
+		end
+
+		if SessionMapState.DrinkDropId then
+			Destroy({ Id = SessionMapState.DrinkDropId })
+			SessionMapState.DrinkDropId = nil
 		end
 
 		Activate({ Name = "SpawnPointsPhase3" })
@@ -857,6 +896,14 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 	wait(0.3, boss.AIThreadName)
 
 	boss.MaxHealth = aiStage.NewMaxHealth or boss.MaxHealth
+
+	if currentRun.IsDreamRun and boss.DreamBiomeData ~= nil then
+		local dreamBiomeData = boss.DreamBiomeData[currentRun.EnteredBiomes]
+		if dreamBiomeData ~= nil and dreamBiomeData.DataOverrides ~= nil and dreamBiomeData.DataOverrides.HealthMultiplier ~= nil then
+			boss.MaxHealth = boss.MaxHealth * dreamBiomeData.DataOverrides.HealthMultiplier
+		end
+	end
+
 	boss.Health = boss.MaxHealth
 	if aiStage.SetHealthPercent ~= nil then
 		boss.Health = boss.Health * aiStage.SetHealthPercent
@@ -879,7 +926,7 @@ function ChronosPhaseTransition( boss, currentRun, aiStage )
 	SetUnitVulnerable( boss )
 	wait(0.5, boss.AIThreadName)
 
-	if boss.CurrentPhase == 2 then
+	if boss.CurrentPhase > 1 then
 		RemoveTimerBlock( CurrentRun, "ChronosTransition")
 	end
 	currentRun.CurrentRoom.Encounter.ChronosTransition = nil
@@ -1697,7 +1744,6 @@ GlobalVoiceLines.PromptFamilyRescueVoiceLines =
 {
 	{
 		PreLineWait = 1.35,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		ObjectType = "NPC_Chronos_Story_01",
 
@@ -1708,14 +1754,12 @@ GlobalVoiceLines.FamilyEntranceVoiceLines =
 {
 	{
 		PreLineWait = 0.25,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		ObjectType = "NPC_Hades_Story_01",
 
 		{ Cue = "/VO/Hades_0207", Text = "{#Emph}Augh...! <Gasp>" },
 	},
 	{
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		UsePlayerSource = true,
 		PreLineAnim = "MelTalkBroodingFull01",
@@ -1728,7 +1772,6 @@ GlobalVoiceLines.FamilyUnfrozenVoiceLines =
 	Queue = false,
 	{
 		PreLineWait = 0.3,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		StatusAnimation = "StatusIconSpeaking_Persephone_Falling",
 		ObjectType = "NPC_Persephone_01",
@@ -1737,7 +1780,6 @@ GlobalVoiceLines.FamilyUnfrozenVoiceLines =
 	},
 	{
 		PreLineWait = 0.6,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		UsePlayerSource = true,
 		{ Cue = "/VO/MelinoeField_4971", Text = "Mother...!" },
@@ -1746,7 +1788,6 @@ GlobalVoiceLines.FamilyUnfrozenVoiceLines =
 GlobalVoiceLines.FamilyUnfrozenVoiceLinesZag =
 {
 	{
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		SkipAnim = true,
 		ObjectType = "NPC_Zagreus_01",
@@ -1856,7 +1897,7 @@ function FamilyRescuePresentation( source, args )
 
 	wait( 3.2 )
 	ProcessTextLines( zagreus, args.TextLineSet )
-	PlayRandomRemainingTextLines( zagreus, args.TextLineSet )
+	PlayFirstEligibleTextLines( zagreus, args.TextLineSet )
 
 	RemoveInputBlock({ Name = "FamilyRescuePresentation" })
 
@@ -1881,7 +1922,6 @@ GlobalVoiceLines.DeathAreaRestorationVoiceLines =
 {
 	{
 		PreLineWait = 0.45,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		Source = { LineHistoryName = "NPC_Hades_01", SubtitleColor = Color.HadesVoice },
 
@@ -1901,7 +1941,6 @@ GlobalVoiceLines.TimeToGoVoiceLines =
 {
 	{
 		PreLineWait = 1.08,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		UsePlayerSource = true,
 
@@ -1967,7 +2006,7 @@ function DeathAreaRestorationPresentation( source, args )
 	CheckPriorityConversations( source, args ) -- activates the other NPCs
 
 	local chronosId = 774458
-	UseableOff({ Id = chronosId, "UsePersephoneInteractRangeOnly" })
+	UseableOff({ Id = chronosId }) -- use persephone's interact range only
 
 	AudioState.AmbienceId = PlaySound({ Name = "/Ambience/MusicExploration4AMBIENCEIris", Duration = 0.5 })
 	SetAudioEffectState({ Name = "Reverb", Value = 1.75 })
@@ -2058,7 +2097,6 @@ GlobalVoiceLines.NyxExitVoiceLines =
 {
 	{
 		PreLineWait = 0.4,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		PreLineAnim = "Nyx_Greeting",
 		ObjectType = "NPC_Nyx_Story_01",
@@ -2202,7 +2240,6 @@ GlobalVoiceLines.ChronosEndCreditsSendOffVoiceLines =
 {
 	{
 		PreLineWait = 0.65,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		Source = { LineHistoryName = "NPC_Chronos_02", SubtitleColor = Color.ChronosVoice },
 
@@ -2213,7 +2250,6 @@ GlobalVoiceLines.ChronosExitReactionVoiceLines =
 {
 	{
 		PreLineWait = 1.65,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		UsePlayerSource = true,
 
@@ -2224,7 +2260,6 @@ GlobalVoiceLines.TwinsEntranceVoiceLines =
 {
 	{
 		PreLineWait = 0.45,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		Source = { LineHistoryName = "NPC_Apollo_01", SubtitleColor = Color.ApolloVoice },
 
@@ -2232,7 +2267,6 @@ GlobalVoiceLines.TwinsEntranceVoiceLines =
 	},
 	{
 		PreLineWait = 0.45,
-		PlayOverTextLines = true,
 		AllowTalkOverTextLines = true,
 		Source = { LineHistoryName = "NPC_Artemis_01", SubtitleColor = Color.ArtemisVoice },
 
@@ -2562,7 +2596,31 @@ function PetCerberus( cerberus )
 	SetAnimation({ DestinationId = cerberus.ObjectId, Name = "Cerberus_Pet" })
 	thread( PlayVoiceLines, GlobalVoiceLines.PetCerberusVoiceLines, true )
 
-	wait( 6.8 )
+
+	thread( DoRumble, { { ScreenPreWait = 0.0, Duration = 0.5,
+		LeftTriggerStart = 2, LeftTriggerStrengthFraction = 0.125, LeftTriggerFrequencyFraction = 0.05, LeftTriggerTimeout = 0.55,
+		RightTriggerStart = 2, RightTriggerStrengthFraction = 0.125, RightTriggerFrequencyFraction = 0.05, RightTriggerTimeout = 0.55}, } )
+
+	thread( DoRumble, { { ScreenPreWait = 0.5, Duration = 3.0,
+		LeftTriggerStart = 2, LeftTriggerStrengthFraction = 0.15, LeftTriggerFrequencyFraction = 0.05, LeftTriggerTimeout = 3.05,
+		RightTriggerStart = 2, RightTriggerStrengthFraction = 0.15, RightTriggerFrequencyFraction = 0.05, RightTriggerTimeout = 3.05}, } )
+
+	wait(3.5)
+	
+	thread( DoRumble, { { ScreenPreWait = 0.02, LeftFraction = 0.17, Duration = 1.4,
+		LeftTriggerStart = 2, LeftTriggerStrengthFraction = 0.3, LeftTriggerFrequencyFraction = 0.15, LeftTriggerTimeout = 1.4,
+		RightTriggerStart = 2, RightTriggerStrengthFraction = 0.3, RightTriggerFrequencyFraction = 0.15, RightTriggerTimeout = 1.4}, } )
+
+	thread( DoRumble, { { ScreenPreWait = 1.4, Duration = 1.25,
+		LeftTriggerStart = 2, LeftTriggerStrengthFraction = 0.15, LeftTriggerFrequencyFraction = 0.05, LeftTriggerTimeout = 1.25,
+		RightTriggerStart = 2, RightTriggerStrengthFraction = 0.15, RightTriggerFrequencyFraction = 0.05, RightTriggerTimeout = 1.25}, } )
+
+	thread( DoRumble, { { ScreenPreWait = 2.65, Duration = 0.6,
+		LeftTriggerStart = 2, LeftTriggerStrengthFraction = 0.06, LeftTriggerFrequencyFraction = 0.015, LeftTriggerTimeout = 0.65,
+		RightTriggerStart = 2, RightTriggerStrengthFraction = 0.06, RightTriggerFrequencyFraction = 0.015, RightTriggerTimeout = 0.65}, } )
+
+	wait(3.3)
+
 	UnzeroMouseTether( "PetCerberus" )
 	RemoveInputBlock({ Name = "PetCerberus" })
 

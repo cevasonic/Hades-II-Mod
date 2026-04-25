@@ -2,7 +2,7 @@ UnitSetData.Medea =
 {
 	Medea =
 	{
-		InheritFrom = { "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 
 		Groups = { "NPCs", "GroundEnemies" },
 
@@ -42,6 +42,81 @@ UnitSetData.Medea =
 		SkipUnitHitFlash = true,
 
 		Material = "Organic",
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.83,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.8,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.1,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 3.3,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.75,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 6,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.37,
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/MedeaDreamEM_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		DefaultAIData =
 		{

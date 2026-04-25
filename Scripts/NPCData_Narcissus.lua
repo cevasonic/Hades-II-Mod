@@ -23,6 +23,46 @@
 		{
 			"NarcissusGiftsMenu_FlavorText01",
 		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					ForceTextLines = "NarcissusDreamRun",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/NarcissusDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 		
 		Traits = 
 		{
@@ -1630,6 +1670,9 @@
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMuttering,
 
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpNarcissusAndEcho" },
+
 				{ Cue = "/VO/MelinoeField_1152", UsePlayerSource = true,
 					PreLineThreadedFunctionName = "PlayCharacterAnim",
 					PreLineThreadedFunctionArgs = { Name = "MelTalkPensive01", WaitTime = 1, UsePlayerSource = true },
@@ -1725,6 +1768,9 @@
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMuttering,
 
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpNarcissusAndEcho" },
+
 				{ Cue = "/VO/Narcissus_0246",
 					Text = "I talked to her again just like you said, but nothing's changed in here. Though I feel kind of different anyway. I guess I'll have to settle for that." },
 				{ Cue = "/VO/MelinoeField_1155", UsePlayerSource = true,
@@ -1777,6 +1823,9 @@
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMuttering,
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpNarcissusAndEcho" },
 
 				{ Cue = "/VO/Narcissus_0082",
 					Emote = "PortraitEmoteFiredUp",
@@ -1831,6 +1880,37 @@
 				{ Cue = "/VO/Narcissus_0192",
 					Text = "What I'm trying to say is, I've decided to give to you the greatest gift of all that I've received. So here's something from my {#Emph}private reserve!" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+
+			NarcissusAboutLittleToSay01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "NarcissusGift07" },
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMuttering,
+
+				{ Cue = "/VO/Narcissus_0315",
+					Text = "Sometimes I'm struck by how incredible I look, and am overcome by a trance-like affection that cannot easily be broken. Not by you, and not even by {#Emph}me." },
+
+				{ Cue = "/VO/MelinoeField_4472", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Sounds familiar. How is what you're describing any different from what normally occurs when I see you, Narcissus?" },
+
+				{ Cue = "/VO/Narcissus_0316",
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Narcissus_Averted_01",
+					Text = "...Don't worry, man, we can just tune everything out. Like the only thing that exists in this world is you and me. Just {#Emph}us." },
 				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
 			},
@@ -2315,6 +2395,181 @@
 				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
 			},
+			NarcissusChat31 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0317",
+					Text = "Stare for as long as you require, then take one of {#Emph}these." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat32 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0318",
+					Text = "My love is unavailable, but I have lots of other gifts to give away." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat33 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0319",
+					Text = "Just thinking about how great I am, you know? It happens all the time." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat34 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0320",
+					Text = "You're looking at the one-and-only... and I should be looking at me now, too." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat35 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0321",
+					Text = "I wasn't born this attractive... oh who am I kidding, yes I was." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat36 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusGift07" },
+					},
+					{
+						SumPrevRuns = 4,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "G_Story01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0322",
+					Text = "Not seen you back here in a while... not that I'd notice either way." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat37 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "G_Story01", },
+					},
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0323",
+					Text = "You just keep showing up, huh... well I would definitely too if I were you." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat38 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0324",
+					Text = "There's a lot to like about this place... and you are looking at it right now." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat39 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ Cue = "/VO/Narcissus_0325",
+					Text = "I try to blink as infrequently as possible, so as not to lose sight of what counts..." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+			NarcissusChat40 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NarcissusDirtyWater" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringContinuousRepeatable,
+
+				{ Cue = "/VO/Narcissus_0326",
+					Portrait = "Portrait_Narcissus_Averted_01",
+					Text = "...Hey beautiful... looks like you've got a visitor... give her a gift already, huh?" },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
 
 			NarcissusSadChat01 =
 			{
@@ -2423,6 +2678,25 @@
 				{ Cue = "/VO/Narcissus_0214",
 					Emote = "PortraitEmoteFiredUp",
 					Text = "I'm kind of in a crisis here, so just help yourself, and {#Emph}go." },
+				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
+			},
+
+			NarcissusDreamRun =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Narcissus",
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
+
+				{ SkipDialogue = true, PostLineWait = 0, InputDelay = 0, BoxAnimation = "BlankObstacle", BoxExitAnimation = "Blank" },
+
 				PrePortraitExitFunctionName = "NarcissusBenefitChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.NarcissusBenefitChoices,
 			},
@@ -2734,6 +3008,103 @@
 			{
 				Partner = "NPC_Echo_01",
 				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+
+			NarcissusWithEchoChat01 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat02 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat03 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat04 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat05 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat06 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat07 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.NarcissusFieldsGreeting,
+			},
+			NarcissusWithEchoChat08 =
+			{
+				Partner = "NPC_Echo_01",
+				-- PlayOnce = true,
 				UseableOffSource = true,
 				GiftableOffSource = true,
 				PreBlockSpecialInteract = true,

@@ -897,6 +897,11 @@ ScreenData.MetaUpgradeCardLayout.ComponentData =
 		TooltipOffsetY = 425,
 		PinOffsetX = 10,
 		PinOffsetY = 140,
+		CannotAffordVoiceLines =
+		{
+			{ GlobalVoiceLines = "CannotAffordMemUpgradeVoiceLines" },
+			{ GlobalVoiceLines = "InvalidResourceInteractionVoiceLines" },
+		},
 		Children = 
 		{
 			PipRingTarget = 
@@ -1327,21 +1332,6 @@ GlobalVoiceLines.OpenedCardScreenHighPsycheLines =
 	},
 }
 
-GlobalVoiceLines.UnlockedCardVoiceLines =
-{
-	RandomRemaining = true,
-	PreLineWait = 0.65,
-	SuccessiveChanceToPlayAll = 0.33,
-	SkipAnim = true,
-	Cooldowns =
-	{
-		{ Name = "MelCardUnlockSpeech", Time = 10 },
-	},
-
-	{ Cue = "/VO/Melinoe_0544", Text = "New Arcana..." },
-	{ Cue = "/VO/Melinoe_0545", Text = "Another Card..." },
-}
-
 GlobalVoiceLines.UpgradedMemLimitVoiceLines =
 {
 	{
@@ -1388,8 +1378,9 @@ GlobalVoiceLines.UpgradedMemLimitVoiceLines =
 }
 GlobalVoiceLines.CannotAffordMemUpgradeVoiceLines =
 {
+	BreakIfPlayed = true,
 	RandomRemaining = true,
-	PreLineWait = 0.65,
+	PreLineWait = 0.15,
 	PlayOnceFromTableThisRun = true,
 	SuccessiveChanceToPlayAll = 0.1,
 	UsePlayerSource = true,
@@ -1401,6 +1392,11 @@ GlobalVoiceLines.CannotAffordMemUpgradeVoiceLines =
 			Comparison = "<",
 			Value = 30,
 		}
+	},
+	Cooldowns =
+	{
+		{ Name = "MelinoeAnyQuipSpeech" },
+		{ Name = "MelinoeResourceInteractionSpeech", Time = 6 },
 	},
 
 	{ Cue = "/VO/Melinoe_0779", Text = "I need more Psyche..." },

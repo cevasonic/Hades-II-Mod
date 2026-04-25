@@ -53,11 +53,6 @@ BountyData =
 		{
 			DeepInheritance = true,
 			TargetMetaRewardsRatio = 0,
-			HarvestPointChanceMultiplier = 0,
-			ShovelPointChanceMultiplier = 0,
-			PickaxePointChanceMultiplier = 0,
-			ExorcismPointChanceMultiplier = 0,
-			FishingPointChanceMultiplier = 0,
 		},
 		StartingRoomOverrides =
 		{
@@ -168,7 +163,7 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			ClearedBiomes = 1,
+			EnteredBiomes = 1,
 			BiomesReached = { F = true, },
 		},
 	},
@@ -180,7 +175,7 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			ClearedBiomes = 2,
+			EnteredBiomes = 2,
 			BiomesReached = { F = true, G = true, },
 		},
 	},
@@ -192,7 +187,7 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			ClearedBiomes = 3,
+			EnteredBiomes = 3,
 			BiomesReached = { F = true, G = true, H = true },
 		},
 	},
@@ -210,7 +205,7 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			ClearedBiomes = 1,
+			EnteredBiomes = 1,
 			BiomesReached = { N = true, },
 		},
 	},
@@ -222,7 +217,7 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			ClearedBiomes = 2,
+			EnteredBiomes = 2,
 			BiomesReached = { N = true, O = true, },
 		},
 	},
@@ -234,7 +229,7 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			ClearedBiomes = 3,
+			EnteredBiomes = 3,
 			BiomesReached = { N = true, O = true, P = true },
 		},
 	},
@@ -643,7 +638,7 @@ BountyData =
 			},
 			{
 				Path = { "GameState", "TextLinesRecord", },
-				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 			},
 
 			-- MetaUpgrades
@@ -745,7 +740,7 @@ BountyData =
 					{
 						NamedRequirements = { "TalentLegal", },
 						{
-							Path = { "CurrentRun", "ClearedBiomes" },
+							Path = { "CurrentRun", "EnteredBiomes" },
 							Comparison = ">",
 							Value = 1,
 						},
@@ -1217,7 +1212,7 @@ BountyData =
 			},
 			{
 				Path = { "GameState", "TextLinesRecord", },
-				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 			},
 			-- MetaUpgrades
 			{
@@ -1640,7 +1635,7 @@ BountyData =
 			},
 			{
 				Path = { "GameState", "TextLinesRecord", },
-				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 			},
 			-- MetaUpgrades
 			{
@@ -1820,7 +1815,7 @@ BountyData =
 			-- FirstLoot
 			{
 				Path = { "GameState", "TextLinesRecord", },
-				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 			},
 			{
 				Path = { "GameState", "TextLinesRecord", },
@@ -2634,7 +2629,7 @@ BountyData =
 					{
 						NamedRequirements = { "TalentLegal", },
 						{
-							Path = { "CurrentRun", "ClearedBiomes" },
+							Path = { "CurrentRun", "EnteredBiomes" },
 							Comparison = ">",
 							Value = 1,
 						},
@@ -3224,7 +3219,7 @@ BountyData =
 			},
 			{
 				Path = { "GameState", "TextLinesRecord", },
-				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+				HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 			},
 			-- MetaUpgrades
 			{
@@ -5142,7 +5137,7 @@ BountyData =
 					{
 						NamedRequirements = { "TalentLegal", },
 						{
-							Path = { "CurrentRun", "ClearedBiomes" },
+							Path = { "CurrentRun", "EnteredBiomes" },
 							Comparison = ">",
 							Value = 1,
 						},
@@ -5366,7 +5361,7 @@ BountyData =
 					{
 						NamedRequirements = { "TalentLegal", },
 						{
-							Path = { "CurrentRun", "ClearedBiomes" },
+							Path = { "CurrentRun", "EnteredBiomes" },
 							Comparison = ">",
 							Value = 1,
 						},
@@ -5511,11 +5506,6 @@ BountyData =
 		RunOverrides =
 		{
 			DeepInheritance = true,
-			HarvestPointChanceMultiplier = 0,
-			ShovelPointChanceMultiplier = 0,
-			PickaxePointChanceMultiplier = 0,
-			ExorcismPointChanceMultiplier = 0,
-			FishingPointChanceMultiplier = 0,
 		},
 
 		LootOptions =
@@ -5590,6 +5580,8 @@ BountyData =
 		StartingBiome = "F",
 		BiomeIcon = "GUI\\Screens\\BountyBoard\\Biome_Underworld",
 		BiomeText = "BountyBoard_UnderworldRun",
+
+		DifficultyRating = 4,
 		
 		RandomMetaUpgradeCostTotal = 30,
 		RandomShrineUpgradePointTotal = 0,
@@ -5622,6 +5614,8 @@ BountyData =
 		StartingBiome = "F",
 		BiomeIcon = "GUI\\Screens\\BountyBoard\\Biome_Underworld",
 		BiomeText = "BountyBoard_UnderworldRun",
+
+		DifficultyRating = 5,
 		
 		RandomMetaUpgradeCostTotal = 30,
 		RandomShrineUpgradePointTotal = 20,
@@ -5650,6 +5644,8 @@ BountyData =
 		StartingBiome = "N",
 		BiomeIcon = "GUI\\Screens\\BountyBoard\\Biome_Surface",
 		BiomeText = "BountyBoard_SurfaceRun",
+
+		DifficultyRating = 4,
 		
 		RandomMetaUpgradeCostTotal = 30,
 		RandomShrineUpgradePointTotal = 0,
@@ -5683,6 +5679,8 @@ BountyData =
 		StartingBiome = "N",
 		BiomeIcon = "GUI\\Screens\\BountyBoard\\Biome_Surface",
 		BiomeText = "BountyBoard_SurfaceRun",
+
+		DifficultyRating = 5,
 		
 		RandomMetaUpgradeCostTotal = 30,
 		RandomShrineUpgradePointTotal = 20,
@@ -8469,6 +8467,34 @@ GlobalVoiceLines.StartPackagedBountyRunVoiceLines =
 
 		{ Cue = "/VO/MelinoeField_2044", Text = "I feel... unstoppable..." },
 	},
+	-- all-random trials (repeated below, these are to prioritize the introduction)
+	{
+		PlayOnce = true,
+		PlayOnceContext = "ChaosAllRandomIntroLines",
+		NoTarget = true,
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.928,
+		ThreadName = "RoomThread",
+		Source = { LineHistoryName = "NPC_Chaos_01", SubtitleColor = Color.ChaosVoice },
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "ActiveBounty" },
+				IsAny = { "PackageBountyRandomUnderworld_Difficulty1", "PackageBountyRandomUnderworld_Difficulty2", "PackageBountyRandomSurface_Difficulty1", "PackageBountyRandomSurface_Difficulty2" },
+			},
+		},
+
+		{ Cue = "/VO/Chaos_0312", Text = "There is no particular order to this Trial.", PlayFirst = true },
+		{ Cue = "/VO/Chaos_0304", Text = "I leave the details of this Trial for you to discover." },
+		{ Cue = "/VO/Chaos_0306", Text = "Whether this Trial goes as we expect, let us find out." },
+		{ Cue = "/VO/Chaos_0311", Text = "I chose each detail of this Trial arbitrarily." },
+		{ Cue = "/VO/Chaos_0313", Text = "This shall not go the way it did last time." },
+		{ Cue = "/VO/Chaos_0314", Text = "You may attempt to find a pattern, but shall not." },
+		{ Cue = "/VO/Chaos_0315", Text = "This Trial has no constancy at all." },
+		{ Cue = "/VO/Chaos_0316", Text = "I have yet to consider all the possibilities herein."	},
+		{ Cue = "/VO/Chaos_0306", Text = "Whether this Trial goes as we expect, let us find out." },
+	},
 	-- 4+ losses
 	{
 		NoTarget = true,
@@ -8722,18 +8748,6 @@ GlobalVoiceLines.StartPackagedBountyRunVoiceLines =
 				},
 			},
 		},
-		--[[
-		{ Cue = "/VO/Chaos_0278", Text = "I believe your magick shall be of little use in this Trial.",
-			PlayFirst = true,
-			GameStateRequirements =
-			{
-				{
-					Path = { "CurrentRun", "ActiveBounty" },
-					IsAny = { "PackageBountyLowMana" },
-				},
-			},
-		},
-		]]--
 		{ Cue = "/VO/Chaos_0263", Text = "Do the Fates determine what transpires, or do you?",
 			PlayFirst = true,
 			GameStateRequirements =
@@ -9063,39 +9077,6 @@ GlobalVoiceLines.StartPackagedBountyRunVoiceLines =
 				{
 					Path = { "CurrentRun", "BiomesReached" },
 					HasAny = { "G", "H", "I" },
-				},
-			},
-		},
-		{ Cue = "/VO/Chaos_0308", Text = "The lowest reaches of your father's realm.",
-			PlayFirst = true,
-			GameStateRequirements =
-			{
-				{
-					Path = { "CurrentRun", "BiomesReached" },
-					HasAny = { "I" },
-				},
-			},
-		},
-		{ Cue = "/VO/Chaos_0310", Text = "How quickly you have reached this mountain's summit...",
-			PlayFirst = true,
-			GameStateRequirements =
-			{
-				{
-					Path = { "CurrentRun", "BiomesReached" },
-					HasAny = { "Q" },
-				},
-			},
-		},
-		{ Cue = "/VO/Chaos_0309", Text = "The summit of Olympus, beyond Time...",
-			PlayFirst = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "GameState", "ReachedTrueEnding" },
-				},
-				{
-					Path = { "CurrentRun", "BiomesReached" },
-					HasAny = { "Q" },
 				},
 			},
 		},

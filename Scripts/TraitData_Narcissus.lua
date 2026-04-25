@@ -2,6 +2,27 @@ OverwriteTableKeys( TraitData, {
 	-- Narcissus
 	NarcissusA =
 	{
+		InheritFrom = { "ForceCommonAppearanceTrait" },
+	
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 4
+			},
+		},
 		BlockStacking = true,
 		BlockInRunRarify = true,
 		Icon = "Boon_Narcissus_01",
@@ -17,7 +38,17 @@ OverwriteTableKeys( TraitData, {
 			Force = 280,
 			UpwardForce = 600,
 			Angle = 170,
-			AngleIncrement = 40,
+			AngleIncrement =
+			{ 
+				CustomRarityMultiplier = 
+				{
+					Common = { Multiplier = 1 },
+					Rare = { Multiplier = 1 },
+					Epic = { Multiplier = 2/3 },
+					Heroic = { Multiplier = 2/5 },
+				},
+				BaseValue = 40,
+			},
 			DropFunctionName = "NarcissusDropPresentation",
 			LootOptions =
 			{
@@ -43,6 +74,11 @@ OverwriteTableKeys( TraitData, {
 				},
 				{
 					Name = "StoreRewardRandomStack",
+					Amount = { BaseValue = 1 },
+					ReportValues = 
+					{ 
+						ReportedPoms = "Amount",
+					}
 				},
 			}
 		},
@@ -58,10 +94,35 @@ OverwriteTableKeys( TraitData, {
 				Format = "ResourceAmount",
 				ExtractAs = "TotalNightshade",
 			},
+			{
+				Key = "ReportedPoms",
+				ExtractAs = "TooltipAmount",
+				SkipAutoExtract = true
+			},
 		},
 	},
 	NarcissusB =
 	{
+	
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 4
+			},
+		},
 		InheritFrom = { "NarcissusA", },
 		Icon = "Boon_Narcissus_02",
 		AcquireFunctionArgs =
@@ -75,7 +136,17 @@ OverwriteTableKeys( TraitData, {
 			Force = 280,
 			UpwardForce = 600,
 			Angle = 180,
-			AngleIncrement = 60,
+			AngleIncrement =
+			{ 
+				CustomRarityMultiplier = 
+				{
+					Common = { Multiplier = 1 },
+					Rare = { Multiplier = 1 },
+					Epic = { Multiplier = 1/2 },
+					Heroic = { Multiplier = 1/4 },
+				},
+				BaseValue = 60,
+			},
 			DropFunctionName = "NarcissusDropPresentation",
 			LootOptions =
 			{
@@ -92,6 +163,11 @@ OverwriteTableKeys( TraitData, {
 				},
 				{
 					Name = "HealDropMajor",
+					Amount = { BaseValue = 1 },
+					ReportValues = 
+					{ 
+						ReportedAmount = "Amount",
+					}
 				},
 			}
 		},
@@ -111,18 +187,45 @@ OverwriteTableKeys( TraitData, {
 				BaseName = "HealDropMajor",
 				Format = "FlatHeal",
 				BaseProperty = "HealFixed",
-				ExtractAs = "HealDropAmount"
+				ExtractAs = "HealDropAmountSingle",
+				AsInt = true,
 			},
 			{
 				Key = "MetaCardPointsCommon",
 				Format = "ResourceAmount",
 				ExtractAs = "TotalMetaCardPointsCommon",
 			},
+			{
+				Key = "ReportedAmount",
+				Multiplier = "HealDropAmountSingle",
+				ExtractAs = "HealDropAmount",
+				SkipAutoExtract = true
+			},
 		},
 	},
 	NarcissusC =
 	{
 		InheritFrom = { "NarcissusA", },
+	
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1.5
+			},
+			Heroic =
+			{
+				Multiplier = 2.5
+			},
+		},
 		Icon = "Boon_Narcissus_03",
 		AcquireFunctionArgs =
 		{ 
@@ -151,7 +254,11 @@ OverwriteTableKeys( TraitData, {
 				},
 				{
 					Name = "Currency",
-					Amount = 100,
+					Amount = { BaseValue = 100 },
+					ReportValues = 
+					{ 
+						ReportedAmount = "Amount",
+					}
 				},
 			}
 		},
@@ -162,12 +269,35 @@ OverwriteTableKeys( TraitData, {
 				Format = "ResourceAmount",
 				ExtractAs = "TotalSilver",
 			},
+			{
+				Key = "ReportedAmount",
+				ExtractAs = "TooltipCurrency"
+			}
 		},
 	},
 	NarcissusD =
 	{
 		InheritFrom = { "NarcissusA", },
 		Icon = "Boon_Narcissus_04",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 3
+			},
+		},
 		AcquireFunctionArgs =
 		{ 
 			Delay = 0.5,
@@ -179,7 +309,17 @@ OverwriteTableKeys( TraitData, {
 			Force = 280,
 			UpwardForce = 600,
 			Angle = 180,
-			AngleIncrement = 60,
+			AngleIncrement =
+			{ 
+				CustomRarityMultiplier = 
+				{
+					Common = { Multiplier = 1 },
+					Rare = { Multiplier = 1 },
+					Epic = { Multiplier = 1/2 },
+					Heroic = { Multiplier = 1/3 },
+				},
+				BaseValue = 60,
+			},
 			DropFunctionName = "NarcissusDropPresentation",
 			LootOptions =
 			{
@@ -195,6 +335,11 @@ OverwriteTableKeys( TraitData, {
 				},
 				{
 					Name = "MaxManaDrop",
+					Amount = { BaseValue = 1 },
+					ReportValues = 
+					{ 
+						ReportedAmount = "Amount",
+					}
 				},
 			}
 		},
@@ -205,12 +350,46 @@ OverwriteTableKeys( TraitData, {
 				Format = "ResourceAmount",
 				ExtractAs = "TotalMemPointsCommon",
 			},
+			{
+				External = true,
+				BaseType = "ConsumableData",
+				BaseName = "MaxManaDrop",
+				Format = "MaxMana",
+				BaseProperty = "AddMaxMana",
+				ExtractAs = "MaxManaSingle",
+				AsInt = true,
+			},
+			{
+				Key = "ReportedAmount",
+				Multiplier = "MaxManaSingle",
+				ExtractAs = "MaxManaAmount",
+				SkipAutoExtract = true
+			},
 		},
 	},
 	NarcissusE =
 	{
 		InheritFrom = { "NarcissusA", },
 		Icon = "Boon_Narcissus_05",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 3
+			},
+		},
 		AcquireFunctionArgs =
 		{ 
 			Delay = 0.5,
@@ -222,7 +401,17 @@ OverwriteTableKeys( TraitData, {
 			Force = 280,
 			UpwardForce = 600,
 			Angle = 180,
-			AngleIncrement = 60,
+			AngleIncrement =
+			{ 
+				CustomRarityMultiplier = 
+				{
+					Common = { Multiplier = 1 },
+					Rare = { Multiplier = 1 },
+					Epic = { Multiplier = 1/2 },
+					Heroic = { Multiplier = 1/3 },
+				},
+				BaseValue = 60,
+			},
 			DropFunctionName = "NarcissusDropPresentation",
 			LootOptions =
 			{
@@ -238,6 +427,11 @@ OverwriteTableKeys( TraitData, {
 				},
 				{
 					Name = "MaxHealthDrop",
+					Amount = { BaseValue = 1 },
+					ReportValues = 
+					{ 
+						ReportedAmount = "Amount",
+					}
 				},
 			}
 		},
@@ -248,12 +442,46 @@ OverwriteTableKeys( TraitData, {
 				Format = "ResourceAmount",
 				ExtractAs = "TotalMetaCurrency",
 			},
+			{
+				External = true,
+				BaseType = "ConsumableData",
+				BaseName = "MaxHealthDrop",
+				Format = "MaxHealth",
+				BaseProperty = "AddMaxHealth",
+				ExtractAs = "MaxHealthSingle",
+				AsInt = true,
+			},
+			{
+				Key = "ReportedAmount",
+				Multiplier = "MaxHealthSingle",
+				ExtractAs = "MaxHealthAmount",
+				SkipAutoExtract = true
+			},
 		},
 	},
 	NarcissusF =
 	{
 		InheritFrom = { "NarcissusA", },
 		Icon = "Boon_Narcissus_06",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1.5
+			},
+			Heroic =
+			{
+				Multiplier = 2.5
+			},
+		},
 		AcquireFunctionArgs =
 		{
 			Delay = 0.5,
@@ -283,7 +511,11 @@ OverwriteTableKeys( TraitData, {
 					Name = "RerollDrop",
 					Overrides =
 					{
-						AddRerolls = 2
+						AddRerolls = { BaseValue = 2 },
+						ReportValues = 
+						{ 
+							ReportedAmount = "AddRerolls",
+						}
 					},
 				},
 			}
@@ -295,11 +527,35 @@ OverwriteTableKeys( TraitData, {
 				Format = "ResourceAmount",
 				ExtractAs = "TotalMetaFabric",
 			},
+			{
+				Key = "ReportedAmount",
+				ExtractAs = "Amount",
+				SkipAutoExtract = true
+			},
 		},
 	},
 	NarcissusG =
 	{
 		InheritFrom = { "NarcissusA", },
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1.5
+			},
+			Heroic =
+			{
+				Multiplier = 2
+			},
+		},
 		Icon = "Boon_Narcissus_07",
 		GameStateRequirements =
 		{
@@ -322,7 +578,17 @@ OverwriteTableKeys( TraitData, {
 			Force = 280,
 			UpwardForce = 600,
 			Angle = 170,
-			AngleIncrement = 40,
+			AngleIncrement =
+			{ 
+				CustomRarityMultiplier = 
+				{
+					Common = { Multiplier = 1 },
+					Rare = { Multiplier = 1 },
+					Epic = { Multiplier = 2/3 },
+					Heroic = { Multiplier = 2/5 },
+				},
+				BaseValue = 40,
+			},
 			DropFunctionName = "NarcissusDropPresentation",
 			LootOptions =
 			{
@@ -331,10 +597,11 @@ OverwriteTableKeys( TraitData, {
 				},
 				{
 					Name = "ElementalBoost",
-					Total = 2, -- used for text
-				},
-				{
-					Name = "ElementalBoost",
+					Amount = { BaseValue = 2 },
+					ReportValues = 
+					{ 
+						ReportedAmount = "Amount",
+					}
 				},
 			}
 		},
@@ -346,12 +613,36 @@ OverwriteTableKeys( TraitData, {
 				Format = "ResourceAmount",
 				ExtractAs = "TotalMixer5Common",
 			},
+			{
+				Key = "ReportedAmount",
+				ExtractAs = "Amount",
+				SkipAutoExtract = true
+			},
 		},
 	},
 	NarcissusH =
 	{
 		InheritFrom = { "NarcissusA", },
 		Icon = "Boon_Narcissus_08",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 2
+			},
+			Heroic =
+			{
+				Multiplier = 3
+			},
+		},
 		AcquireFunctionArgs =
 		{
 			Delay = 0.5,
@@ -363,12 +654,27 @@ OverwriteTableKeys( TraitData, {
 			Force = 280,
 			UpwardForce = 600,
 			Angle = 180,
-			AngleIncrement = 60,
+			AngleIncrement =
+			{ 
+				CustomRarityMultiplier = 
+				{
+					Common = { Multiplier = 1 },
+					Rare = { Multiplier = 1 },
+					Epic = { Multiplier = 1/2 },
+					Heroic = { Multiplier = 1/3 },
+				},
+				BaseValue = 60,
+			},
 			DropFunctionName = "NarcissusDropPresentation",
 			LootOptions =
 			{
 				{
 					Name = "LastStandDrop",
+					Amount = { BaseValue = 1 },
+					ReportValues = 
+					{ 
+						ReportedAmount = "Amount",
+					},
 					Overrides = 
 					{
 						CanDuplicate = false,
@@ -392,6 +698,11 @@ OverwriteTableKeys( TraitData, {
 				Key = "PlantGLotus",
 				Format = "ResourceAmount",
 				ExtractAs = "TotalLotus",
+			},
+			{
+				Key = "ReportedAmount",
+				ExtractAs = "Amount",
+				SkipAutoExtract = true
 			},
 		},
 	},

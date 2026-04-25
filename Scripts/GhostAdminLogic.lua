@@ -714,7 +714,6 @@ function CookTimeTick( args )
 				end
 			end
 		end
-		wait( args.TickInterval )
 	end
 	RemoveInputBlock({ Name = "CookTimeTick" })
 end

@@ -3,7 +3,7 @@ UnitSetData.SiegeVine =
 	
 	SiegeVine =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 		--IntroEncounterName = "SiegeVineIntro",
 
 		SpawnAngleMin = 170,

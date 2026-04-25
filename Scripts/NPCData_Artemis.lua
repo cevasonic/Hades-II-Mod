@@ -18,6 +18,7 @@ UnitSetData.NPC_Artemis =
 		InvincibubbleScale = 1.0,
 		AlwaysShowInvulnerabubbleOnInvulnerableHit = true,
 		TurnInPlaceAnimation = "Artemis_Turn",
+		EffectBlocks = { "RavenFamiliarMark", "OnHitStun" },
 
 		SingingTeleportToId = 742272,
 		SingingAngleTowardTargetId = 742157,
@@ -444,7 +445,7 @@ UnitSetData.NPC_Artemis =
 						CountPathTrue = true,
 						Comparison = "==",
 						Value = 0,
-					},					
+					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ArtemisHubFirstMeeting01" },
 					},
@@ -507,6 +508,82 @@ UnitSetData.NPC_Artemis =
 					PreLineFunctionName = "ArtemisStopSingingForNarrative",
 					PostLineFunctionName = "ArtemisStartSingingPresentation",
 					Text = "I'll admit it, Apollo had a lot to do with this one. But I still like it... and it reminds me of how we all got to soar together through the sky. Join me a bit?" },
+			},
+
+			-- partner conversation
+			ArtemisWithNemesis01 =
+			{
+				Partner = "NPC_Nemesis_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				UseText = "UseListenNPC",
+				StatusAnimation = false,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+				InitialGiftableOffSource = true,
+				GiftableOffSource = true,
+
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll =
+						{
+							"ArtemisHubFirstMeeting01",
+							"ArtemisAboutNemesis01",
+							"NemesisWithHecate02",
+							"NyxWithNemesis01",
+						},
+					},
+					{
+						SumPrevRuns = 5,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount =
+						{
+							"NemesisWithHecate02",
+							"NyxWithNemesis01",
+						},
+						Comparison = "==",
+						Value = 0,
+					},
+				},
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				TeleportToId = 566621,
+				TeleportOffsetX = 10,
+				TeleportOffsetY = -80,
+				AngleTowardTargetId = 590204,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Nemesis_0434",
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Nemesis_Averted_01", Speaker = "NPC_Nemesis_01",
+					Text = "...And how's Callisto doing, everything all right with her? Still frolicking around the woods up there, or what?" },
+
+				{ Cue = "/VO/Artemis_0439",
+					PreLineAnim = "Artemis_Shrug",
+					Text = "Oh, she's been fine. Plenty of Nymphs and beasts to keep her company. She knows that my assignment is long-term, and I can't be in touch by Boon. Though you're all right?" },
+
+				{ Cue = "/VO/Nemesis_0435",
+					Portrait = "Portrait_Nemesis_Default_01", Speaker = "NPC_Nemesis_01",
+					Text = "More or less. Plenty to do around here lately, though I don't get to do it all. But making sure I'm getting my fair share." },
+
+				{ Cue = "/VO/Artemis_0440",
+					PostLineThreadedFunctionName = "ArtemisExitPresentation", PostLineFunctionArgs = { AnimationState = "Artemis_Disappear", WaitTime = 1.6 },
+
+					Text = "You haven't changed a bit. I'll see you, Nem." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Nemesis_01",
+						{ Cue = "/VO/Nemesis_0436", Text = "Yeah. See you, too." },
+					},
+				},
 			},
 
 			-- repeatable singing
@@ -1295,6 +1372,24 @@ UnitSetData.NPC_Artemis =
 				},
 			},
 			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunArtemisIntroVO",
+				BreakIfPlayed = true,
+				PreLineWait = 0.15,
+				UsePlayerSource = true,
+				AllowTalkOverTextLines = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun", },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				-- repeatable version below
+				{ Cue = "/VO/MelinoeField_5656", Text = "I manifested Sister Artemis...!" },
+			},
+			{
 				UsePlayerSource = true,
 				RandomRemaining = true,
 				PreLineWait = 0.15,
@@ -1311,6 +1406,21 @@ UnitSetData.NPC_Artemis =
 				{ Cue = "/VO/Melinoe_1242", Text = "Just watch your aim!" },
 				{ Cue = "/VO/Melinoe_1243", Text = "You're just in time." },
 				{ Cue = "/VO/Melinoe_1244", Text = "I'll keep them busy for you!" },
+				{ Cue = "/VO/MelinoeField_5656", Text = "I manifested Sister Artemis...!",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							SumPrevRuns = 8,
+							Path = { "SpeechRecord", "/VO/MelinoeField_5656" },
+							CountPathTrue = true,
+							Comparison = "<=",
+							Value = 0,
+						},
+					},
+				},
 			}
 		},
 
@@ -1722,6 +1832,7 @@ UnitSetData.NPC_Artemis =
 		{
 			SkipInteractAnim = true,
 			SkipSound = true,
+			SkipBoonInteractPresentation = true,
 			PackageName = "NPC_Artemis_Field_01",
 			PreserveContextArt = true,
 		},
@@ -1743,6 +1854,7 @@ UnitSetData.NPC_Artemis =
 		LightingColor = {210, 255, 97, 255},
 		LootColor = {110, 255, 0, 255},
 		SubtitleColor = Color.ArtemisVoice,
+		UseNarrativeContextArt = true,
 		UpgradeScreenOpenSound = "/SFX/ArtemisBoonArrow",
 		UpgradeSelectedSound = "/SFX/ArtemisBoonChoice",
 		LootRejectionAnimation = "BoonDissipateA_Artemis",
@@ -1750,6 +1862,49 @@ UnitSetData.NPC_Artemis =
 		EchoLastRewardId = "EchoLastRewardBoon_Artemis",
 		PriorityUpgrades = { },
 		LoadPackages = { "NPC_Artemis_Field_01", "Artemis" },
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/ArtemisDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+		},
+
 		Traits =
 		{ 
 			"SupportingFireBoon", 
@@ -1825,6 +1980,10 @@ UnitSetData.NPC_Artemis =
 				GameStateRequirements =
 				{
 					--
+				},
+				Cooldowns =
+				{
+					{ Name = "ArtemisOfferSpeech", Time = 8 },
 				},
 				
 				{ Cue = "/VO/Artemis_0111", Text = "For your journey." },
@@ -2241,6 +2400,7 @@ UnitSetData.NPC_Artemis =
 					PreLineThreadedFunctionArgs = { Name = "MelTalkPensive01", WaitTime = 1, UsePlayerSource = true },
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Hey Artemis, if Nemesis and I... if we were closer, would that be all right? I mean with {#Emph}you. {#Prev}Because if not, just say the word. It's probably not going anywhere anyway..." },
+
 				{ Cue = "/VO/Artemis_0378",
 					PreLineAnim = "Artemis_Shrug",
 					Text = "What am I, Sister Hecate? You don't need my permission, not like Nemesis belongs to me, though I've considered trapping her. In all seriousness, good hunting with that one." },
@@ -2832,12 +2992,19 @@ UnitSetData.NPC_Artemis =
 					Text = "{#Emph}Hah! {#Prev}They're just like us for the most part, except quieter usually. You take good care of yours for me, all right?" },
 			},
 
+			-- alt below
 			ArtemisAboutSinging01 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArtemisAboutSinging01_B" },
+					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ArtemisHubSinging01" },
 					},
@@ -2855,6 +3022,41 @@ UnitSetData.NPC_Artemis =
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "No place to practice singing at home either, I expect. Is it truly that concerning if Apollo hears? He can't be {#Emph}that {#Prev}much better! And he'd probably be proud of you." },
+				{ Cue = "/VO/Artemis_0285",
+					PreLineAnim = "Artemis_Shrug",
+					Text = "Or he'd tease me incessantly... I'd likely have to put an arrow through him and get into a heap of trouble. Not prepared to take that sort of risk, Sister." },
+			},
+			ArtemisAboutSinging01_B =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArtemisAboutSinging01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArtemisHubSinging01" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "SpawnRecord", "NPC_Artemis_01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				{ Cue = "/VO/Artemis_0284",
+					Text = "Good being in the Crossroads earlier. My aim is steadier, nerves calm again. I don't get any real peace at home... but it's there to be found in the woods." },
+
+				{ Cue = "/VO/MelinoeField_5293", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You could always do some singing back at home, though, right? You're at least as good as Apollo at this point. He'd welcome your accompaniment at the Palace, I'm sure!" },
+
 				{ Cue = "/VO/Artemis_0285",
 					PreLineAnim = "Artemis_Shrug",
 					Text = "Or he'd tease me incessantly... I'd likely have to put an arrow through him and get into a heap of trouble. Not prepared to take that sort of risk, Sister." },
@@ -2924,7 +3126,7 @@ UnitSetData.NPC_Artemis =
 					},
 					{
 						Path = { "GameState", "TextLinesRecord", },
-						HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+						HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 					},
 				},
 				{ Cue = "/VO/Artemis_0165",
@@ -3040,7 +3242,7 @@ UnitSetData.NPC_Artemis =
 						PathTrue = { "CurrentRun", "BiomesReached", "F" },
 					},
 					{
-						PathTrue = { "GameState", "ReachedTrueEnding" },
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 				{ Cue = "/VO/Artemis_0174",
@@ -3276,7 +3478,7 @@ UnitSetData.NPC_Artemis =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
-				StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
+				-- StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
 				GameStateRequirements =
 				{
 					{
@@ -4326,8 +4528,19 @@ GlobalVoiceLines.ArtemisReRollReactionVoiceLines =
 {
 	BreakIfPlayed = true,
 	RandomRemaining = true,
-	PreLineWait = 0.5,
+	PreLineWait = 0.65,
 	ObjectType = "NPC_Artemis_Field_01",
+	GameStateRequirements =
+	{
+		{
+			Path = { "CurrentLootData", "Name" },
+			IsAny = { "NPC_Artemis_Field_01" },
+		},
+	},
+	Cooldowns =
+	{
+		{ Name = "ArtemisOfferSpeech", Time = 30 },
+	},
 
 	{ Cue = "/VO/Artemis_0371", Text = "How about these?", PlayFirst = true },
 	{ Cue = "/VO/Artemis_0372", Text = "Try these then." },

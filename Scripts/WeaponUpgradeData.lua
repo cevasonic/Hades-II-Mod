@@ -859,15 +859,3 @@ GlobalVoiceLines.OpenedWeaponUpgradeMenuVoiceLines =
 		},
 	},
 }
-
-GlobalVoiceLines.AspectMaxedVoiceLines =
-{
-	RandomRemaining = true,
-	PreLineWait = 0.35,
-	UsePlayerSource = true,
-	TriggerCooldowns = { "MelinoeMiscWeaponEquipSpeech" },
-
-	{ Cue = "/VO/Melinoe_2619", Text = "My bond with this Aspect is complete." },
-	{ Cue = "/VO/Melinoe_2620", Text = "Our bond is now complete." },
-	{ Cue = "/VO/Melinoe_2621", Text = "We are inseparable now." },
-}

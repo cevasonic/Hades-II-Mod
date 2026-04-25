@@ -688,7 +688,7 @@ GameData.RunClearMessageData =
 					"HestiaCastBoon",
 					"HestiaSprintBoon",
 					"HestiaManaBoon",
-					"SacrificeBoon",
+					"AloneDamageBoon",
 					"OmegaZeroBurnBoon",
 					"CastProjectileBoon",
 					"FireballManaSpecialBoon",
@@ -723,7 +723,6 @@ GameData.RunClearMessageData =
 					"AresStatusDoubleDamageBoon",
 					"BloodDropRevengeBoon",
 					"MissingHealthCritBoon",
-					"AloneDamageBoon",
 					"LowHealthLifestealBoon",
 					"OmegaDelayedDamageBoon",
 				},
@@ -1207,6 +1206,7 @@ ScreenData.RunClear =
 
 		--Ares
 		ProjectileAresSwordEx = "OmegaDelayedDamageBoon",
+		ProjectileAresSwordGenerated = "RendBloodDropBoon",
 
 		--Demeter
 		DemeterSprintStorm = "SlowField",
@@ -1295,6 +1295,7 @@ ScreenData.RunClear =
 		LavaTileTriangle01Weapon = "Traps",
 		LavaTileTriangle02Weapon = "Traps",
 		RubbleFallOlympus = "Traps",
+		SoulPylonSpiritball = "Traps",
 		PolyphemusBoulders = "Traps",
 		PolyphemusBoulderSky = "Traps",
 		ThornTreeThorn = "Traps",
@@ -1498,6 +1499,42 @@ ScreenData.RunClear =
 				ShadowBlur = 0, ShadowColor = {80,40,0,255}, ShadowOffset={0, 2},
 				OutlineThickness = 2, OutlineColor = {80,40,0,255},
 				Justification = "Center",
+			},
+		},
+
+		DreamRunTitleText =
+		{
+			Text = "RunClearScreen_Title",
+			X = ScreenCenterX,
+			Y = 70,
+			GroupName = "Combat_Menu_TraitTray_Overlay",
+			TextArgs =
+			{
+				FontSize = 50,
+				OffsetY = -21,
+				Color = {245,255,225,255},
+				Font = "P22UndergroundSCMedium",
+				ShadowBlur = 0, ShadowColor = {0,50,30,255}, ShadowOffset={0, 3},
+				OutlineThickness = 0,
+				Justification = "Center",
+			},
+		},
+
+		DreamRunClearMessageText =
+		{
+			GroupName = "Combat_Menu_TraitTray_Overlay",
+			X = ScreenCenterX,
+			Y = 120,
+			TextArgs =
+			{
+				Color = { 141, 253, 240, 255 },
+				FontSize = 23,
+				OffsetY = -10,
+				Font = "P22UndergroundSCLight",
+				ShadowBlur = 0, ShadowColor = {0,0,0,1}, ShadowOffset={0, 2},
+				OutlineThickness = 2, OutlineColor = {0,0,0,1},
+				Justification = "Center",
+				TextSymbolScale = 1.5,
 			},
 		},
 

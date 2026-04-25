@@ -958,9 +958,7 @@ LootSetData.Zeus =
 						FunctionName = "RequireRunsSinceTextLines",
 						FunctionArgs = { TextLines = { "ChronosNightmare01" }, Min = 2 },
 					},
-					{
-						PathTrue = { "GameState", "ReachedTrueEnding" },
-					},
+					NamedRequirementsFalse = { "ReachedEpilogue" },
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Zeus_0078",
@@ -1055,7 +1053,7 @@ LootSetData.Zeus =
 						SumPrevRuns = 2,
 						Path = { "TextLinesRecord" },
 						TableValuesToCount = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" },
-						Comparison = "<",
+						Comparison = "<=",
 						Value = 0,
 					},
 					{
@@ -1719,7 +1717,11 @@ LootSetData.Zeus =
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasNone = { "ZeusPalaceFirstMeeting01", "ZeusAboutSurfaceNoCure01" },
+						HasAll = { "ZeusAboutSurfaceNoCure01" },
+					},					
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
 					},
 					{
 						SumPrevRuns = 5,
@@ -2067,7 +2069,7 @@ LootSetData.Zeus =
 						SumPrevRuns = 5,
 						Path = { "TextLinesRecord", "TrueEnding01" },
 						CountPathTrue = true,
-						Comparison = "<",
+						Comparison = "<=",
 						Value = 0,
 					},
 					{
@@ -3578,9 +3580,6 @@ LootSetData.Zeus =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "ZeusLootBought03" },
-					},
-					{
 						FunctionName = "RequiredAlive",
 						FunctionArgs = { Units = { "NPC_Charon_01" }, },
 					},
@@ -3601,9 +3600,6 @@ LootSetData.Zeus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "GameState", "TextLinesRecord", "ZeusLootBought03" },
-					},
 					{
 						FunctionName = "RequiredAlive",
 						FunctionArgs = { Units = { "NPC_Charon_01" }, },
@@ -3644,9 +3640,6 @@ LootSetData.Zeus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						PathTrue = { "GameState", "TextLinesRecord", "ZeusLootBought03" },
-					},
 					{
 						FunctionName = "RequiredAlive",
 						FunctionArgs = { Units = { "NPC_Charon_01" }, },
@@ -3803,8 +3796,8 @@ LootSetData.Zeus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "HeraUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "HeraUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Zeus_0258",
@@ -3819,8 +3812,8 @@ LootSetData.Zeus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "HeraUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "HeraUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Zeus_0259",
@@ -3835,8 +3828,8 @@ LootSetData.Zeus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentLootData", "Name" },
-						IsAny = { "PoseidonUpgrade" },
+						Path = { "CurrentRun", "CurrentRoom", "UseRecord" },
+						HasAny = { "PoseidonUpgrade" },
 					},
 				},
 				{ Cue = "/VO/Zeus_0260",
@@ -4188,22 +4181,6 @@ LootSetData.Zeus =
 			PlayFromTarget = true,
 
 			{ Cue = "/VO/Melinoe_1739", Text = "You are most generous, Lord Uncle." },
-		},
-
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
 		},
 
 		FullSuperActivatedVoiceLines =

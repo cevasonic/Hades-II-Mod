@@ -2,7 +2,7 @@ UnitSetData.Lamia =
 {
 	Lamia =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 480,
 		HealthBarOffsetY = -230,
@@ -184,10 +184,15 @@ UnitSetData.Lamia =
 
 	Lamia_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "Lamia_Miniboss" },
+		InheritFrom = { "SuperElite", "BaseIEnemy", "Lamia_Miniboss" },
 		MaxHealth = 1000,
 		HealthBuffer = 5000,
 		BlockRaiseDead = false,
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 	}
 
 }

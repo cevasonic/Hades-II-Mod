@@ -7,6 +7,7 @@
 		RequiredKill = false,
 		AggroMinimumDistance = 500,
 		StartAggroed = true,
+		IgnoreCurseDamage = true,
 		TriggersOnHitEffects = false,
 		TriggersOnDeathWithKillEffects = true,
 		CanBeFrozen = false,
@@ -92,84 +93,204 @@
 
 		ToggleTrap = true,
 	},
-
-	BloodMine =
+	DestructibleTree =
 	{
 		InheritFrom = { "BaseTrap" },
 
-		ActivateFuseIfNoSpawner = true,
-		FuseWarningAnimation = "BlastWarningDecal",
+		CannotDieFromDamage = true,
+		MaxHealth = 0,
 
-		DefaultAIData =
+		SkipDamagePresentation = false,
+		SkipDamagePresentationFromNonPlayerUnits = true,
+		SkipDamageText = true,
+		SkipUnitHitFlash = true,
+		HideHealthBar = true,
+		HideLevelDisplay = true,
+		IgnoreAutoLock = true,
+		IgnoreInvisibility = true, -- Skip HadesInvisibility emote presentation
+		OnHitEvents =
 		{
-			DeepInheritance = true,
+			{
+				FunctionName = "FirstOnHitSound",
+				Args =
+				{
+					Sound = "/Leftovers/SFX/CaravanDamage",
+				},
+			},
 		},
-		TriggerGroups = { "GroundEnemies", "FlyingEnemies", "HeroTeam" },
+		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
 
-		OnDamagedFunctionNames = { "ActivateFuse" },
-		OnDeathFireWeapons = { "MineBlast" },
+		OnDamagedFunctionName = "DestructibleTreeHit",
 
-		DissipateAnimation = "BloodMineDeactivated",
-		FuseAnimation = "BloodMineActivated",
-		FuseWarningProjectileName = "MineBlast",
-		FlashOnFuse = true,
-		FuseDuration = 1.0,
-		TriggerDistance = 225,
-		WakeUpDelay = 1.5,
-		ExpirationDuration = 15.0,
+		SkipModifiers = false,
+		SetupEvents =
+		{
+			{
+				FunctionName = "RandomizeObject",
+				Args =
+				{
+					RandomizeSets =
+					{
+						{
+							Animation = { "DestructibleTreeFullA" },
+							OverwriteData =
+							{
+								SplinterAnimation = "DestructibleTreeDamagedA",
+								DestroyedAnimation = "DestructibleTreeStumpA",
+							},
+							PropertyChanges =
+							{
+								{
+									ThingProperty = "Graphic",
+									ChangeValue = "DestructibleTreeFullA",
+								},
+							},
+						},
+						{
+							Animation = { "DestructibleTreeFullB" },
+							OverwriteData =
+							{
+								SplinterAnimation = "DestructibleTreeDamagedB",
+								DestroyedAnimation = "DestructibleTreeStumpB",
+							},
+							PropertyChanges =
+							{
+								{
+									ThingProperty = "Graphic",
+									ChangeValue = "DestructibleTreeFullB",
+								},
+							},
+						},
+					},
+				},
+			},
+		},
 		
-		DestroyDelay = 0.5,
-		AIOptions =
-		{
-			"MineAI",
-		},
-		AttackDistance = 100,
+		SplinterAnimation = "DestructibleTreeDamagedA",
+		DestroyedAnimation = "DestructibleTreeStumpA",
 
-		CleanupAnimation = "Blank",
+		DefaultAIData = {
+			DeepInheritance = true,
+
+			HitsToSplinter = 2,
+		},
+
+		WeaponOptions =
+		{
+			"DestructibleTreeSplinter",
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 7,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 10.5,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 15,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 15,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
-				Name = "FriendImmunity",
-				IsMultiplier = true,
-				FriendMultiplier = 0,
+				NonPlayerMultiplier = 5,
 			},
 			{
-				Name = "CharmedMultiplier",
-				IsMultiplier = true,
-				NonPlayerMultiplier = 10,
-			},
+				PlayerMultiplier = 0.0,
+			}
 		},
-	},
 
-	BloodMinePreFused =
-	{
-		InheritFrom = { "BloodMine" },
-
-		TriggerDistance = 999999,
-
-		OnSpawnVoiceLines =
+		KillingEnemyVoiceLines =
 		{
-			Queue = "Interrupt",
 			BreakIfPlayed = true,
 			RandomRemaining = true,
-			SuccessiveChanceToPlay = 0.75,
-			PreLineWait = 0.15,
+			PlayOnceFromTableThisRun = true,
+			PreLineWait = 0.45,
 			UsePlayerSource = true,
+			SuccessiveChanceToPlay = 0.1,
+			SuccessiveChanceToPlayAll = 0.5,
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "Health" },
+					Comparison = ">=",
+					Value = 15,
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "Name" },
+					IsNone = { "F_Boss01", "F_Boss02" },
+				},
+			},
 			Cooldowns =
 			{
-				{ Name = "MelFoundBombSpeech", Time = 30 },
 				{ Name = "MelinoeAnyQuipSpeech" },
+				{ Name = "MelinoeTrapKillSpeech", Time = 80 },
 			},
+			TriggerCooldowns = { "MelinoeCombatQuipPlayed" },
 
-			{ Cue = "/VO/Melinoe_0714", Text = "What the?" },
-			{ Cue = "/VO/Melinoe_0715", Text = "Wha—?", PlayFirst = true, },
-			{ Cue = "/VO/Melinoe_1924", Text = "How'd that get in there." },
-			{ Cue = "/VO/Melinoe_1925", Text = "Uh-oh!" },
-			{ Cue = "/VO/Melinoe_1926", Text = "{#Emph}Tsk..." },
-			{ Cue = "/VO/Melinoe_1927", Text = "Damn." },
-			{ Cue = "/VO/Melinoe_1928", Text = "Whoa!" },
-			{ Cue = "/VO/Melinoe_1929", Text = "{#Emph}Urgh..." },
-		},
+			{ Cue = "/VO/Melinoe_1966", Text = "Shadows take you...!" },
+			{ Cue = "/VO/Melinoe_1967", Text = "The woods answer my call..." },
+			{ Cue = "/VO/Melinoe_1968", Text = "All back to dust...", PlayFirst = true },
+			{ Cue = "/VO/Melinoe_1969", Text = "Return to dust." },
+			{ Cue = "/VO/MelinoeField_0576", Text = "Splinter apart!" },
+			{ Cue = "/VO/MelinoeField_0577", Text = "Splinter and fall." },
+			{ Cue = "/VO/MelinoeField_0578", Text = "Splinter!" },
+			{ Cue = "/VO/MelinoeField_0579", Text = "Woods take you!" },
+		}
 	},
 
 	-- Oceanus Traps
@@ -177,9 +298,18 @@
 	{
 		InheritFrom = { "BaseTrap" },
 
-		SpawnObstaclesOnSpawn =
+		SetupEvents =
 		{
-			{ Name = "_Impassable_FloodTrap", SyncOwnerAngle = true, GroupName = "Impassable" },
+			{
+				FunctionName = "SpawnObstaclesOnUnit",
+				Args =
+				{
+					SpawnData =
+					{
+						{ Name = "_Impassable_FloodTrap", SyncOwnerAngle = true, GroupName = "Impassable" },
+					},
+				},
+			},
 		},
 
 		DefaultAIData =
@@ -201,6 +331,7 @@
 			"FloodTrapWeapon",
 		},
 		ToggleTrap = true,
+		DisableImmediately = true,
 
 		OutgoingDamageModifiers =
 		{
@@ -209,7 +340,6 @@
 			},
 		},
 	},
-
 	SteamTrap =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -234,6 +364,70 @@
 		},
 		ToggleTrap = true,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.84,
+						},
+						{
+							NonPlayerMultiplier = 42,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.4,
+						},
+						{
+							NonPlayerMultiplier = 70,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
@@ -246,7 +440,6 @@
 			[1] = { GlobalVoiceLines = "SteamTrapKillVoiceLines" },
 		},
 	},
-
 	SteamWallTrap =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -282,6 +475,70 @@
 
 		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.84,
+						},
+						{
+							NonPlayerMultiplier = 42,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.4,
+						},
+						{
+							NonPlayerMultiplier = 70,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
@@ -294,7 +551,6 @@
 			[1] = { GlobalVoiceLines = "SteamTrapKillVoiceLines" },
 		},		
 	},
-
 	SteamCubeFused =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -313,7 +569,7 @@
 
 		SpawnObstaclesOnDeath =
 		{
-			{ Name = "SteamCubeFusedDestroyed", SyncOwnerAngle = true, RestoreOnLoad = true, },
+			{ Name = "SteamCubeFusedDestroyed", SyncOwnerAngle = true, RestoreOnLoad = true, SyncFlip = true },
 		},
 		OnDeathFireWeapons = { "SteamCubeExplosion" },
 
@@ -336,6 +592,70 @@
 		SilentImpact = true,
 		OnHitShake = { Distance = 5, Speed = 300, Duration = 0.25 },
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.84,
+						},
+						{
+							NonPlayerMultiplier = 42,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.4,
+						},
+						{
+							NonPlayerMultiplier = 70,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
@@ -349,97 +669,6 @@
 		},		
 	},
 
-
-	GunBombUnit =
-	{
-		InheritFrom = { "BaseTrap" },
-		GenusName = "Eris",
-
-		MaxHealth = 9999,
-		FlashOnFuse = true,
-		FuseDuration = 0.2,
-		ImpactReaction =
-		{
-			--[[RequireAnyProjectileNames =
-			{
-				"ErisLaser", "ErisLaserDash",
-			},]]
-			RequireNotProjectileNames =
-			{
-				"ErisWindBuffet", "GunGrenadeTossLucifer", "OilPuddleFire", "OilPuddleFire02", "OilPuddleFire03", "OilPuddleFire04"
-			},
-			RequireAnyAttackerName =
-			{
-				"_PlayerUnit", "Eris"
-			},
-			FunctionName = "ActivateLuciferFuse"
-		},
-		FuseActivationSound = "/SFX/Player Sounds/ZagreusLuciferPreAttack",
-
-		OnHitShake = { Distance = 3, Speed = 600, Duration = 0.15 },
-
-		OnDeathShakeScreenSpeed = 150,
-		OnDeathShakeScreenDistance = 4,
-		OnDeathShakeScreenDuration = 0.25,
-		OnDeathShakeScreenFalloff = 1500,
-
-		AlwaysTraitor = true,
-		OnDeathFireWeapons = { "GunBombWeapon" },
-
-		DumbFireWeapons = { "GunBombImmolation" },
-
-		IncomingDamageModifiers =
-		{
-			{
-				Name = "ImmolationImmunity",
-				ValidWeapons = { "GunBombImmolation" },
-				ValidWeaponMultiplier = 0,
-				Multiplicative = true,
-			},
-		},
-		KeepNonPlayerMultipliers = true,
-		OutgoingDamageModifiers =
-		{
-			{
-				Name = "IgnoreEris",
-				NonPlayerMultiplier = 0,
-				Multiplicative = true,
-			},
-		},
-
-		OnKillVoiceLines =
-		{
-			{
-				RandomRemaining = true,
-				BreakIfPlayed = true,
-				PreLineWait = 0.35,
-				SuccessiveChanceToPlay = 0.25,
-				ObjectType = "Eris",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "BossHealthBarRecord", "Eris" },
-						Comparison = ">=",
-						Value = 0.65,
-					},
-				},
-				Cooldowns =
-				{
-					{ Name = "ErisSpokeRecently", Time = 12 },
-					{ Name = "ErisBombedRecently", Time = 30 },
-				},
-
-				{ Cue = "/VO/ErisField_0418", Text = "See that?" },
-				{ Cue = "/VO/ErisField_0419", Text = "Off they go!" },
-				{ Cue = "/VO/ErisField_0420", Text = "Whoopsie!" },
-				{ Cue = "/VO/ErisField_0421", Text = "Whoops!" },
-				{ Cue = "/VO/ErisField_0422", Text = "Pop!" },
-				{ Cue = "/VO/ErisField_0423", Text = "{#Emph}Pop!" },
-			},
-		},
-
-	},
-
 	-- Fields Traps
 	MiasmaGeyser =
 	{
@@ -447,9 +676,18 @@
 
 		ToggleTrap = false,
 
-		SpawnObstaclesOnSpawn =
+		SetupEvents =
 		{
-			{ Name = "_Impassable_Miasma", SyncOwnerAngle = true, GroupName = "Impassable" },
+			{
+				FunctionName = "SpawnObstaclesOnUnit",
+				Args =
+				{
+					SpawnData =
+					{
+						{ Name = "_Impassable_Miasma", SyncOwnerAngle = true, GroupName = "Impassable" },
+					},
+				},
+			},
 		},
 
 		DefaultAIData = {
@@ -505,7 +743,6 @@
 			}
 		},
 	},
-
 	BrambleTrap =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -542,10 +779,159 @@
 			},
 		},
 	},
-
 	BrambleTrapBush =
 	{
 		InheritFrom = { "BrambleTrap" },
+	},
+	ThornTree =
+	{
+		InheritFrom = { "BaseTrap" },
+
+		CannotDieFromDamage = true,
+		MaxHealth = 0,
+
+		SkipDamagePresentation = false,
+		SkipDamageText = true,
+		SkipUnitHitFlash = true,
+		HideHealthBar = true,
+		HideLevelDisplay = true,
+		IgnoreAutoLock = true,
+		IgnoreInvisibility = true, -- Skip HadesInvisibility emote presentation
+		
+		OnHitEvents =
+		{
+			{
+				FunctionName = "FirstOnHitSound",
+				Args =
+				{
+					Sound = "/SFX/Enemy Sounds/Heartless/HeartProjectileLand",
+				},
+			},
+		},
+		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
+
+		OnDamagedFunctionName = "ThornTreeHit",
+		OnHitAnimation = "ThornTreeHitAnim",
+		--SplinterAnimation = "ThornTreeDamaged",
+		DestroyedAnimation = "ThornTreeDestroyed",
+
+		SkipModifiers = false,
+
+		DefaultAIData = {
+			DeepInheritance = true,
+
+			HitsToSplinter = 30,
+		},
+
+		WeaponOptions =
+		{
+			"ThornTreeWeapon",
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.7,
+						},
+						{
+							NonPlayerMultiplier = 28,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.12,
+						},
+						{
+							NonPlayerMultiplier = 45,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.5,
+						},
+						{
+							NonPlayerMultiplier = 60,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.5,
+						},
+						{
+							NonPlayerMultiplier = 60,
+						},
+					},
+				},
+			},
+		},
+
+		OutgoingDamageModifiers =
+		{
+			{
+				NonPlayerMultiplier = 40,
+			},
+			{
+				PlayerMultiplier = 1.0,
+			}
+		},
+
+		KillingEnemyVoiceLines =
+		{
+			BreakIfPlayed = true,
+			RandomRemaining = true,
+			PlayOnceFromTableThisRun = true,
+			PreLineWait = 0.45,
+			UsePlayerSource = true,
+			SuccessiveChanceToPlay = 0.1,
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "Health" },
+					Comparison = ">=",
+					Value = 15,
+				},
+			},
+			Cooldowns =
+			{
+				{ Name = "MelinoeAnyQuipSpeech" },
+				{ Name = "MelinoeTrapKillSpeech", Time = 80 },
+			},
+			TriggerCooldowns = { "MelinoeCombatQuipPlayed" },
+
+			{ Cue = "/VO/MelinoeField_0882", Text = "Thorns hurt.", PlayFirst = true },
+			{ Cue = "/VO/MelinoeField_0883", Text = "The thorns answer to me." },
+			{ Cue = "/VO/MelinoeField_0884", Text = "Stinging thorns..." },
+			{ Cue = "/VO/MelinoeField_0885", Text = "Straight to the heart..." },
+			{ Cue = "/VO/MelinoeField_1140", Text = "Eat thorns." },
+			{ Cue = "/VO/MelinoeField_1143", Text = "Thorns always hurt." },
+		}
 	},
 
 	-- Clockwork Traps
@@ -589,6 +975,71 @@
 		IdleAnimation = "SpikeTrapIdle",
 		DisableImmediately = true,
 
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.7,
+						},
+						{
+							NonPlayerMultiplier = 21,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.12,
+						},
+						{
+							NonPlayerMultiplier = 34,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.5,
+						},
+						{
+							NonPlayerMultiplier = 45,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.5,
+						},
+						{
+							NonPlayerMultiplier = 45,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
@@ -596,7 +1047,6 @@
 			},
 		},
 	},
-
 	BeamTrap =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -650,6 +1100,70 @@
 		ToggleTrap = true,
 		DisableImmediately = true,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.7,
+						},
+						{
+							NonPlayerMultiplier = 1.4,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.12,
+						},
+						{
+							NonPlayerMultiplier = 2.25,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.5,
+						},
+						{
+							NonPlayerMultiplier = 3,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.5,
+						},
+						{
+							NonPlayerMultiplier = 3,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
@@ -677,253 +1191,6 @@
 	},
 
 	-- Ephyra Traps
-
-
-    TyphonEgg =
-    {
-		InheritFrom = { "BaseTrap" },
-
-		MaxHealth = 2000,
-		SkipDamageText = true,
-		HideHealthBar = true,
-		HideLevelDisplay = true,
-		DestroyDelay = 2,
-		DeathAnimation = "Blank",
-		FlashOnFuse = true,
-		FuseDuration = 0.0,
-		IgnoreElapsedTimeMultiplier = true,
-		--FuseAnimation = "FireBarrelLit",
-
-		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
-
-		OnDeathShakeScreenSpeed = 350,
-		OnDeathShakeScreenDistance = 8,
-		OnDeathShakeScreenDuration = 0.65,
-		OnDeathShakeScreenFalloff = 1500,
-
-		OnDamagedFunctionName = "ActivateFuse",
-
-		OnDeathFireWeapons = { "TyphonEggDeathWeapon" },
-
-		TargetGroups = { "GroundEnemies", "FlyingEnemies", "HeroTeam" },
-
-		OutgoingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 30,
-			}
-		},
-
-		IncomingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 0,
-			},
-		},
-    },
-    
-    TyphonEggLarge =
-    {
-        InheritFrom = { "TyphonEgg" },
-
-		MaxHealth = 100,
-        OnDamagedFunctionName = "nil",
-		OnDeathFireWeapons = {},
-		FlashOnFuseColor = Color.White,
-		FuseDuration = 2.0,
-
-		DeathFx = "EnemyDeathFxTyphon",
-		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
-		OnDeathShakeScreenSpeed = 0,
-
-		IncomingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 0,
-			},
-		},
-
-		OutgoingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 0,
-			}
-		},
-    },
-
-	-- Thessaly Traps
-	FireBarrel =
-	{
-		InheritFrom = { "BaseTrap" },
-
-		MaxHealth = 9999,
-		SkipDamageText = true,
-		HideHealthBar = true,
-		HideLevelDisplay = true,
-		DestroyDelay = 2,
-		DeathAnimation = "Blank",
-		FlashOnFuse = true,
-		FuseDuration = 1.5,
-		FuseAnimation = "FireBarrelLit",
-		FuseWarningAnimation = "BlastWarningDecal",
-		FuseWarningProjectileName = "FireBarrelExplosion",
-
-		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
-
-		OnDeathShakeScreenSpeed = 350,
-		OnDeathShakeScreenDistance = 8,
-		OnDeathShakeScreenDuration = 0.65,
-		OnDeathShakeScreenFalloff = 1500,
-
-		OnDamagedFunctionName = "ActivateFuse",
-
-		OnDeathFireWeapons = { "FireBarrelExplosion" },
-
-		TargetGroups = { "GroundEnemies", "FlyingEnemies", "HeroTeam" },
-
-		OutgoingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 50,
-			},
-		},
-	},
-	FireBarrelShips =
-	{
-		InheritFrom = { "FireBarrel" },
-
-		FuseAnimation = "FireBarrelShipsLit",
-
-		OnDeathFireWeapons = { "FireBarrelExplosionShips" },
-
-		OnKillVoiceLines =
-		{
-			{
-				RandomRemaining = true,
-				BreakIfPlayed = true,
-				PreLineWait = 0.5,
-				SuccessiveChanceToPlay = 0.5,
-				SuccessiveChanceToPlayAll = 0.4,
-				ObjectType = "Eris",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "BossHealthBarRecord", "Eris" },
-						Comparison = ">=",
-						Value = 0.25,
-					},
-					ChanceToPlay = 0.25,
-				},
-				Cooldowns =
-				{
-					{ Name = "ErisSpokeRecently", Time = 12 },
-				},
-
-				{ Cue = "/VO/ErisField_0322", Text = "{#Emph}Ooh {#Prev}that's {#Emph}hot!" },
-				{ Cue = "/VO/ErisField_0323", Text = "{#Emph}Yeah{#Prev}, burn it {#Emph}all {#Prev}down!" },
-				{ Cue = "/VO/ErisField_0324", Text = "Things are heating {#Emph}up!" },
-				{ Cue = "/VO/ErisField_0325", Text = "{#Emph}Spicy!" },
-				{ Cue = "/VO/ErisField_0487", Text = "{#Emph}Whew, hot!" },
-				{ Cue = "/VO/ErisField_0488", Text = "Some mood lighting!" },
-				{ Cue = "/VO/ErisField_0489", Text = "We're on {#Emph}fire!" },
-				{ Cue = "/VO/ErisField_0490", Text = "{#Emph}Everything's on fire!" },
-				{ Cue = "/VO/ErisField_0491", Text = "Getting warmer!" },
-				{ Cue = "/VO/ErisField_0492", Text = "Oh, it {#Emph}burns!" },
-			},
-		},
-	},
-
-	OilPuddle =
-	{
-		InheritFrom = { "BaseTrap" },
-		SilentImpact = true,
-		TriggersOnHitEffects = false,
-
-		DefaultAIData = {
-			DeepInheritance = true,
-		},
-
-		OnHitFunctionName = "OilPuddleOnHit",
-
-		WeaponOptions =
-		{
-			"OilPuddleIgnite", "OilPuddleSlick",
-		},
-
-		AIOptions =
-		{
-			"DoAttackerAILoop",
-		},
-
-		OutgoingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 2,
-			},
-		},
-	},
-	OilPuddle02 =
-	{
-		InheritFrom = { "OilPuddle" },
-
-		WeaponOptions =
-		{
-			"OilPuddleIgnite02", "OilPuddleSlick02",
-		},
-	},
-	OilPuddle03 =
-	{
-		InheritFrom = { "OilPuddle" },
-
-		WeaponOptions =
-		{
-			"OilPuddleIgnite03", "OilPuddleSlick03",
-		},
-	},
-	OilPuddle04 =
-	{
-		InheritFrom = { "OilPuddle" },
-
-		WeaponOptions =
-		{
-			"OilPuddleIgnite04", "OilPuddleSlick04",
-		},
-	},
-
-	ChronosCover =
-	{
-		InheritFrom = { "BaseTrap" },
-		MaxHealth = 500,
-		HealthBarType = "Medium",
-		HealthBarOffsetY = -375,
-
-		SkipDamagePresentation = false,
-		SkipDamageText = false,
-		SkipUnitHitFlash = false,
-		HideHealthBar = false,
-		HideLevelDisplay = false,
-		IgnoreAutoLock = false,
-
-		SpawnFx = "HecateTeleportFxFront",
-
-		DamagedFxStyles =
-		{
-			Default = "HitSparkEnemyDamagedMetal",
-			Rapid = "HitSparkEnemyDamagedMetal",
-		},
-
-		DefaultAIData =
-		{
-		},
-
-		Material = "MetalObstacle",
-
-		AIOptions =
-		{
-			"EmptyAI",
-		},
-	},
-
 	BattleStandard =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -1047,7 +1314,6 @@
 			}
 		},
 	},
-
 	BattleStandardChronos =
 	{
 		InheritFrom = { "BattleStandard" },
@@ -1064,7 +1330,6 @@
 			}
 		}
 	},
-
 	SoulPylon =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -1081,6 +1346,8 @@
 		ImpactSound = "/SFX/EphyraExitGateImpact",
 
 		OnDeathThreadedFunctionName = "HandlePylonObjective",
+		DestroyDelay = 5.0,
+		DeathAnimation = "Blank",
 
 		SkipDamagePresentation = false,
 		SkipDamageText = false,
@@ -1098,9 +1365,18 @@
 			{ Name = "SoulPylonDestroyed", SyncOwnerAngle = true, RestoreOnLoad = true, RestoreOnLoadName = "SoulPylonDestroyedFinished", },
 		},
 
-		SpawnObstaclesOnSpawn =
+		SetupEvents =
 		{
-			{ Name = "SoulPylonBase", SyncOwnerAngle = true, GroupName = "FX_Terrain_Top" },
+			{
+				FunctionName = "SpawnObstaclesOnUnit",
+				Args =
+				{
+					SpawnData =
+					{
+						{ Name = "SoulPylonBase", SyncOwnerAngle = true, GroupName = "FX_Terrain_Top" },
+					},
+				},
+			},
 		},
 
 		DefaultAIData =
@@ -1108,10 +1384,75 @@
 		},
 		DamageType = "Ally",
 
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 0.8,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 1.2,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 2,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0,
+						},
+						{
+							NonPlayerMultiplier = 2,
+						},
+					},
+				},
+			},
+		},
+
 		OutgoingDamageModifiers =
 		{
 			{
-				NonPlayerMultiplier = 20,
+				NonPlayerMultiplier = 1,
 			},
 			{
 				PlayerMultiplier = 0.0,
@@ -1135,11 +1476,10 @@
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeSurfacePenaltyCure" },
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsNone = { "N_Story01", },
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeSurfacePenaltyCure" },
 					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
@@ -1153,10 +1493,42 @@
 					{ Name = "StruckPylonRecently", Time = 360 },
 				},
 
-				{ Cue = "/VO/MelinoeField_0404", Text = "Hold still in there, Shades.", PlayFirst = true, },
-				{ Cue = "/VO/MelinoeField_0405", Text = "You Shades are getting out of there...!" },
-				{ Cue = "/VO/MelinoeField_0406", Text = "You'll be out in no time, Shades." },
-				{ Cue = "/VO/MelinoeField_0407", Text = "How many of these do they have?" },
+				{ Cue = "/VO/MelinoeField_0404", Text = "Hold still in there, Shades.", PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "CurrentRoom", "Name" },
+							IsNone = { "N_Story01", },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_0405", Text = "You Shades are getting out of there...!",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "CurrentRoom", "Name" },
+							IsNone = { "N_Story01", },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_0406", Text = "You'll be out in no time, Shades.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "CurrentRoom", "Name" },
+							IsNone = { "N_Story01", },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_0407", Text = "How many of these do they have?",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "CurrentRoom", "Name" },
+							IsNone = { "N_Story01", },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_4232", Text = "Excuse me a moment!",
 					BreakIfPlayed = true,
 					GameStateRequirements =
@@ -1198,16 +1570,6 @@
 						},
 					},
 				},
-				{ Cue = "/VO/MelinoeField_0409", Text = "Pardon the racket, Lord Charon...!",
-					PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							Path = { "CurrentRun", "CurrentRoom", "Name" },
-							IsAny = { "N_Shop01", },
-						},
-					},
-				},
 			},
 			{
 				RandomRemaining = true,
@@ -1240,6 +1602,9 @@
 				SuccessiveChanceToPlay = 0.33,
 				GameStateRequirements = 
 				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "Name" },
 						IsNone = { "N_Story01", "N_Shop01" },
@@ -1492,163 +1857,7 @@
 		},
 	},
 
-	-- Misc / Unsorted Traps
-	ShovelPointTrap =
-	{
-		InheritFrom = { "PassiveRoomWeapon" },
-
-		DamageTextStartColor = Color.TrapDamageLight,
-		DamageTextColor = Color.TrapDamage,
-
-		WakeUpDelay = 0.0,
-
-		DefaultAIData =
-		{
-			DeepInheritance = true,
-		},
-
-		AIOptions =
-		{
-			"EmptyAI",
-		},
-	},
-
-	DestructibleTree =
-	{
-		InheritFrom = { "BaseTrap" },
-
-		CannotDieFromDamage = true,
-		MaxHealth = 0,
-
-		SkipDamagePresentation = false,
-		SkipDamagePresentationFromNonPlayerUnits = true,
-		SkipDamageText = true,
-		SkipUnitHitFlash = true,
-		HideHealthBar = true,
-		HideLevelDisplay = true,
-		IgnoreAutoLock = true,
-		IgnoreInvisibility = true, -- Skip HadesInvisibility emote presentation
-		OnHitEvents =
-		{
-			{
-				FunctionName = "FirstOnHitSound",
-				Args =
-				{
-					Sound = "/Leftovers/SFX/CaravanDamage",
-				},
-			},
-		},
-		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
-
-		OnDamagedFunctionName = "DestructibleTreeHit",
-
-		SkipModifiers = false,
-		SetupEvents =
-		{
-			{
-				FunctionName = "RandomizeObject",
-				Args =
-				{
-					RandomizeSets =
-					{
-						{
-							Animation = { "DestructibleTreeFullA" },
-							OverwriteData =
-							{
-								SplinterAnimation = "DestructibleTreeDamagedA",
-								DestroyedAnimation = "DestructibleTreeStumpA",
-							},
-							PropertyChanges =
-							{
-								{
-									ThingProperty = "Graphic",
-									ChangeValue = "DestructibleTreeFullA",
-								},
-							},
-						},
-						{
-							Animation = { "DestructibleTreeFullB" },
-							OverwriteData =
-							{
-								SplinterAnimation = "DestructibleTreeDamagedB",
-								DestroyedAnimation = "DestructibleTreeStumpB",
-							},
-							PropertyChanges =
-							{
-								{
-									ThingProperty = "Graphic",
-									ChangeValue = "DestructibleTreeFullB",
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		
-		SplinterAnimation = "DestructibleTreeDamagedA",
-		DestroyedAnimation = "DestructibleTreeStumpA",
-
-		DefaultAIData = {
-			DeepInheritance = true,
-
-			HitsToSplinter = 2,
-		},
-
-		WeaponOptions =
-		{
-			"DestructibleTreeSplinter",
-		},
-
-		OutgoingDamageModifiers =
-		{
-			{
-				NonPlayerMultiplier = 5,
-			},
-			{
-				PlayerMultiplier = 0.0,
-			}
-		},
-
-		KillingEnemyVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PlayOnceFromTableThisRun = true,
-			PreLineWait = 0.45,
-			UsePlayerSource = true,
-			SuccessiveChanceToPlay = 0.1,
-			SuccessiveChanceToPlayAll = 0.5,
-			GameStateRequirements =
-			{
-				{
-					Path = { "CurrentRun", "Hero", "Health" },
-					Comparison = ">=",
-					Value = 15,
-				},
-				{
-					Path = { "CurrentRun", "CurrentRoom", "Name" },
-					IsNone = { "F_Boss01", "F_Boss02" },
-				},
-			},
-			Cooldowns =
-			{
-				{ Name = "MelinoeAnyQuipSpeech" },
-				{ Name = "MelinoeTrapKillSpeech", Time = 80 },
-			},
-			TriggerCooldowns = { "MelinoeCombatQuipPlayed" },
-
-			{ Cue = "/VO/Melinoe_1966", Text = "Shadows take you...!" },
-			{ Cue = "/VO/Melinoe_1967", Text = "The woods answer my call..." },
-			{ Cue = "/VO/Melinoe_1968", Text = "All back to dust...", PlayFirst = true },
-			{ Cue = "/VO/Melinoe_1969", Text = "Return to dust." },
-			{ Cue = "/VO/MelinoeField_0576", Text = "Splinter apart!" },
-			{ Cue = "/VO/MelinoeField_0577", Text = "Splinter and fall." },
-			{ Cue = "/VO/MelinoeField_0578", Text = "Splinter!" },
-			{ Cue = "/VO/MelinoeField_0579", Text = "Woods take you!" },
-		}
-	},
-
+	-- Ships Traps
 	DestructibleMast =
 	{
 		InheritFrom = { "BaseTrap" },
@@ -1741,100 +1950,629 @@
 			{ Cue = "/VO/MelinoeField_1876", Text = "Back off!" },
 			{ Cue = "/VO/MelinoeField_1877", Text = "Into the sea with you!", PlayFirst = true },
 		}
-
 	},
-
-	ThornTree =
+	FireBarrel =
 	{
 		InheritFrom = { "BaseTrap" },
 
-		CannotDieFromDamage = true,
-		MaxHealth = 0,
-
-		SkipDamagePresentation = false,
+		MaxHealth = 9999,
 		SkipDamageText = true,
-		SkipUnitHitFlash = true,
 		HideHealthBar = true,
 		HideLevelDisplay = true,
-		IgnoreAutoLock = true,
-		IgnoreInvisibility = true, -- Skip HadesInvisibility emote presentation
-		
-		OnHitEvents =
-		{
-			{
-				FunctionName = "FirstOnHitSound",
-				Args =
-				{
-					Sound = "/SFX/Enemy Sounds/Heartless/HeartProjectileLand",
-				},
-			},
-		},
+		DestroyDelay = 2,
+		DeathAnimation = "Blank",
+		FlashOnFuse = true,
+		FuseDuration = 1.5,
+		FuseAnimation = "FireBarrelLit",
+		FuseWarningAnimation = "BlastWarningDecal",
+		FuseWarningProjectileName = "FireBarrelExplosion",
+
 		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
 
-		OnDamagedFunctionName = "ThornTreeHit",
-		OnHitAnimation = "ThornTreeHitAnim",
-		--SplinterAnimation = "ThornTreeDamaged",
-		DestroyedAnimation = "ThornTreeDestroyed",
+		OnDeathShakeScreenSpeed = 350,
+		OnDeathShakeScreenDistance = 8,
+		OnDeathShakeScreenDuration = 0.65,
+		OnDeathShakeScreenFalloff = 1500,
 
-		SkipModifiers = false,
+		OnDamagedFunctionName = "ActivateFuse",
 
-		DefaultAIData = {
-			DeepInheritance = true,
+		OnDeathFireWeapons = { "FireBarrelExplosion" },
 
-			HitsToSplinter = 30,
-		},
+		TargetGroups = { "GroundEnemies", "FlyingEnemies", "HeroTeam" },
 
-		WeaponOptions =
+		DreamBiomeData =
 		{
-			"ThornTreeWeapon",
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.8,
+						},
+						{
+							NonPlayerMultiplier = 40,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.2,
+						},
+						{
+							NonPlayerMultiplier = 60,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 2,
+						},
+						{
+							NonPlayerMultiplier = 100,
+						},
+					},
+				},
+			},
 		},
 
 		OutgoingDamageModifiers =
 		{
 			{
-				NonPlayerMultiplier = 40,
+				NonPlayerMultiplier = 50,
 			},
+		},
+	},
+	FireBarrelShips =
+	{
+		InheritFrom = { "FireBarrel" },
+
+		FuseAnimation = "FireBarrelShipsLit",
+
+		OnDeathFireWeapons = { "FireBarrelExplosionShips" },
+
+		DreamBiomeData =
+		{
+			[1] =
 			{
-				PlayerMultiplier = 1.0,
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.48,
+						},
+						{
+							NonPlayerMultiplier = 24,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.8,
+						},
+						{
+							NonPlayerMultiplier = 40,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.3,
+						},
+						{
+							NonPlayerMultiplier = 65,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1.3,
+						},
+						{
+							NonPlayerMultiplier = 65,
+						},
+					},
+				},
+			},
+		},
+
+		OnKillVoiceLines =
+		{
+			{
+				RandomRemaining = true,
+				BreakIfPlayed = true,
+				PreLineWait = 0.5,
+				SuccessiveChanceToPlay = 0.5,
+				SuccessiveChanceToPlayAll = 0.4,
+				ObjectType = "Eris",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "BossHealthBarRecord", "Eris" },
+						Comparison = ">=",
+						Value = 0.25,
+					},
+					ChanceToPlay = 0.25,
+				},
+				Cooldowns =
+				{
+					{ Name = "ErisSpokeRecently", Time = 12 },
+				},
+
+				{ Cue = "/VO/ErisField_0322", Text = "{#Emph}Ooh {#Prev}that's {#Emph}hot!" },
+				{ Cue = "/VO/ErisField_0323", Text = "{#Emph}Yeah{#Prev}, burn it {#Emph}all {#Prev}down!" },
+				{ Cue = "/VO/ErisField_0324", Text = "Things are heating {#Emph}up!" },
+				{ Cue = "/VO/ErisField_0325", Text = "{#Emph}Spicy!" },
+				{ Cue = "/VO/ErisField_0487", Text = "{#Emph}Whew, hot!" },
+				{ Cue = "/VO/ErisField_0488", Text = "Some mood lighting!" },
+				{ Cue = "/VO/ErisField_0489", Text = "We're on {#Emph}fire!" },
+				{ Cue = "/VO/ErisField_0490", Text = "{#Emph}Everything's on fire!" },
+				{ Cue = "/VO/ErisField_0491", Text = "Getting warmer!" },
+				{ Cue = "/VO/ErisField_0492", Text = "Oh, it {#Emph}burns!" },
+			},
+		},
+	},
+	OilPuddle =
+	{
+		InheritFrom = { "BaseTrap" },
+		SilentImpact = true,
+		TriggersOnHitEffects = false,
+
+		DefaultAIData = {
+			DeepInheritance = true,
+		},
+
+		OnHitFunctionName = "OilPuddleOnHit",
+
+		WeaponOptions =
+		{
+			"OilPuddleIgnite", "OilPuddleSlick",
+		},
+
+		AIOptions =
+		{
+			"DoAttackerAILoop",
+		},
+
+		OutgoingDamageModifiers =
+		{
+			{
+				NonPlayerMultiplier = 2,
+			},
+		},
+	},
+	OilPuddle02 =
+	{
+		InheritFrom = { "OilPuddle" },
+
+		WeaponOptions =
+		{
+			"OilPuddleIgnite02", "OilPuddleSlick02",
+		},
+	},
+	OilPuddle03 =
+	{
+		InheritFrom = { "OilPuddle" },
+
+		WeaponOptions =
+		{
+			"OilPuddleIgnite03", "OilPuddleSlick03",
+		},
+	},
+	OilPuddle04 =
+	{
+		InheritFrom = { "OilPuddle" },
+
+		WeaponOptions =
+		{
+			"OilPuddleIgnite04", "OilPuddleSlick04",
+		},
+	},
+	GunBombUnit =
+	{
+		InheritFrom = { "BaseTrap" },
+		GenusName = "Eris",
+
+		MaxHealth = 9999,
+		FlashOnFuse = true,
+		FuseDuration = 0.2,
+		ImpactReaction =
+		{
+			--[[RequireAnyProjectileNames =
+			{
+				"ErisLaser", "ErisLaserDash",
+			},]]
+			RequireNotProjectileNames =
+			{
+				"ErisWindBuffet", "GunGrenadeTossLucifer", "OilPuddleFire", "OilPuddleFire02", "OilPuddleFire03", "OilPuddleFire04"
+			},
+			RequireAnyAttackerName =
+			{
+				"_PlayerUnit", "Eris"
+			},
+			FunctionName = "ActivateLuciferFuse"
+		},
+		FuseActivationSound = "/SFX/Player Sounds/ZagreusLuciferPreAttack",
+
+		OnHitShake = { Distance = 3, Speed = 600, Duration = 0.15 },
+
+		OnDeathShakeScreenSpeed = 150,
+		OnDeathShakeScreenDistance = 4,
+		OnDeathShakeScreenDuration = 0.25,
+		OnDeathShakeScreenFalloff = 1500,
+
+		AlwaysTraitor = true,
+		OnDeathFireWeapons = { "GunBombWeapon" },
+
+		DumbFireWeapons = { "GunBombImmolation" },
+
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.48,
+				},
+			},
+			[2] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.8,
+				},
+			},
+			[3] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.3,
+				},
+			},
+			[4] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.3,
+				},
+			},
+		},
+
+		IncomingDamageModifiers =
+		{
+			{
+				Name = "ImmolationImmunity",
+				ValidWeapons = { "GunBombImmolation" },
+				ValidWeaponMultiplier = 0,
+				Multiplicative = true,
+			},
+		},
+		KeepNonPlayerMultipliers = true,
+		OutgoingDamageModifiers =
+		{
+			{
+				Name = "IgnoreEris",
+				NonPlayerMultiplier = 0,
+				Multiplicative = true,
+			},
+		},
+
+		OnKillVoiceLines =
+		{
+			{
+				RandomRemaining = true,
+				BreakIfPlayed = true,
+				PreLineWait = 0.35,
+				SuccessiveChanceToPlay = 0.25,
+				ObjectType = "Eris",
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "BossHealthBarRecord", "Eris" },
+						Comparison = ">=",
+						Value = 0.65,
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "ErisSpokeRecently", Time = 12 },
+					{ Name = "ErisBombedRecently", Time = 30 },
+				},
+
+				{ Cue = "/VO/ErisField_0418", Text = "See that?" },
+				{ Cue = "/VO/ErisField_0419", Text = "Off they go!" },
+				{ Cue = "/VO/ErisField_0420", Text = "Whoopsie!" },
+				{ Cue = "/VO/ErisField_0421", Text = "Whoops!" },
+				{ Cue = "/VO/ErisField_0422", Text = "Pop!" },
+				{ Cue = "/VO/ErisField_0423", Text = "{#Emph}Pop!" },
+			},
+		},
+	},
+
+	-- Olympus Traps
+
+	-- Typhon Traps
+	TyphonEgg =
+	{
+		InheritFrom = { "BaseTrap" },
+
+		MaxHealth = 2000,
+		SkipDamageText = true,
+		HideHealthBar = true,
+		HideLevelDisplay = true,
+		DestroyDelay = 2,
+		DeathAnimation = "Blank",
+		FlashOnFuse = true,
+		FuseDuration = 0.0,
+		IgnoreElapsedTimeMultiplier = true,
+		--FuseAnimation = "FireBarrelLit",
+
+		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
+
+		OnDeathShakeScreenSpeed = 350,
+		OnDeathShakeScreenDistance = 8,
+		OnDeathShakeScreenDuration = 0.65,
+		OnDeathShakeScreenFalloff = 1500,
+
+		OnDamagedFunctionName = "ActivateFuse",
+
+		OnDeathFireWeapons = { "TyphonEggDeathWeapon" },
+
+		TargetGroups = { "GroundEnemies", "FlyingEnemies", "HeroTeam" },
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.4,
+						},
+						{
+							NonPlayerMultiplier = 12,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.64,
+						},
+						{
+							NonPlayerMultiplier = 19,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1,
+						},
+						{
+							NonPlayerMultiplier = 30,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1,
+						},
+						{
+							NonPlayerMultiplier = 30,
+						},
+					},
+				},
+			},
+		},
+
+		OutgoingDamageModifiers =
+		{
+			{
+				NonPlayerMultiplier = 30,
 			}
 		},
 
-		KillingEnemyVoiceLines =
+		IncomingDamageModifiers =
 		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PlayOnceFromTableThisRun = true,
-			PreLineWait = 0.45,
-			UsePlayerSource = true,
-			SuccessiveChanceToPlay = 0.1,
-			GameStateRequirements =
 			{
+				NonPlayerMultiplier = 0,
+			},
+		},
+	},
+	TyphonEggLarge =
+	{
+		InheritFrom = { "TyphonEgg" },
+
+		MaxHealth = 100,
+		OnDamagedFunctionName = "nil",
+		OnDeathFireWeapons = {},
+		FlashOnFuseColor = Color.White,
+		FuseDuration = 2.0,
+
+		DeathFx = "EnemyDeathFxTyphon",
+		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
+		OnDeathShakeScreenSpeed = 0,
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				AddOutgoingDamageModifiers =
 				{
-					Path = { "CurrentRun", "Hero", "Health" },
-					Comparison = ">=",
-					Value = 15,
+				 	PlayerMultiplier = 0.4,
 				},
 			},
-			Cooldowns =
+			[2] =
 			{
-				{ Name = "MelinoeAnyQuipSpeech" },
-				{ Name = "MelinoeTrapKillSpeech", Time = 80 },
+				AddOutgoingDamageModifiers =
+				{
+				 	PlayerMultiplier = 0.64,
+				},
 			},
-			TriggerCooldowns = { "MelinoeCombatQuipPlayed" },
+			[3] =
+			{
+				AddOutgoingDamageModifiers =
+				{
+				 	PlayerMultiplier = 1,
+				},
+			},
+			[4] =
+			{
+				AddOutgoingDamageModifiers =
+				{
+			 		PlayerMultiplier = 1,
+				},
+			},
+		},
 
-			{ Cue = "/VO/MelinoeField_0882", Text = "Thorns hurt.", PlayFirst = true },
-			{ Cue = "/VO/MelinoeField_0883", Text = "The thorns answer to me." },
-			{ Cue = "/VO/MelinoeField_0884", Text = "Stinging thorns..." },
-			{ Cue = "/VO/MelinoeField_0885", Text = "Straight to the heart..." },
-			{ Cue = "/VO/MelinoeField_1140", Text = "Eat thorns." },
-			{ Cue = "/VO/MelinoeField_1143", Text = "Thorns always hurt." },
-		}
+		IncomingDamageModifiers =
+		{
+			{
+				NonPlayerMultiplier = 0,
+			},
+		},
 
+		OutgoingDamageModifiers =
+		{
+			{
+				NonPlayerMultiplier = 0,
+			}
+		},
 	},
-
 	TyphonMine =
 	{
 		InheritFrom = { "BaseTrap" },
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.4,
+						},
+						{
+							NonPlayerMultiplier = 12,
+						},
+					},
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 0.64,
+						},
+						{
+							NonPlayerMultiplier = 19,
+						},
+					},
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1,
+						},
+						{
+							NonPlayerMultiplier = 30,
+						},
+					},
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					OutgoingDamageModifiers =
+					{
+						{
+				 			PlayerMultiplier = 1,
+						},
+						{
+							NonPlayerMultiplier = 30,
+						},
+					},
+				},
+			},
+		},
 
 		DefaultAIData = {
 			DeepInheritance = true,
@@ -1866,6 +2604,136 @@
 		},
 	},
 
+	-- Misc / Unsorted Traps
+	BloodMine =
+	{
+		InheritFrom = { "BaseTrap" },
+
+		ActivateFuseIfNoSpawner = true,
+		FuseWarningAnimation = "BlastWarningDecal",
+
+		DefaultAIData =
+		{
+			DeepInheritance = true,
+		},
+		TriggerGroups = { "GroundEnemies", "FlyingEnemies", "HeroTeam" },
+
+		OnDamagedFunctionNames = { "ActivateFuse" },
+		OnDeathFireWeapons = { "MineBlast" },
+
+		DissipateAnimation = "BloodMineDeactivated",
+		FuseAnimation = "BloodMineActivated",
+		FuseWarningProjectileName = "MineBlast",
+		FlashOnFuse = true,
+		FuseDuration = 1.0,
+		TriggerDistance = 225,
+		WakeUpDelay = 1.5,
+		ExpirationDuration = 15.0,
+		
+		DestroyDelay = 0.5,
+		AIOptions =
+		{
+			"MineAI",
+		},
+		AttackDistance = 100,
+
+		CleanupAnimation = "Blank",
+		OutgoingDamageModifiers =
+		{
+			{
+				Name = "FriendImmunity",
+				IsMultiplier = true,
+				FriendMultiplier = 0,
+			},
+			{
+				Name = "CharmedMultiplier",
+				IsMultiplier = true,
+				NonPlayerMultiplier = 10,
+			},
+		},
+	},
+	BloodMinePreFused =
+	{
+		InheritFrom = { "BloodMine" },
+
+		TriggerDistance = 999999,
+
+		OnSpawnVoiceLines =
+		{
+			Queue = "Interrupt",
+			BreakIfPlayed = true,
+			RandomRemaining = true,
+			SuccessiveChanceToPlay = 0.75,
+			PreLineWait = 0.15,
+			UsePlayerSource = true,
+			Cooldowns =
+			{
+				{ Name = "MelFoundBombSpeech", Time = 30 },
+				{ Name = "MelinoeAnyQuipSpeech" },
+			},
+
+			{ Cue = "/VO/Melinoe_0714", Text = "What the?" },
+			{ Cue = "/VO/Melinoe_0715", Text = "Wha—?", PlayFirst = true, },
+			{ Cue = "/VO/Melinoe_1924", Text = "How'd that get in there." },
+			{ Cue = "/VO/Melinoe_1925", Text = "Uh-oh!" },
+			{ Cue = "/VO/Melinoe_1926", Text = "{#Emph}Tsk..." },
+			{ Cue = "/VO/Melinoe_1927", Text = "Damn." },
+			{ Cue = "/VO/Melinoe_1928", Text = "Whoa!" },
+			{ Cue = "/VO/Melinoe_1929", Text = "{#Emph}Urgh..." },
+		},
+	},
+	ShovelPointTrap =
+	{
+		InheritFrom = { "PassiveRoomWeapon" },
+
+		DamageTextStartColor = Color.TrapDamageLight,
+		DamageTextColor = Color.TrapDamage,
+
+		WakeUpDelay = 0.0,
+
+		DefaultAIData =
+		{
+			DeepInheritance = true,
+		},
+
+		AIOptions =
+		{
+			"EmptyAI",
+		},
+	},
+	ChronosCover =
+	{
+		InheritFrom = { "BaseTrap" },
+		MaxHealth = 500,
+		HealthBarType = "Medium",
+		HealthBarOffsetY = -375,
+
+		SkipDamagePresentation = false,
+		SkipDamageText = false,
+		SkipUnitHitFlash = false,
+		HideHealthBar = false,
+		HideLevelDisplay = false,
+		IgnoreAutoLock = false,
+
+		SpawnFx = "HecateTeleportFxFront",
+
+		DamagedFxStyles =
+		{
+			Default = "HitSparkEnemyDamagedMetal",
+			Rapid = "HitSparkEnemyDamagedMetal",
+		},
+
+		DefaultAIData =
+		{
+		},
+
+		Material = "MetalObstacle",
+
+		AIOptions =
+		{
+			"EmptyAI",
+		},
+	},
 	EyeBomb =
 	{
 		Health = 1,

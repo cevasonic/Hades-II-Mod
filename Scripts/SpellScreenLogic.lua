@@ -43,7 +43,9 @@
 	screen.Source = spellItem
 	screen.SourceItemName = args.SourceItemName or spellItem.Name
 	screen.StripRequirements = spellItem.StripRequirements
-	
+	if CurrentRun.IsDreamRun then
+		screen.ComponentData.Background.AnimationName = "SpellScreenDreamRunIn"
+	end
 	HideCombatUI( screen.Name )	
 	OnScreenOpened( screen )
 	if HeroHasTrait( "SpellTalentKeepsake" ) then

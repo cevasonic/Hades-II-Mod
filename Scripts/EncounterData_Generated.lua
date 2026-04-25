@@ -27,6 +27,44 @@ OverwriteTableKeys( EncounterData,
 		MoneyDropCapMax = 25,
 		MoneyDropCapDepthRamp = 0,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 15,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 20,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapBase = 4,
+					MoneyDropCapMin = 30,
+					MoneyDropCapMax = 45,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapBase = 5,
+					MoneyDropCapMin = 45,
+					MoneyDropCapMax = 55,
+				},
+			},
+		},
+
 		ManualWaveTemplates =
 		{
 			-- Wave 1
@@ -92,6 +130,8 @@ OverwriteTableKeys( EncounterData,
 		BaseDifficulty = 38,
 		DepthDifficultyRamp = 12,
 		SpawnAggroed = true,
+
+		DreamBiomeData = "nil",
 	},
 
 	GeneratedH_Passive =
@@ -227,6 +267,43 @@ OverwriteTableKeys( EncounterData,
 			ChainAggroAllEnemies = false,
 		},
 
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 25,
+					MoneyDropCapMax = 35,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 25,
+					MoneyDropCapMax = 40,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 45,
+					MoneyDropCapMax = 60,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 60,
+					MoneyDropCapMax = 80,
+				},
+			},
+		},
+
 		HardEncounterOverrideValues =
 		{
 			DepthDifficultyRamp = 30,
@@ -239,7 +316,8 @@ OverwriteTableKeys( EncounterData,
 		DistanceTriggers =
 		{
 			{
-				TriggerGroup = "GroundEnemies",
+				Name = "FieldsEnemiesSpottedDistanceTrigger",
+				TriggerGroups = { "GroundEnemies", "FlyingEnemies" },
 				WithinDistance = 650,
 				VoiceLines = { GlobalVoiceLines = "FieldsEnemiesSpottedVoiceLines" },
 			}
@@ -366,6 +444,42 @@ OverwriteTableKeys( EncounterData,
 		MoneyDropCapMax = 45,
 		MoneyDropCapDepthRamp = 0,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 35,
+					MoneyDropCapMax = 50,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 35,
+					MoneyDropCapMax = 50,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 30,
+					MoneyDropCapMax = 45,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 30,
+					MoneyDropCapMax = 45,
+				},
+			},
+		},
+
 		HardEncounterOverrideValues =
 		{
 			DepthDifficultyRamp = 30,
@@ -402,10 +516,21 @@ OverwriteTableKeys( EncounterData,
 		ThreadedEvents =
 		{
 			{
+				BreakIfPlayed = true,
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "CurrentRun", "IsDreamRun" },
+							},
+						},
 					},
 				},
 				FunctionName = "HadesSpeakingPresentation",
@@ -502,13 +627,25 @@ OverwriteTableKeys( EncounterData,
 		PreSpawnEnemies = false,
 
 		SpeakerNames = { "Intercom", },
+		LoadPackages = { "Hypnos" },
 		ThreadedEvents =
 		{
 			{
+				BreakIfPlayed = true,
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "CurrentRun", "IsDreamRun" },
+							},
+						},
 					},
 				},
 				FunctionName = "HadesSpeakingPresentation",
@@ -564,6 +701,45 @@ OverwriteTableKeys( EncounterData,
 		MoneyDropCapMin = 15,
 		MoneyDropCapMax = 25,
 		MoneyDropCapDepthRamp = 0,
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 15,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapBase = 4.5,
+					MoneyDropCapMin = 20,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapBase = 5,
+					MoneyDropCapMin = 30,
+					MoneyDropCapMax = 45,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapBase = 5.5,
+					MoneyDropCapMin = 45,
+					MoneyDropCapMax = 55,
+				},
+			},
+		},
 	},
 
 	GeneratedN_Smaller =
@@ -598,6 +774,8 @@ OverwriteTableKeys( EncounterData,
 		MaxTypesCap = 2,
 		BaseDifficulty = 20,
 		DepthDifficultyRamp = 5,
+		
+		DreamBiomeData = "nil",
 		
 		BlockDionysusEncounterKeepsake = true,
 		CountsForRoomEncounterDepth = false,
@@ -674,6 +852,43 @@ OverwriteTableKeys( EncounterData,
 		MoneyDropCapMin = 20,
 		MoneyDropCapMax = 30,
 		MoneyDropCapDepthRamp = 0,
+
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 15,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 20,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 30,
+					MoneyDropCapMax = 45,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 45,
+					MoneyDropCapMax = 55,
+				},
+			},
+		},
 
 		HardEncounterOverrideValues =
 		{
@@ -823,6 +1038,86 @@ OverwriteTableKeys( EncounterData,
 		--PrioritizeGroup = "Automatons",
 		RandomPrioritizeGroup = { "Automatons", "ChronosForces" },
 		PauseDurationAfterPriorityGroup = 1.0,
+
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 10,
+					MoneyDropCapMax = 20,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 10,
+					MoneyDropCapMax = 25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 25,
+					MoneyDropCapMax = 30,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 30,
+					MoneyDropCapMax = 45,
+				},
+			},
+		},
+
+		EncounterSpawnsStartEvents =
+		{
+			{
+				Threaded = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
+						IsNone = GameData.BannedEnemySightedEncounters,
+					},
+					{
+						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "RanEncounterSpawnsStartEvents" },
+					},
+					-- block EnemySightedVoiceLines after the True Ending until the PostTrueEndingOlympusIntroVO has played
+					OrRequirements =
+					{
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_4582" },
+							},
+						},
+					},
+				},
+				FunctionName = "DistanceTrigger",
+				Args =
+				{
+					WithinDistance = 600,
+					TriggerGroups = { "EnemyTeam", },
+					PostTriggerEvents =
+					{
+						{
+							FunctionName = "CheckEnemySightedVoiceLines",
+						},
+					},
+				},
+			},
+		},
 
 		WaveStartUnthreadedEvents =
 		{
@@ -1023,6 +1318,43 @@ OverwriteTableKeys( EncounterData,
 		MoneyDropCapMax = 85,
 		MoneyDropCapDepthRamp = 0,
 
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 90,
+					MoneyDropCapMax = 120,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 90,
+					MoneyDropCapMax = 120,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 70,
+					MoneyDropCapMax = 90,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 70,
+					MoneyDropCapMax = 90,
+				},
+			},
+		},
+
 		ThreadedEvents =
 		{
 			{ FunctionName = "TyphonIncursion",
@@ -1068,7 +1400,9 @@ OverwriteTableKeys( EncounterData,
 					},
 				},
 			},
-		}
+		},
+
+		Using = { SpawnUnits = { "TyphonArm_Incursion", "TyphonTail_Incursion" } },
 	},
 
 	GeneratedQ_Large =

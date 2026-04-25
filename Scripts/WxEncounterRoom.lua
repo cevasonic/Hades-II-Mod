@@ -18,6 +18,7 @@ function UpdateRoomCounterUI(currentRun)
             Amount = currentDepth,
             Text = "{#UseMoneyFormat}{$TempTextData.Amount}{!Icons.PlantGLotusIconAlt}",         -- Sử dụng mã văn bản đã được định cấu hình có icon [1]
             Duration = 2.0,               -- Thời gian hiển thị
+            Delay = 1.0
         })
 
     

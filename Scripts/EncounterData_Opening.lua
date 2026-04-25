@@ -67,6 +67,8 @@ OverwriteTableKeys( EncounterData,
 		MaxTypes = 2,
 		MaxTypesCap = 2,
 
+		DreamBiomeData = "nil",
+
 		OnSpawnFunctionName = "ArachneCombatDrumCheck",
 		OnKillFunctionName = "ArachneCombatDrumCheck",
 
@@ -88,6 +90,8 @@ OverwriteTableKeys( EncounterData,
 		MinTypes = 2,
 		MaxTypes = 2,
 		MaxTypesCap = 2,
+		
+		DreamBiomeData = "nil",
 
 		CountsForRoomEncounterDepth = false,
 
@@ -128,10 +132,21 @@ OverwriteTableKeys( EncounterData,
 		ThreadedEvents =
 		{
 			{
+				BreakIfPlayed = true,
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "CurrentRun", "IsDreamRun" },
+							},
+						},
 					},
 				},
 				FunctionName = "HadesSpeakingPresentation",
@@ -416,34 +431,6 @@ OverwriteTableKeys( EncounterData,
 						{ Cue = "/VO/MelinoeField_0633", Text = "Disgusting..." },
 						{ Cue = "/VO/MelinoeField_0634", Text = "{#Emph}Augh..." },
 					},
-					-- eidolon events
-					{
-						RandomRemaining = true,
-						SuccessiveChanceToPlayAll = 0.1,
-						GameStateRequirements =
-						{
-							{
-								PathFromArgs = true,
-								Path = { "TriggerSource", "Name" },
-								IsAny = { "HubReturnMudman01", "HubReturnMudman02" },
-							},
-						},
-						{ Cue = "/VO/MelinoeField_0636", Text = "Eidolons everywhere..." },
-					},
-					-- zombieassassin events
-					{
-						RandomRemaining = true,
-						SuccessiveChanceToPlayAll = 0.1,
-						GameStateRequirements =
-						{
-							{
-								PathFromArgs = true,
-								Path = { "TriggerSource", "Name" },
-								IsAny = { "HubReturnAssassin01" },
-							},
-						},
-						{ Cue = "/VO/MelinoeField_0635", Text = "What's that one doing here...?" },
-					},
 					-- other foes
 					{
 						RandomRemaining = true,
@@ -501,6 +488,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 664734,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -527,6 +515,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 662489,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -562,6 +551,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 561136,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -588,6 +578,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 691494,
+							WakeUpDelay = 0,
 						},
 					},
 				},
@@ -610,6 +601,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 662240,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -636,6 +628,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 664446,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -663,6 +656,7 @@ OverwriteTableKeys( EncounterData,
 						{
 							SpawnAngleMin = 0,
 							SpawnAngleMax = 360,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -691,6 +685,7 @@ OverwriteTableKeys( EncounterData,
 							SpawnAnimation = "Enemy_Zombie_Prone_IdleLoop",
 							SpawnAngleMin = -20,
 							SpawnAngleMax = 40,
+							WakeUpDelay = 0,
 						},
 					},
 					{
@@ -701,6 +696,7 @@ OverwriteTableKeys( EncounterData,
 						{
 							SpawnAnimation = "Enemy_Carrion_PeckingGround",
 							SpawnAngleTowardId = 664433,
+							WakeUpDelay = 0,
 						},							
 					},
 				},
@@ -731,6 +727,7 @@ OverwriteTableKeys( EncounterData,
 						{
 							AIOptions = { "IdleAI" },
 							PreferredSpawnPoint = "nil",
+							WakeUpDelay = 0,
 						},
 					},			
 				},
@@ -766,6 +763,7 @@ OverwriteTableKeys( EncounterData,
 							CanBeChainAggroed = false,
 							SpawnAngleMin = 250,
 							SpawnAngleMax = 290,
+							WakeUpDelay = 0,
 						},
 					},
 					{
@@ -778,6 +776,7 @@ OverwriteTableKeys( EncounterData,
 							AIOptions = { "IdleAI" },
 							PostAggroAI = "AttackAndDie",
 							AIAggroRange = 200,
+							WakeUpDelay = 0,
 						},
 					},
 				},
@@ -813,6 +812,7 @@ OverwriteTableKeys( EncounterData,
 							CanBeChainAggroed = false,
 							SpawnAngleMin = 250,
 							SpawnAngleMax = 290,
+							WakeUpDelay = 0,
 						},
 					},
 					{
@@ -825,6 +825,7 @@ OverwriteTableKeys( EncounterData,
 							AIOptions = { "IdleAI" },
 							PostAggroAI = "AttackAndDie",
 							AIAggroRange = 200,
+							WakeUpDelay = 0,
 						},
 					},
 				},
@@ -858,6 +859,7 @@ OverwriteTableKeys( EncounterData,
 							OnDamagedFunctionName = "AggroUnit",
 							CanBeAggroed = true,
 							CanBeChainAggroed = false,
+							WakeUpDelay = 0,
 						},
 					},
 				},
@@ -891,6 +893,7 @@ OverwriteTableKeys( EncounterData,
 							OnDamagedFunctionName = "AggroUnit",
 							CanBeAggroed = true,
 							CanBeChainAggroed = false,
+							WakeUpDelay = 0,
 						},
 					},
 					{
@@ -900,6 +903,7 @@ OverwriteTableKeys( EncounterData,
 						SpawnOverrides =
 						{
 							SpawnAngleTowardId = 664449,
+							WakeUpDelay = 0,
 						},
 						SpawnDefaultAIDataOverrides =
 						{
@@ -955,6 +959,24 @@ OverwriteTableKeys( EncounterData,
 				VoiceLines = { GlobalVoiceLines = "OlympusAssaultReactionLines" },
 			}
 		},	
+	},
+
+	PIntroDreamRunEmpty =
+	{
+		InheritFrom = { "Empty" },
+		AlwaysForce = true,
+
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				Path = { "CurrentRun", "EnteredBiomes" },
+				Comparison = "==",
+				Value = 0,
+			},
+		},
 	},
 
 	PIntroCombat01 =

@@ -226,6 +226,9 @@ function HoldSprintUntilInput()
 	if not IsControlDown({ Name = "Rush" }) or EndSprintControlDown() then 
 		EndRamWeapons({ Id = CurrentRun.Hero.ObjectId })
 		Halt({ Id = CurrentRun.Hero.ObjectId })
+		if not SessionMapState.SprintStartEventsFired then
+			SessionMapState.SprintActive = nil
+		end
 	end
 end
 
@@ -315,6 +318,7 @@ OnRamWeaponComplete{ "WeaponSprint",
 		end
 		if not IsEmpty(MapState.AttachedStormProjectileIds) then
 			DetachProjectiles({ Ids = MapState.AttachedStormProjectileIds })
+			MapState.AttachedStormProjectileIds = nil
 		end
 		thread( CheckDashManeuverEnd )
 		notifyExistingWaiters(  "SprintInput" )
@@ -444,7 +448,7 @@ OnWeaponFired{ "WeaponDagger5",
 			offset.Y = offset.Y * (target.BackstabDistanceScaleY or 1.0)
 			local tempObstacle = SpawnObstacle({ Name = "BlankObstacle", DestinationId = targetId, OffsetX = offset.X, OffsetY = offset.Y })
 			if not IsLocationValid({ Id = CurrentRun.Hero.ObjectId, DestinationId = tempObstacle}) then
-				Destroy({ tempObstacle })
+				Destroy({ Id = tempObstacle })
 				tempObstacle = SpawnObstacle({ Name = "BlankObstacle", DestinationId = targetId })
 			else
 				angle = angle + 180
@@ -1290,13 +1294,17 @@ end
 
 function CheckAxeSpinDisable( unit, weaponData, args, triggerArgs )
 	if not triggerArgs.NumProjectiles or triggerArgs.NumProjectiles == 0 then
-		ClearEffect({ Id = unit.ObjectId, Name = "IndependentAxeSpinSelfFireSlow"})
-		ClearEffect({ Id = unit.ObjectId, Name = "IndependentAxeSpinAttackDisableCancellable"})
-		ClearEffect({ Id = unit.ObjectId, Name = "AxeSpinSelfFireSlow"})
-		ClearEffect({ Id = unit.ObjectId, Name = "AxeSpinMoveStop"})
-		ClearEffect({ Id = unit.ObjectId, Name = "AxeSpinAttackDisableCancellable"})
-		ClearEffect({ Id = unit.ObjectId, Name = "AxeSpinAttackDisable"})
+		EndAxeSpinDisable()
 	end
+end
+
+function EndAxeSpinDisable()
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "IndependentAxeSpinSelfFireSlow"})
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "IndependentAxeSpinAttackDisableCancellable"})
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "AxeSpinSelfFireSlow"})
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "AxeSpinMoveStop"})
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "AxeSpinAttackDisableCancellable"})
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "AxeSpinAttackDisable"})
 end
 
 function EndDashDisableForce( )
@@ -1503,6 +1511,9 @@ function CastChargeStage( weaponName, stageData )
 end
 
 function EmptyCastCharge( weaponName, stageReached )
+	if stageReached > 0 then
+		RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "WeaponCastArm", Method = "ArmProjectiles" })
+	end
 end
 
 function IndirectCastChargeStage( weaponName, stageData )
@@ -1519,6 +1530,9 @@ function IndirectCastChargeStage( weaponName, stageData )
 end
 
 function EmptyIndirectCastCharge( weaponName, stageReached )
+	if SessionMapState.ArmCast then
+		SessionMapState.LastExMove = "WeaponCast"
+	end
 end
 
 function StaffChargeStage( weaponName, stageData )
@@ -2695,6 +2709,11 @@ function SuitBaseMissileAttack( weaponData, projectileName )
 			DestinationId = invisibleTarget, DataProperties = derivedValues.PropertyChanges, ThingProperties = derivedValues.ThingPropertyChanges,
 			SpawnFromMarker = secondMarker })
 	end
+	CheckDamageOnFire({ name = "WeaponSuitRanged", ProjectileName  = projectileName })
+	local trait = GetHeroTrait("AthenaProjectileBoon")
+	if trait and trait.OnWeaponFiredFunctions then
+		thread( CallFunctionName, trait.OnWeaponFiredFunctions.FunctionName, weaponData, trait.OnWeaponFiredFunctions.FunctionArgs, { Force = true })
+	end
 	PlaySound({ Name = "/SFX/Player Sounds/MelinoeSuitSpecialPreLaunch", Id = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/VO/MelinoeEmotes/EmoteAttackingBombLob", Id = CurrentRun.Hero.ObjectId })
 	RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = weaponName, Method = "forceCooldown", Parameters = { weaponData.BaseCooldown }  })
@@ -2765,6 +2784,11 @@ function EmptySuitCharge( weaponName, stageReached )
 	if missileCount <= 0 then
 		thread( SuitBaseMissileAttack, weaponData, projectileName )
 	else
+		CheckDamageOnFire({ name = "WeaponSuitRanged", ProjectileName  = projectileName })
+		local trait = GetHeroTrait("AthenaProjectileBoon")
+		if trait and trait.OnWeaponFiredFunctions then
+			thread( CallFunctionName, trait.OnWeaponFiredFunctions.FunctionName, weaponData, trait.OnWeaponFiredFunctions.FunctionArgs, { Force = true })
+		end
 		local perfectCharge = GetWeaponProperty({ Id = CurrentRun.Hero.ObjectId, WeaponName = weaponData.Name, Property = "PerfectChargeWindowRemaining" }) > 0 
 		cooldown = weaponData.BaseExCooldown
 		if weaponData.BaseCooldownAddition == 0 then

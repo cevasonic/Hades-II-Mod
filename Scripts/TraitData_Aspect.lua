@@ -1076,7 +1076,7 @@
 			FunctionName = "CheckDaggerBlock",
 			FunctionArgs = 
 			{
-				Cooldown = 12,
+				Cooldown = 10,
 				CritCount = 9,
 				InvulnerableEffectName = "DaggerBlockInvincibubble",
 				InvulnerableDuration = 1,
@@ -1544,6 +1544,7 @@
 					FireGraphic = "Melinoe_Dagger_Morrigan_AttackDouble_Fire",
 					ChargeCancelGraphic = "Melinoe_Dagger_Morrigan_AttackDouble_End",
 					ClipRegenInterval = 0.05,
+					SwapOnFire = "WeaponDagger",
 					
 				},
 				ProjectileName = "ProjectileDaggerSliceDouble",
@@ -2141,7 +2142,7 @@
 		{
 			WeaponLob = 
 			{
-				HideChargeDuration = 1.6,
+				HideChargeDuration = 0.95,
 				ChannelSlowIneligible = true,
 				ShowAmmoUI = false,
 				OnProjectileDeathFunction = "nil",
@@ -2152,7 +2153,7 @@
 				{
 					{
 						ManaCost = 35,
-						Wait = 3,
+						Wait = 1.75,
 						ResetChargeOnFire = true,
 						SkipManaSpendOnFire = true,
 						WeaponProperties = 
@@ -2346,7 +2347,10 @@
 					UnblockedBlinkFx = "null",
 					ProjectileAngleStartOffset = 0,
 					ChargeRangeMultiplier = 0,
-					RemoveControlOnFire= "WeaponLobSpecial",
+					RemoveControlOnFire = "WeaponLobSpecial",
+					AutoLock = true,
+					AutoLockRange = 650,
+					AutoLockArcDistance = math.rad(40),
 				},
 			},
 			{
@@ -2591,6 +2595,11 @@
 			{
 				WeaponName = "WeaponTorch",
 				ProjectileName = "ProjectileTorchBallEos",
+				WeaponProperties = 
+				{
+					ActiveProjectileCap2 = 1,
+					ActiveProjectileNameCap2 = "ProjectileTorchBallEos",
+				},
 				ProjectileProperties = 
 				{
 					MultiDetonate = true,
@@ -2950,6 +2959,7 @@
 				CancelCameraShake = true,
 				CancelSlowFrames = true,
 				ChannelSlowIneligible = false,
+				UnequipAnimation = "Melinoe_Torch_Supay_Unequip",
 				ChargeWeaponStages = 
 				{
 					{
@@ -4146,6 +4156,7 @@
 					ChargeSelfVelocity = 0,
 					ChargeStartAnimationUseCharge = true,
 					ClipRegenInterval = 0.6,
+					FireAtAttackTarget = true
 				},
 				ExcludeLinked = true,
 			},
@@ -4163,6 +4174,7 @@
 					ChargeCancelGraphic = "Melinoe_Axe_Nergal_Attack2_End",
 					RootOwnerWhileFiring = true,
 					BarrelLength = 200,
+					FireAtAttackTarget = true
 				},
 				ExcludeLinked = true,
 				ProjectileProperties =
@@ -4183,6 +4195,7 @@
 					SwapOnFire = "WeaponAxe4",
 					RootOwnerWhileFiring = true,
 					BarrelLength = 200,
+					FireAtAttackTarget = true
 				},
 				ExcludeLinked = true,
 				ProjectileProperties =
@@ -5179,6 +5192,8 @@
 			{
 				DisableSeek = true,
 				SkipFunctionFire = true,
+				ManualCheckDamageOnFire = false,
+				ManualCheckOnWeaponFired = false,
 				OnChargeFunctionNames = { "DoWeaponCharge" },
 				OnProjectileDeathFunction = "nil",
 				Sounds =
@@ -5215,7 +5230,7 @@
 						Wait = 0.35,
 						EarlyPropertySwaps = 
 						{
-							Delay = 0.2,
+							Delay = 0.30,
 							SwapProperties = 
 							{
 								WeaponProperties =

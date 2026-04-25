@@ -37,8 +37,10 @@
 	UseableOn({ Id = 768210 }) -- Exit door
 	RemoveInputBlock({ Name = "TyphonHeadKillPresentation" })
 	SetPlayerVulnerable("TyphonHeadKillPresentation")
-	OpenRunClearScreen()
 
+	if not CurrentRun.IsDreamRun or (CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount) then
+		OpenRunClearScreen()
+	end
 end
 
 function TyphonSpecialKillPresentation( unit, args )
@@ -192,9 +194,20 @@ function TyphonSpecialKillPresentation( unit, args )
 	wait( cameraPanTime )
 
 	local textMessage = "TyphonDestroyedMessage"
+	if unit.AltDeathMessageTextIds ~= nil then
+		local eligibleTextIds = {}
+		for k, altTextIdData in pairs( unit.AltDeathMessageTextIds ) do
+			if altTextIdData.GameStateRequirements == nil or IsGameStateEligible( altTextIdData, altTextIdData.GameStateRequirements ) then
+				table.insert( eligibleTextIds, altTextIdData.TextId )
+			end
+		end
+		if not IsEmpty( eligibleTextIds ) then
+			textMessage = GetRandomValue( eligibleTextIds )
+		end
+	end
 
 	thread( DisplayInfoBanner, nil, { 
-		Text = textMessage or "BiomeClearedMessage", 
+		Text = textMessage, 
 		Delay = 0.75, 
 		TextColor = Color.White, 
 		TextFadeColor = {64,230,255,255},
@@ -311,7 +324,7 @@ function TyphonFakeDeathTransition( typhon, currentRun, aiStage )
 	wait( 0.01 )
 
 	EndMusic()
-	thread( PlayVoiceLines, typhon.DefeatedVoiceLines, true, typhon )
+	thread( PlayVoiceLines, typhon.DefeatedVoiceLines, true, typhon, { FakeOut = true } )
 	CreateAnimation({ Name = "TyphonDeathGradient", DestinationId = ScreenAnchors.Vignette, Group = "Combat_Menu_TraitTray_Overlay" })
 
 	RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "All", Method = "cancelCharge" })
@@ -330,6 +343,12 @@ function TyphonFakeDeathTransition( typhon, currentRun, aiStage )
 	typhon.CurrentPhase = typhon.CurrentPhase + 1
 
 	typhon.MaxHealth = aiStage.NewMaxHealth or typhon.MaxHealth
+	if currentRun.IsDreamRun and typhon.DreamBiomeData ~= nil then
+		local dreamBiomeData = typhon.DreamBiomeData[currentRun.EnteredBiomes]
+		if dreamBiomeData ~= nil and dreamBiomeData.DataOverrides ~= nil and dreamBiomeData.DataOverrides.HealthMultiplier ~= nil then
+			typhon.MaxHealth = typhon.MaxHealth * dreamBiomeData.DataOverrides.HealthMultiplier
+		end
+	end
 	typhon.Health = typhon.MaxHealth
 	if aiStage.SetHealthPercent ~= nil then
 		typhon.Health = typhon.Health * aiStage.SetHealthPercent
@@ -378,8 +397,11 @@ function TyphonFakeDeathTransition( typhon, currentRun, aiStage )
 	SetAnimation({ Name = "Melinoe_Young_Excited_Start", DestinationId = CurrentRun.Hero.ObjectId })
 
 	wait( 1.5 )
-	local textLines = GetRandomEligibleTextLines( typhon, typhon.BossPhaseChangeTextLineSets, GetNarrativeDataValue( typhon, "BossPhaseChangeTextLinePriorities" ) )
-	PlayTextLines( typhon, textLines )
+
+	if not CurrentRun.IsDreamRun then
+		local textLines = GetRandomEligibleTextLines( typhon, typhon.BossPhaseChangeTextLineSets, GetNarrativeDataValue( typhon, "BossPhaseChangeTextLinePriorities" ) )
+		PlayTextLines( typhon, textLines )
+	end
 
 	FakeDeathTyphonEntrance(CurrentRun, CurrentRun.CurrentRoom, RoomData.Q_Boss02.EntranceFunctionArgs)
 
@@ -496,14 +518,17 @@ function TyphonFakeDeathKillPresentation( unit, args )
 
 	wait( args.StartPanTime )
 
-	local textMessage = args.Message
-	if args.BossDifficultyMessage and GetNumShrineUpgrades( "BossDifficultyShrineUpgrade" ) > 0 then
-		textMessage = args.BossDifficultyMessage
-	end
-	if GameState.TyphonFakeDeathCount == 1 then
-		textMessage = "TyphonDefeatedMessageAlt01"
-	elseif unit.FakeDeathAltMessages ~= nil and GameState.TyphonFakeDeathCount > 1 then
-		textMessage = GetRandomValue(unit.FakeDeathAltMessages)
+	local textMessage = "TyphonDefeatedMessageAlt01"
+	if unit.AltFakeDeathMessageTextIds ~= nil then
+		local eligibleTextIds = {}
+		for k, altTextIdData in pairs( unit.AltFakeDeathMessageTextIds ) do
+			if altTextIdData.GameStateRequirements == nil or IsGameStateEligible( altTextIdData, altTextIdData.GameStateRequirements ) then
+				table.insert( eligibleTextIds, altTextIdData.TextId )
+			end
+		end
+		if not IsEmpty( eligibleTextIds ) then
+			textMessage = GetRandomValue( eligibleTextIds )
+		end
 	end
 
 	thread( DisplayInfoBanner, nil, { 
@@ -597,7 +622,11 @@ function FakeDeathTyphonEntrance( currentRun, currentRoom, args )
 
 	Teleport({ Id = args.TyphonId, DestinationId = 800464, OffsetX = 0, OffsetY = -500 })
 	local moveTarget = SpawnObstacle({ DestinationId = args.TyphonId, OffsetY = 650, Name = "InvisibleTarget" })
-	SetThingProperty({ Property = "GrannyTexture", Value = "GR2/TyphonHeadStage3_Color", DestinationId = args.TyphonId })
+	local swapTexture = "GR2/TyphonHeadStage3_Color"
+	if CurrentRun.IsDreamRun then
+		swapTexture = "GR2/TyphonHeadDreamStage3_Color"
+	end
+	SetThingProperty({ Property = "GrannyTexture", Value = swapTexture, DestinationId = args.TyphonId })
 	SetColor({ Id = args.TyphonId, Color = Color.Black, Duration = 0.0 })
 	SetAlpha({ Id = args.TyphonId, Fraction = 0, Duration = 0 })
 	AngleTowardTarget({ Id = args.TyphonId, DestinationId = CurrentRun.Hero.ObjectId })
@@ -621,6 +650,7 @@ function FakeDeathTyphonEntrance( currentRun, currentRoom, args )
 	SetAlpha({ Ids = GetIds({ Name = "BehindStorm" }), Fraction = 1.0, Duration = 1.0 })
 	
 	wait(1.0)
+	thread( PlayVoiceLines, GlobalVoiceLines.BabalityDreamRunVoiceLines )
 
 	SetAnimation({ DestinationId = args.TyphonId, Name = "Enemy_TyphonHead_Laugh" })
 	PlaySound({ Name = "/VO/Typhon_0032", DestinationId = args.TyphonId })
@@ -659,13 +689,13 @@ function FortressMainDoorOpenPresentation( source, args )
 		SetSoundCueValue({ Names = { "Guitar" }, Id = AudioState.MusicId, Value = 1.0, Duration = 2.0 })
 	end
 
-	local fortressDoorId = GetClosestIds({ Id = CurrentRun.Hero.ObjectId, DestinationIds = GetIdsByType({ Name = "FortressMainDoor" }), Distance = 300 })[1]
+	local fortressDoorId = GetClosestIds({ Id = CurrentRun.Hero.ObjectId, DestinationIds = GetIdsByType({ Name = "FortressMainDoor" }), Distance = 800 })[1]
 
 	PanCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 1.15, FromCurrentLocation = true, Retarget = true })
 	PlayInteractAnimation( fortressDoorId, { Animation = GetEquippedWeaponValue( "WeaponInteractAnimation" ) })
 	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = fortressDoorId })
 
-	wait(0.7)
+	wait(0.4)
 
 	SetAnimation({ Name = "FortressMainDoorOpen", DestinationId = fortressDoorId }) --nopkg
 	PlaySound({ Name = "/SFX/TyphonBigDoorOpen" })
@@ -1329,6 +1359,8 @@ function RoomEntranceTyphonHeadEM( currentRun, currentRoom, args )
 
 	local roomData = RoomData[currentRoom.Name] or currentRoom
 	local encounterData = EncounterData[currentRoom.Encounter.Name] or currentRoom.Encounter
+	local typhon = ActiveEnemies[args.TyphonId]
+	local chronos = ActiveEnemies[args.ChronosId]
 
 	if GetConfigOptionValue({ Name = "EditingMode" }) then
 		FadeIn({ Duration = 0.0 })
@@ -1359,35 +1391,39 @@ function RoomEntranceTyphonHeadEM( currentRun, currentRoom, args )
 	end
 
 	-- CHRONOS INTRO
+
 	SetAlpha({ Id = args.ChronosId, Fraction = 0, Duration = 0 })
 
-	if currentRoom.CameraEndPoint ~= nil then
-		PanCamera({ Id = currentRoom.CameraEndPoint, Duration = roomData.IntroCameraPanDuration or roomIntroSequenceDuration, EaseIn = 0.01, })
+	if not CurrentRun.IsDreamRun then
+
+		if currentRoom.CameraEndPoint ~= nil then
+			PanCamera({ Id = currentRoom.CameraEndPoint, Duration = roomData.IntroCameraPanDuration or roomIntroSequenceDuration, EaseIn = 0.01, })
+		end
+
+
+		wait(1.5)
+		MusicPlayer( "/Music/ChronosBossFightMusic" )
+		SetMusicSection( 8, MusicId )
+
+		SetAlpha({ Id = args.ChronosId, Fraction = 1, Duration = 0.3 })
+		CreateAnimation({ Name = "ChronosTeleportFxFront", DestinationId = args.ChronosId })
+
+		wait(0.3)
+
+		thread( PlayVoiceLines, chronos.PreFightVoiceLines, true )
+
+		wait(2.2)
+
+		if not CurrentRun.IsDreamRun then
+			local textLines = GetRandomEligibleTextLines( typhon, typhon.BossIntroTextLineSets, GetNarrativeDataValue( typhon, "BossIntroTextLinePriorities" ) )
+			PlayTextLines( typhon, textLines )
+		end
+
+		-- CHRONOS OUT
+		CreateAnimation({ Name = "ChronosTeleportFxFront", DestinationId = args.ChronosId })
+		SetAlpha({ Id = args.ChronosId, Fraction = 0, Duration = 0.5 })
+		SetAnimation({ DestinationId = args.ChronosId, Name = "Enemy_Chronos_TeleportDashOut" })
 	end
-
-
-	wait(1.5)
-	MusicPlayer( "/Music/ChronosBossFightMusic" )
-	SetMusicSection( 8, MusicId )
-
-	SetAlpha({ Id = args.ChronosId, Fraction = 1, Duration = 0.3 })
-	CreateAnimation({ Name = "ChronosTeleportFxFront", DestinationId = args.ChronosId })
-
-	wait(0.3)
-
-	local chronos = ActiveEnemies[args.ChronosId]
-	thread( PlayVoiceLines, chronos.PreFightVoiceLines, true )
-
-	wait(2.2)
-
-	local typhon = ActiveEnemies[args.TyphonId]
-	local textLines = GetRandomEligibleTextLines( typhon, typhon.BossIntroTextLineSets, GetNarrativeDataValue( typhon, "BossIntroTextLinePriorities" ) )
-	PlayTextLines( typhon, textLines )
-
-	-- CHRONOS OUT
-	CreateAnimation({ Name = "ChronosTeleportFxFront", DestinationId = args.ChronosId })
-	SetAlpha({ Id = args.ChronosId, Fraction = 0, Duration = 0.5 })
-	SetAnimation({ DestinationId = args.ChronosId, Name = "Enemy_Chronos_TeleportDashOut" })
 
 	PanCamera({ Id = args.TyphonIntroPanId, Duration = 4.0, EaseIn = 0.01, })
 	wait( 0.5 )
@@ -1408,8 +1444,6 @@ function RoomEntranceTyphonHeadEM( currentRun, currentRoom, args )
 	SetAlpha({ Ids = GetIds({ Name = "StartFX" }), Fraction = 0.0, Duration = 1.0 })
 
 	wait(0.5)
-
-	local typhon = ActiveEnemies[args.TyphonId]
 
 	CreateBossHealthBar( typhon )
 
@@ -1621,7 +1655,7 @@ function TyphonHeadStageTransition( typhon, args )
 
 	wait( 0.8, typhon.AIThreadName )
 
-	thread( PlayVoiceLines, zeus.TyphonAttackArrivalLines, true )
+	thread( PlayVoiceLines, zeus.TyphonAttackArrivalVoiceLines, true )
 
 	wait( 2.15, typhon.AIThreadName )
 
@@ -1643,7 +1677,12 @@ function TyphonHeadStageTransition( typhon, args )
 
 	-- play stun animation and update damage texture for Typhon
 	SetAnimation({ Name = "Enemy_TyphonHead_StunnedStart", DestinationId = typhon.ObjectId })
-	SetThingProperty({ Property = "GrannyTexture", Value = "GR2/TyphonHeadStage2_Color", DestinationId = typhon.ObjectId })
+	local swapTexture = "GR2/TyphonHeadStage2_Color"
+
+	if CurrentRun.IsDreamRun then
+		swapTexture = "GR2/TyphonHeadDreamStage2_Color"
+	end
+	SetThingProperty({ Property = "GrannyTexture", Value = swapTexture, DestinationId = typhon.ObjectId })
 
 	wait( 0.75, typhon.AIThreadName )
 
@@ -1694,6 +1733,7 @@ function TyphonHeadStageTransition( typhon, args )
 	SetAngle({ Id = dummy.ObjectId, Angle = GetAngle({ Id = typhon.ObjectId }) })
 
 	SetUnitProperty({ DestinationId = typhon.ObjectId, Property = "ImmuneToStun", Value = false })
+	SetThingProperty({ Property = "StopsProjectiles", Value = false, DestinationId = typhon.ObjectId }) -- Avoid projectiles double-colliding with the dummy and the original head
 	SetUnitVulnerable( typhon, "TyphonHeadStageTransition" )
 	typhon.ImpactLocationOffsetZ = -920 -- Hit fx offset
 	typhon.HealthBarOffsetY = 575 -- Damage numbers offset
@@ -1721,6 +1761,7 @@ function TyphonHeadStageTransition( typhon, args )
 	SetAnimation({ Name = "Enemy_TyphonHead_StunnedEnd", DestinationId = typhon.ObjectId })
 	StopAnimation({ Name = "TyphonHeadStunnedTongueAttract", DestinationId = typhon.ObjectId })
 	SetUnitProperty({ DestinationId = typhon.ObjectId, Property = "ImmuneToStun", Value = true })
+	SetThingProperty({ Property = "StopsProjectiles", Value = true, DestinationId = typhon.ObjectId })
 	typhon.HealthBarOffsetY = 150
 	typhon.ImpactLocationOffsetZ = 0
 	Kill(dummy)
@@ -1735,6 +1776,7 @@ function TyphonHeadStageTransitionEM( typhon, args )
 	local chronos = ActiveEnemies[chronosId]
 
 	killTaggedThreads(chronos.AIThreadName)
+	killTaggedThreads("ChronosTyphonFightHitPresentation")
 	chronos.AIBehavior = nil
 	chronos.ChainedWeapon = nil
 	chronos.ChainedWeaponOptions = nil
@@ -1893,6 +1935,7 @@ function TyphonChronosStageTransition( typhon, args )
 	local chronos = ActiveEnemies[chronosId]
 
 	killTaggedThreads(chronos.AIThreadName)
+	killTaggedThreads("ChronosTyphonFightHitPresentation")
 	chronos.AIBehavior = nil
 	chronos.ChainedWeapon = nil
 	chronos.ChainedWeaponOptions = nil
@@ -2361,6 +2404,7 @@ function CheckTyphonReward( source, args )
 		ForceToValidLocation = true,
 		KeepCollision = true,
 	})
+	thread( PlayVoiceLines, ConsumableData[args.LootOptions[1].Name].OnSpawnVoiceLines )
 
 	GameState.TyphonDefeatedWithStormStop = true
 

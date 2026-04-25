@@ -2,7 +2,7 @@ UnitSetData.SatyrCrossbow =
 {
 	SatyrCrossbow =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 		MaxHealth = 600,
 		HealthBuffer = 2550,
 

@@ -3,7 +3,7 @@ UnitSetData.Zombie =
 
 	ZombieAssassin =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 		IntroEncounterName = "ZombieAssassinIntro",
 
 		MaxHealth = 230,
@@ -152,7 +152,7 @@ UnitSetData.Zombie =
 
 	ZombieAssassin_Shadow =
 	{
-		InheritFrom = { "Shadow", "ZombieAssassin" },
+		InheritFrom = { "BaseFEnemy", "Shadow", "ZombieAssassin" },
 		GenusName = "ZombieAssassin",
 		
 		MaxHealth = 230,
@@ -161,7 +161,7 @@ UnitSetData.Zombie =
 
 	ZombieAssassin_Miniboss =
 	{
-		InheritFrom = { "ZombieAssassin" },
+		InheritFrom = { "BaseFEnemy", "ZombieAssassin" },
 		MaxHealth = 1615,
 		HealthBarType = "ExtraLarge",
 		HealthBarAttachToMarkerName = "head_fxMarker_00_M_JNT",

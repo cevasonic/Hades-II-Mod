@@ -240,6 +240,31 @@ ScreenData.HUD =
 			},
 		},
 
+		DreamActive =
+		{
+			X = 280,
+			Y = 40,
+			Animation = "GUI\\Screens\\RunHistory\\Icon-Dream",
+			Scale = 0.6,
+			GroupName = "HUD_Overlay",
+			Alpha = 0.0,
+			AlphaTarget = 0.0,
+			OffsetX = 0, -- used for dynamic positioning
+			NoFearPaddingX = 10,
+			TextArgs =
+			{
+				Text = "HUD_DreamRegion",
+				Font = "P22UndergroundSCMedium",
+				FontSize = 24,
+				Justification = "Left",
+				OffsetX = 24,
+				OffsetY = -2,
+				ShadowRed = 0.1, ShadowBlue = 0.1, ShadowGreen = 0.1,
+				OutlineColor = {0.113, 0.113, 0.113, 1}, OutlineThickness = 2,
+				ShadowAlpha = 1.0, ShadowBlur = 1, ShadowOffset = {0, 4},
+			},
+		},
+
 		BountyReadyConfirm =
 		{
 			X = 260,

@@ -39,7 +39,7 @@ UnitSetData.AutomatonBeamer =
 		StopAnimationsOnDeath = { "AutomatonBeamerDefenseShieldFxIn", "AutomatonBeamerDefenseShieldFx", "AutomatonBeamerDefenseShieldBacking", "AutomatonBeamerDefenseShieldFxDisplacement" },
 		StopAnimationsOnPolymorph =
 		{
-			"Enemy_Beamer_DefenseLoop ", "AutomatonBeamerScanCharge", "AutomatonBeamerScanChargeStreaks",
+			"Enemy_Beamer_DefenseLoop", "AutomatonBeamerScanCharge", "AutomatonBeamerScanChargeStreaks",
 		 	"AutomatonBeamerDefenseShieldFxIn", "AutomatonBeamerDefenseShieldFx", "AutomatonBeamerDefenseShieldFxDisplacement", "AutomatonBeamerDefenseShieldFxDisplacementOut", "AutomatonBeamerDefenseShieldBacking", "AutomatonBeamerDefenseShieldBackingOut", "AutomatonBeamerDefenseShieldFxOut"
 		},
 

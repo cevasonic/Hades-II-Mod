@@ -114,12 +114,33 @@ ConsumableData =
 		},
 		SurfaceShopText = "RoomRewardHealDrop_Store",
 		SurfaceShopIcon = "RoomRewardHealShop",
+		LastRewardEligible = false,
 		HealFraction = 0.4,
 		UseText = "UseHealDrop",
 		ConsumeFx = "HealConsumableFx",
 		OnUsedFunctionName = "UseConsumableItem",
 		PurchaseText = "Shop_UseHealDrop",
-		NeverForceRequired = true,
+		RoomRequiredGameStateRequirements =
+		{
+			{
+				FunctionName = "RequiredHealthFraction",
+				FunctionArgs = { Comparison = "<", Value = 1.0, },
+			},
+			OrRequirements =
+			{
+				{
+					{
+						PathTrue = { "CurrentRun", "CurrentRoom", "CanSpawnDreamReward" },
+					},
+				},
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name", },
+						IsAny = { "C_Boss01" },
+					},
+				},
+			},
+		},
 		PurchaseRequirements =
 		{
 			{
@@ -196,6 +217,7 @@ ConsumableData =
 			{
 				Key = "HealFixed",
 				ExtractAs = "TooltipHeal",
+				Format = "FlatHeal"
 			},
 		},
 		BlockExitText = "ExitBlockedByHeal",
@@ -390,6 +412,7 @@ ConsumableData =
 	RoomMoneyTinyDrop =
 	{
 		InheritFrom = { "RoomMoneyDrop", },
+		LastRewardEligible = false,
 		ResourceCosts =
 		{
 			Money = 20,
@@ -491,6 +514,7 @@ ConsumableData =
 	MaxHealthDropSmall =
 	{
 		InheritFrom = { "MaxHealthDrop" },
+		LastRewardEligible = false,
 		DoorIcon = "MaxHealthDropSmallPreview",
 		AddMaxHealth = 5,
 		GoldConversionEligible = true,
@@ -550,6 +574,7 @@ ConsumableData =
 	EmptyMaxHealthSmallDrop = 
 	{
 		InheritFrom = { "EmptyMaxHealthDrop", },
+		LastRewardEligible = false,
 		GoldifyValue = 150,
 		Cost =
 		{
@@ -636,6 +661,7 @@ ConsumableData =
 		InheritFrom = { "MaxManaDrop", },
 		DoorIcon = "MaxManaDropSmall_Preview",
 		AddMaxMana = 10,
+		LastRewardEligible = false,
 
 		GoldConversionEligible = true,
 		GoldifyValue = 200,
@@ -727,6 +753,7 @@ ConsumableData =
 	MinorTalentDrop = 
 	{
 		InheritFrom = { "TalentDrop" },
+		LastRewardEligible = false,
 		DoorIcon = "MinorTalentDropPreview",
 		AddTalentPoints = 1,
 
@@ -806,8 +833,24 @@ ConsumableData =
 		OnConsumedGlobalVoiceLines = "UsedLastStandDropVoiceLines",
 		PlayInteract = true,
 		HideWorldText = true,
-		NeverForceRequired = true,
-
+		RoomRequiredGameStateRequirements =
+		{
+			NamedRequirements = { "MissingLastStand", },
+			OrRequirements =
+			{
+				{
+					{
+						PathTrue = { "CurrentRun", "CurrentRoom", "CanSpawnDreamReward" },
+					},
+				},
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name", },
+						IsAny = { "C_Boss01" },
+					},
+				},
+			},
+		},
 		GoldConversionEligible = true,
 		UseTextTalkAndSpecial = "UseOrGoldifyLastStandDrop",
 		GoldifyValue = 400,
@@ -854,6 +897,7 @@ ConsumableData =
 	{
 		InheritFrom = { "BaseConsumable", },
 		UseText = "UseArmorDrop",
+		LastRewardEligible = false,
 		UsePromptOffsetY = 30,
 		DoorIcon = "ArmorBoostPreview",
 		SurfaceShopText = "ArmorBoost_Store",
@@ -1001,11 +1045,11 @@ ConsumableData =
 	{
 		InheritFrom = { "FireBoost", },
 		SpawnSound = "/SFX/GemDropSFX",
-		ConsumeSound = "/Leftovers/Menu Sounds/WellPurchase_Jar",
+		ConsumeSound = "/SFX/ElementalBoostPickup",
 		DoorIcon = "ElementalEssenceDrop_Preview",
 		ResourceCosts =
 		{
-			Money = 70,
+			Money = 40,
 		},
 		UseFunctionArgs =
 		{
@@ -1357,6 +1401,7 @@ ConsumableData =
 		Icon = "Shop_MetaCardPointsCommonRange",
 		-- OnPurchaseSound = "/Leftovers/Menu Sounds/WellPurchase_Crystal",
 		CostPerMetaCardPointsCommon = 5,
+		LastRewardEligible = false,
 		AddResources =
 		{
 			MetaCardPointsCommon =
@@ -1592,6 +1637,7 @@ ConsumableData =
 	MetaCurrencyDrop =
 	{
 		InheritFrom = { "BaseResource", "BaseMetaRoomReward" },
+		LastRewardEligible = false,
 		DoorIcon = "MetaCurrencyDrop",
 		SpawnSound = "/SFX/BoneRewardDrop",
 		ConsumeSound = "/SFX/BoneRewardPickup",
@@ -1790,6 +1836,7 @@ ConsumableData =
 				IsAny = { "Elysium", "Styx", },
 			},
 		},
+		LastRewardEligible = false,
 		SurfaceShopText = "GiftDrop_Surface",
 		SurfaceShopIcon = "GiftDropPreview",
 		ResourceCosts =
@@ -1854,6 +1901,7 @@ ConsumableData =
 	TrashPointsDrop =
 	{
 		InheritFrom = { "BaseResource", },
+		ExcludeFromConsumableItemsGroup = true,
 		SpawnSound = "/SFX/CrappyRewardDrop",
 		PickUpSound = "/SFX/TrashPickup", -- for HarvestPresentation
 		ConsumeFx = "ItemConsumeFxSmall",
@@ -1999,8 +2047,6 @@ ConsumableData =
 
 		OnSpawnVoiceLines =
 		{
-			PlayOnce = true,
-			PlayOnceContext = "EntropyFirstDropVO",
 			PreLineWait = 0.55,
 
 			{ Cue = "/VO/MelinoeField_4180", Text = "Entropy..." },
@@ -2090,7 +2136,7 @@ ConsumableData =
 		{
 			GemPoints = 10,
 		},
-		IncreasePerBiomeCleared = 10,
+		AddResourceIncreasePerBiomeCleared = 10,
 
 		SpawnSound = "/SFX/GemDropSFX",
 		ConsumeSound = "/SFX/GemPickup",
@@ -2106,25 +2152,48 @@ ConsumableData =
 
 		SpawnSound = "/SFX/GemDropSFX",
 		ConsumeSound = "/SFX/GemPickup",
+	},
 
-		OnUseEvents =
+	DreamPointsDrop =
+	{
+		InheritFrom = { "BaseSuperResource" },
+		AddResources =
 		{
+			DreamPoints = 1,
+		},
+		AddResourceIncreasePerBiomeCleared = 1,
+
+		OnSpawnVoiceLines =
+		{
+			PreLineWait = 0.55,
+			GameStateRequirements =
 			{
-				FunctionName = "GenericPresentation",
-				Threaded = true,
-				Args =
 				{
-					InputBlock = "AnomalyGemPickup",
-					PreWait = 2.0,
+					FunctionName = "RequiredHealthFraction",
+					FunctionArgs = { Comparison = ">=", Value = 0.2, },
 				},
+			},
+			SkipCooldownCheckIfNonePlayed = true,
+			Cooldowns =
+			{
+				{ Name = "MelinoeAnyQuipSpeech" },
+			},
+			{ Cue = "/VO/MelinoeField_5422", Text = "What's that...?", PlayFirst = true, PlayOnce = true, PlayOnceContext = "FirstDreamPointsSpawnVO",
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentRun", "CurrentRoom", "Name", },
-						IsAny = { "C_Boss01" },
+						Path = { "GameState", "LifetimeResourcesGained", "DreamPoints" },
+						Comparison = "<=",
+						Value = 3,
 					},
 				},
 			},
+			{ Cue = "/VO/MelinoeField_5423", Text = "Shiny...", ChanceToPlayAgain = 0.01 },
 		},
+
+		IconPath = ResourceData.DreamPoints.IconPath,
+		TextIconPath = ResourceData.DreamPoints.TextIconPath,
+		SpawnSound = "/SFX/GoldStarDrop",
+		ConsumeSound = "/SFX/GoldStarPickup",
 	},
 }

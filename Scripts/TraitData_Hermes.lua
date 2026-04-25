@@ -284,22 +284,23 @@ OverwriteTableKeys( TraitData, {
 		BlockStacking = true,
 		RarityLevels =
 		{
-			-- change the 225/250/275 number to be the percent increase at each rarity
+			-- change the 170/190/210 number to be the percent increase at each rarity
+			-- ( 1 / value ) * 100 - 100
 			Common =
 			{
 				Multiplier = 1.00,
 			},
 			Rare =
 			{
-				Multiplier = (1-(100/225))/0.50,
+				Multiplier = (1-(100/150))/(1-0.714),
 			},
 			Epic =
 			{
-				Multiplier = (1-(100/250))/0.50,
+				Multiplier = (1-(100/160))/(1-0.714),
 			},
 			Heroic =
 			{
-				Multiplier = (1-(100/275))/0.50,
+				Multiplier = (1-(100/170))/(1-0.714),
 			}
 		},
 		WeaponDataOverride = 
@@ -314,18 +315,23 @@ OverwriteTableKeys( TraitData, {
 			WeaponNames = WeaponSets.HeroRangedWeapons,
 			Value = 
 			{
-				BaseValue = 0.5,
+				BaseValue = 0.714,
 				DecimalPlaces = 4,
 				SourceIsMultiplier = true,
 			},
 			ReportValues = { ReportedSpeedMultiplier = "Value" }
+		},
+		CastDurationMultiplier = { 
+			BaseValue = 0.714,
+			DecimalPlaces = 4,
+			SourceIsMultiplier = true,
 		},
 		PropertyChanges = 
 		{
 			{
 				WeaponName = "WeaponCast",
 				ProjectileProperty = "FuseStart",
-				BaseValue = 0.50,
+				BaseValue = 0.714,
 				SourceIsMultiplier = true,
 				ChangeType = "Multiply",
 				DeriveSource = "DeriveSource",
@@ -596,7 +602,7 @@ OverwriteTableKeys( TraitData, {
 			},
 		},
 		FirstPurchaseDiscount = { BaseValue = 0.95, SourceIsMultiplier = true },
-		
+		AcquireFunctionName = "UpdateStoreItemCostText",
 		StatLines =
 		{
 			"DiscountStatDisplay",

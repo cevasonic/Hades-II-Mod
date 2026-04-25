@@ -18,6 +18,7 @@ UnitSetData.NPC_Eris =
 		TurnInPlaceAnimation = "Eris_Turn",
 		
 		BecomingCloserFunctionName = "BecomingCloserErisPresentation",
+		BecomingCloserRepeatableFunctionName = "BecomingCloserErisRepeatablePresentation",
 
 		GiftGameStateRequirements = 
 		{
@@ -167,6 +168,10 @@ UnitSetData.NPC_Eris =
 				Path = { "CurrentRun", "TextLinesChoiceRecord", "ErisBecomingCloser01", },
 				IsNone = { "Choice_ErisAccept" },
 			},
+			-- shouldn't reappear if re-entering Hub after events with ErisExitPresentation
+			{
+				PathFalse = { "CurrentRun", "ErisExitedHub" },
+			},
 			OrRequirements =
 			{
 				{
@@ -215,7 +220,7 @@ UnitSetData.NPC_Eris =
 							-- shouldn't throw trash if these events are queued
 							{
 								FunctionName = "RequiredQueuedTextLine",
-								FunctionArgs = { IsNone = { "ErisAboutRelationship01", "MorosWithEris01" }, },
+								FunctionArgs = { IsNone = { "ErisAboutRelationship01", "MorosWithEris01", "ErisAboutAlley02", "ErisAboutWeaponGun01" }, },
 							},
 						},
 						WithinDistance = 420,
@@ -228,6 +233,8 @@ UnitSetData.NPC_Eris =
 							{
 								{
 									Name = "TrashPointsDrop",
+									AngleMin = 180,
+									AngleMax = 300,
 									OverwriteSelf =
 									{
 										TouchdownGroup = "Terrain_02",
@@ -559,8 +566,8 @@ UnitSetData.NPC_Eris =
 				GameStateRequirements =
 				{
 				},
-				-- OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				-- OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 
 				{ Cue = "/VO/Eris_0041",
 					Portrait = "Portrait_Eris_FiredUp_01",
@@ -685,7 +692,6 @@ UnitSetData.NPC_Eris =
 					}
 				},
 			},
-
 			ErisAboutTrash03 =
 			{
 				PlayOnce = true,
@@ -732,6 +738,47 @@ UnitSetData.NPC_Eris =
 					}
 				},
 			},
+			ErisAboutTrash04 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgrades", "Cosmetic_ErisTrashcan" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ErisAboutTrash03", "ErisTaverna02", "ErisBossAboutAres03" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Melinoe_4897", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Eris, I have a favor to ask, although it's more of a plea: Could you {#Emph}please{#Prev}, please stop leaving your rubbish on the ground? You could just put it in the basket right nearby!" },
+
+				{ Cue = "/VO/Eris_0352",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "Oh I don't know, babe! I distinctly remember when I asked you to set me up with Ares and that didn't go my way. So why should {#Emph}I {#Prev}do anything for {#Emph}you?" },
+
+				{ Cue = "/VO/Melinoe_4898", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I don't think asking me to get the god of war's attention is equivalent to simply picking up after yourself when you're essentially a guest. But if you want to be spiteful, fine." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.3,
+						ObjectType = "NPC_Eris_01",
+						{ Cue = "/VO/Eris_0353", Text = "I do, I do!" },
+					},
+				},
+			},
 
 			ErisAboutAlley01 =
 			{
@@ -751,12 +798,63 @@ UnitSetData.NPC_Eris =
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "No, I... was just drawn here to you. By your trail of rubbish! You're luring me, aren't you." },
+
 				EndVoiceLines =
 				{
 					{
 						PreLineWait = 0.35,
 						ObjectType = "NPC_Eris_01",
 						{ Cue = "/VO/Eris_0047", Text = "You're an easy target." },
+					},
+				},
+			},
+			ErisAboutAlley02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ErisTaverna02", "ErisAboutAlley01" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Melinoe_4906", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Hey, thank you, Eris! You didn't throw your rubbish toward me as I approached... that couldn't have been easy." },
+
+				{ Cue = "/VO/Eris_0366",
+					Emote = "PortraitEmoteSurprise",
+					Portrait = "Portrait_Eris_Unsure_01",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "It {#Emph}was {#Prev}easy, Trouble, because I forgot! I've had a lot on my mind, OK? So you don't have to give me such a hard time as soon as I slip up on even the slightest thing." },
+
+				{ Cue = "/VO/Melinoe_4907", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Portrait = "Portrait_Mel_Hesitant_01",
+					Text = "I wasn't giving you a hard time, I was genuinely pleased, but also completely mistaken apparently. Do you really expect me to keep picking up after you forever?" },
+
+				{ Cue = "/VO/Eris_0367",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Text = "Well it's not like Moros is gonna do it! Besides, how else could I lure you to where I have you all to myself?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.36,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4908", Text = "I {#Emph}knew {#Prev}you were trying to lure me!" },
+					},
+					{
+						PreLineWait = 0.36,
+						ObjectType = "NPC_Eris_01",
+						{ Cue = "/VO/Eris_0368", Text = "And you still take the bait!" },
 					},
 				},
 			},
@@ -970,6 +1068,9 @@ UnitSetData.NPC_Eris =
 				UseableOffSource = true,
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" }
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
@@ -1994,6 +2095,142 @@ UnitSetData.NPC_Eris =
 				},
 			},
 
+			ErisAboutRug01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgrades", "Cosmetic_ErisRug" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Eris_0414",
+					Portrait = "Portrait_Eris_FiredUp_01",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Text = "Babe, I can't believe you got us something for our special spot! That's so {#Emph}thoughtful! {#Prev}You really shouldn't have." },
+
+				{ Cue = "/VO/Melinoe_4937", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You're right, I probably shouldn't have. You'll find some way to hold this over me at some point, won't you?" },
+
+				{ Cue = "/VO/Eris_0415",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "Guess you'll find out! And don't worry, if anyone asks, I'll just tell them it's our little secret." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4938", Text = "Must you?" },
+					},
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Eris_01",
+						{ Cue = "/VO/Eris_0416", Text = "I must." },
+					},
+				},
+			},
+			ErisAboutSign01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgrades", "Cosmetic_ErisWarningSign01" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Eris_0354",
+					Portrait = "Portrait_Eris_Unsure_01",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Text = "You really put up warning signs about me, babe? That seems a little immature, even for you. What if I did something like that to you, how would {#Emph}you {#Prev}like it?" },
+
+				{ Cue = "/VO/Melinoe_4899", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Well, I... wouldn't like it, probably, Eris. I'm sorry. I merely thought the signs would help me know when I can visit with you here... I'd not considered it was something cruel." },
+
+				{ Cue = "/VO/Eris_0355",
+					Emote = "PortraitEmoteSparkly",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "It {#Emph}is {#Prev}cruel! I was so impressed! But now you're groveling about it so I guess I gave you too much credit for that one. You're not gonna take them {#Emph}down{#Prev}, are you?" },
+
+				{ Cue = "/VO/Melinoe_4900", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "...It sounds like you don't want me to, so... perhaps I shall." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Eris_01",
+						{ Cue = "/VO/Eris_0356", Text = "You better not!" },
+					},
+				},
+			},
+			ErisAboutSign02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ErisAboutSign01" },
+					},
+					{
+						PathFalse = { "GameState", "WorldUpgrades", "Cosmetic_ErisWarningSign01" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Eris_0357",
+					Portrait = "Portrait_Eris_FiredUp_01",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Emote = "PortraitEmoteCheerful",
+					Text = "You really put away the signs with my face on 'em! You have a mean streak after all! {#Emph}Babe! I'm so proud of you!" },
+
+				{ Cue = "/VO/Melinoe_4901", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Intense_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "{#Emph}What? {#Prev}Do you want your warning signs posted, or don't you? Either way I'm going to do the exact opposite, because that's what you would do to me!" },
+
+				{ Cue = "/VO/Eris_0358",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Emote = "PortraitEmoteFiredUp",
+					Text = "Oh you're {#Emph}so {#Prev}fired up right now! Do I want those signs {#Emph}up {#Prev}or {#Emph}down? {#Prev}You'll never know, because I swear I'll never mention 'em again." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4902", Text = "...How could you be so cruel?" },
+					},
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Eris_01",
+						PreLineAnim = "Enemy_Eris_Hub_Greet",
+						{ Cue = "/VO/Eris_0359", Text = "It's a gift!" },
+					},
+				},
+			},
+
 			-- about other characters
 			ErisAboutChronos01 =
 			{
@@ -2283,6 +2520,91 @@ UnitSetData.NPC_Eris =
 				},
 			},
 
+			ErisAboutCharon01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredAlive",
+						FunctionArgs = { Units = { "NPC_Charon_01", } },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Eris_0360",
+					Text = "Well if it isn't Charon over there! I heard all the heavy breathing, and sure enough. Got him eating out of the palm of your hand like all the other animals around here, {#Emph}huh." },
+
+				{ Cue = "/VO/Melinoe_4903", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Your utter disrespect to one of the most dedicated servants of the realm and your {#Emph}own brother {#Prev}is duly noted, Eris. But if it matters, Charon is here of his own volition." },
+
+				{ Cue = "/VO/Eris_0361",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Text = "{#Emph}Oh{#Prev}, kind of like how {#Emph}you're {#Prev}here of your own volition too? Taken as a baby, not allowed to see even a glimpse of the outside world till you've been trained as an assassin. {#Emph}Your choice!" },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4904", Text = "No one has forced me to do this." },
+					},
+					{
+						PreLineWait = 0.32,
+						ObjectType = "NPC_Eris_01",
+						{ Cue = "/VO/Eris_0362", Text = "{#Emph}Uh-huh." },
+					}
+				},
+			},
+
+			ErisAboutArtemisSinging01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "AudioState", "AmbientTrackName" },
+						IsAny = { "/Music/ArtemisSong_MC", "/Music/IrisEndThemeCrossroads_MC" },
+					},
+					{
+						Path = { "ConfigOptionCache", "MusicVolume" },
+						Comparison = ">",
+						Value = 0.1,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Eris_0369",
+					Portrait = "Portrait_Eris_Unsure_01",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "Hey, could you do me a favor and ask your woodsy pal over there to keep it {#Emph}down? {#Prev}I practically can't hear myself {#Emph}think!" },
+
+				{ Cue = "/VO/Melinoe_4909", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Perhaps it's because no thoughts of any note have been going through your head. You really expect me to ask Artemis not to sing on your behalf? Do it yourself!" },
+
+				{ Cue = "/VO/Eris_0370",
+					Portrait = "Portrait_Eris_FiredUp_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+					Text = "Fine, maybe I will! Or maybe I'll keep sulking and complaining about it! I haven't decided yet." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+						{ Cue = "/VO/Melinoe_4910", Text = "Take all the time you need." },
+					},
+				},
+			},
+
 			ErisAboutMoros01 =
 			{
 				PlayOnce = true,
@@ -2462,6 +2784,7 @@ UnitSetData.NPC_Eris =
 				PauseMusicPlayerMusic = true,
 				PlayOnce = true,
 				UseableOffSource = true,
+				InitialGiftableOffSource = true,
 				GiftableOffSource = true,
 				PostBlockSpecialInteract = true,
 				StatusAnimation = "StatusIconWantsAffection",
@@ -2489,19 +2812,11 @@ UnitSetData.NPC_Eris =
 						Comparison = ">=",
 						Value = 6,
 					},
-					{
-						FunctionName = "RequiredQueuedTextLine",
-						FunctionArgs = { IsNone = { "IcarusBecomingCloser01" } },
-					},
 					NamedRequirements = { "NoRecentBecomingCloserEvent" },
-					NamedRequirementsFalse = { "NearTrueEnding" },
-					--[[
-					{
-						PathFalse = { "CurrentRun", "TimePassageOccurred" },
-						HintId = "Codex_TimePassesGiftUsed",
-					},
-					]]--
+					NamedRequirementsFalse = { "NearTrueEnding", "IcarusBecomingCloserEligible" },
 				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 
 				{ Cue = "/VO/Eris_0276",
 					PreLineAnim = "Enemy_Eris_Hub_Flattered",
@@ -2697,7 +3012,7 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 
 				{ Cue = "/VO/Eris_0379",
-					Portrait = "Portrait_Eris_FiredUp_01",
+					Portrait = "Portrait_Eris_Unsure_01",
 					PreLineAnim = "Enemy_Eris_Hub_Scoff",
 
 					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Eris_Unsure_01", WaitTime = 5.6 },
@@ -2925,6 +3240,50 @@ UnitSetData.NPC_Eris =
 				},
 			},
 
+			ErisAboutCurse01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ErisGift07", "ErisGrantsCurse01" },
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+
+				{ Cue = "/VO/Melinoe_4919", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Hesitant_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					Text = "You know back when I was just getting started, I didn't appreciate you placing some wretched curse on me. I might have settled things with Chronos even sooner!" },
+
+				{ Cue = "/VO/Eris_0390",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "And why would I have wanted {#Emph}that? {#Prev}Also thanks for reminding me, I almost forgot I could just curse you every night. That might work even better than the Rail!" },
+
+				{ Cue = "/VO/Melinoe_4920", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Intense_01",
+					PreLineAnim = "MelTalkBrooding01ReturnToIdle", PreLineAnimTarget = "Hero",
+					Text = "If you so much as dare, I shall pluck every feather from your wings, one by one by one." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Eris_01",
+						PreLineAnim = "Enemy_Eris_Hub_Flattered",
+						{ Cue = "/VO/Eris_0391", Text = "All right, all right, relax!" },
+					},
+				},
+			},
+
+
 			ErisPostEpilogue01 =
 			{
 				PlayOnce = true,
@@ -3026,7 +3385,6 @@ UnitSetData.NPC_Eris =
 				InitialGiftableOffSource = true,
 				GiftableOffSource = true,
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				TeleportToId = 566613,
 				AngleTowardTargetId = 556921,
@@ -3118,12 +3476,357 @@ UnitSetData.NPC_Eris =
 			},
 
 			-- repeatable
+			ErisBecomingCloserChat01 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsAny = { "Choice_ErisAccept" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentErisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "IcarusBecomingCloserEligible" },
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
+
+				{ Cue = "/VO/Melinoe_5962", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You seem as though you're looking for Trouble, Eris." },
+
+				{ Cue = "/VO/Eris_0324",
+					ExitPortraitImmediately = true,
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10, ExtraWaitTime = 1.0 },
+
+					Text = "Been a little while since we blew off steam, hasn't it, babe?" },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Eris_0325",
+					Portrait = "Portrait_Eris_Flushed_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+					Text = "See, I'm not always bad. Sometimes I'm {#Emph}horrible." },
+
+				{ Cue = "/VO/Melinoe_5655", UsePlayerSource = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "{#Emph}...Whew. {#Prev}No arguments." },
+
+				EndFunctionName = "ErisExitPresentation",
+				-- EndFunctionArgs = { NoLaugh = true },
+
+				-- EndGlobalVoiceLines = "MelSighVoiceLines",
+			},
+			ErisBecomingCloserChat02 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsAny = { "Choice_ErisAccept" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentErisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "IcarusBecomingCloserEligible" },
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
+
+				{ Cue = "/VO/Melinoe_5963", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "What's on your mind there, Strife?" },
+
+				{ Cue = "/VO/Eris_0326",
+					ExitPortraitImmediately = true,
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10, ExtraWaitTime = 1.0 },
+
+					Text = "Want to get out of here? And by that I mean go over {#Emph}there." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Eris_0327",
+					Portrait = "Portrait_Eris_Flushed_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+
+					Text = "Always a pleasure messing with you, babe!" },
+
+				{ Cue = "/VO/Melinoe_5656", UsePlayerSource = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					Text = "...Likewise, Eris." },
+
+				EndFunctionName = "ErisExitPresentation",
+				-- EndFunctionArgs = { NoLaugh = true },
+
+				EndGlobalVoiceLines = "MelSighVoiceLines",
+			},
+			ErisBecomingCloserChat03 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsAny = { "Choice_ErisAccept" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentErisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "IcarusBecomingCloserEligible" },
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
+
+				{ Cue = "/VO/Melinoe_5964", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You want something, don't you?" },
+
+				{ Cue = "/VO/Eris_0328",
+					ExitPortraitImmediately = true,
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10, ExtraWaitTime = 1.0 },
+
+					Text = "I want to disappear for a bit, and you're coming with me." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Eris_0329",
+					Portrait = "Portrait_Eris_Flushed_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+
+					Text = "All right, Trouble, you're free to go. Get out of here, will you?" },
+
+				{ Cue = "/VO/Melinoe_5657", UsePlayerSource = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					Text = "...All right, all right." },
+
+				EndFunctionName = "ErisExitPresentation",
+				-- EndFunctionArgs = { NoLaugh = true },
+
+				EndGlobalVoiceLines = "MelSighVoiceLines",
+			},
+			ErisBecomingCloserChat04 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsAny = { "Choice_ErisAccept" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentErisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "IcarusBecomingCloserEligible" },
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
+
+				{ Cue = "/VO/Melinoe_5965", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "May I help you with something this eve?" },
+
+				{ Cue = "/VO/Eris_0330",
+					ExitPortraitImmediately = true,
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10, ExtraWaitTime = 1.0 },
+
+					Text = "What do you say we check if the old fishing pier's all right?" },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Eris_0331",
+					Portrait = "Portrait_Eris_Flushed_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+					Emote = "PortraitEmoteSparkly",
+					
+					Text = "Inspection complete! Want to go report our latest findings?" },
+
+				{ Cue = "/VO/Melinoe_5658", UsePlayerSource = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_EmpatheticFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					Text = "...Let's keep them to ourselves." },
+
+				EndFunctionName = "ErisExitPresentation",
+				-- EndFunctionArgs = { NoLaugh = true },
+
+				EndGlobalVoiceLines = "MelSighVoiceLines",
+			},
+			ErisBecomingCloserChat05 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsAny = { "Choice_ErisAccept" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentErisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "IcarusBecomingCloserEligible" },
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
+
+				{ Cue = "/VO/Eris_0332",
+					Text = "Oh hi again there babe. Can you guess what I'm thinking?" },
+
+				{ Cue = "/VO/Melinoe_5966", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					ExitPortraitImmediately = true,
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10, ExtraWaitTime = 1.0 },
+
+					Text = "Hi again there, Eris. And yes, I believe I can." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Eris_0333",
+					Portrait = "Portrait_Eris_Flushed_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+					
+					Text = "Well! You're definitely getting pretty good at reading minds." },
+
+				{ Cue = "/VO/Melinoe_5659", UsePlayerSource = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					Text = "...You know, I try." },
+
+				EndFunctionName = "ErisExitPresentation",
+				-- EndFunctionArgs = { NoLaugh = true },
+
+				EndGlobalVoiceLines = "MelSighVoiceLines",
+			},
+			ErisBecomingCloserChat06 =
+			{
+				PlayFirst = true,
+				PauseMusicPlayerMusic = true,
+				UseableOffSource = true,
+				PostBlockSpecialInteract = true,
+				StatusAnimation = "StatusIconWantsAffection",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsAny = { "Choice_ErisAccept" },
+					},
+					NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentErisBecomingCloserEvent" },
+					NamedRequirementsFalse = { "IcarusBecomingCloserEligible" },
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
+
+				{ Cue = "/VO/Melinoe_5967", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Something you wish to discuss with me?" },
+
+				{ Cue = "/VO/Eris_0334",
+					ExitPortraitImmediately = true,
+					PostLineFunctionName = "BecomingCloserPresentation",
+					PostLineFunctionArgs = { Repeatable = true, TimeTicks = 10, ExtraWaitTime = 1.0 },
+
+					Text = "Whatever it is you need, babe, I'm here for you. Sometimes." },
+
+				-- INTERMISSION PRESENTATION
+
+				{ Cue = "/VO/Eris_0335",
+					Portrait = "Portrait_Eris_Flushed_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+					PreLineWait = 0.35,
+					
+					Text = "...And that takes care of {#Emph}that {#Prev}I think, at least for now!" },
+
+				{ Cue = "/VO/Melinoe_5660", UsePlayerSource = true,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostIntermissionArgs,
+
+					Portrait = "Portrait_Mel_PleasedFlushed_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+
+					Text = "...I concur." },
+
+				EndFunctionName = "ErisExitPresentation",
+				EndFunctionArgs = { NoLaugh = true },
+
+				EndGlobalVoiceLines = "MelSighVoiceLines",
+			},
+
 			ErisChat01 =
 			{
 				UseableOffSource = true,
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
 				{ Cue = "/VO/Eris_0004",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
 					Text = "Think you might have missed a spot back there, Trouble?" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3133,6 +3836,7 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
 				{ Cue = "/VO/Eris_0005",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
 					Text = "Just keep at it, whatever it is you think you've got to prove!" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3151,6 +3855,8 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
 				{ Cue = "/VO/Eris_0007",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
+					Portrait = "Portrait_Eris_Unsure_01",
 					Text = "You know this whole place is turning into a real dump..." },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3160,6 +3866,8 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreetingRepeatable,
 				{ Cue = "/VO/Eris_0008",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Portrait = "Portrait_Eris_Unsure_01",
 					Text = "Real shame what's been happening between us lately, Trouble." },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3186,6 +3894,7 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 				{ Cue = "/VO/Eris_0010",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
 					Text = "Life sure moves fast, even for deathless goddesses, {#Emph}huh{#Prev}, Trouble?" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3219,6 +3928,7 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 				{ Cue = "/VO/Eris_0013",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
 					Text = "How about you mind your own business, Trouble, and lemme mind mine." },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3260,6 +3970,8 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 				{ Cue = "/VO/Eris_0017",
+					Portrait = "Portrait_Eris_FiredUp_01",
+					PreLineAnim = "Enemy_Eris_Hub_Greet",
 					Text = "{#Emph}Whew{#Prev}, it's all just been a little much lately, y'know?" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3279,6 +3991,7 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 				{ Cue = "/VO/Eris_0019",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
 					Text = "Come {#Emph}on{#Prev}, babe! You know rumors gonna fly if they catch us like this!" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
@@ -3306,19 +4019,163 @@ UnitSetData.NPC_Eris =
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 				{ Cue = "/VO/Eris_0022",
+					Portrait = "Portrait_Eris_Unsure_01",
 					Text = "All this stress, it isn't getting to you, is it, babe?" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
 			ErisChat20 =
 			{
 				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesChoiceRecord", "ErisBecomingCloser01" },
+						IsNone = { "Choice_ErisAccept" },
+					},
+				},
+
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
 				{ Cue = "/VO/Eris_0023",
+					Portrait = "Portrait_Eris_FiredUp_01",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
 					Text = "Why talk to me? Do what you want! {#Emph}Nobody {#Prev}cares!" },
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
+			ErisChat21 =
+			{
+				UseableOffSource = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0457",
+					Portrait = "Portrait_Eris_Unsure_01",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+					Text = "I just don't get what's wrong with liking it when everything gets totally messed up." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat22 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
+				},
 
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0458",
+					Portrait = "Portrait_Eris_Unsure_01",
+					Text = "You better not fix everything anytime soon, you hear me, Trouble?" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat23 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EnemyKills", "Eris" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0459",
+					Portrait = "Portrait_Eris_Unsure_01",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					Text = "{#Emph}Whew{#Prev}, you really worked me over out there on the Rift last night, babe!" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat24 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EnemyKills", "Eris" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
+				},
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0460",
+					Text = "You must be keeping count of every single time you beat me, huh?" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat25 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "EnemyKills", "Eris" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "RoomsEntered" },
+						TableValuesToCount = { "O_Boss01", "O_Boss02" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0461",
+					Text = "Come by the Rift again sometime! It's not like I can shoot you here." },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat26 =
+			{
+				UseableOffSource = true,
+
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0462",
+					PostLineThreadedFunctionName = "ErisExitPresentation",
+					Text = "Race you to the Rift, babe! Last one over there's the first one to get shot!" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat27 =
+			{
+				UseableOffSource = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0319",
+					Emote = "PortraitEmoteDepressed",
+					Portrait = "Portrait_Eris_Unsure_01",
+					Text = "{#Emph}Eh{#Prev}, I'm sort of busy doing other things right now, OK?" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat28 =
+			{
+				UseableOffSource = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0377",
+					Text = "Move along now, Trouble!" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
+			ErisChat29 =
+			{
+				UseableOffSource = true,
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.ErisGreeting,
+				{ Cue = "/VO/Eris_0378",
+					Portrait = "Portrait_Eris_FiredUp_01",
+					Text = "Let's all just stand around!" },
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
 		},
 
 		GiftTextLineSets =
@@ -3338,6 +4195,9 @@ UnitSetData.NPC_Eris =
 						Path = { "GameState", "UseRecord", "NPC_Eris_01" },
 						Comparison = ">=",
 						Value = 2,
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ErisTaverna02" },
 					},
 				},
 				{ Cue = "/VO/Eris_0068",
@@ -3416,8 +4276,8 @@ UnitSetData.NPC_Eris =
 				{ Cue = "/VO/Melinoe_2801", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "Please, don't... I mean, I just wanted you to have it since I know you have a taste for this stuff, but it's been harder to come by. Anyway...!" },
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Please don't... I mean, I just wanted you to have it since I know you have a taste for this stuff, but it's been harder to come by. Anyway...!" },
 
 			},
 			ErisGift03 =
@@ -3736,7 +4596,7 @@ UnitSetData.NPC_Eris =
 						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
 					},
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "ErisGift02" },
+						PathTrue = { "GameState", "TextLinesRecord", "ErisGift01" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -3915,6 +4775,248 @@ UnitSetData.NPC_Eris =
 					Emote = "PortraitEmoteSparkly",
 					Text = "I had a blast there, babe. And look how {#Emph}clean {#Prev}my wings are now! Won't stay like this for long, but... still." },
 			},
+			ErisBathHouse03 =
+			{
+				PauseMusicPlayerMusic = true,
+				PlayOnce = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
+				DoNotFlipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "IsDead" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ErisBecomingCloser01", "ErisAboutStrife01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+				},
+				{ Cue = "/VO/Melinoe_4931", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					Text = "I was thinking, why don't we break from all our pointless fighting and stop by the springs again. What do you say? " },
+
+				{ Cue = "/VO/Eris_0407",
+					PreLineAnim = "Enemy_Eris_Hub_Flattered",
+					PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+					PostLineRemoveContextArt = true,
+					Text = "Sure! I like listening to whatever pops into your head while staring at you till you get all self-conscious. Let's go!" }, 
+
+				{ Cue = "/VO/Eris_0409",
+					PreLineFunctionName = "BathHouseStartPresentation",
+					NarrativeContextArt = "DialogueBackground_Bathhouse",
+
+					Portrait = "Portrait_Eris_Bath_01",
+					PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+					Text = "...I'm not your friend, you know. However close you think we are now, I'm just setting you up so I can really let you down." },
+
+				{ Cue = "/VO/Melinoe_4932", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "If that were so, why would you bother warning me about it? You'd simply do it, rather than try to push me away. Well I'm not going anywhere. Especially not without my attire." },
+
+				{ Cue = "/VO/Eris_0410",
+					Portrait = "Portrait_Eris_Bath_01",
+					PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+					Text = "You'll regret it later. Everybody always does. I can make things {#Emph}so {#Prev}much worse! And the more time you give me, the more likely it'll happen. You think I'm bluffing?" },
+
+				{ Cue = "/VO/Melinoe_4933", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "No, I think you probably mean it. But as for me, I don't ever want to get too comfortable. That's when I feel the most uneasy. And with you around, I doubt I ever will." },
+
+				{ Cue = "/VO/Eris_0411",
+					Portrait = "Portrait_Eris_Bath_01",
+					PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+					PreLineWait = 0.35,
+					Text = "That's probably the nicest thing that anybody's ever said to me... but it changes nothing, and nothing ever does. Hey if you don't want to get too comfortable, then what are you doing {#Emph}here?" },
+
+				{ Cue = "/VO/Melinoe_4934", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Bath_01",
+					PortraitExitAnimation = "Portrait_Mel_Bath_01_Exit",
+					Text = "Recovering from the last time you used me for target practice with the Adamant Rail. I'm used to certain trade-offs when it comes to being around you, Eris." },
+
+				{ Cue = "/VO/Eris_0412",
+					Portrait = "Portrait_Eris_Bath_01",
+					PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+					PostLineFunctionName = "BathHouseQuipPresentation",
+					PostLineThreadedFunctionName = "TimePassesPresentation",
+					PostLineThreadedFunctionArgs = { TimeTicks = 12, },
+
+					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+					PostLineRemoveContextArt = true,
+					Text = "Just don't get {#Emph}too {#Prev}used to them, right, Trouble? But at least you seem to understand there's no getting rid of me." },
+
+				{ Cue = "/VO/Eris_0413",
+					NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+					PreLineFunctionName = "BathHouseEndPresentation",
+					PreLineWait = 0.2,
+
+					PostLineThreadedFunctionName = "InCombatTextEvent",
+					PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+					
+					Emote = "PortraitEmoteSparkly",
+					Text = "Well! You look like you're all set for some more target practice after that. You know where to find me." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_4936", Text = "That I do." },
+					},
+				},
+			},
+			ErisBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ErisTaverna02", "ErisBathHouse03" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "ErisBathHouseRepeatable01", "ErisBathHouse03" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0294",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "A visit to the springs, just you and me? Aw, {#Emph}babe!" },
+
+					{ Cue = "/VO/Eris_0297",
+						PostLineRemoveContextArt = true,
+						PreLineAnim = "Enemy_Eris_Hub_Flattered",
+
+						Portrait = "Portrait_Eris_FiredUp_01",
+						PortraitExitAnimation = "Portrait_Eris_FiredUp_01_Exit",
+						Text = "Of everybody in your little Crossroads, you'd choose {#Emph}me? {#Prev}I'm honored, babe!" },
+
+					{ Cue = "/VO/Eris_0300",
+						PostLineRemoveContextArt = true,
+						PreLineAnim = "Enemy_Eris_Hub_Scoff",
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "I've gotten real dirty since we last visited the springs, so I don't really see why not!" },
+				},
+
+				-- Mel in the bath
+				[2] = HeroRepeatableTextLines.BathHouseIntroTextLines,
+
+				-- Eris in the bath
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0295",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Bath_01",
+						PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+						Text = "...No matter how much of this stuff I drink, it never seems to clean me on the inside!" },
+
+					{ Cue = "/VO/Eris_0298",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Bath_01",
+						PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+						Text = "...Things are pretty awkward with us, huh? Though if it means more visits to the springs, what do I care?" },
+
+					{ Cue = "/VO/Eris_0301",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Bath_01",
+						PortraitExitAnimation = "Portrait_Eris_Bath_01_Exit",
+						Text = "...Just keep your hands where I can see 'em, babe. Don't want you getting too comfortable!" },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0296",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "{#Emph}Whew! {#Prev}I'm so relaxed it's almost like I wouldn't want to kill you anymore!" },
+
+					{ Cue = "/VO/Eris_0299",
+						PreLineWait = 0.2,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Felt {#Emph}good{#Prev}, didn't it? The only reason to do {#Emph}anything{#Prev}, Trouble!" },
+
+					{ Cue = "/VO/Eris_0302",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "{#Emph}Mm! {#Prev}Next time I might not let you drag me out of there so soon." },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
 
 			ErisBathHouseDecline01 =
 			{
@@ -3940,15 +5042,17 @@ UnitSetData.NPC_Eris =
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
-
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_3553", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Hesitant_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "Hey... what would you say about a visit to the hot springs, to cleanse yourself of all your foul deeds? And me of mine?" },
 				{ Cue = "/VO/Eris_0094",
-					Portrait = "Portrait_Eris_Unsure_01",
+					Portrait = "Portrait_Eris_FiredUp_01",
 					Emote = "PortraitEmoteSurprise",
 					PostLineThreadedFunctionName = "GiftPointRareRefundPresentation",
 					Text = "Oh, {#Emph}haha{#Prev}, well... you know, I'd feel way too self-conscious there with anybody else. Sorry!" },
@@ -3961,6 +5065,39 @@ UnitSetData.NPC_Eris =
 						-- { Cue = "/VO/Melinoe_0461", Text = "Maybe some other time." },
 					},
 				},
+			},
+			ErisBathHouseDecline02 =
+			{
+				PlayOnce = true,
+				SkipGiftPresentationPost = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ErisBathHouse01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+				},
+				{ Cue = "/VO/Melinoe_4905", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "It's fine if you can't make it though would you be up for visiting the springs with me? Could help to calm us down." },
+
+				{ Cue = "/VO/Eris_0365",
+					PostLineThreadedFunctionName = "GiftPointRareRefundPresentation",
+					Text = "Last thing I want, babe, is to calm down. Besides, the springs are {#Emph}all the way over there{#Prev}, and I'm already minding my own business {#Emph}here! {#Prev}As you should mind yours." },
 			},
 
 			-- taverna
@@ -4205,6 +5342,8 @@ UnitSetData.NPC_Eris =
 			{
 				PlayOnce = true,
 				SkipGiftPresentationPost = true,
+				UseableOffSource = true,
+				GiftableOffSource = true,
 				Cost =
 				{
 					SuperGiftPoints = 1,
@@ -4225,14 +5364,156 @@ UnitSetData.NPC_Eris =
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_4283", UsePlayerSource = true,
 					Text = "What if we head to the taverna for a little while? You don't seem particularly busy and we probably should talk..." },
 				{ Cue = "/VO/Eris_0244",
-					PreLineWait = 0.35,
 					Portrait = "Portrait_Eris_Unsure_01",
-					PostLineThreadedFunctionName = "SuperGiftPointRefundPresentation",
+					PreLineAnim = "Enemy_Eris_Hub_Scoff",
+
+					PostLineThreadedFunctionName = "ErisExitPresentation",
+					PostLineThreadedFunctionArgs = { NoLaugh = true, RefundSuperGiftPoint = true },
+
 					Text = "What if you get out of my {#Emph}face {#Prev}for a little while? Don't feel like seeing you and all those Shades judging me, thanks." },
+			},
+
+			ErisTavernaRepeatable01 =
+			{
+				Cost =
+				{
+					SuperGiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "ErisTavernaRepeatable01", "ErisTaverna02" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before taverna
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0309",
+						PreLineAnim = "Enemy_Eris_Hub_Flattered",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "After everything that's happened I could definitely use a drink. Let's go right now!" },
+
+					{ Cue = "/VO/Eris_0312",
+						PreLineAnim = "Enemy_Eris_Hub_Greet",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "We haven't been to the taverna in a bit, I guess, so I don't see why not. After you, babe!" },
+
+					{ Cue = "/VO/Eris_0315",
+						PreLineAnim = "Enemy_Eris_Hub_Flattered",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "Know what, I could definitely go for some Ambrosia here now that you bring it up!" },
+				},
+
+				-- at taverna
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0310",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "...You see those Shades right over there? I keep shooting dirty looks at them. I think they're too afraid to move!" },
+
+					{ Cue = "/VO/Eris_0313",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "...This stuff really does taste kind of different every time. So what do we drink to? Don't even answer that, pour up." },
+
+					{ Cue = "/VO/Eris_0316",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Eris_Unsure_01",
+						PortraitExitAnimation = "Portrait_Eris_Unsure_01_Exit",
+						Text = "...You don't know how bad I want to flip all of these tables, so why don't we hurry up and drink." },
+				},
+
+				-- after taverna
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0311",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Eris_Unsure_01", WaitTime = 2.6 },
+
+						Text = "{#Emph}Whew! {#Prev}I think I really needed that! But now I'm kind of sad." },
+
+					{ Cue = "/VO/Eris_0314",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "{#Emph}Ah{#Prev}, it's funny. I don't hate that place as much as I used to." },
+
+					{ Cue = "/VO/Eris_0317",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						PreLineAnim = "Enemy_Eris_Hub_Scoff",
+
+						Text = "Well, they won't be seeing me back {#Emph}there {#Prev}anytime soon!" },
+				},
+				
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
 			},
 
 			-- fishing
@@ -4360,6 +5641,9 @@ UnitSetData.NPC_Eris =
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_3554", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Casual_01",
@@ -4370,6 +5654,117 @@ UnitSetData.NPC_Eris =
 					Text = "{#Emph}Mmm{#Prev}, a trip to the fishing-hole involves a lot more being still and quiet than I think I can handle right now, thanks." },
 			},
 
+			ErisFishingRepeatable01 =
+			{
+				Cost =
+				{
+					GiftPointsEpic = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ErisTaverna02" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "ErisFishingRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- start fishing
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0303",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Eris_Unsure_01",
+						PortraitExitAnimation = "Portrait_Eris_Unsure_01_Exit",
+						Text = "Oh no, not this again. But then again, who cares? Let's go!" },
+
+					{ Cue = "/VO/Eris_0305",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "{#Emph}Hm! {#Prev}Think I could probably disturb the waters just enough to get the fishies biting, though there's one way to find out!" },
+
+					{ Cue = "/VO/Eris_0307",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Eris_Default_01",
+						PortraitExitAnimation = "Portrait_Eris_Default_01_Exit",
+						Text = "I'd much rather mess with you than a bunch of mindless fish, but I could probably do both at the same time!" },
+				},
+
+				-- end fishing
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Eris_0304",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "That's more than enough being still and quiet for one night." },
+
+					{ Cue = "/VO/Eris_0306",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PreLineAnim = "Enemy_Eris_Hub_Flattered",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "We'll {#Emph}never {#Prev}be the same again, I hope you know, Trouble." },
+
+					{ Cue = "/VO/Eris_0308",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PreLineAnim = "Enemy_Eris_Hub_Scoff",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "That's enough concentrating on being here for one night!" },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Eris",
+			},
 		},
 
 		MissingDistanceTrigger =

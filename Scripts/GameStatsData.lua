@@ -2,9 +2,6 @@ ScreenData.GameStats =
 {
 	BlockPause = true,
 
-	OpenSound = "/SFX/Menu Sounds/FatedListOpen",
-	CloseSound = "/SFX/Menu Sounds/FatedListClose",
-
 	Components = {},
 
 	CategoryStartX = 300,
@@ -35,6 +32,10 @@ ScreenData.GameStats =
 			Name = "GameStats_Keepsakes",
 			Icon = "GUI\\Screens\\GameStats\\Icon-Keepsakes",
 		},
+		{
+			Name = "GameStats_Familiars",
+			Icon = "GUI\\Screens\\Codex\\Icon-Familiars",
+		},
 	},
 
 	WeaponBaseAspectMapping =
@@ -51,6 +52,8 @@ ScreenData.GameStats =
 	RowStartY = 278,
 	RowSpacingTraits = 40,
 	IconScaleTraits = 0.24,
+
+	CloseDestroyWait = 0.36,
 
 	WeaponColumnHeaders =
 	{
@@ -144,7 +147,7 @@ ScreenData.GameStats =
 
 		BackgroundBack = 
 		{
-			AnimationName = "GameStatsBack",
+			AnimationName = "GameStatsBackDelay",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
 		},
@@ -156,7 +159,7 @@ ScreenData.GameStats =
 
 		BackgroundFront = 
 		{
-			AnimationName = "GameStatsFront",
+			AnimationName = "GameStatsIn",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
 		},
@@ -165,6 +168,7 @@ ScreenData.GameStats =
 		{
 			X = 80,
 			Y = 77,
+			Alpha = 0,
 			TextArgs =
 			{
 				FontSize = 26,

@@ -2,14 +2,9 @@ UnitSetData.Scylla =
 {
 	Scylla =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseGEnemy", "BaseVulnerableEnemy"},
 		Portrait = "Portrait_Scylla_Default_01",
 		EndTextLinesThreadedFunctionName = "ResetScyllaMusicStem",
-		EndTextLinesThreadedFunctionArgs =
-		{
-			Delay = 2,
-			Duration = 0.25,
-		},
 		StartedVoiceLinesFunctionName = "GenericPresentation",
 		StartedVoiceLinesFunctionArgs =
 		{
@@ -40,6 +35,70 @@ UnitSetData.Scylla =
 		LoadPackages = { "Scylla", },
 		Material = "Organic",
 		HealthBarTextId = "Scylla_Full",
+		-- AltHealthBarTextIds handled in BossScylla01 & BossScylla02
+
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.7,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.0,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.75,
+					SpeedMultiplier = 1.1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.9,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 5,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.75,
+				},
+			},
+		},
 
 		SetupEvents =
 		{
@@ -47,7 +106,55 @@ UnitSetData.Scylla =
 				FunctionName = "OverwriteSelf",
 				Args =
 				{
-					GrannyTexture = "GR2/ScyllaEM_Color",
+					DreamBiomeData =
+					{
+						[1] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.7,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.0,
+							},
+						},
+						[2] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 1.25,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.25,
+							},
+						},
+						[3] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 2.75,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.9,
+							},
+						},
+						[4] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 5,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 2.75,
+							},
+						},
+					},
 					OnDamagedEvents =
 					{
 						{
@@ -64,15 +171,7 @@ UnitSetData.Scylla =
 				},
 				GameStateRequirements =
 				{
-					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 2,
-						},
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 			},
 			{
@@ -90,19 +189,76 @@ UnitSetData.Scylla =
 				},
 				GameStateRequirements =
 				{
-					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 2,
-						},
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				}
-			}
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					StartedVoiceLinesFunctionName = "nil",
+					FinishedVoiceLinesFunctionName = "nil",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/ScyllaEM_Color",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/ScyllaEMDream_Color",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/ScyllaDream_Color",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
-		BossDifficultyShrineRequiredCount = 2,
 
 		MusicStem = "Vocals",
 		MusicStemOff = true,
@@ -116,16 +272,6 @@ UnitSetData.Scylla =
 		DeathAnimation = "Enemy_Scylla_Death",
 		DeathAngle = 270,
 		DeathPanOffsetY = -130,
-		
-		Outline =
-		{
-			R = 255,
-			G = 255,
-			B = 0,
-			Opacity = 0.8,
-			Thickness = 2,
-			Threshold = 0.6,
-		},
 
 		SpeechCooldownTime = 11,
 
@@ -133,7 +279,24 @@ UnitSetData.Scylla =
 		GroupHealthBarOwner = true,
 
 		OnDeathFunctionName = "ScyllaKillPresentation",
-		OnDeathFunctionArgs = { Message = "SirensDefeatedMessage", CameraPanTime = 1.5, StartSound = "/Leftovers/Menu Sounds/EmoteShocked", EndMusicEarly = true, BatsAfterDeath = false, FlashRed = true, FlashDuration = 0.45, AddInterBiomeTimerBlock = true },
+		OnDeathFunctionArgs =
+		{
+			Message = "SirensDefeatedMessage",
+			CameraPanTime = 1.5,
+			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
+			EndMusicEarly = true,
+			FlashRed = true,
+			FlashDuration = 0.45,
+			AddInterBiomeTimerBlock = true,
+			IsBiomeBoss = true,
+		},
+
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
 
 		PreBossAISetupFunctionName = "ScyllaActivatePresentation",
 
@@ -415,8 +578,15 @@ UnitSetData.Scylla =
 				LowPassOn = true,
 				AIData =
 				{
-					AIEndLastAlive = true,
-					--PreAttackLowPass = true,
+					AIEndRequirements =
+					{
+						{
+							Path = { "RequiredKillEnemies" },
+							UseLength = true,
+							Comparison = "<=",
+							Value = 1,
+						}
+					},
 				},
 				ThreadedEvents =
 				{
@@ -681,11 +851,7 @@ UnitSetData.Scylla =
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 2,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Scylla_0259", Text = "Thank you... Oceanus...",
@@ -723,6 +889,8 @@ UnitSetData.Scylla =
 			{
 				{ Name = "BossVanquishedSpeech", Time = 60 },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
+			{ GlobalVoiceLines = "ScyllaFanShowEndVoiceLines" },
 			{ GlobalVoiceLines = "SeleneVictoryVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
@@ -734,8 +902,8 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "AudioState", "MusicName" },
-						IsAny = { "/Music/IrisMusicScylla4_MC" },
+						Path = { "CurrentRun", "MusicRecord" },
+						HasAny = { "/Music/IrisMusicScylla4_MC" },
 					},
 				},
 
@@ -759,6 +927,23 @@ UnitSetData.Scylla =
 				{ Cue = "/VO/MelinoeField_0099", Text = "...I hate her.", PreLineWait = 7.5 },
 				{ Cue = "/VO/MelinoeField_0100", Text = "Keep practicing!" },
 				{ Cue = "/VO/MelinoeField_0101", Text = "Sing about {#Emph}that..." },
+				{ Cue = "/VO/MelinoeField_5567", Text = "This silence ought to help my sleep...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5568", Text = "Get out of my head, Scylla...",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_4310", Text = "...That was an odd song.",
 					GameStateRequirements =
 					{
@@ -784,6 +969,9 @@ UnitSetData.Scylla =
 						},
 						{
 							PathFalse = { "PrevRun", "RoomsEntered", "G_PostBoss01", },
+						},
+						{
+							PathFalse = { "PrevRun", "ActiveBounty" },
 						},
 					},
 				},
@@ -816,7 +1004,7 @@ UnitSetData.Scylla =
 					Emote = "PortraitEmoteAnger",
 					PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
 					PostLineFunctionName = "StartBossRoomMusic",
-					Text = "Don't {#Emph}ever {#Prev}say such things about our fans! {#Prev}Oh hey gals...? What say we give her the {#Emph}old song and dance?" },
+					Text = "Don't {#Emph}ever {#Prev}say such things about our fans! Oh hey gals...? What say we give her the {#Emph}old song and dance?" },
 				EndGlobalVoiceLines = "ScyllaShowStartVoiceLines",
 			},
 
@@ -826,14 +1014,10 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
-					{
 						Path = { "AudioState", "MusicName" },
 						IsAny = { "/Music/IrisMusicScylla3_MC" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0279",
 					Emote = "PortraitEmoteSparkly",
@@ -858,15 +1042,11 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
-					{
 						Path = { "GameState", "LastBossHealthBarRecord", "Scylla" },
 						Comparison = "<=",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Scylla_0282",
@@ -888,16 +1068,12 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Scylla" },
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ScyllaAboutAltFight01" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Scylla_0284",
@@ -908,9 +1084,10 @@ UnitSetData.Scylla =
 					Text = "Who do you even think this mysterious sponsor is, setting the location for our clash and whether that horrid Charybdis makes a guest appearance?" },
 				{ Cue = "/VO/Scylla_0285",
 					-- PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
+					Emote = "PortraitEmoteCheerful",
 					PostLineFunctionName = "StartBossRoomMusic",
-					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteFiredUp", DoShake = true, WaitTime = 9.65, PlayScyllaTauntAnim = true },
-					Text = "Nice try, lady. You can barge onto our stage, no {#Emph}matter {#Prev}the size... you can try and take our sense of style... {#Emph}even our fans! {#Prev}But you'll never take our {#Emph}sponsors!!" },
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "PortraitEmoteFiredUp", DoShake = true, WaitTime = 8.85, PlayScyllaTauntAnim = true },
+					Text = "Nice try, lady. You can barge onto our stage, no {#Emph}matter {#Prev}the size... you can try and take our sense of style... {#Emph}even our fans! {#Prev}But you'll {#Emph}never {#Prev}take our {#Emph}sponsors!!" },
 				EndGlobalVoiceLines = "ScyllaShowStartVoiceLines",
 			},
 			ScyllaAboutAltFight04 =
@@ -919,16 +1096,12 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Scylla" },
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ScyllaAboutAltFight03" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Scylla_0286",
@@ -953,13 +1126,9 @@ UnitSetData.Scylla =
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Scylla" },
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "ScyllaAboutAltFight03" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Scylla_0288",
@@ -980,11 +1149,7 @@ UnitSetData.Scylla =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0290",
 					Emote = "PortraitEmoteSparkly",
@@ -1008,11 +1173,7 @@ UnitSetData.Scylla =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3544", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
@@ -1031,17 +1192,13 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Scylla" },
 					},
 					{
 						Path = { "AudioState", "MusicName" },
 						IsAny = { "/Music/IrisMusicScylla3_MC" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Scylla_0293",
@@ -1616,7 +1773,7 @@ UnitSetData.Scylla =
 					},
 				},
 				{ Cue = "/VO/Scylla_0303",
-					Text = "We know how come you keep on showing up here, don't we, lady? You're like Odysseus and {#Emph}all {#Prev}the rest! Though... what was with that Princess of the Underworld stuff he was going on about?" },
+					Text = "We know how come you keep on showing up here, don't we, lady? You're like Odysseus and {#Emph}all {#Prev}the rest! Though... what was with that {#Emph}Princess of the Underworld {#Prev}stuff he was going on about?" },
 				{ Cue = "/VO/MelinoeField_3584", UsePlayerSource = true,
 					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Mel_Hesitant_01", WaitTime = 3 },
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
@@ -1643,6 +1800,9 @@ UnitSetData.Scylla =
 						HasAny = { "BossPreDamageKeepsake" },
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpOdysseus" },
 
 				{ Cue = "/VO/MelinoeField_4354",
 					UsePlayerSource = true,
@@ -1924,13 +2084,9 @@ UnitSetData.Scylla =
 				GameStateRequirements = 
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
-					{
 						PathTrue = { "PrevRun", "RoomsEntered", "O_MiniBoss01" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 					--[[
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "ScyllaAboutAltFight01" }
@@ -1955,11 +2111,7 @@ UnitSetData.Scylla =
 				PlayOnce = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3598", UsePlayerSource = true,
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
@@ -2491,11 +2643,6 @@ UnitSetData.Scylla =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
-					{
 						FunctionName = "RequiredConsecutiveClearsOfRoom",
 						FunctionArgs = { Names = { "G_Boss01", "G_Boss02" }, Count = 2 },
 					},
@@ -2504,6 +2651,7 @@ UnitSetData.Scylla =
 						Comparison = "<=",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0330",
 					Text = "You better {#Emph}work {#Prev}with us tonight, lady! There's a potential sponsor somewhere in the stands so we have {#Emph}got {#Prev}to put on a {#Emph}big show! {#Prev}Bigger than when you beat us normally." },
@@ -2729,10 +2877,13 @@ UnitSetData.Scylla =
 				},
 				{ Cue = "/VO/Scylla_0028_B",
 					Text = "Don't worry, gals. One day? They'll put us up on the biggest stage, for {#Emph}all the world to see!" },
-				{ Cue = "/VO/Melinoe_2043", UsePlayerSource = true,
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					
+				{ Cue = "/VO/MelinoeField_5280", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Intense_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
-					Text = "I'm not particularly interested in listening to your delusions of grandeur right now, so why not start your little song." },
+					Text = "Scylla, I do not have time or patience for your delusions of grandeur right now, so why not start your little song?" },
+
 				{ Cue = "/VO/Scylla_0029",
 					PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
 					PostLineFunctionName = "StartBossRoomMusic",
@@ -2978,23 +3129,11 @@ UnitSetData.Scylla =
 					Text = "{#Emph}Ooh{#Prev}, you {#Emph}know {#Prev}we're on a hot streak when our fans keep coming back!" },
 				EndGlobalVoiceLines = "ScyllaShowStartVoiceLines",
 			},
-			ScyllaMiscStart22 =
-			{
-				{ Cue = "/VO/Scylla_0422",
-					PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
-					PostLineFunctionName = "StartBossRoomMusic",
-					Text = "Jetty, Roxy, and I, we're thinking maybe we'll try going solo after this!" },
-				EndGlobalVoiceLines = "ScyllaShowStartVoiceLines",
-			},
 			ScyllaMiscStart23 =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<=",
-						Value = 2,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0422",
 					PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
@@ -3057,11 +3196,7 @@ UnitSetData.Scylla =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0430",
 					Emote = "PortraitEmoteFiredUp",
@@ -3075,11 +3210,7 @@ UnitSetData.Scylla =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0431",
 					PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
@@ -3092,11 +3223,7 @@ UnitSetData.Scylla =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0432",
 					Emote = "PortraitEmoteCheerful",
@@ -3110,11 +3237,7 @@ UnitSetData.Scylla =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Scylla_0433",
 					PreLineThreadedFunctionName = "PlayScyllaTauntAnim",
@@ -3324,51 +3447,31 @@ GlobalVoiceLines.ScyllaGreetingLines =
 		{ Cue = "/VO/Scylla_0354", Text = "We're up in {#Emph}lights!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0355", Text = "It's our big break!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0357", Text = "Center stage...",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0358", Text = "Charybdis, {#Emph}look {#Prev}who!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0359", Text = "We're all here...",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0344", Text = "Oh, no...",
@@ -3379,17 +3482,16 @@ GlobalVoiceLines.ScyllaGreetingLines =
 					FunctionName = "RequiredConsecutiveClearsOfRoom",
 					FunctionArgs = { Names = { "G_Boss01", "G_Boss02" }, Count = 3 },
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			},
 		},
 		{ Cue = "/VO/Scylla_0351", Text = "{#Emph}Welcome{#Prev}, everyone!!",
 			PlayFirst = true,
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0215", Text = "Whoa, what is she {#Emph}wearing?",
@@ -3446,7 +3548,7 @@ GlobalVoiceLines.ScyllaGreetingLines =
 		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 1.35,
-		SuccessiveChanceToPlayAll = 0.33,
+		SuccessiveChanceToPlayAll = 0.1,
 		UsePlayerSource = true,
 		GameStateRequirements =
 		{
@@ -3461,8 +3563,18 @@ GlobalVoiceLines.ScyllaGreetingLines =
 			NamedRequirementsFalse = { "NoGreetingToScylla" },
 		},
 
-		{ Cue = "/VO/Melinoe_1447", Text = "Still practicing, are we?" },
-		{ Cue = "/VO/Melinoe_1448", Text = "I beat the crowds, did I?" },
+		{ Cue = "/VO/Melinoe_1447", Text = "Still practicing, are we?",
+			GameStateRequirements =
+			{
+				NamedRequirementsFalse = { "BossDifficultyActive" },
+			},
+		},
+		{ Cue = "/VO/Melinoe_1448", Text = "I beat the crowds, did I?",
+			GameStateRequirements =
+			{
+				NamedRequirementsFalse = { "BossDifficultyActive" },
+			},
+		},
 		{ Cue = "/VO/Melinoe_1449", Text = "On with the show?", PlayFirst = true },
 		{ Cue = "/VO/Melinoe_1450", Text = "From the top, then?" },
 	},
@@ -3470,6 +3582,23 @@ GlobalVoiceLines.ScyllaGreetingLines =
 
 GlobalVoiceLines.ScyllaShowStartVoiceLines =
 {
+	{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
+	{
+		RandomRemaining = true,
+		PreLineWait = 0.5,
+		PlayOnce = true,
+		PlayOnceContext = "ScyllaDreamRunStartVO",
+		SuccessiveChanceToPlay = 0.5,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_5564", Text = "Your blasted songs are still stuck in my head!" },
+		{ Cue = "/VO/MelinoeField_5565", Text = "I hear your every blasted lyric in my sleep...", PlayFirst = true },
+	},
 	{
 		RandomRemaining = true,
 		PreLineWait = 0.85,
@@ -3487,6 +3616,142 @@ GlobalVoiceLines.ScyllaShowStartVoiceLines =
 		},
 
 		{ Cue = "/VO/Scylla_0299", Text = "This one's for those of you who thought they'd get away!" },
+	},
+	{ GlobalVoiceLines = "ScyllaFanShowStartVoiceLines" },
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		ObjectType = "Scylla",
+		-- SuccessiveChanceToPlayAll = 0.2,
+		GameStateRequirements =
+		{
+			{
+				Path = { "LastLinePlayed" },
+				IsAny = { "/VO/Odysseus_0743", "/VO/Odysseus_0744", "/VO/Odysseus_0745", "/VO/Odysseus_0746" },
+			},
+		},
+		Cooldowns =
+		{
+			{ Name = "ScyllaSpokeRecently", Time = 20 },
+		},
+
+		{ Cue = "/VO/Scylla_0115", Text = "{#Emph}Wha?" },
+		{ Cue = "/VO/Scylla_0103", Text = "{#Emph}Hey!" },
+		{ Cue = "/VO/Scylla_0075", Text = "Hit it!",
+			GameStateRequirements =
+			{
+				OrRequirements =
+				{
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla1_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0743" },
+						},
+					},
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla2_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0744" },
+						},
+					},
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla3_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0745" },
+						},
+					},
+				},
+			},
+		},
+		{ Cue = "/VO/Scylla_0076", Text = "Here!",
+			GameStateRequirements =
+			{
+				OrRequirements =
+				{
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla1_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0743" },
+						},
+					},
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla2_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0744" },
+						},
+					},
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla3_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0745" },
+						},
+					},
+				},
+			},
+		},
+		{ Cue = "/VO/Scylla_0225", Text = "All right gals, from the {#Emph}top!",
+			GameStateRequirements =
+			{
+				OrRequirements =
+				{
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla1_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0743" },
+						},
+					},
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla2_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0744" },
+						},
+					},
+					{
+						{
+							Path = { "AudioState", "MusicName" },
+							IsAny = { "/Music/IrisMusicScylla3_MC" },
+						},
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Odysseus_0745" },
+						},
+					},
+				},
+			},
+		},
 	},
 	{
 		RandomRemaining = true,
@@ -3523,7 +3788,6 @@ GlobalVoiceLines.ScyllaShowStartVoiceLines =
 			},
 		},
 		{ Cue = "/VO/Scylla_0369", Text = "{#Emph}Now!" },
-		-- { Cue = "/VO/Scylla_0365", Text = "We've got a special someone in the audience tonight!" },
 		{ Cue = "/VO/Scylla_0299", Text = "This one's for those of you who thought they'd get away!",
 			GameStateRequirements =
 			{
@@ -3618,16 +3882,6 @@ GlobalVoiceLines.ScyllaShowStartVoiceLines =
 				},
 			},
 		},
-		{ Cue = "/VO/Scylla_0362", Text = "Please welcome a {#Emph}very {#Prev}special guest!",
-			GameStateRequirements =
-			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
-			},
-		},
 		{ Cue = "/VO/Scylla_0361", Text = "We're Scylla and the Sirens, with special guest {#Emph}Charybdis!",
 			PlayFirst = true,
 			GameStateRequirements =
@@ -3635,32 +3889,37 @@ GlobalVoiceLines.ScyllaShowStartVoiceLines =
 				{
 					PathTrue = { "GameState", "SpeechRecord", "/VO/Scylla_0281" }
 				},
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
-
 		{ Cue = "/VO/Scylla_0363", Text = "Welcome... {#Emph}Charybdis the Devouring!",
+			PlayFirst = true,
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Scylla_0361" }
 				},
+				NamedRequirements = { "BossDifficultyActive" },
+			},
+		},
+		{ Cue = "/VO/Scylla_0362", Text = "Please welcome a {#Emph}very {#Prev}special guest!",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Scylla_0363" }
+				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Scylla_0364", Text = "Charybdis is here, everybody!",
+			PlayFirst = true,
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Scylla_0361" }
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 	},
@@ -3748,51 +4007,31 @@ GlobalVoiceLines.ScyllaSirenRallyVoiceLines =
 	{ Cue = "/VO/Scylla_0168", Text = "Both of you get {#Emph}up!", PlayFirst = true,
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = "<",
-				Value = 2,
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/Scylla_0163", Text = "Get back in it, you two!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = "<",
-				Value = 2,
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/Scylla_0165", Text = "Roxy, Jetty, {#Emph}now!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = "<",
-				Value = 2,
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/Scylla_0170", Text = "{#Emph}Now{#Prev}, you two!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = "<",
-				Value = 2,
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/Scylla_0171", Text = "{#Emph}Come on{#Prev}, Sirens!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = "<",
-				Value = 2,
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/Scylla_0172", Text = "Come on, you {#Emph}Pinheads!",
@@ -3833,23 +4072,14 @@ GlobalVoiceLines.ScyllaSirenDeathReactionVoiceLines =
 						Path = { "CurrentRun", "EnemyKills" },
 						HasAll = { "SirenKeytarist", "SirenDrummer" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
-
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{
 					{
 						Path = { "CurrentRun", "EnemyKills" },
 						HasAll = { "SirenKeytarist", "SirenDrummer", "Charybdis_ScyllaFight" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 			},
 		},

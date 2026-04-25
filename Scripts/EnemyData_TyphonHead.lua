@@ -2,12 +2,11 @@ UnitSetData.TyphonHead =
 {
 	TyphonHead =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseBossEnemy", "BaseQEnemy", "BaseVulnerableEnemy" },
 		InvulnerableFx = "nil",
 		SubtitleColor = Color.TyphonVoice,
 		SpeakerName = "Typhon",
 		
-		BlockPostBossMetaUpgrades = true,
 		DamagedFxAtImpactLocation = true,
 
 		DeathAnimation = "Enemy_TyphonHead_Death",
@@ -19,13 +18,15 @@ UnitSetData.TyphonHead =
 			EndPanTime = 5.5,
 			PanZoomFraction = 0.7,
 			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
-			BatsAfterDeath = false,
 			FlashRed = true,
 			AddInterBiomeTimerBlock = true,
 			SpecialKillRequirements =
 			{
 				{
 					PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeStormStop" },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun", },
 				},
 			},
 		},
@@ -35,8 +36,13 @@ UnitSetData.TyphonHead =
 		HideVengeanceText = true,
 		CatFamiliarAttackDistance = 500,
 
-		FakeDeathAltMessages = { "TyphonDefeatedMessageAlt01" },
 		KillThreadNamesOnDeath =  { "TyphonHeadWeaponCameraThread", "TyphonHeadIncursionThread" },
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
 
 		Material = "Organic",
 		DeathSound = "/SFX/StabSplatterEndSequence",
@@ -85,6 +91,43 @@ UnitSetData.TyphonHead =
 		EffectVfxOffsetZ = 5000,
 		HealthBarOffsetY = 150, -- Damage numbers offset
 		HealthBarTextId = "TyphonHead_Full",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "TyphonHead_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+		AltFakeDeathMessageTextIds =
+		{
+			{
+				TextId = "TyphonDefeatedMessageAlt01Dream",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
 		IgnoreShieldShrine = true,
 
 		IncomingDamageModifiers =
@@ -123,6 +166,54 @@ UnitSetData.TyphonHead =
 		AngleMin = 235,
 		AngleMax = 305,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.325,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.35,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.62,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.87,
+				},
+			},
+		},
+
 		SetupEvents =
 		{
 			{
@@ -152,7 +243,6 @@ UnitSetData.TyphonHead =
 						EndPanTime = 5.5,
 						PanZoomFraction = 0.7,
 						StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
-						BatsAfterDeath = false,
 						FlashRed = true,
 						AddInterBiomeTimerBlock = true,
 						SubtitleTextOptions = { "TyphonDefeatedSubtitle" },
@@ -161,24 +251,42 @@ UnitSetData.TyphonHead =
 							{
 								PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeStormStop" },
 							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun", },
+							},
 						},
 					},
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonHeadDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 4,
-						},
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
 		},
-		BossDifficultyShrineRequiredCount = 4,
 
 		DefaultAIData =
 		{
@@ -367,11 +475,7 @@ UnitSetData.TyphonHead =
 				PlayOnce = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 					-- @ back compat
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "TyphonHeadAltFight01" }
@@ -398,17 +502,13 @@ UnitSetData.TyphonHead =
 				GameStateRequirements = 
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "TyphonHead" },
 					},
 					{
 						FunctionName = "RequiredConsecutiveDeathsInRoom",
 						FunctionArgs = { Name = "Q_Boss02", Count = 1 },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1231", PreLineWait = 0.35,
 					Source = "NPC_Chronos_01",
@@ -427,17 +527,13 @@ UnitSetData.TyphonHead =
 				GameStateRequirements = 
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "TyphonHead" },
 					},
 					{
 						FunctionName = "RequiredConsecutiveClearsOfRoom",
 						FunctionArgs = { Name = "Q_Boss02", Count = 1 },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1233", PreLineWait = 0.35,
 					Source = "NPC_Chronos_01",
@@ -456,11 +552,6 @@ UnitSetData.TyphonHead =
 				GameStateRequirements = 
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "TyphonHead" },
 					},
 					{
@@ -468,6 +559,7 @@ UnitSetData.TyphonHead =
 						Comparison = ">=",
 						Value = 3,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1235", PreLineWait = 0.35,
 					Source = "NPC_Chronos_01",
@@ -490,11 +582,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3790", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -516,11 +604,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3791", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -540,11 +624,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3792", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -564,11 +644,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3793", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -588,11 +664,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3794", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -611,11 +683,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3795", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -635,11 +703,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3796", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -659,11 +723,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3798", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -683,11 +743,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3797", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -707,11 +763,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3799", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -731,11 +783,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3794", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -755,11 +803,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3796", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -780,11 +824,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3794", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -798,11 +838,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3795", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -816,11 +852,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3796", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -834,11 +866,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3798", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -852,11 +880,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3797", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -870,11 +894,7 @@ UnitSetData.TyphonHead =
 				SkipContextArt = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3799", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Child_Defiant_01",
@@ -1147,7 +1167,7 @@ UnitSetData.TyphonHead =
 		{
 			Queue = "Interrupt",
 			{
-				BreakIfPlayed = true,
+				-- BreakIfPlayed = true,
 				RandomRemaining = true,
 				PreLineWait = 1.25,
 				SkipAnim = true,
@@ -1248,42 +1268,26 @@ UnitSetData.TyphonHead =
 				{ Cue = "/VO/Typhon_0131", Text = "{#TyphonFormat}CHROOONNNOOOSSS...!",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0132", Text = "{#TyphonFormat}CHRONAAAAAUUUGGGHHH...!",
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0133", Text = "{#TyphonFormat}HOOOOOWWW...?!",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0134", Text = "{#TyphonFormat}TIIIIIMMMEEE...!",
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 4,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Typhon_0068", Text = "{#TyphonFormat}ZEEEUUUUUSSS...!",
@@ -1305,6 +1309,32 @@ UnitSetData.TyphonHead =
 					},
 				},
 				{ Cue = "/VO/Typhon_0070", Text = "{#TyphonFormat}DAAAAAMN YOUUUUU...!", PlayFirst = true },
+			},
+			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunTyphonKillVO",
+				UsePlayerSource = true,
+				RandomRemaining = true,
+				PreLineWait = 5.3,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						Path = { "CurrentRun", "EnteredBiomes" },
+						Comparison = "~=",
+						Value = 4,
+					},
+					{
+						PathFromArgs = true,
+						PathFalse = { "FakeOut" },
+					},
+				},
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+				{ Cue = "/VO/MelinoeField_5599", Text = "Typhon yet lingers in my head...", PlayFirst = true, },
+				{ Cue = "/VO/MelinoeField_5600", Text = "You have no power over me, monster." },
 			},
 		},
 
@@ -1328,7 +1358,7 @@ UnitSetData.TyphonHead =
 
 	TyphonHeadEgg01 =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseQEnemy", "BaseVulnerableEnemy" },
 
 		Groups = { "EnemyTeam", "GroundEnemies" },
 
@@ -1895,6 +1925,22 @@ WeaponSetData =
 		{
 			DeepInheritance = true,
 
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage1_Color", },
+					},
+				},
+			},
+
 			ProjectileName = "TyphonEggLob01",
 			SpawnFromMarker = "TyphonHead_Rig:snakeMouthSphere_00_M_JNT",
 			ImmuneToProjectileSlow = true,
@@ -1949,6 +1995,22 @@ WeaponSetData =
 		{
 			DeepInheritance = true,
 
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage3_Color", },
+					},
+				},
+			},
+
 			FireTicks = 2,
 			FireInterval = 1.05,
 			ProjectileName = "TyphonEggLob02",
@@ -1982,6 +2044,22 @@ WeaponSetData =
 		{
 			DeepInheritance = true,
 
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage3_Color", },
+					},
+				},
+			},
+
 			FireTicks = 12,
 			FireInterval = 0.21,
 			ProjectileName = "TyphonEggLob04",
@@ -2000,6 +2078,22 @@ WeaponSetData =
 		AIData =
 		{
 			DeepInheritance = true,
+
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage3_Color", },
+					},
+				},
+			},
 
 			FireTicks = 4,
 			FireInterval = 0.42,
@@ -2020,6 +2114,22 @@ WeaponSetData =
 		{
 			DeepInheritance = true,
 
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage1_Color", },
+					},
+				},
+			},
+
 			FireTicks = 2,
 			FireInterval = 1.05,
 			ProjectileName = "TyphonEggLobCaptain",
@@ -2039,6 +2149,22 @@ WeaponSetData =
 		{
 			DeepInheritance = true,
 
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage2_Color", },
+					},
+				},
+			},
+
 			FireTicks = 2,
 			FireInterval = 1.05,
 			ProjectileName = "TyphonEggLobBoar",
@@ -2052,11 +2178,26 @@ WeaponSetData =
 	TyphonHeadCastSummonDragon =
 	{
 		InheritFrom = { "TyphonHeadCastSummon01" },
-
 		
 		AIData =
 		{
 			DeepInheritance = true,
+
+			ConditionalData =
+			{
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						}
+					},
+					Data =
+					{
+						PreAttackThreadedFunctionArgs = { NewGrannyTexture = "GR2/TyphonHeadDreamStage2_Color", },
+					},
+				},
+			},
 
 			FireTicks = 2,
 			FireInterval = 1.05,
@@ -2493,15 +2634,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -2619,15 +2752,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 4,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -3204,22 +3329,14 @@ GlobalVoiceLines.TyphonHidingVoiceLines =
 		PlayFirst = true,
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 4,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/Typhon_0130", Text = "{#TyphonFormat}TITANNN...",
 		PlayFirst = true,
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 4,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 }

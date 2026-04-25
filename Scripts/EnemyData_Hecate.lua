@@ -2,7 +2,7 @@
 {
 	Hecate =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseFEnemy", "BaseVulnerableEnemy"},
 
 		Portrait = "Portrait_Hec_Default_01",
 		Groups = { "NPCs", "GroundEnemies", "FlyingEnemies" },
@@ -23,6 +23,56 @@
 			"HecateGroundGlow",
 		},
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.8,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 5,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.6,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 9,
+					SpeedMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 3.45,
+				},
+			},
+		},
+
 		SkipDamagedFx = true,
 		SkipUnitHitFlash = true,
 
@@ -32,13 +82,68 @@
 		SetupEvents =
 		{
 			{
-				FunctionName = "SetupHecateBossIntroTextLines",
+				FunctionName = "SetupBossIntroTextLines",
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 			},
 			{
 				FunctionName = "OverwriteSelf",
 				Args =
 				{
 					MaxHealth = 7250,
+					DreamBiomeData =
+					{
+						[1] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 1.25,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.25,
+							},
+						},
+						[2] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 2.25,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.8,
+							},
+						},
+						[3] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 5,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 2.6,
+							},
+						},
+						[4] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 9,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 3.45,
+							},
+						},
+					},
 					OnDamagedEvents =
 					{
 						{
@@ -60,23 +165,56 @@
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 1,
-						},
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "HecateHubDream_Mesh",
+					SetAnimation = "HecateHubTorchBattleIdle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
 					},
 				},
 			},
 		},
-		BossDifficultyShrineRequiredCount = 1,
 
 		SpeechCooldownTime = 11,
 		OnDeathFunctionName = "HecateKillPresentation",
-		OnDeathFunctionArgs = { Message = "BiomeClearedMessage", CameraPanTime = 0.3, StartSound = "/Leftovers/Menu Sounds/EmoteShocked", AddInterBiomeTimerBlock = true },
+		OnDeathFunctionArgs = { Message = "HecateMessage", CameraPanTime = 0.3, StartSound = "/Leftovers/Menu Sounds/EmoteShocked", AddInterBiomeTimerBlock = true },
 		DeathAnimation = "HecateBattleOutfitBattleOutro",
 		LastHitAnimation = "HecateLastHit",
 		InvulnerableFx = "Invincibubble_Hecate",
@@ -88,17 +226,39 @@
 		HealthBarTextId = "Hecate_Full",
 		AltHealthBarTextIds =
 		{
-			{ TextId = "Hecate_AltFight01",
+			{
+				TextId = "Hecate_AltFight01",
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
+			{
+				TextId = "Hecate_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
 		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
 		HealthBarOffsetY = -275,
 		IgnoreInvincibubbleOnHit = true,
 		DefaultAIData =
@@ -660,6 +820,7 @@
 			RandomRemaining = true,
 			PreLineWait = 0.4,
 			Queue = "Interrupt",
+			SkipAnim = true,
 
 			{ Cue = "/VO/Hecate_0011", Text = "Stand down!" },
 			{ Cue = "/VO/Hecate_0124", Text = "Enough!", PlayFirst = true },
@@ -910,11 +1071,7 @@
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 					OrRequirements =
 					{
 						{
@@ -940,11 +1097,7 @@
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 					OrRequirements =
 					{
 						{
@@ -1062,14 +1215,14 @@
 						Path = { "CurrentRun", "WeaponsFiredRecord" },
 						HasAny =
 						{
-						 	"WeaponSpellLaser",
-						 	"WeaponSpellPolymorph",
-						 	"WeaponSpellSummon", 
-						 	"WeaponSpellTimeSlow",
-						 	"WeaponSpellPotion",
-						 	"WeaponSpellMeteor",
-						 	"WeaponSpellTransform",
-						 	"WeaponSpellLeap",
+							"WeaponSpellLaser",
+							"WeaponSpellPolymorph",
+							"WeaponSpellSummon", 
+							"WeaponSpellTimeSlow",
+							"WeaponSpellPotion",
+							"WeaponSpellMeteor",
+							"WeaponSpellTransform",
+							"WeaponSpellLeap",
 						},
 					},
 					{
@@ -1299,33 +1452,6 @@
 				},
 			},
 
-			HecateBossAboutChronosBossW00 =
-			{
-				PlayOnce = true,
-				GameStateRequirements =
-				{
-					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
-					},
-					{
-						PathTrue = { "PrevRun", "EnemyKills", "Chronos" },
-					},
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasNone = { "HecateAboutChronosBossW01", "HecateAboutChronosBossW02", "HecateAboutChronosBossW03", },
-					},
-				},
-				{ Cue = "/VO/HecateField_0293",
-					Text = "You bested our enemy, and now are eager to reach him again. As much as I am curious to know more, you must have your reasons for withholding the details." },
-				{ Cue = "/VO/MelinoeField_3481", UsePlayerSource = true,
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
-					Text = "I can hardly believe what happened, much less explain it. But, it went largely the way you expected, Headmistress. I apologize for not informing you." },
-				{ Cue = "/VO/HecateField_0294",
-					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
-					PreLineFunctionName = "StartBossRoomMusic",
-					Text = "Never apologize when you are not at fault. Speak no more of this than necessary, not to me or anyone. And press on." },
-			},
 			HecateBossAboutChronosBossW01 =
 			{
 				PlayOnce = true,
@@ -1580,7 +1706,7 @@
 					Text = "Lately I dreamt of Father once again, when Chronos came for him, and you took me to safety. Except this time, I saw more than before..." },
 
 				{ Cue = "/VO/HecateField_0289",
-					Text = "Twas no mere dream, of course. What more did you learn whilst you lingered thus?" },
+					Text = "'Twas no mere dream, of course. What more did you learn whilst you lingered thus?" },
 
 				{ Cue = "/VO/MelinoeField_3478", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Intense_01",
@@ -1592,6 +1718,39 @@
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
 					PreLineFunctionName = "StartBossRoomMusic",
 					Text = "{#Emph}Blast... {#Prev}Hermes suspected that this was the case, but has been unable to prove it beyond doubt. For now, let us proceed as though the Fates themselves oppose us; as though we've nobody to count on save ourselves." },
+			},
+			HecateBossAboutFatesQuest01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					--[[
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "BlockDeathKeepsake" },
+					},
+					]]--
+					-- indirect check that final Fated List update has been viewed
+					{
+						PathTrue = { "GameState", "SpeechRecord", "/VO/Melinoe_5156" },
+					},
+					NamedRequirements = { "TrueFatesQuestCanBeCompleted" },
+				},
+				{ Cue = "/VO/MelinoeField_5274", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					Text = "I think I know where they are now, Headmistress. The Three Fates, I mean. I may be able to find them at long last." },
+
+				{ Cue = "/VO/HecateField_0503",
+					Text = "Well, that is quite the development! Of all your grandfather's wrongdoings, making off with the Fates is one of the most brazen. Where is it that you think they are?" },
+
+				{ Cue = "/VO/MelinoeField_5275", UsePlayerSource = true,
+					PreLineAnim = "MelinoeIdleWeaponless", PreLineAnimTarget = "Hero",
+					Text = "Not far below, or at least, that's where I think I can reach them. I wonder what they're like... the children of Nyx all seem quite different from one to the next." },
+
+				{ Cue = "/VO/HecateField_0504",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "If you are close to locating them, then you needn't wonder for much longer. What I have come to know about them is, there is no telling what they have in store for any of us." },
 			},
 
 			-- alt below
@@ -1619,7 +1778,6 @@
 							"HecateBossAboutTyphonFight01_B",
 							"HecateAboutTyphonFight03",
 							"HecateAboutTyphonFight03_B",
-							"HecateAboutChronosBossW04",
 							"HecateAboutChronosBossW04_A",
 							"HecateAboutChronosBossW04_B",
 						},
@@ -1678,7 +1836,6 @@
 							-- "HecateBossAboutTyphonFight01_B",
 							"HecateAboutTyphonFight03",
 							"HecateAboutTyphonFight03_B",
-							"HecateAboutChronosBossW04",
 							"HecateAboutChronosBossW04_A",
 							"HecateAboutChronosBossW04_B",
 						},
@@ -1874,6 +2031,7 @@
 			HecateBossAboutDagger01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1892,8 +2050,6 @@
 				{ Cue = "/VO/Hecate_0440",
 					Text = "A flash of silver... Lim and Oros. So, the Sister Blades availed themselves to you. The other Nocturnal Arms shall follow their lead, I expect." },
 				{ Cue = "/VO/Melinoe_1801", UsePlayerSource = true,
-					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Nyx entrusted them to you to safeguard the realm as a last resort. But, this cannot possibly be how they were meant to be used..." },
 				{ Cue = "/VO/Hecate_0441",
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
@@ -1903,6 +2059,7 @@
 			HecateBossAboutTorch01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1912,8 +2069,6 @@
 				{ Cue = "/VO/HecateField_0167",
 					Text = "I trust the dark of Erebus was not too much to handle with the ever-burning Flames of Ygnium to light your path?" },
 				{ Cue = "/VO/Melinoe_1034", UsePlayerSource = true,
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "No, Headmistress, it was not. Although, I've much to learn in how to wield these Flames." },
 				{ Cue = "/VO/Hecate_0300",
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
@@ -1923,6 +2078,7 @@
 			HecateBossAboutTorch02 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1936,8 +2092,6 @@
 				{ Cue = "/VO/HecateField_0112",
 					Text = "The Umbral Flames of Ygnium, at your command! You use them in your own way; not merely copy my technique." },
 				{ Cue = "/VO/MelinoeField_0506", UsePlayerSource = true,
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "You always said once I was ready to brandish the Flames, that I ought wield them with my intuition as my guide." },
 				{ Cue = "/VO/HecateField_0113",
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
@@ -1947,6 +2101,7 @@
 			HecateBossAboutAxe01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1969,6 +2124,7 @@
 			HecateBossAboutLob01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -1987,6 +2143,7 @@
 			HecateBossAboutSuit01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2006,6 +2163,7 @@
 			HecateBossAboutCirceAspect01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2024,6 +2182,7 @@
 			HecateBossAboutMorosAspect01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2045,6 +2204,7 @@
 			HecateBossAboutEosAspect01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2063,6 +2223,7 @@
 			HecateBossAboutCharonAspect01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2079,9 +2240,230 @@
 					PreLineFunctionName = "StartBossRoomMusic",
 					Text = "Perhaps he did, or hewed off a few heads. If Nyx and the Three Fates entrusted the protection of the Underworld to a certain few, they could have chosen worse." },
 			},
+
+			HecateBossAboutMedeaAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "LobCloseAttackAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0507",
+					Text = "The Argent Skull must have a sense of humor that it took on such a form for Medea. She professes a great love for skulls in general, yet her own Aspect scarce resembles one." },
+
+				{ Cue = "/VO/MelinoeField_5282", UsePlayerSource = true,
+					Text = "Lady Medea still must have been pleased to use Revaal. Though, I've wondered why the Nocturnal Arms take on such different-looking forms for different bearers." },
+
+				{ Cue = "/VO/HecateField_0508",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Must there always be a reason? We all have different aspects of ourselves, which we may reveal or not to those we meet. Go on, now: Summon up some of Medea's wrath." },
+			},
+			HecateBossAboutPersephoneAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "LobImpulseAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0509",
+					Text = "You bear the Aspect of the Queen. 'Tis a reminder, perhaps, that not even the Nocturnal Arms are infallible, lest Queen Persephone would never have been taken." },
+
+				{ Cue = "/VO/MelinoeField_5283", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					Text = "What was Mother supposed to do... fight off Chronos herself when he ambushed everybody in the House?" },
+
+				{ Cue = "/VO/HecateField_0510",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Precisely my point. Your mother did not even have Revaal by then. Even the most vigilant of us lets down their guard from time to time... though never in this glade." },
+			},
+			HecateBossAboutSeleneAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "SuitHexAspect" },
+					},
+				},
+
+				{ Cue = "/VO/HecateField_0511",
+					Text = "The might of the Moon. That you have come to bear Selene's favored Aspect of the Black Coat ultimately comes as no surprise, though I am pleased to see it." },
+
+				{ Cue = "/VO/MelinoeField_5284", UsePlayerSource = true,
+					Text = "Did you ever see Selene wield Xinth herself? She always seems so collected that I have trouble picturing her battling head-on." },
+
+				{ Cue = "/VO/HecateField_0512",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Well, she was never one for battle-cries and such, but yes, I've witnessed her seldom-seen temper... and 'tis something to behold. And as for yours, here you can let it out." },
+			},
+			HecateBossAboutNyxAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "SuitMarkCritAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0513",
+					Text = "There's a particularly special Aspect that you have... the Nocturnal Arms had to meet a certain standard, and who better to approve that standard than Night herself?" },
+
+				{ Cue = "/VO/MelinoeField_5285", UsePlayerSource = true,
+					Text = "From everything I know of Nyx, she doesn't seem the sort to physically come to blows. She needed such a weapon to bring the Underworld to order?" },
+
+				{ Cue = "/VO/HecateField_0514",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "She needed such a weapon to be {#Emph}feared! {#Prev}But, that was long ago... Night was not as widely known as she is now. Yet the Black Coat remains in perfect working order...!" },
+			},
+			HecateBossAboutAnubisAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "StaffRaiseDeadAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0515",
+					Text = "The Ankh Scepter of Anubis... I've seen it in my travels, but to see it so close to where we reside is unusual indeed. Perhaps it can sense all the Shades of the dead nearby." },
+
+				{ Cue = "/VO/MelinoeField_5286", UsePlayerSource = true,
+					Text = "The one who wielded this scepter also presides over the dead, if I understand correctly. How many gods of the dead are there?" },
+
+				{ Cue = "/VO/HecateField_0516",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Who can say? There are a lot of dead, and more accumulating all the time. Some shall be looking to that Scepter of yours for guidance. Show them the way." },
+			},
+			HecateBossAboutMorriganAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "DaggerTripleAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0517",
+					Text = "The Crow Cutters of the Morrigan... now there's a dangerous combination. Much like the phantom goddesses who wielded them." },
+
+				{ Cue = "/VO/MelinoeField_5287", UsePlayerSource = true,
+					Text = "Sister Artemis described the Morrigan as another threefold goddess of shadow, but of a different age and place... I always thought you were one-of-a-kind, Headmistress." },
+
+				{ Cue = "/VO/HecateField_0518",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Or perhaps the Morrigan were so enamored of my peerless technique that I became a source of influence! What other explanation could there be?" },
+			},
+			HecateBossAboutSupayAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "TorchAutofireAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0519",
+					Text = "The Devil Sparks of Supay... flickering flames from the deepest, hottest recesses of the Earth, now in your own possession. They act of their own accord, do they not?" },
+
+				{ Cue = "/VO/MelinoeField_5288", UsePlayerSource = true,
+					Text = "This Aspect is unusual in that regard. I know the Nocturnal Arms each have a will of their own to an extent, but with the Aspect of Supay, it's unmistakable." },
+
+				{ Cue = "/VO/HecateField_0520",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Well then, I suppose if you prevail in this clash, the glory ought to go to those Flames rather than you! Come, let's see some sparks fly." },
+			},
+			HecateBossAboutNergalAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "AxeRallyAspect" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0521",
+					Text = "Now that is a substantial armament you have... the Rock Lion Mace, is it? Slow and unwieldy... certainly not {#Emph}my {#Prev}style." },
+
+				{ Cue = "/VO/MelinoeField_5289", UsePlayerSource = true,
+					Text = "It works for me. And not only is it terribly destructive, I find it quite effective for relieving stress! Makes a very satisfying clang. You'll see in a moment... or hear, I suppose." },
+
+				{ Cue = "/VO/HecateField_0522",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Will I, now? It seems the Aspect of Nergal bestows in its bearer a prodigious sense of humor to accompany the oversized mallet! Come then and clang away." },
+			},
+			HecateBossAboutHelAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "LobGunAspect" },
+					},
+					{
+						PathTrue = { "GameState", "RoomsEntered", "P_Intro" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0523",
+					Text = "{#Emph}Ah{#Prev}, the Frost Mane... I felt a chill in the air moments prior, which must have come from that Aspect. The land in which I first encountered it was the coldest I have thus experienced." },
+
+				{ Cue = "/VO/MelinoeField_5290", UsePlayerSource = true,
+					Text = "You've been to this other realm of the dead where the goddess Hel resides? I can't imagine any place beneath the Earth being colder than the heights of Olympus." },
+
+				{ Cue = "/VO/HecateField_0524",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "The world is vast. Your grandmother may govern the turning of the seasons, but there are other goddesses out there who have a very {#Emph}icy {#Prev}touch. You are one of them right now." },
+			},
+			HecateBossAboutShivaAspect01 =
+			{
+				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "SuitComboAspect" },
+					},
+					{
+						PathTrue = { "GameState", "RoomsEntered", "P_Intro" },
+					},
+				},
+				{ Cue = "/VO/HecateField_0525",
+					Text = "{#Emph}Ah{#Prev}, I stand in the presence of the Purifying Grace of Shiva the Destroyer... of Shiva's {#Emph}Aspect{#Prev}, anyhow. Has that destructive force thus served you well?" },
+
+				{ Cue = "/VO/MelinoeField_5291", UsePlayerSource = true,
+					Text = "You could say that. Of all the Aspects that I've seen, this one seems capable of inflicting the most catastrophic harm in a single strike. Shiva must be very powerful." },
+
+				{ Cue = "/VO/HecateField_0526",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Some say Shiva is both a creator and a destroyer... not unlike your grandmother, perhaps, with her cycle of death and rebirth. Show me what you can do with such power!" },
+			},
+
 			HecateBossAboutWeaponAspects01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2107,6 +2489,7 @@
 			HecateBossAboutWeaponAspects02 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2129,6 +2512,7 @@
 			HecateBossAboutHiddenAspects01 =
 			{
 				PlayOnce = true,
+				SkipPreNarrativeUnequip = true,
 				GameStateRequirements =
 				{
 					{
@@ -2619,11 +3003,7 @@
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/HecateField_0280",
@@ -2648,11 +3028,7 @@
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/HecateField_0283",
@@ -2673,16 +3049,12 @@
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Hecate" },
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutAltFight01" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/HecateField_0320",
@@ -2695,6 +3067,35 @@
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
 					PreLineFunctionName = "StartBossRoomMusic",
 					Text = "Do wonder, by all means. And should you require more of an advanced test of your aptitude, I shall be waiting." },
+			},
+
+			HecateBossAboutAltFight04 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "LastBossDifficultyRecord", "Hecate" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutAltFight03" },
+					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+
+				{ Cue = "/VO/HecateField_0505",
+					Text = "{#Emph}Ah{#Prev}, you spoke the Vow of Rivals once more! I didn't even have to ask. Was it the added fierceness of this test that compelled you or the change of locale?" },
+
+				{ Cue = "/VO/MelinoeField_5281", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Perhaps both, Headmistress. I want to keep things lively and to keep making the most of these tests of yours." },
+
+				{ Cue = "/VO/HecateField_0506",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Keeping things {#Emph}lively {#Prev}may be difficult in this realm but I take your meaning. I have asked you to hold nothing back against me... and this way, I can best heed my own advice." },
 			},
 
 			HecateBossAboutErebus01 =
@@ -3404,11 +3805,13 @@
 
 				{ Cue = "/VO/HecateField_0330",
 					Text = "Everything as it once was, yet nothing is the same! A feeling I know only too well. It seems we are to prolong your training for a while..." },
+
 				{ Cue = "/VO/MelinoeField_4121", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "My training shall never be complete, isn't that right? Although it's odd to think that following my prior steps to Tartarus shall help maintain the proper course of Time..." },
+					
 				{ Cue = "/VO/HecateField_0331",
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -3492,6 +3895,35 @@
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
 					PreLineFunctionName = "StartBossRoomMusic",
 					Text = "Try not to dwell on it too much, lest it scatter your mind to no end. But yes, these flames and I do not truly belong. And for that very reason, I suspect the Fates figured me out." },
+			},
+
+			HecateBossAboutDreamRuns01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 4,
+						IgnoreCurrentRun = true,
+						Path = { "IsDreamRun" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+
+				{ Cue = "/VO/HecateField_0501",
+					Text = "Not seen you here of late, Melinoë. And you've not ventured to the surface either recently. Your dreams have called to you instead, is that not so?" },
+
+				{ Cue = "/VO/MelinoeField_5273", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I heard from Lord Hypnos again after his rather sudden departure. He's helping me explore my dreams, yes... confront my lingering fears from doing this night after night." },
+
+				{ Cue = "/VO/HecateField_0502",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					PreLineFunctionName = "StartBossRoomMusic",
+					Text = "Dreams rooted in reality are the most troubling sort. Well, as long as you do not remain forever trapped in flights of fancy! I have come to enjoy these occasional clashes." },
 			},
 
 			HecateBossAboutSayingLittle01 =
@@ -3838,9 +4270,6 @@
 				GameStateRequirements =
 				{
 					{
-						--
-					},
-					{
 						FunctionName = "RequiredConsecutiveClearsOfRoom",
 						FunctionArgs = { Names = { "F_Boss01", "F_Boss02" }, Count = 2 },
 					},
@@ -4053,13 +4482,10 @@
 			},
 			HecateBossMiscStart33 =
 			{
+				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/HecateField_0351",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -4080,6 +4506,187 @@
 					PreLineFunctionName = "StartBossRoomMusic",
 					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
 					Text = "Let us ensure that such a terrifying night is not to be forgotten by our witnesses." },
+			},
+			HecateBossMiscStart35 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate01" }
+							},
+							{
+								PathFalse = { "PrevRun", "EncounterClearStats", "BossHecate01", "TookDamage" }
+							},
+						},
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate02" }
+							},
+							{
+								PathFalse = { "PrevRun", "EncounterClearStats", "BossHecate02", "TookDamage" }
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/HecateField_0494",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "I distinctly recall you eluded my every strike in our last outing. Let's see you do that again." },
+			},
+			HecateBossMiscStart36 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateBossMiscStart35" },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate01" }
+							},
+							{
+								PathFalse = { "PrevRun", "EncounterClearStats", "BossHecate01", "TookDamage" }
+							},
+						},
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate02" }
+							},
+							{
+								PathFalse = { "PrevRun", "EncounterClearStats", "BossHecate02", "TookDamage" }
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/HecateField_0495",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "Perhaps you'll do me the courtesy of letting me strike you once or twice this eve, unlike last time..." },
+			},
+			HecateBossMiscStart37 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate01" }
+							},
+							{
+								Path = { "PrevRun", "EncounterClearStats", "BossHecate01", "ClearTime" },
+								Comparison = "<=",
+								Value = 30.0
+							},
+						},
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate02" }
+							},
+							{
+								Path = { "PrevRun", "EncounterClearStats", "BossHecate02", "ClearTime" },
+								Comparison = "<=",
+								Value = 40.0
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/HecateField_0496",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "You achieved victory as swiftly as I've seen when last we clashed. Is that to be your pace from here on out?" },
+			},
+			HecateBossMiscStart38 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateBossMiscStart37" },
+					},
+					OrRequirements =
+					{
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate01" }
+							},
+							{
+								Path = { "PrevRun", "EncounterClearStats", "BossHecate01", "ClearTime" },
+								Comparison = "<=",
+								Value = 30.0
+							},
+						},
+						{
+							{
+								PathTrue = { "PrevRun", "EncounterClearStats", "BossHecate02" }
+							},
+							{
+								Path = { "PrevRun", "EncounterClearStats", "BossHecate02", "ClearTime" },
+								Comparison = "<=",
+								Value = 40.0
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/HecateField_0497",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "Our last confrontation ended practically as soon as it began. Shall you make such short work of me again?" },
+			},
+			HecateBossMiscStart39 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "SpellTransformTrait" },
+					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+				{ Cue = "/VO/HecateField_0498",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "So, 'tis to be your Dark Side against my own this eve. I shall look forward to seeing the result." },
+			},
+			HecateBossMiscStart40 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 16,
+					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+				{ Cue = "/VO/HecateField_0499",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "We each have made an Oath to Night. I expect you to hold nothing back." },
+			},
+			HecateBossMiscStart41 =
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = GameData.AllHiddenAspects,
+					},
+				},
+				{ Cue = "/VO/HecateField_0500",
+					PreLineFunctionName = "StartBossRoomMusic",
+					PreLineThreadedFunctionName = "PlayHecateTauntAnim", PreLineWait = 0.35,
+					Text = "That strange Aspect of the Arms you wield... show me more of what you can achieve with it." },
 			},
 		},
 
@@ -4133,11 +4740,7 @@
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/HecateField_0282",
 					PreLineWait = 0.35,
@@ -4968,6 +5571,84 @@
 
 		WakeUpDelay = 0.3,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 2.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.8,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 5,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.6,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 9,
+					SpeedMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 3.45,
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/HecateBattleDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
 		AIOptions = { "AttackAndDie" },
 
 		DefaultAIData =
@@ -4999,11 +5680,116 @@
 	{
 		InheritFrom = { "HecateCopy"},
 
-		ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-
 		AIOptions = { "AttackerAI" },
 
 		GrannyTexture = "GR2/HecateEM_Color",
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 2.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.8,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 5,
+					--SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.6,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 9,
+					--SpeedMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 3.45,
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/HecateEMDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "InProgress" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/HecateEMDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathTrue = { "CurrentRun", "CurrentRoom", "Encounter", "InProgress" },
+					},
+				},
+			},
+		},
 
 		WeaponOptions =
 		{
@@ -5027,6 +5813,7 @@
 GlobalVoiceLines.HecateBossGreetingLines =
 {
 	-- @ ending
+	{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
 	{
 		GameStateRequirements =
 		{
@@ -5058,15 +5845,22 @@ GlobalVoiceLines.HecateBossGreetingLines =
 		GameStateRequirements =
 		{
 			{
-				Path = { "SessionMapState", "QueuedBossIntroTextLines", "Name" },
-				IsAny = {
-					"HecateBossAboutChronos01",
-					"HecateBossAboutEndingPath04",
-					"HecateBossAboutErebus01",
-					"HecateBossAboutHermes01",
-					"HecateBossAboutFailure01",
-					"HecateBossAboutRepetition01",
-					"HecateBossPostEpilogue02",
+				PathFalse = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs =
+				{
+					IsAny =
+					{
+						"HecateBossAboutChronos01",
+						"HecateBossAboutEndingPath04",
+						"HecateBossAboutErebus01",
+						"HecateBossAboutHermes01",
+						"HecateBossAboutFailure01",
+						"HecateBossAboutRepetition01",
+						"HecateBossPostEpilogue02",
+					},
 				},
 			},
 		},
@@ -5094,8 +5888,11 @@ GlobalVoiceLines.HecateBossGreetingLines =
 		GameStateRequirements =
 		{
 			{
-				Path = { "SessionMapState", "QueuedBossIntroTextLines", "Name" },
-				IsAny = { "HecateBossAboutEndingPath00" },
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs =
+				{
+					IsAny = { "HecateBossAboutEndingPath00" },
+				},
 			},
 		},
 		{ Cue = "/VO/HecateField_0417", Text = "Steady yourself..." },
@@ -5108,8 +5905,11 @@ GlobalVoiceLines.HecateBossGreetingLines =
 		GameStateRequirements =
 		{
 			{
-				Path = { "SessionMapState", "QueuedBossIntroTextLines", "Name" },
-				IsAny = { "HecateBossAboutEndingPath02" },
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs =
+				{
+					IsAny = { "HecateBossAboutEndingPath02" },
+				},
 			},
 		},
 		{ Cue = "/VO/HecateField_0420", Text = "How fares the task?" },
@@ -5122,8 +5922,11 @@ GlobalVoiceLines.HecateBossGreetingLines =
 		GameStateRequirements =
 		{
 			{
-				Path = { "SessionMapState", "QueuedBossIntroTextLines", "Name" },
-				IsAny = { "HecateBossAboutEndingPath03" },
+				FunctionName = "RequiredQueuedTextLine",
+				FunctionArgs =
+				{
+					IsAny = { "HecateBossAboutEndingPath03" },
+				},
 			},
 		},
 		{ Cue = "/VO/HecateField_0423", Text = "Question..." },
@@ -5191,6 +5994,27 @@ GlobalVoiceLines.HecateBossGreetingLines =
 				},
 			},
 		},
+		{ Cue = "/VO/MelinoeField_5559", Text = "One of those dreams where I'm taking a test, is it?",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+			},
+		},
+		{ Cue = "/VO/MelinoeField_5560", Text = "Hi, imaginary Headmistress!",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_5559" }
+				},
+			},
+		},
 	},
 	{
 		BreakIfPlayed = true,
@@ -5199,6 +6023,7 @@ GlobalVoiceLines.HecateBossGreetingLines =
 		SuccessiveChanceToPlayAll = 0.66,
 		ObjectType = "Hecate",
 		PreLineAnim = "HecateHubGreet_Battle",
+		IgnorePreLineAnimInDreamRuns = true,
 		GameStateRequirements =
 		{
 			{
@@ -5261,13 +6086,9 @@ GlobalVoiceLines.HecateBossGreetingLines =
 					PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutAltFight01" },
 				},
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
-				{
 					PathFalse = { "GameState", "LastBossDifficultyRecord", "Hecate" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/HecateField_0370", Text = "Returned from above?",
@@ -5350,24 +6171,16 @@ GlobalVoiceLines.HecateBossGreetingLines =
 			GameStateRequirements =
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = "<=",
-					Value = 0,
-				},
-				{
 					PathTrue = { "GameState", "LastBossDifficultyRecord", "Hecate" },
 				},
+				NamedRequirementsFalse = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/HecateField_0279", Text = "You found me.",
 			PlayFirst = true,
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/HecateField_0472", Text = "You chose to face me thus.",
@@ -5380,11 +6193,7 @@ GlobalVoiceLines.HecateBossGreetingLines =
 				{
 					PathFalse = { "GameState", "LastBossDifficultyRecord", "Hecate" },
 				},
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/HecateField_0473", Text = "Your Vow remains.",
@@ -5397,11 +6206,7 @@ GlobalVoiceLines.HecateBossGreetingLines =
 				{
 					PathTrue = { "GameState", "LastBossDifficultyRecord", "Hecate" },
 				},
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/HecateField_0474", Text = "Fulfill the Oath.",
@@ -5411,11 +6216,7 @@ GlobalVoiceLines.HecateBossGreetingLines =
 				{
 					PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutAltFight01" },
 				},
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/Hecate_0068", Text = "Greetings, Witch.",
@@ -5638,6 +6439,9 @@ GlobalVoiceLines.HecateBossGreetingLines =
 			{
 				{
 					PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "TorchDetonateAspect" },
+				},
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutMorosAspect01" },
 				},
 			},
 		},
@@ -6132,11 +6936,7 @@ GlobalVoiceLines.HecateBossSpawnWaveVoiceLines =
 		ObjectType = "Hecate",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 1,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 		TriggerCooldowns = { "HecateSpokeRecently", "HecateSummonedRecently" },
 
@@ -6193,11 +6993,7 @@ GlobalVoiceLines.HecateBossSpawnWaveVoiceLines =
 					Comparison = "<=",
 					Value = 0,
 				},
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 1,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 	},

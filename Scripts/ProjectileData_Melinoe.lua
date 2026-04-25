@@ -453,8 +453,8 @@ OverwriteTableKeys( ProjectileData, {
 
 	FamiliarLinkLaser = 
 	{
-		DamageTextStartColor = Color.DeepPink,
-		DamageTextColor = Color.DarkMagenta,
+		DamageTextStartColor = {26, 255, 222, 255},
+		DamageTextColor = {198, 101, 255, 255},
 	},
 
 	-- Spell

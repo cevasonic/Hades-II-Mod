@@ -286,8 +286,11 @@ OverwriteTableKeys( ObstacleData, {
 						GameStateRequirements =
 						{
 							{
-								PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_0371" },
-							}
+								PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_0370" },
+							},
+							{
+								PathFalse = { "GameState", "RoomsEntered", "N_Boss01" }
+							},
 						},
 					},
 					{ Cue = "/VO/MelinoeField_0372", Text = "That barrier's back up.",
@@ -1087,43 +1090,6 @@ OverwriteTableKeys( ObstacleData, {
 		ExpirePoisonPuddleRadius = 400,
 
 		OnHitShake = { Distance = 3, Speed = 300, Duration = 0.15 },
-		--[[ImpactReaction =
-		{
-			RequiredSourceProjectile = { "PolyphemusMegaLeapTouchdown" },
-			DestroySelf = true,
-			SpawnObstacle = "PoisonCure_Destroyed",
-			MaintainHorizontalFlip = true,
-			CombatText = "RubbleSlamKill",
-			ReactionEvents =
-			{
-				{
-					FunctionName = "GenericPresentation",
-					Threaded = true,
-					Args =
-					{
-						VoiceLines =
-						{
-							RandomRemaining = true,
-							BreakIfPlayed = true,
-							PreLineWait = 0.45,
-							ObjectTypes = { "NPC_Medea_01", "Medea" },
-							SkipCooldownCheckIfNonePlayed = true,
-							Cooldowns =
-							{
-								{ Name = "MedeaSpokeRecently", Time = 12 },
-							},
-
-							{ Cue = "/VO/Medea_0444", Text = "Well, there goes that..." },
-							{ Cue = "/VO/Medea_0445", Text = "One less cure." },
-							{ Cue = "/VO/Medea_0446", Text = "There goes a curing pool...", PlayFirst = true },
-							{ Cue = "/VO/Medea_0447", Text = "One fewer curing pool..." },
-							{ Cue = "/VO/Medea_0448", Text = "Curing pool, destroyed..." },
-							{ Cue = "/VO/Medea_0449", Text = "A curing pool, ruined..." },
-						},
-					},
-				},
-			},
-		},]]
 	},
 
 	PoisonCure_Destroyed =

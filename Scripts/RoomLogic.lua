@@ -82,7 +82,6 @@ Import "PresentationBiomeO.lua"
 Import "PresentationBiomeP.lua"
 Import "PresentationBiomeQ.lua"
 Import "EncounterPresentation.lua"
-Import "EnemyPresentation.lua"
 Import "RunLogic.lua"
 Import "RewardLogic.lua"
 Import "RewardPresentation.lua"
@@ -102,9 +101,7 @@ Import "HubPresentation.lua"
 Import "FlashbackPresentation.lua"
 Import "TradePresentation.lua"
 
-
 -- Mod
-
 Import "WxLoadMods.lua"
 
 -- Iris
@@ -356,6 +353,7 @@ function MapStateInit()
 	}
 	-- Hard-coded buckets
 	MapState.SpawnPoints = GetIds({ Name = "SpawnPoints" })
+	MapState.OilPuddleIds = GetIdsByType({ Names = { "OilPuddle", "OilPuddle02", "OilPuddle03", "OilPuddle04" }})
 end
 
 function SessionMapStateInit()
@@ -449,6 +447,7 @@ function SessionMapStateInit()
 	SessionMapState.CosmeticsPurchased = {}
 	SessionMapState.DarkSide = {}
 	SessionMapState.DeathMarkers = {}
+	SessionMapState.MidEncounterSpawns = {}
 	SessionMapState.DeathSummons = {}
 	SessionMapState.DisplayedLuckMultiplier = 0
 	SessionMapState.InCombatTextStackCount = 0
@@ -519,14 +518,14 @@ function ValidateRequirements()
 		if enemyData.InteractTextLineSets ~= nil then
 			for textLinesName, textLines in pairs( enemyData.InteractTextLineSets ) do
 				if textLines.GameStateRequirements ~= nil then
-					IsGameStateEligible( textLines, textLines.GameStateRequirements )
+					DebugTestAllRequirements( textLines, textLines.GameStateRequirements )
 				end
 			end
 		end
 		if enemyData.GiftTextLineSets ~= nil then
 			for textLinesName, textLines in pairs( enemyData.GiftTextLineSets ) do
 				if textLines.GameStateRequirements ~= nil then
-					IsGameStateEligible( textLines, textLines.GameStateRequirements )
+					DebugTestAllRequirements( textLines, textLines.GameStateRequirements )
 				end
 			end
 		end
@@ -743,6 +742,13 @@ function SetupMap()
 
 end
 
+function AttemptUseAutoExitDoor( door, args )
+	while PlayingTextLines do
+		wait(0.1)
+	end
+	AttemptUseDoor( door, args )
+end
+
 function AttemptUseDoor( door, args )
 
 	if door.InUse then
@@ -756,14 +762,19 @@ function AttemptUseDoor( door, args )
 		return
 	end
 
+	-- Mod Hook: Grant gold and increase damage scale on room exit
+	if GrantRandomGoldOnRoomExit ~= nil then
+		GrantRandomGoldOnRoomExit( CurrentRun, door )
+	end
+	if UpdateRoomCounterUI ~= nil then
+		UpdateRoomCounterUI( CurrentRun )
+	end
+
 	if door.EncounterCost ~= nil then
 		if not IsEmpty( CurrentRun.CurrentRoom.ActiveEncounters ) then
 			thread( CannotUseDoorPresentation, door )
 			return
 		elseif not door.EncounterCostStarted then
-
-
-
 			door.EncounterCostStarted = true
 
 			if door.OnUsedEncounterCostPresentationFunctionName ~= nil then
@@ -915,6 +926,13 @@ function GetDoorHealAmount( currentRun, limitedOnly )
 	if limitedOnly then
 		healAmount = 0
 	end
+	
+	local healingMultiplier = CalculateHealingMultiplier()
+	if healingMultiplier > 1 then
+		healAmount = round(( healAmount + roomHealIgnorePenalty) * healingMultiplier)
+	else
+		healAmount = round( healAmount * healingMultiplier) + roomHealIgnorePenalty
+	end
 	if HeroHasTrait("DoorHealReserveKeepsake") then
 		local missingHealth = CurrentRun.Hero.MaxHealth - CurrentRun.Hero.Health
 		if missingHealth > healAmount then
@@ -922,10 +940,10 @@ function GetDoorHealAmount( currentRun, limitedOnly )
 			local trait = GetHeroTrait("DoorHealReserveKeepsake")
 			local healReserve = trait.DoorHealReserve
 			if healReserve > remainingMissing then
-				roomHealIgnorePenalty = roomHealIgnorePenalty + remainingMissing
+				healAmount = healAmount + remainingMissing
 				trait.DoorHealReserve = round( trait.DoorHealReserve - remainingMissing )
 			else
-				roomHealIgnorePenalty = roomHealIgnorePenalty + trait.DoorHealReserve
+				healAmount = healAmount + trait.DoorHealReserve
 				trait.DoorHealReserve = 0
 				trait.CustomName = trait.ZeroBonusTrayText
 				if healReserve ~= 0 then
@@ -936,14 +954,6 @@ function GetDoorHealAmount( currentRun, limitedOnly )
 		end
 	end
 	
-	local healingMultiplier = CalculateHealingMultiplier()
-	if healingMultiplier < 1 then
-		healAmount = round( healAmount * healingMultiplier)
-		healAmount = healAmount + roomHealIgnorePenalty	
-	else
-		healAmount = healAmount + roomHealIgnorePenalty
-		healAmount = round( healAmount * healingMultiplier)
-	end
 	return healAmount
 end
 
@@ -993,8 +1003,6 @@ function UnusedWeaponBonusDropGems( source, args )
 		return
 	end
 
-	local consumableData = ConsumableData.GemPointsDrop
-	local amount = consumableData.AddResources.GemPoints + consumableData.IncreasePerBiomeCleared * (CurrentRun.ClearedBiomes - 1)
 	GiveRandomConsumables(
 		{
 			Delay = 0.35,
@@ -1007,10 +1015,6 @@ function UnusedWeaponBonusDropGems( source, args )
 					Overrides =
 					{
 						CanDuplicate = false,
-						AddResources =
-						{
-							GemPoints = amount,
-						},
 					},
 				},
 			},
@@ -1020,6 +1024,10 @@ end
 
 function CheckInspectPoints( currentRun, source )
 	if source.InspectPoints == nil then
+		return
+	end
+
+	if CurrentRun.IsDreamRun and CurrentHubRoom == nil then
 		return
 	end
 
@@ -1244,9 +1252,14 @@ function StartRoom( currentRun, currentRoom )
 	end
 
 	if currentRoom.BiomeStartRoom then
+		for i, traitData in pairs(CurrentRun.Hero.Traits) do
+			if GameData.LogExpireOnBiomeStartKeepsakes[traitData.Name] then
+				ReduceTraitUses( traitData , {Force = true })
+			end
+		end
+
 		if HeroHasTrait("BonusMoneyKeepsake") then
 			local traitData = GetHeroTrait("BonusMoneyKeepsake") 
-			ReduceTraitUses( traitData , {Force = true })
 
 			if traitData.ZeroBonusTrayText then
 				traitData.CustomTrayText = traitData.ZeroBonusTrayText
@@ -1257,9 +1270,15 @@ function StartRoom( currentRun, currentRoom )
 			traitData.ActivatedThisBiome = false
 			traitData.CustomTrayText = "PersistentDionysusSkipKeepsake"
 		end
+		
+
+		if HeroHasTrait("TempHammerKeepsake") then
+			local sourceKeepsake = GetHeroTrait("TempHammerKeepsake")
+			sourceKeepsake.CustomTrayText = sourceKeepsake.ZeroBonusTrayText
+		end
+
 		if HeroHasTrait("SkipEncounterKeepsake") then
 			local traitData = GetHeroTrait("SkipEncounterKeepsake") 
-			ReduceTraitUses( traitData , {Force = true })
 			if traitData.ZeroBonusTrayText then
 				traitData.CustomTrayText = traitData.ZeroBonusTrayText
 			end
@@ -1270,7 +1289,8 @@ function StartRoom( currentRun, currentRoom )
 		end
 	end
 	if currentRoom.BiomeStartRoom then
-		IncrementTableValue( CurrentRun, "ClearedBiomes" )
+		IncrementTableValue( CurrentRun, "EnteredBiomes" )
+		table.insert( CurrentRun.BiomeVisitOrder, currentRoom.RoomSetName )
 	end
 
 	StartRoomPresentation( currentRun, currentRoom, darknessEarned )
@@ -1330,10 +1350,6 @@ function StartRoom( currentRun, currentRoom )
 
 	RunEventsGeneric( RoomData[currentRoom.Name].PostCombatEvents, currentRoom )
 
-	--@Mod
-	UpdateRoomCounterUI(currentRun)
-	UpdateRoomDamagePercentGrowth(currentRun.Hero)
-        
 end
 
 function SetupRoomArt( currentRun, currentRoom )
@@ -1362,7 +1378,7 @@ function SetupRoomArt( currentRun, currentRoom )
 end
 
 function WaitForNextEncounterReady()
-	while not IsEmpty( MapState.RoomRequiredObjects ) or IsScreenOpen( "UpgradeChoice" ) or IsScreenOpen( "BoonMenu" ) or IsScreenOpen( "Dialog" ) or IsScreenOpen( "SpellScreen" ) or IsScreenOpen( "TalentScreen" ) do
+	while HasRoomRequiredObject() or IsScreenOpen( "UpgradeChoice" ) or IsScreenOpen( "Dialog" ) or IsScreenOpen( "SpellScreen" ) or IsScreenOpen( "TalentScreen" ) do
 		wait( 0.5 )
 	end
 end
@@ -1711,17 +1727,6 @@ function SetupHeroObject( room, applyLuaUpgrades )
 	else
 		RemoveTrait( currentRun.Hero, "GodModeTrait" )
 	end
-
-	--@Mod Tăng Damage trực tiếp
-	if currentRun.Hero.OutgoingDamageModifiers == nil then
-		currentRun.Hero.OutgoingDamageModifiers = {}
-	end
-	table.insert( currentRun.Hero.OutgoingDamageModifiers, {
-		Name = "CustomDamageBoost",
-		GlobalMultiplier = 1.0,  -- Bắt đầu 100%, sẽ được tăng qua UpdateRoomDamagePercentGrowth
-	})
-
-	
 	-- Build all upgrades.
 	UpdateHeroTraitDictionary()
 	CheckActivatedTraits( CurrentRun.Hero, { SkipPresentation = true } )
@@ -1752,7 +1757,6 @@ function SetupHeroObject( room, applyLuaUpgrades )
 	
 	RunEventsGeneric( HeroData.SetupEvents, hero, args )
 
-
 end
 
 function CheckAttachmentTextures( source, args )
@@ -1766,17 +1770,17 @@ function CheckAttachmentTextures( source, args )
 end
 
 function SetupHeroLight()
-	local currentRun = CurrentRun
-	local roomData = RoomData[currentRun.CurrentRoom.Name] or currentRun.CurrentRoom
-	if currentRun.Hero.AttachedLightName ~= nil and not roomData.BlockHeroLight then
-		local heroGroup = GetGroupName({ Id = currentRun.Hero.ObjectId, DrawGroup = true })
+	local currentRoom = CurrentHubRoom or CurrentRun.CurrentRoom
+	local roomData = RoomData[currentRoom.Name] or currentRoom
+	if CurrentRun.Hero.AttachedLightName ~= nil and not roomData.BlockHeroLight then
+		local heroGroup = GetGroupName({ Id = CurrentRun.Hero.ObjectId, DrawGroup = true })
 		local heroLightGroup = "HeroLight"
 		for i = 1, (HeroData.AttachedLightCount or 1) do
-			local heroLightId = SpawnObstacle({ Name = HeroData.AttachedLightName, DestinationId = currentRun.Hero.ObjectId, Group = heroLightGroup })
+			local heroLightId = SpawnObstacle({ Name = HeroData.AttachedLightName, DestinationId = CurrentRun.Hero.ObjectId, Group = heroLightGroup })
 			SetScale({ Id = heroLightId, Fraction = HeroData.AttachedLightScale })
 			SetColor({ Id = heroLightId, Color = HeroData.AttachedLightColor })
-			Attach({ Id = heroLightId, DestinationId = currentRun.Hero.ObjectId })
-			currentRun.Hero.AttachedLightId = heroLightId
+			Attach({ Id = heroLightId, DestinationId = CurrentRun.Hero.ObjectId })
+			CurrentRun.Hero.AttachedLightId = heroLightId
 		end
 		InsertGroupBehind({ Name = heroLightGroup, DestinationName = heroGroup })
 	end
@@ -1844,10 +1848,6 @@ function BeginPerfectClearEncounter(encounter)
 end
 
 function BeginEliteChallenge(encounter)
-	StartEncounterEffects( encounter )
-end
-
-function BeginSurvivalEncounter(encounter)
 	StartEncounterEffects( encounter )
 end
 
@@ -2262,7 +2262,7 @@ function CreateLoot( args )
 	loot.BoughtFromShop = args.BoughtFromShop
 	loot.StackNum = args.StackNum or loot.StackNum
 	loot.ExchangeOnlyFromLootName = args.ExchangeOnlyFromLootName
-
+	loot.IgnoreRoomRarityBonus = loot.IgnoreRoomRarityBonus or args.IgnoreRoomRarityBonus
 	if args.AutoLoadPackages then
 		if not GameData.MissingPackages[loot.Name] then
 			LoadPackages({ Name = loot.Name, IgnoreAssert = true })
@@ -2367,7 +2367,8 @@ function CheckMoneyDrop( enemy, moneyDropData, attacker )
 
 	local recipient = nil
 
-	local moneyMultiplier = GetTotalHeroTraitValue( "MoneyMultiplier", { IsMultiplier = true } )
+	local moneyMultiplier = enemy.MoneyMultiplier or 1
+	moneyMultiplier = moneyMultiplier + (GetTotalHeroTraitValue( "MoneyMultiplier", { IsMultiplier = true } ) - 1)
 
 	local currentEncounter = CurrentRun.CurrentRoom.Encounter
 	if currentEncounter ~= nil and currentEncounter.MoneyDropStore and not moneyDropData.IgnoreRoomMoneyStore then
@@ -2397,8 +2398,10 @@ function CheckMoneyDrop( enemy, moneyDropData, attacker )
 			amount = amount * moneyMultiplier
 			amount = round( amount )
 
-			DropMoney( amount, { LocationId = enemy.ObjectId, Radius = moneyDropData.Radius, Source = enemy.Name } )
-			--DebugPrint({ Text = "Money Other: "..tostring( amount ) })
+			if amount > 0 then
+				DropMoney( amount, { LocationId = enemy.ObjectId, Radius = moneyDropData.Radius, Source = enemy.Name } )
+				--DebugPrint({ Text = "Money Other: "..tostring( amount ) })
+			end
 		end
 	end
 	if enemy.MoneyDropGlobalVoiceLines ~= nil then
@@ -2772,7 +2775,7 @@ function AddMaxMana( manaGained, source, args )
 	manaTraitData.Source = args.Source
 	AddTraitToHero({ TraitData = manaTraitData })
 	if not( args.Silent ) then
-		thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "MaxManaIncrease", PreDelay = args.PreDelay or 0, Duration = 0.7, LuaKey = "TooltipData", ShadowScale = 0.7, OffsetY = -100, LuaValue = { TooltipMana = manaGained }})
+		thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, UseProgressiveStack = true, Text = "MaxManaIncrease", PreDelay = args.PreDelay or 0, Duration = 0.7, LuaKey = "TooltipData", ShadowScale = 0.7, OffsetY = -100, LuaValue = { TooltipMana = manaGained }})
 	end
 end
 
@@ -2880,6 +2883,7 @@ function EndEncounterEffects( currentRun, currentRoom, currentEncounter )
 	if SessionMapState.LaserSpellDown then
 		LaserHoldClear()
 	end
+	ClearEffect({ Id = CurrentRun.Hero.ObjectId, Name = "MiasmaSlow" })
 	UpdateHeroTraitDictionary()
 	if currentRoom.DestroyAssistUnitOnEncounterEndId and not currentEncounter.SkipCleanupRaiseDead then
 		thread( CleanupRaiseDeadEncounter, currentRoom )
@@ -2932,6 +2936,9 @@ function EndEncounterEffects( currentRun, currentRoom, currentEncounter )
 	end
 
 	if currentEncounter == currentRoom.Encounter or currentEncounter == MapState.EncounterOverride then
+		if UpdateRoomDamagePercentGrowth ~= nil then
+			UpdateRoomDamagePercentGrowth( CurrentRun.Hero )
+		end
 		local heroHealth = CurrentRun.Hero.Health
 		local traitsToRemove = {}
 		for k, trait in ipairs( CurrentRun.Hero.Traits ) do
@@ -3013,7 +3020,10 @@ function EndEncounterEffects( currentRun, currentRoom, currentEncounter )
 			EndSpellTransform()
 		end
 		
-		MapState.UsedBlockDeath = nil
+		if MapState.UsedBlockDeath then
+			MapState.UsedBlockDeath = nil
+			RecreateLifePips()
+		end
 		MapState.EncounterOverride = nil
 	end
 end
@@ -3080,6 +3090,22 @@ function IsCombatEncounterActive( currentRun, args  )
 	return false
 end
 
+function HasRoomRequiredObject()
+	if not IsEmpty( MapState.RoomRequiredObjects ) then
+		for id, object in pairs( MapState.RoomRequiredObjects ) do
+			if object.RoomRequiredGameStateRequirements then
+				if IsGameStateEligible( object, object.RoomRequiredGameStateRequirements) then
+					return true
+				end
+			else
+				return true
+			end
+			DebugPrint({ Text = "Exit Blocked By: "..GetTableString( object ) })
+		end
+	end
+	return false
+end
+
 function CheckRoomExitsReadySource( source, args )
 	return CheckRoomExitsReady( CurrentRun.CurrentRoom, args )
 end
@@ -3090,10 +3116,7 @@ function CheckRoomExitsReady( currentRoom )
 		return
 	end
 
-	if not IsEmpty( MapState.RoomRequiredObjects ) then
-		for id, object in pairs( MapState.RoomRequiredObjects ) do
-			DebugPrint({ Text = "Exit Blocked By: "..GetTableString( object ) })
-		end
+	if HasRoomRequiredObject() then
 		return false
 	end
 
@@ -3281,6 +3304,22 @@ function SetupUnit( unit, currentRun, args )
 
 	unit.WeaponHistory = unit.WeaponHistory or {}
 
+	if currentRun.IsDreamRun and unit.DreamBiomeData ~= nil then
+		local biomeLevel = currentRun.EnteredBiomes or 1
+		if unit.IsFromNextBiomeEnemyShrineUpgrade then
+			biomeLevel = math.min(GameData.FullRunBiomeCount, biomeLevel + 1)
+		end
+		local dreamBiomeData = unit.DreamBiomeData[biomeLevel]
+		if dreamBiomeData ~= nil then
+			if dreamBiomeData.DataOverrides ~= nil then
+				OverwriteTableKeys(unit, dreamBiomeData.DataOverrides)
+			end
+			if dreamBiomeData.AddOutgoingDamageModifier ~= nil then
+				AddOutgoingDamageModifier(unit, dreamBiomeData.AddOutgoingDamageModifier)
+			end
+		end
+	end
+
 	if unit.IsElite and not unit.Charmed then
 		unit.EliteAttributes = unit.EliteAttributes or {}
 		local eliteAttributes = currentRoom.EliteAttributes[unit.Name]
@@ -3294,12 +3333,8 @@ function SetupUnit( unit, currentRun, args )
 		end
 	end
 
-	if unit.SpawnAngle ~= nil then
-		SetAngle({ Id = unit.ObjectId, Angle = unit.SpawnAngle })
-	end
-
 	if unit.SpawnAngleMin ~= nil and unit.SpawnAngleMax ~= nil then
-		SetGoalAngle({ Id = unit.ObjectId, Angle = RandomFloat(unit.SpawnAngleMin, unit.SpawnAngleMax) })
+		SetGoalAngle({ Id = unit.ObjectId, Angle = RandomFloat(unit.SpawnAngleMin, unit.SpawnAngleMax), CompleteAngle = true })
 	end
 
 	if unit.SpawnAngleTowardId then
@@ -3311,13 +3346,13 @@ function SetupUnit( unit, currentRun, args )
 	end
 
 	unit.HitShields = 0
-	unit.SpeedMultiplier = 1
+	unit.SpeedMultiplier = unit.SpeedMultiplier or 1
 	if unit.UseShrineUpgrades and not args.IgnoreShrineUpgrades then
 		if not unit.IgnoreShieldShrine then
 			unit.HitShields = GetNumShrineUpgrades( "EnemyShieldShrineUpgrade" )
 		end
 		if not unit.IgnoreSpeedShrine then
-			local speedMultiplier = (MetaUpgradeData.EnemySpeedShrineUpgrade.ChangeValue - 1.0) + (unit.EliteAdditionalSpeedMultiplier or 0)
+			local speedMultiplier = (MetaUpgradeData.EnemySpeedShrineUpgrade.ChangeValue - 1.0)
 			--DebugPrint({ Text = "speedMultiplier = "..speedMultiplier })
 			if speedMultiplier > 0.0 then		
 				unit.SpeedMultiplier = unit.SpeedMultiplier + speedMultiplier
@@ -3358,43 +3393,10 @@ function SetupUnit( unit, currentRun, args )
 		CreateAnimation({ Name = unit.AttachedAnimationName, DestinationId = unit.ObjectId, OffsetZ = unit.AttachedAnimationOffsetZ })
 	end
 	if unit.CreateAnimations ~= nil then
+		unit.CreatedAnimations = unit.CreatedAnimations or {}
 		for i, animName in ipairs( unit.CreateAnimations ) do
 			CreateAnimation({ Name = animName , DestinationId = unit.ObjectId })
-		end
-	end
-
-	if unit.SpawnObstaclesOnSpawn ~= nil then
-		for k, spawnData in pairs(unit.SpawnObstaclesOnSpawn) do
-			local offsetX = spawnData.OffsetX
-			local offsetY = spawnData.OffsetY
-			if spawnData.Radius ~= nil then
-				offsetX = RandomFloat(-spawnData.Radius, spawnData.Radius)
-				offsetY = RandomFloat(-spawnData.Radius, spawnData.Radius)
-			end
-			local spawnId = SpawnObstacle({ Name = spawnData.Name, Group = spawnData.GroupName or "Standing", DestinationId = unit.ObjectId, OffsetX = offsetX, OffsetY = offsetY })
-			local spawn = DeepCopyTable( ObstacleData[spawnData.Name] ) or {}
-			spawn.ObjectId = spawnId
-			SetupObstacle(spawn)
-			if spawnData.UpwardForce ~= nil and spawnData.UpwardForce > 0 then
-				SetThingProperty({ Property = "OffsetZ", Value = 0, DestinationId = spawnId })
-				SetThingProperty({ Property = "StopsProjectiles", Value = true, DestinationId = spawnId })
-				SetThingProperty({ Property = "StopsUnits", Value = true, DestinationId = spawnId })
-				ApplyUpwardForce({ Id = spawnId, Speed = spawnData.UpwardForce })
-				ApplyForce({ Id = spawnId, Speed = RandomFloat( spawnData.RandomForceMin or 0, spawnData.RandomForceMax or 0 ), Angle = RandomFloat( 0, 360 ) })
-			end
-			if spawnData.HSV ~= nil then
-				SetHSV({ Id = spawnId, HSV = spawnData.HSV })
-			end
-			if spawnData.Color ~= nil then
-				SetColor({ Id = spawnId, Color = spawnData.Color })
-			end
-			if spawnData.Outline ~= nil then
-				spawnData.Outline.Id = spawnId
-				AddOutline( spawnData.Outline )
-			end
-			if spawnData.SyncOwnerAngle then
-				SetAngle({ Id = spawnId, Angle = GetAngle({ Id = unit.ObjectId }) })
-			end
+			table.insert( unit.CreatedAnimations, animName )
 		end
 	end
 
@@ -3436,10 +3438,6 @@ function SetupUnit( unit, currentRun, args )
 		unit.CurrentPhase = 1
 	end
 
-	if unit.Color ~= nil then
-		SetColor({ Id = unit.ObjectId, Color = unit.Color, MultiplyBase = true })
-	end
-
 	if unit.SpawnFx ~= nil then
 		CreateAnimation({ DestinationId = unit.ObjectId, Name = unit.SpawnFx })
 	end
@@ -3449,11 +3447,7 @@ function SetupUnit( unit, currentRun, args )
 	end
 
 	if unit.AddOutlineImmediately then
-		if not unit.HasOutline and unit.Outline ~= nil and unit.HealthBuffer ~= nil and unit.HealthBuffer > 0 then
-			unit.Outline.Id = unit.ObjectId
-			AddOutline( unit.Outline )
-			unit.HasOutline = true
-		end
+		SetupUnitOutline( unit )
 	end
 
 	if unit.MoneyDropOnDeath and unit.MoneyDropOnDeath.ValuePerDifficulty and unit.MoneyDropOnDeath.ValuePerDifficulty > 0 then
@@ -3514,12 +3508,52 @@ function SetupUnit( unit, currentRun, args )
 
 	CreateLevelDisplay( unit, CurrentRun )
 
-	if unit.IgnoreTimeSlowEffects then
-		AddEffectBlock({ Id = unit.ObjectId, Name = "LegacyChillEffect" })	
-	end
 	if unit.EffectBlocks then
 		for _, effectName in ipairs( unit.EffectBlocks ) do
 			AddEffectBlock({ Id = unit.ObjectId, Name = effectName })
+		end
+	end
+end
+
+function SetupUnitOutline( unit, args )
+	if not unit.HasOutline and unit.Outline ~= nil then
+		unit.Outline.Id = unit.ObjectId
+		AddOutline( unit.Outline )
+		unit.HasOutline = true
+	end
+end
+
+function SpawnObstaclesOnUnit(unit, args)
+	for k, spawnData in pairs(args.SpawnData) do
+		local offsetX = spawnData.OffsetX
+		local offsetY = spawnData.OffsetY
+		if spawnData.Radius ~= nil then
+			offsetX = RandomFloat(-spawnData.Radius, spawnData.Radius)
+			offsetY = RandomFloat(-spawnData.Radius, spawnData.Radius)
+		end
+		local spawnId = SpawnObstacle({ Name = spawnData.Name, Group = spawnData.GroupName or "Standing", DestinationId = unit.ObjectId, OffsetX = offsetX, OffsetY = offsetY })
+		local spawn = DeepCopyTable( ObstacleData[spawnData.Name] ) or {}
+		spawn.ObjectId = spawnId
+		SetupObstacle(spawn)
+		if spawnData.UpwardForce ~= nil and spawnData.UpwardForce > 0 then
+			SetThingProperty({ Property = "OffsetZ", Value = 0, DestinationId = spawnId })
+			SetThingProperty({ Property = "StopsProjectiles", Value = true, DestinationId = spawnId })
+			SetThingProperty({ Property = "StopsUnits", Value = true, DestinationId = spawnId })
+			ApplyUpwardForce({ Id = spawnId, Speed = spawnData.UpwardForce })
+			ApplyForce({ Id = spawnId, Speed = RandomFloat( spawnData.RandomForceMin or 0, spawnData.RandomForceMax or 0 ), Angle = RandomFloat( 0, 360 ) })
+		end
+		if spawnData.HSV ~= nil then
+			SetHSV({ Id = spawnId, HSV = spawnData.HSV })
+		end
+		if spawnData.Color ~= nil then
+			SetColor({ Id = spawnId, Color = spawnData.Color })
+		end
+		if spawnData.Outline ~= nil then
+			spawnData.Outline.Id = spawnId
+			AddOutline( spawnData.Outline )
+		end
+		if spawnData.SyncOwnerAngle then
+			SetAngle({ Id = spawnId, Angle = GetAngle({ Id = unit.ObjectId }) })
 		end
 	end
 end
@@ -3530,9 +3564,6 @@ function ApplyEnemyModifiers(unit, currentRun, args )
 		if traitData.Chance == nil or RandomChance(traitData.Chance * GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true })) then
 			thread(CallFunctionName, traitData.FunctionName, unit, traitData.Args)
 		end
-	end
-	if CurrentRun.CurrentRoom.ElapsedTimeMultiplier then
-		SetThingProperty({ Property = "ElapsedTimeMultiplier", Value = CurrentRun.CurrentRoom.ElapsedTimeMultiplier, ValueChangeType = "Multiply", DataValue = false, DestinationId = unit.ObjectId })
 	end
 end
 
@@ -3665,12 +3696,8 @@ function SetNextInteractLines( source, textLines )
 	if textLines.OnQueuedFunctionName ~= nil then
 		CallFunctionName( textLines.OnQueuedFunctionName, source, textLines.OnQueuedFunctionArgs )
 	end
-	if textLines.OnQueuedFunctions ~= nil then
-		for k, onQueuedFunctionData in pairs( textLines.OnQueuedFunctions ) do
-			if onQueuedFunctionData.GameStateRequirements == nil or IsGameStateEligible( source, onQueuedFunctionData.GameStateRequirements ) then
-				CallFunctionName( onQueuedFunctionData.Name, source, onQueuedFunctionData.Args )
-			end
-		end
+	if textLines.OnQueuedEvents ~= nil then
+		RunEventsGeneric( textLines.OnQueuedEvents, source )
 	end
 	if textLines.OnQueuedThreadedFunctionName ~= nil then
 		thread( CallFunctionName, textLines.OnQueuedThreadedFunctionName, source, textLines.OnQueuedFunctionArgs )
@@ -3690,13 +3717,6 @@ function SetStatusAnimationFromTextLines( source, textLines )
 		local onQueuedFunctionArgs = textLines.OnQueuedFunctionArgs
 		if onQueuedFunctionArgs and onQueuedFunctionArgs.StatusAnimation then
 			PlayStatusAnimation( source, { Animation = onQueuedFunctionArgs.StatusAnimation } )
-		end
-	end
-	if textLines.OnQueuedFunctions ~= nil then
-		for k, onQueuedFunctionData in pairs( textLines.OnQueuedFunctions ) do
-			if onQueuedFunctionData.Args and onQueuedFunctionData.Args.StatusAnimation and ( onQueuedFunctionData.GameStateRequirements == nil or IsGameStateEligible( source, onQueuedFunctionData.GameStateRequirements ) ) then
-				PlayStatusAnimation( source, { Animation = onQueuedFunctionData.Args.StatusAnimation } )
-			end
 		end
 	end
 
@@ -3774,10 +3794,11 @@ function UnlockRoomExits( run, room, delay )
 		return
 	end
 	room.ExitsUnlocked = true
+	local roomData = RoomData[room.Name] or room
 
 	thread( CheckQuestStatus )
 
-	if CheckPackagedBountyCompletion() then
+	if CheckPackagedBountyCompletion() or CheckDreamBiomeCompletion() then
 		return
 	end
 
@@ -3787,7 +3808,7 @@ function UnlockRoomExits( run, room, delay )
 		end
 	end
 
-	if IsEmpty( MapState.OfferedExitDoors ) then
+	if IsEmpty( MapState.OfferedExitDoors ) and not roomData.UnlockWithoutDoors then
 		return
 	end
 
@@ -4149,19 +4170,9 @@ function CheckExitPreUnlock( door, args, doorIndex )
 end
 
 function LeaveRoom( currentRun, door )
-
 	CurrentRun.CurrentRoom.Leaving = true
 	local nextRoom = door.Room
 	local currentRoomData = RoomData[CurrentRun.CurrentRoom.Name]
-
-	-- Gọi hàm thưởng tiền ngẫu nhiên khi thoát Room
-	if GrantRandomGoldOnRoomExit ~= nil then
-		GrantRandomGoldOnRoomExit( currentRun, door )
-	else
-		thread( InCombatText, CurrentRun.Hero.ObjectId, "DOOM", 2, { ShadowScaleX = 1.5 } )
-	end
-
-
 	if CurrentRun.CurrentRoom.TempHealth then
 		Damage( CurrentRun.Hero, { SourceWeapon = "TempHealth", DamageAmount = CurrentRun.CurrentRoom.TempHealth, MinHealth = 1, PureDamage = true, Silent = true } )
 	end
@@ -4248,7 +4259,9 @@ function LeaveRoom( currentRun, door )
 			if trait.BlockDecay then
 				trait.BlockDecay = false
 			else
-				trait.StatMultiplier = trait.StatMultiplier - trait.Decay
+				if trait.Decay ~= nil then
+					trait.StatMultiplier = trait.StatMultiplier - trait.Decay
+				end
 				if trait.StatMultiplier > 0 then
 					local maxHealth = trait.StatMultiplier * trait.StartMaxHealth
 					local maxMana = trait.StatMultiplier * trait.StartMaxMana
@@ -4393,7 +4406,11 @@ function LeaveRoom( currentRun, door )
 
 	RunShopGeneration( currentRun.CurrentRoom )
 
-	GameState.LocationName = nextRoom.SaveProfileLocationText
+	local locationText = nextRoom.SaveProfileLocationText
+	if currentRun.IsDreamRun then
+		locationText = nextRoom.DreamSaveProfileLocationText or locationText
+	end
+	GameState.LocationName = locationText
 	RandomSetNextInitSeed()
 	if not nextRoom.SkipSave then
 		RequestSave({ StartNextMap = nextRoom.Name, SaveName = "_Temp", DevSaveName = CreateDevSaveName( currentRun ) })
@@ -5005,13 +5022,18 @@ function HandleSecretSpawns( currentRun )
 				challengeSwitch.StartingValue = round( startingValue )
 			end
 
+			local valueText = challengeSwitch.ChallengeText
 			offsetX = challengeSwitch.ValueTextAnchorOffsetX or 40
 			if IsHorizontallyFlipped({ Id = challengeSwitch.ObjectId }) then
 				offsetX = offsetX * -1
+				if challengeSwitch.ChallengeTextFlipped ~= nil then
+					valueText = challengeSwitch.ChallengeTextFlipped
+				end
 			end
 			challengeSwitch.ValueTextAnchor = SpawnObstacle({ Name = "BlankObstacle", DestinationId = challengeSwitch.ObjectId })
 			Attach({ Id = challengeSwitch.ValueTextAnchor, DestinationId = challengeSwitch.ObjectId, OffsetX = offsetX , OffsetY = challengeSwitch.ValueTextAnchorOffsetY or -220, })
-			CreateTextBox({ Id = challengeSwitch.ValueTextAnchor, Text = challengeSwitch.ChallengeText, LuaKey = "Amount", LuaValue = startingValue or 0, Font = challengeSwitch.OverheadTextFont, FontSize = 40, Color = Color.White, OutlineThickness = 1, OutlineColor = {0.0, 0.0, 0.0,1}, TextSymbolScale = challengeSwitch.OverheadTextSymbolScale, })
+			
+			CreateTextBox({ Id = challengeSwitch.ValueTextAnchor, Text = valueText, LuaKey = "Amount", LuaValue = startingValue or 0, Font = challengeSwitch.OverheadTextFont, FontSize = 40, Color = Color.White, OutlineThickness = 1, OutlineColor = {0.0, 0.0, 0.0,1}, TextSymbolScale = challengeSwitch.OverheadTextSymbolScale, })
 			ModifyTextBox({ Id = challengeSwitch.ValueTextAnchor, FadeTarget = 0, FadeDuration = 0 })
 
 			if challengeSwitch.KeyCost == nil and challengeSwitch.KeyCostMin ~= nil and challengeSwitch.KeyCostMax ~= nil then
@@ -5440,7 +5462,7 @@ function PolyphemusBoulderManager( room, args )
 		local targetId = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationIds = spawnIds, Distance = 9999 })
 		RemoveValue(spawnIds, targetId)
 
-		if targetId == nil or targetId == 0 then
+		if targetId == nil or targetId == 0 or CurrentRun.Hero.IsDead then
 			return
 		end
 
@@ -5634,11 +5656,11 @@ function LockEphyraExits( room, args )
 	end
 end
 
-function HandlePylonObjective( room, args )
+function HandlePylonObjective( source, args )
 
 	args = args or {}
 
-	if not IsGameStateEligible( room, NamedRequirementsData.PylonObjectiveRevealed ) then
+	if not IsGameStateEligible( source, NamedRequirementsData.PylonObjectiveRevealed ) then
 		return
 	end
 
@@ -5646,7 +5668,7 @@ function HandlePylonObjective( room, args )
 
 	wait(1.3, RoomThreadName)
 
-	if room.Leaving then
+	if source.Leaving then
 		return
 	end
 
@@ -5655,6 +5677,11 @@ function HandlePylonObjective( room, args )
 	local numPylons = CurrentRun.SpawnRecord.SoulPylon or 0
 
 	numPylons = numPylons - #GetIdsByType({ Name ="SoulPylon" })
+
+	if source.IsDead then
+		-- We delay the cleanup on SoulPylon so the projectiles have an owner, so its still picked up by GetIds above
+		numPylons = numPylons + 1
+	end
 
 	UpdateObjectiveDescription( "BiomeNPylons", "Objective_BiomeNPylons", "Pylons", 6 - numPylons )
 
@@ -5828,7 +5855,7 @@ function UseFieldsRewardFinder( source, args )
 				end
 				thread( DirectionHintPresentation, reward, { Cooldown = 0.0, Delay = 0 } )
 				wait( 0.3 )
-				CreateScreenEdgeIndicator( reward, { AnimName = reward.DoorIcon or reward.Icon or reward.IconPath or spellIcon or reward.Name } )
+				CreateScreenEdgeIndicator( reward, { AnimName = reward.ScreenEdgeIcon or reward.DoorIcon or reward.Icon or reward.IconPath or spellIcon or reward.Name } )
 				CurrentRun.CurrentRoom.SpawnedRewardCageIndicators = true
 				wait( args.Interval )
 			end
@@ -5842,7 +5869,7 @@ function UseFieldsRewardFinder( source, args )
 				end
 				thread( DirectionHintPresentation, reward, { Cooldown = 0.0, Delay = 0 } )
 				wait( 0.3 )
-				CreateScreenEdgeIndicator( reward, { AnimName = reward.DoorIcon or reward.Icon or reward.IconPath or spellIcon or reward.Name,
+				CreateScreenEdgeIndicator( reward, { AnimName = reward.ScreenEdgeIcon or reward.DoorIcon or reward.Icon or reward.IconPath or spellIcon or reward.Name,
 					BackingAnimName = "FieldsOptionalRewardFinderScreenEdgeIndicator", SoundName = "/SFX/Menu Sounds/MirrorFlash2" } )
 				CurrentRun.CurrentRoom.SpawnedRewardCageIndicators = true
 				wait( args.Interval )

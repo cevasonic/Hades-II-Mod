@@ -303,6 +303,7 @@ RoomSetData.Test =
 						"CharonPointsDrop",
 						"GemPointsDrop",
 						"GemPointsBigDrop",
+						"DreamPointsDrop",
 
 						-- Healing, no interact
 						"HealDrop",

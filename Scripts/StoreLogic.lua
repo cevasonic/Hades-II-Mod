@@ -180,7 +180,8 @@ function FillInShopOptions( args )
 				for s, itemData in pairs(groupData.OptionsData) do
 					local upgradeData = DeepCopyTable( ConsumableData[itemData.Name] or LootData[itemData.Name] )
 					local itemName = itemData.Name
-					if not Contains( args.ExclusionNames, itemName) and (( itemData.ReplaceRequirements == nil and ( StoreItemEligible(upgradeData, args) or itemData.SkipRequirements )) or ( itemData.ReplaceRequirements and IsGameStateEligible( itemData, itemData.ReplaceRequirements) )) then
+					local additionalRequirementsValid = itemData.AdditionalRequirements == nil or IsGameStateEligible(itemData, itemData.AdditionalRequirements)
+					if not Contains( args.ExclusionNames, itemName) and (( itemData.ReplaceRequirements == nil and ( StoreItemEligible(upgradeData, args) or itemData.SkipRequirements )) or ( itemData.ReplaceRequirements and IsGameStateEligible( itemData, itemData.ReplaceRequirements) )) and additionalRequirementsValid then
 						if itemName == "RandomLoot" or itemName == "BoostedRandomLoot" then
 							local pickedGod = GetEligibleInteractedGod()
 							if pickedGod ~= nil then
@@ -303,10 +304,30 @@ function StoreItemEligible( itemData, args )
 	end
 end
 
+function UpdateStoreItemCostText()
+	if not CurrentRun.CurrentRoom.Store or IsEmpty(CurrentRun.CurrentRoom.Store.SpawnedStoreItems) then
+		return
+	end
+	for i, data in pairs(CurrentRun.CurrentRoom.Store.SpawnedStoreItems ) do
+		data.ResourceCosts = ShallowCopyTable(data.OriginalResourceCosts)
+		local costMultiplier = GetShopCostMultiplier()
+		for resourceName, resourceAmount in pairs(data.ResourceCosts) do		
+			data.ResourceCosts[resourceName] = round( resourceAmount * costMultiplier )
+		end
+		local originalObject = MapState.ActiveObstacles[data.ObjectId] or LootObjects[data.ObjectId]
+		if originalObject then
+			originalObject.ResourceCosts = ShallowCopyTable(data.ResourceCosts)
+		end
+		DestroyTextBox({ Id = data.ObjectId })				
+		UpdateCostText( data )
+	end
+end
+
 function RemoveStoreItem( args )
 	if CurrentRun == nil or CurrentRun.CurrentRoom == nil or CurrentRun.CurrentRoom.Store == nil or IsEmpty( CurrentRun.CurrentRoom.Store.StoreOptions ) then
 		return
 	end
+	local roomData = RoomData[CurrentRun.CurrentRoom.Name] or CurrentRun.CurrentRoom
 	local wasFirstPurchase = not CurrentRun.CurrentRoom.FirstPurchase 
 	local removedItem = false
 	for i, data in pairs( CurrentRun.CurrentRoom.Store.StoreOptions ) do
@@ -340,7 +361,7 @@ function RemoveStoreItem( args )
 		if HasHeroTraitValue("DuplicateWorldShopItem") and args.Name ~= "SpellDrop" then
 			UseHeroTraitsWithValue("DuplicateWorldShopItem")
 			local allPoints = GetIdsByType ({ Names = {"SecretPoint", "EnemyPoint" }})
-			local spawnTarget = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationIds = allPoints, Distance = 2000 })
+			local spawnTarget = roomData.StoreDuplicateItemId or GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationIds = allPoints, Distance = 2000 })
 			local spawnedItem = nil
 			if args.IsBoon then
 				spawnedItem = CreateLoot({ Name = args.Name, SpawnPoint = spawnTarget })
@@ -397,14 +418,16 @@ function RestockWorldItem(replacedIndex, kitId, args )
 		screenName = UIData.TalentMenuId
 	end
 
+	if screenName then
+		waitUntil( screenName )
+	end
+	
 	local options = FillInShopOptions({ RoomName = room.Name, StoreData = storeData, ExclusionNames = { args.Name, args.Name.."Drop" } }).StoreOptions
 	if options == nil or not options[replacedIndex] then
 		options = FillInShopOptions({ RoomName = room.Name, StoreData = storeData }).StoreOptions
 	end
 	itemData = options[replacedIndex]
-	if screenName then
-		waitUntil( screenName )
-	end
+
 	InvalidateCheckpoint()
 	SpawnStoreItemInWorld( itemData, kitId )
 	WorldShopItemRestockPresentation( kitId )
@@ -606,6 +629,7 @@ function SpawnStoreItemInWorld( itemData, kitId )
 			boonRarities = itemData.Args.BoonRaritiesOverride 
 		end
 		spawnedItem = CreateHermesLoot({ SpawnPoint = kitId, ResourceCosts = itemData.ResourceCosts or GetProcessedValue( ConsumableData[itemData.Name].ResourceCosts ), DoesNotBlockExit = true, SuppressSpawnSounds = true, BoughtFromShop = true, AddBoostedAnimation = itemData.AddBoostedAnimation, BoonRaritiesOverride = boonRarities })
+		spawnedItem.BoonRaritiesOverride = boonRarities
 		spawnedItem.CanReceiveGift = false
 		SetThingProperty({ Property = "SortBoundsScale", Value = 1.0, DestinationId = spawnedItem.ObjectId })
 	elseif itemData.Type == "Consumable" then
@@ -620,6 +644,10 @@ function SpawnStoreItemInWorld( itemData, kitId )
 			ExtractValues( CurrentRun.Hero, spawnedItem, spawnedItem )
 		end
 	elseif itemData.Type == "Boon" then
+		local boonRarities = itemData.BoonRaritiesOverride
+		if not boonRarities and itemData.Args then
+			boonRarities = itemData.Args.BoonRaritiesOverride 
+		end
 		itemData.Args.SpawnPoint = kitId
 		itemData.Args.DoesNotBlockExit = true
 		itemData.Args.SuppressSpawnSounds = true
@@ -627,6 +655,7 @@ function SpawnStoreItemInWorld( itemData, kitId )
 		itemData.Args.AutoLoadPackages = true
 		spawnedItem = GiveLoot( itemData.Args )
 		spawnedItem.CanReceiveGift = false
+		spawnedItem.BoonRaritiesOverride = boonRarities
 		SetThingProperty({ Property = "SortBoundsScale", Value = 1.0, DestinationId = spawnedItem.ObjectId })
 	end
 	if spawnedItem ~= nil then
@@ -1000,8 +1029,8 @@ function UpdateStoreReroll( screen, options, rerollFunctionName )
 		if CurrentRun.NumRerolls < cost or cost < 0 then
 			color = Color.CostUnaffordable
 		end
-
 		if CurrentRun.NumRerolls < cost or cost < 0 then
+			components.RerollButton.RerollFunctionName = nil
 			SetAlpha({ Id = screen.Components.RerollButton.Id, Fraction = 0.0, Duration = 0.2 })
 		elseif cost > 0 then
 			components.RerollButton.RerollFunctionName = rerollFunctionName or "RerollStore"
@@ -1012,6 +1041,7 @@ function UpdateStoreReroll( screen, options, rerollFunctionName )
 
 			SetAlpha({ Id = screen.Components.RerollButton.Id, Fraction = 1.0, Duration = 0.2 })
 		else
+			components.RerollButton.RerollFunctionName = nil
 			SetAlpha({ Id = screen.Components.RerollButton.Id, Fraction = 0.0, Duration = 0.2 })
 		end
 	else
@@ -1135,6 +1165,9 @@ function HandleStorePurchase( screen, button )
 	local wasFirstPurchase = not CurrentRun.CurrentRoom.FirstPurchase and HasHeroTraitValue("FirstPurchaseDiscount")
 	CurrentRun.CurrentRoom.FirstPurchase = true
 	CurrentRun.WellPurchases =  (CurrentRun.WellPurchases or 0) + 1
+	if upgradeData.Name ~= nil then
+		CurrentRun.WellShopPurchases[upgradeData.Name] = (CurrentRun.WellShopPurchases[upgradeData.Name] or 0) + 1
+	end
 
 	SpendResources( upgradeData.ResourceCosts, upgradeData.Name or "WeaponUpgrade", { SkipQuestStatusCheck = true, } )
 	UpdateMoneyUI( true )
@@ -1304,7 +1337,7 @@ function UnwrapRandomLoot( source )
 	RandomSynchronize()
 	InvalidateCheckpoint()
 	local obstacleId = SpawnObstacle({ Name = "InvisibleTarget", DestinationId = spawnId })
-	local reward = GiveLoot({ SpawnPoint = obstacleId }) -- Debug: , ForceLootName = "HestiaUpgrade" })
+	local reward = GiveLoot({ SpawnPoint = obstacleId, IgnoreRoomRarityBonus = source.IgnoreRoomRarityBonus }) -- Debug: , ForceLootName = "HestiaUpgrade" })
 	
 	SetObstacleProperty({ Property = "MagnetismWhileBlocked", Value = 0, DestinationId = reward.ObjectId })
 
@@ -1313,6 +1346,7 @@ function UnwrapRandomLoot( source )
 		reward.BoughtTextLines = nil
 	end
 	reward.WasRandomLoot = true
+	reward.ZagContractItem = source.ZagContractItem
 	reward.MakeUpTextLines = nil
 	UseableOff({ Id = reward.ObjectId })
 	UnwrapLootPresentation( reward )

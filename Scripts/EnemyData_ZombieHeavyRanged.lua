@@ -3,7 +3,7 @@ UnitSetData.ZombieHeavyRanged =
 
 	ZombieHeavyRanged =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 		IntroEncounterName = "ZombieHeavyRangedIntro",
 
 		MaxHealth = 440,

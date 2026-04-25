@@ -383,36 +383,6 @@ EncounterSets =
 
 	----------------
 
-	TartarusEncountersDefault =
-	{
-		"Empty"
-	},
-
-	AsphodelEncountersDefault =
-	{
-		"Empty"
-	},
-
-	ElysiumEncountersDefault =
-	{
-		"Empty"
-	},
-
-	StyxEncountersMini =
-	{
-		"Empty",
-	},
-
-	TartarusEncountersNoSurvival =
-	{
-		"Empty"
-	},
-
-	ThanatosEncounters = 
-	{
-		"Empty"
-	},
-
 	ShopRoomEvents =
 	{
 		{
@@ -501,18 +471,6 @@ EncounterSets =
 			},
 		},
 		{ FunctionName = "WaitForNextEncounterReady" },
-	},
-
-	EncounterEventsSurvival =
-	{
-		{ FunctionName = "SurvivalEncounterStartPresentation" },
-		{ FunctionName = "EncounterAudio" },
-		{ FunctionName = "BeginSurvivalEncounter" },
-		{ FunctionName = "HandleTimedSpawns" },
-		{ FunctionName = "DisableRoomTraps" },
-		{ FunctionName = "CheckForAllEnemiesDead" },
-		{ FunctionName = "PostCombatAudio" },
-		{ FunctionName = "SpawnRoomReward" },
 	},
 
 	EncounterEventsPerfectClear =
@@ -773,7 +731,15 @@ EncounterSets =
 
 	EncounterEventsNonCombat =
 	{
-		{ FunctionName = "CheckConversations" },
+		{
+			FunctionName = "CheckConversations",
+			GameStateRequirements =
+			{
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
+			},
+		},
 	},
 
 	TimeChallengeOptions =

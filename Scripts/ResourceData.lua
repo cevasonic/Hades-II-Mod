@@ -576,6 +576,7 @@ ResourceData =
 				{ Cue = "/VO/Melinoe_2824", Text = "Shaderot.", PlayFirst = true },
 				{ Cue = "/VO/Melinoe_2825", Text = "Some Shaderot." },
 			},
+			{ GlobalVoiceLines = "PersephoneGatherReactionVoiceLines" },
 			{ GlobalVoiceLines = "ResourceFoundVoiceLines" },
 		},
 	},
@@ -686,6 +687,7 @@ ResourceData =
 				{ Cue = "/VO/Medea_0311", Text = "Moss, was it?" },
 				{ Cue = "/VO/Medea_0312", Text = "Fresh Moss..." },
 			},
+			{ GlobalVoiceLines = "PolyphemusGatherReactionVoiceLines" },
 			{ GlobalVoiceLines = "ResourceFoundVoiceLines" },
 		},
 	},
@@ -1110,6 +1112,7 @@ ResourceData =
 				{ Cue = "/VO/Melinoe_5788", Text = "A Garlic Bulb..." },
 				{ Cue = "/VO/Melinoe_5789", Text = "A bulb of Garlic..." },
 			},
+			{ GlobalVoiceLines = "PolyphemusGatherReactionVoiceLines" },
 			{ GlobalVoiceLines = "FoundSeedVoiceLines" },
 			{ GlobalVoiceLines = "ResourceFoundVoiceLines" },
 		},
@@ -1817,12 +1820,34 @@ ResourceData =
 			{
 				RandomRemaining = true,
 				BreakIfPlayed = true,
+				PreLineWait = 0.45,
+				SuccessiveChanceToPlayAll = 0.15,
+				ObjectTypes = { "NPC_Persephone_01" },
+				SkipCooldownCheckIfNonePlayed = true,
+				Cooldowns =
+				{
+					{ Name = "PersephoneSpokeRecently", Time = 8 },
+				},
+
+				{ Cue = "/VO/Persephone_0103", Text = "How many of those do we have?" },
+				{ Cue = "/VO/Persephone_0104", Text = "Saving us the trouble!", PlayFirst = true },
+				{ Cue = "/VO/Persephone_0105", Text = "Chronos doesn't want those anymore..." },
+				{ Cue = "/VO/Persephone_0106", Text = "Thank you for the help." },
+				{ Cue = "/VO/Persephone_0107", Text = "We don't want those around..." },
+			},
+			{
+				RandomRemaining = true,
+				BreakIfPlayed = true,
 				SuccessiveChanceToPlay = 0.25,
 				PreLineWait = 0.35,
 				GameStateRequirements =
 				{
 					{
 						PathEmpty = { "RequiredKillEnemies" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsNone = { "I_Story01" },
 					},
 				},
 				SkipCooldownCheckIfNonePlayed = true,
@@ -2318,53 +2343,6 @@ ResourceData =
 			},
 			{ Cue = "/VO/Melinoe_1659", Text = "Can use this at my Altar back home." },
 		},
-
-		ConsumedVoiceLines =
-		{
-			{
-				PlayOnce = true,
-				BreakIfPlayed = true,
-				PreLineWait = 0.45,
-				GameStateRequirements =
-				{
-					{
-						Path = { "GameState", "LifetimeResourcesGained", "MemPointsCommon" },
-						Comparison = "<=",
-						Value = 5,
-					},
-				},
-				{ Cue = "/VO/Melinoe_1659", Text = "Can use this at my Altar back home." },
-			},
-			Cooldowns =
-			{
-				{ Name = "MelinoeAnyQuipSpeech" },
-				{ Name = "ErisResourceGranted", Time = 8 }
-			},
-			{
-				RandomRemaining = true,
-				BreakIfPlayed = true,
-				SuccessiveChanceToPlay = 0.33,
-				PreLineWait = 0.45,
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsNone = { "ArtemisCombatIntro", "ArtemisCombatF", "ArtemisCombatG", "ArtemisCombatN", "HeraclesCombatN" },
-					},
-				},
-				Cooldowns =
-				{
-					{ Name = "MelinoeAnyQuipSpeech" },
-				},
-				TriggerCooldowns = { "MelinoePurchasedConsumableSpeech" },
-
-				{ Cue = "/VO/Melinoe_1657", Text = "Psyche.", PlayFirst = true, },
-				{ Cue = "/VO/Melinoe_1658", Text = "More Psyche." },
-				{ Cue = "/VO/Melinoe_1904", Text = "I'll just stash this away.", PlayFirst = true },
-				{ Cue = "/VO/Melinoe_1660", Text = "The Spirits of the Dead..." },
-			},
-			{ GlobalVoiceLines = "ResourceFoundVoiceLines" },
-		},
 	},
 
 	MetaFabric =
@@ -2436,7 +2414,7 @@ ResourceData =
 		TextIconPath = "Items\\Resources\\Other\\CardUpgradePoints_Text",
 		TooltipId = "CardUpgradePointsIcon",
 		CostTextId = "CardUpgradePoints_Short",
-		MetaRewardStandPickupSound = "/Leftovers/Menu Sounds/TalismanRockUpLEGENDARY",
+		MetaRewardStandPickupSound = "/Leftovers/Menu Sounds/MoonDustSFX2",
 
 		ExtraDescriptions =
 		{
@@ -2539,12 +2517,8 @@ ResourceData =
 						PathEmpty = { "RequiredKillEnemies" },
 					},
 					{
-						Path = { "CurrentRun", "TextLinesRecord" },
-						HasNone = { "ErisGiftDecline01", "NemesisGiftDecline01", "NemesisGift02", "NyxGift02" },
-					},
-					{
 						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
-						IsNone = { "NemesisRandomEvent", "Story_Hades_01" },
+						IsNone = { "NemesisRandomEvent" },
 					},
 				},
 				Cooldowns =
@@ -2601,15 +2575,8 @@ ResourceData =
 						PathEmpty = { "RequiredKillEnemies" },
 					},
 					{
-						Path = { "CurrentRun", "HubTextLinesRecord" },
-						HasNone = { "HecateBathHouseDecline01", "OdysseusBathHouseDecline01", "NemesisBathHouseDecline01", "ErisBathHouseDecline01", "MorosBathHouseDecline01", "SkellyBathHouseDecline01", "DoraBathHouseDecline01", "IcarusBathHouseDecline01" },
-					},
-					{
 						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
 						IsNone = { "NemesisRandomEvent" },
-					},
-					{
-						PathFalse = { "CurrentRun", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
 					},
 				},
 				Cooldowns =
@@ -2648,15 +2615,8 @@ ResourceData =
 						PathEmpty = { "RequiredKillEnemies" },
 					},
 					{
-						Path = { "CurrentRun", "HubTextLinesRecord" },
-						HasNone = { "HecateFishingDecline01", "OdysseusFishingDecline01", "NemesisFishingDecline01", "ErisFishingDecline01", "MorosFishingDecline01", "SkellyFishingDecline01", "DoraFishingDecline01", "IcarusFishingDecline01" },
-					},
-					{
 						Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
 						IsNone = { "NemesisRandomEvent" },
-					},
-					{
-						PathFalse = { "CurrentRun", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
 					},
 				},
 				Cooldowns =
@@ -2747,6 +2707,27 @@ ResourceData =
 		{
 			--
 		},
+
+		ExtraDescriptions =
+		{
+			{
+				TextId = "IcarusPoints_ExtraDetails1",
+				Requirements =
+				{
+					{
+						SumPrevRuns = 3,
+						Path = { "TextLinesRecord", "IcarusAboutBecomingCloser01" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "IcarusAboutBecomingCloser01" }
+					},
+				},
+			}
+		},
+
 	},
 
 	-- @ ending
@@ -2831,6 +2812,19 @@ ResourceData =
 				},
 			},
 			{ Cue = "/VO/Melinoe_5713", Text = "No use searching for this now..." },
+		},
+
+		ExtraDescriptions =
+		{
+			{
+				TextId = "DeathAreaPoints_ExtraDetails1",
+				Requirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "TrueEndingFinale01" },
+					},
+				},
+			},
 		},
 
 		OnAddVoiceLines =
@@ -3053,7 +3047,7 @@ ResourceData =
 		TextIconPath = "Items\\Resources\\Other\\WeaponPointsRare_Text",
 		TooltipId = "WeaponPointsRareIcon",
 		CostTextId = "WeaponPointsRare_Short",
-		MetaRewardStandPickupSound = "/SFX/TitanBloodPickupSFX",
+		MetaRewardStandPickupSound = "/SFX/NightmarePickup",
 
 		RevealGameStateRequirements =
 		{
@@ -3148,7 +3142,7 @@ ResourceData =
 		TextIconPath = "Items\\Resources\\Other\\Mixer5Common_Text",
 		TooltipId = "Mixer5CommonIcon",
 		CostTextId = "Mixer5Common_Short",
-		MetaRewardStandPickupSound = "/Leftovers/Menu Sounds/TalismanRockUpLEGENDARY",
+		MetaRewardStandPickupSound = "/SFX/Menu Sounds/StardustPickup",
 
 		ExtraDescriptions =
 		{
@@ -3364,28 +3358,11 @@ ResourceData =
 
 		OnAddVoiceLines =
 		{
-			{
-				RandomRemaining = true,
-				BreakIfPlayed = true,
-				SuccessiveChanceToPlay = 0.25,
-				PreLineWait = 0.35,
-				GameStateRequirements =
-				{
-					{
-						PathEmpty = { "RequiredKillEnemies" },
-					},
-				},
-				SkipCooldownCheckIfNonePlayed = true,
-				Cooldowns =
-				{
-					{ Name = "MelinoeAnyQuipSpeech", Time = 5 },
-				},
+			Queue = "Always",
+			PreLineWait = 0.35,
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
 
-				{ Cue = "/VO/MelinoeField_4182", Text = "Typhon's essence... the power to stop Time...", PlayFirst = true },
-				{ Cue = "/VO/MelinoeField_4180", Text = "Entropy..." },
-				{ Cue = "/VO/MelinoeField_4181", Text = "This is Entropy..." },
-			},
-			{ GlobalVoiceLines = "ResourceFoundVoiceLines" },
+			{ Cue = "/VO/MelinoeField_4182", Text = "Typhon's essence... the power to stop Time..." },
 		},
 	},
 
@@ -3398,18 +3375,6 @@ ResourceData =
 		TooltipId = "FamiliarPointsIcon",
 		CostTextId = "FamiliarPoints_Short",
 		MetaRewardStandPickupSound = "/Leftovers/Menu Sounds/TalismanRockUpLEGENDARY",
-
-		RevealGameStateRequirements =
-		{
-			{
-				Path = { "GameState", "SpeechRecord" },
-				HasAny = { "/VO/Melinoe_0990" },
-			},
-			{
-				Path = { "GameState", "WorldUpgradesRevealed" },
-				HasAll = { "WorldUpgradeAltRunDoor" },
-			},
-		},
 
 		ExtraDescriptions =
 		{
@@ -3488,7 +3453,6 @@ ResourceData =
 		OnAddVoiceLines =
 		{
 			{
-				RandomRemaining = true,
 				BreakIfPlayed = true,
 				SuccessiveChanceToPlay = 0.25,
 				PreLineWait = 0.35,
@@ -3496,13 +3460,6 @@ ResourceData =
 				{
 					{
 						PathEmpty = { "RequiredKillEnemies" },
-					},
-					{
-						PathFalse = { "CurrentRun", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
-					},
-					{
-						Path = { "CurrentRun", "HubTextLinesRecord" },
-						HasNone = { "HecateTavernaDecline01", "OdysseusTavernaDecline01", "NemesisTavernaDecline01", "ErisTavernaDecline01", "MorosTavernaDecline01", "SkellyTavernaDecline01", "DoraTavernaDecline01", "IcarusTavernaDecline01", "HermesFieldGiftDecline01" },
 					},
 				},
 				Cooldowns =
@@ -3592,6 +3549,91 @@ ResourceData =
 			{ GlobalVoiceLines = "ResourceFoundVoiceLines" },
 		},
 
+	},
+
+	DreamPoints =
+	{
+		InheritFrom = { "BaseResource" },
+
+		IconPath = "Items\\Resources\\Other\\DreamPoints",
+		TextIconPath = "Items\\Resources\\Other\\DreamPoints_Text",
+		TooltipId = "DreamPointsIcon",
+		CostTextId = "DreamPoints_Short",
+
+		OnAddVoiceLines =
+		{
+			{
+				RandomRemaining = true,
+				BreakIfPlayed = true,
+				SuccessiveChanceToPlay = 0.33,
+				PreLineWait = 0.35,
+				GameStateRequirements =
+				{
+					{
+						PathEmpty = { "RequiredKillEnemies" },
+					},
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = ">=", Value = 0.2, },
+					},
+				},
+				SkipCooldownCheckIfNonePlayed = true,
+				Cooldowns =
+				{
+					{ Name = "MelinoeAnyQuipSpeech", Time = 5 },
+				},
+
+				{ Cue = "/VO/MelinoeField_5427", Text = "I do love these." },
+				{ Cue = "/VO/MelinoeField_5428", Text = "I feel better about myself!" },
+				{ Cue = "/VO/MelinoeField_5429", Text = "I earned this." },
+				{ Cue = "/VO/MelinoeField_5430", Text = "I feel so special!" },
+				{ Cue = "/VO/MelinoeField_5423", Text = "Shiny...",
+					GameStateRequirements =
+					{
+						{
+							SumPrevRuns = 4,
+							Path = { "SpeechRecord", "/VO/MelinoeField_5423" },
+							CountPathTrue = true,
+							Comparison = "<=",
+							Value = 0,
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5424", Text = "A Shiny Star!",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = "==",
+							Value = 1,
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5425", Text = "Some Shiny Stars.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = ">=",
+							Value = 2,
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5426", Text = "More Shiny Stars.",
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = ">=",
+							Value = 2,
+						},
+					},
+				},
+			},
+			-- { GlobalVoiceLines = "ResourceFoundVoiceLines" },
+		},
 	},
 
 	TrashPoints =
@@ -3750,6 +3792,7 @@ ResourceDisplayOrderData =
 {
 	"CosmeticsPoints",
 
+	"DreamPoints",
 	"TrashPoints",
 	"MetaCardPointsCommon",
 	"MemPointsCommon",
@@ -4005,6 +4048,7 @@ ScreenData.InventoryScreen =
 			"HadesSpearPoints",
 			"MixerMythic",
 			"DeathAreaPoints",
+			"DreamPoints",
 		},
 		{
 			Name = "InventoryScreen_GardenTab",
@@ -4047,7 +4091,7 @@ ScreenData.InventoryScreen =
 					},
 				}
 			},
-			"SeedMystery",
+
 			"PlantFMoly",
 			"PlantFNightshadeSeed",
 			"PlantFNightshade",
@@ -4083,6 +4127,8 @@ ScreenData.InventoryScreen =
 
 			"PlantChaosThalamusSeed",
 			"PlantChaosThalamus",
+
+			"SeedMystery",
 		},
 		{
 			Name = "InventoryScreen_GiftsTab",
@@ -4105,6 +4151,7 @@ ScreenData.InventoryScreen =
 			"MedeaPoints",
 			"IcarusPoints",
 			"HypnosPoints",
+			"DreamPoints",
 			"CosmeticsPoints",
 		},
 		{

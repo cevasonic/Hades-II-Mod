@@ -34,6 +34,46 @@ UnitSetData.NPC_Circe =
 		BoonInfoTitleText = "Codex_BoonInfo_Circe",
 		Using = { "MetaUpgradeCardFlip", GrannyModel = "Odysseus_Mesh" },
 		LoadPackages = { "NPC_Circe_01", "Circe" },
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					ForceTextLines = "CirceDreamRun",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CirceDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 		
 		Traits = 
 		{
@@ -55,6 +95,22 @@ UnitSetData.NPC_Circe =
 
 		UpgradeMenuOpenVoiceLines =
 		{
+			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunCirceIntroVO",
+				BreakIfPlayed = true,
+				PreLineWait = 0.9,
+				UsePlayerSource = true,
+				AllowTalkOverTextLines = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun", },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5652", Text = "Is that really you, Madame Circe?" },
+			},
 			{
 				PlayOnce = true,
 				BreakIfPlayed = true,
@@ -684,6 +740,81 @@ UnitSetData.NPC_Circe =
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
 
+			CirceAboutShrine01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 22,
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.AboutShrineEvents,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0202",
+					Portrait = "Portrait_Circe_Serious_01",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "Tell me poppet, do my senses yet ring true? The dark and moody skies of such an eve, the energy in the air, it all suggests deliberate intent... the Testament of Night herself." },
+
+				{ Cue = "/VO/MelinoeField_4744", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "You're sensing Fear in the air, Madame, for I have said the Vows. Nyx has such a strong connection to the Underworld, yet her work is best known on the surface, isn't it?" },
+
+				{ Cue = "/VO/Circe_0203",
+					Portrait = "Portrait_Circe_Serious_01",
+					PreLineAnim = "Circe_Pensive_End",
+					Text = "Indeed, and may you soon enact her will! The mysteries within the dark of course originate from your realm not this one. May that darkness ever guide you forth." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceAboutShrine02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 32,
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "CirceAboutShrine01" }
+					},
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.AboutShrineEvents,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0256",
+					Portrait = "Portrait_Circe_Serious_01",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					Text = "{#Emph}Ooh{#Prev}, how the seas are roiling! I've not experienced an eve as dark and brooding since I relocated here! The Testament of Night must be demanding much of you, poppet." },
+
+				{ Cue = "/VO/MelinoeField_4750", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "We serve the Night at will. But yes, my Vows have made the voyage treacherous. I know all creatures respond differently to the effect... are your piggies all right?" },
+
+				{ Cue = "/VO/Circe_0257",
+					PreLineAnim = "Circe_Pensive_End",
+					Text = "Oh, why, look at all of them, they're {#Emph}fine! {#Prev}Oblivious to all the perils of this world, delighting in each other's company and all the bounties that this isle can provide!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+
 			CirceAboutTransformation01 =
 			{
 				PlayOnce = true,
@@ -929,6 +1060,40 @@ UnitSetData.NPC_Circe =
 				PrePortraitExitFunctionName = "CirceBlessingChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
+			CirceAboutMedea02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "CirceAboutMedea01", "MedeaAboutCirce01" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "NPC_Medea_01" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0258",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					Portrait = "Portrait_Circe_Serious_01", 
+					Text = "The aura here turned for the worse as you arrived. You have been working with Medea, haven't you? Being holed up in that necropolis cannot be good for her psyche..." },
+
+				{ Cue = "/VO/MelinoeField_4751", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I did see her earlier tonight. Did something happen between the two of you? I got the impression you haven't been in contact much at all." },
+
+				{ Cue = "/VO/Circe_0259",
+					PreLineAnim = "Circe_Pensive_End",
+					Portrait = "Portrait_Circe_Serious_01", 
+					Text = "It's likely I remind Medea of too many incidents from long ago, which are not mine to share! One needn't live in the past, poppet. Perhaps some ages hence, she'll break free from hers... but she must take her time." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
 
 			CirceAboutScylla01 =
 			{
@@ -1101,6 +1266,7 @@ UnitSetData.NPC_Circe =
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
 
+			-- alt below
 			CirceAboutOdysseus01 =
 			{
 				PlayOnce = true,
@@ -1108,7 +1274,11 @@ UnitSetData.NPC_Circe =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "CirceGift02" }
+						PathTrue = { "GameState", "TextLinesRecord", "CirceGift01" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "OdysseusBathHouse02", "CirceAboutOdysseus01_B" },
 					},
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
@@ -1131,8 +1301,48 @@ UnitSetData.NPC_Circe =
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Did you use to know him? I don't recall you interacting at the Crossroads. Not that I was paying much heed to anything besides my studies then. I was so little last you visited!" },
 				{ Cue = "/VO/Circe_0057",
-					Portrait = "Portrait_Circe_Serious_01", 
+					-- Portrait = "Portrait_Circe_Serious_01", 
 					Text = "Once I relocated this isle, the journey to the Crossroads became {#Emph}much {#Prev}more arduous. As for Odysseus, yes, him I've met before. Him and his pig-headed crew! A different age, poppet, {#Emph}haha! {#Prev}Perchance he's learned a bit since then." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceAboutOdysseus01_B =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "OdysseusBathHouse02", "CirceGift02" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "CirceAboutOdysseus01" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0055",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					Portrait = "Portrait_Circe_Serious_01", 
+					Text = "I wonder, does Our Lady Hecate as yet consort with that Tactician Shade of hers, {#Emph}heh? {#Prev}Not of surpassing stature, prone to talk. {#Emph}Oh{#Prev}, what was his name again...?" },
+				{ Cue = "/VO/MelinoeField_1983", UsePlayerSource = true,
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "You mean Odysseus? He remains indispensable to our cause. What knowledge I possess of this route and the dangers along it are thanks largely to him. Why do you ask?" },
+				{ Cue = "/VO/Circe_0056",
+					PreLineAnim = "Circe_Pensive_End", 
+					Portrait = "Portrait_Circe_Serious_01", 
+					Text = "{#Emph}Oh! {#Prev}No reason at all! It's merely that he was a flighty sort as I recall, quite prone to wandering about! So his continued service is a bit of a surprise. A pleasant one, mind you!" },
+				{ Cue = "/VO/MelinoeField_5233", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I don't recall you interacting at the Crossroads. Not that I was paying much heed to anything besides my studies then. I was so little last you visited!" },
+				{ Cue = "/VO/Circe_0325",
+					Portrait = "Portrait_Circe_Serious_01", 
+					Text = "Once I relocated this isle, the journey to the Crossroads became {#Emph}much {#Prev}more arduous. As for Odysseus and his pig-headed crew... perchance he's learned a bit since then." },
 				PrePortraitExitFunctionName = "CirceBlessingChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
@@ -1163,6 +1373,38 @@ UnitSetData.NPC_Circe =
 					Portrait = "Portrait_Circe_Serious_01", 
 					PostLineThreadedFunctionName = "MuteSpeaker",
 					Text = "What is it that you have there, little miss? {#Emph}Uh, mm{#Prev}, some old accursed Knuckle Bones, it seems... I ask you {#Emph}quickly {#Prev}get them hence! They're interfering with the energy about this place!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceAboutOdysseusKeepsake02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "BossPreDamageKeepsake" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "CirceAboutOdysseusKeepsake01" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "CirceAboutOdysseusQuest00", "CirceAboutOdysseusQuest01" }
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0314",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Emote = "PortraitEmoteDepressed",
+					Portrait = "Portrait_Circe_Serious_01", 
+					PostLineThreadedFunctionName = "MuteSpeaker",
+					Text = "You brought that artifact with you again, those Knuckle Bones...! We'll keep this very short, then, poppet, for I simply cannot tolerate them here!" },
 				PrePortraitExitFunctionName = "CirceBlessingChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
@@ -1235,6 +1477,9 @@ UnitSetData.NPC_Circe =
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpOdysseus" },
 
 				{ Cue = "/VO/Circe_0223",
 					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
@@ -1827,6 +2072,126 @@ UnitSetData.NPC_Circe =
 				PrePortraitExitFunctionName = "CirceBlessingChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
+			CirceAboutRavenFamiliar01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "RavenFamiliar" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0204",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End", 
+					Text = "Such a magnificent raven you have! Not many sea-birds venture quite this far, and I oft ward the rest of them away." },
+				{ Cue = "/VO/MelinoeField_4745", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Pleased_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Madame, this is Raki, who I'm certain feels more comfortable within the woods of Erebus, but has proved willing to explore." },
+				{ Cue = "/VO/Circe_0205",
+					PreLineAnim = "Circe_Pensive_Start",
+					PostLineAnim = "Circe_Pensive_End", 
+					Text = "Raki, is it? How do you do, then, little bird? This isle ought to make the perfect feasting-grounds until you're ready to depart. {#Emph}Oh{#Prev}, you each take care!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceAboutCatFamiliar01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "CatFamiliar" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0206",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "That little cat there, she must be with you! Poor thing must utterly detest the water everywhere, yet shows no signs of negativity... not more than usual for creatures of her kind." },
+				{ Cue = "/VO/MelinoeField_4746", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Pleased_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Madame Circe, this is my Familiar, Toula. She may take to water more than most... I found her over at the docks of Ephyra, though she did seem eager to leave." },
+				{ Cue = "/VO/Circe_0207",
+					PreLineAnim = "Circe_Explaining_Start",
+					PostLineAnim = "Circe_Explaining_End", 
+					Text = "Hello, Toula! She's strong of spirit, that's immediately clear. And if she truly is a cat, then she'll soon make herself at home!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceAboutHoundFamiliar01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "HoundFamiliar" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0208",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "Why, if it isn't prim and proper Hecuba there by your side! I've yet to meet a hound so poised. Our Lady Hecate permitted you to travel side-by-side!" },
+				{ Cue = "/VO/MelinoeField_4747", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Pleased_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Looks like Hecuba remembers you as well, Madame. Have you always had such a strong connection to beasts, or did Headmistress help you learn?" },
+				{ Cue = "/VO/Circe_0209",
+					PreLineAnim = "Circe_Pensive_Start",
+					PostLineAnim = "Circe_Pensive_End", 
+					Text = "{#Emph}Oh ho ho{#Prev}, both! If not for my innate affinity, perchance I would have been unworthy of Our Lady's teachings. And you, in turn, have clearly earned her deepest trust!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceAboutPolecatFamiliar01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "PolecatFamiliar" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0210",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "Well, if it isn't little Gale skittering about your feet! I've seldom met such crafty little creatures as that one. Our Lady Hecate assigned her to you, then?" },
+				{ Cue = "/VO/MelinoeField_4748", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Pleased_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Sort of! I found Gale all the way on Olympus where I'm headed anyway. Is this little polecat truly as mischievous as you imply? She's been on good behavior with me!" },
+				{ Cue = "/VO/Circe_0211",
+					PreLineAnim = "Circe_Pensive_Start",
+					PostLineAnim = "Circe_Pensive_End", 
+					Text = "Consider yourself blessed, poppet. That one is rather wild still! Perchance calmed down a bit with age is all." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
 
 			CirceAboutCirceAspect01 =
 			{
@@ -1961,6 +2326,89 @@ UnitSetData.NPC_Circe =
 					Text = "This is the Aspect of a god of the dead... not my father, but a being called Anubis. Distant to us either in place or time, but a protector of the Underworld in his own right. Thank you for leading me to this discovery." },
 				{ Cue = "/VO/Circe_0156",
 					Text = "Of course, of course, poppet! Anubis, was it then? To think that there are gods of the dead besides your father! But if the Fates charged {#Emph}him {#Prev}with the responsibility, perchance they charged others as well... or shall do so eventually." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+
+			CirceAboutFamiliars01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					OrRequirements =
+					{
+						{
+							{
+								Path = { "GameState", "EquippedFamiliar" },
+								IsAny = { "FrogFamiliar" },
+							},
+							{
+								Path = { "GameState", "FamiliarUpgrades" },
+								HasAll = GameData.AllFrogFamiliarUpgrades,
+							},
+						},
+						{
+							{
+								Path = { "GameState", "EquippedFamiliar" },
+								IsAny = { "RavenFamiliar" },
+							},
+							{
+								Path = { "GameState", "FamiliarUpgrades" },
+								HasAll = GameData.AllRavenFamiliarUpgrades,
+							},
+						},
+						{
+							{
+								Path = { "GameState", "EquippedFamiliar" },
+								IsAny = { "CatFamiliar" },
+							},
+							{
+								Path = { "GameState", "FamiliarUpgrades" },
+								HasAll = GameData.AllCatFamiliarUpgrades,
+							},
+						},
+						{
+							{
+								Path = { "GameState", "EquippedFamiliar" },
+								IsAny = { "HoundFamiliar" },
+							},
+							{
+								Path = { "GameState", "FamiliarUpgrades" },
+								HasAll = GameData.AllHoundFamiliarUpgrades,
+							},
+						},
+						{
+							{
+								Path = { "GameState", "EquippedFamiliar" },
+								IsAny = { "PolecatFamiliar" },
+							},
+							{
+								Path = { "GameState", "FamiliarUpgrades" },
+								HasAll = GameData.AllPolecatFamiliarUpgrades,
+							},
+						},
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0254",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End", 
+					Text = "Such a powerful connection you've formed with your Familiars, poppet! Nothing reflects more strongly on one's character than to be loved by beasts. What is your secret?" },
+
+				{ Cue = "/VO/MelinoeField_4749", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Well... truthfully they all just seem to love Witch's Delight. It's a miraculous recipe passed down from Headmistress... or dare I to suggest, perhaps from you?" },
+
+				{ Cue = "/VO/Circe_0255",
+					Emote = "PortraitEmoteCheerful",
+					PreLineAnim = "Circe_Explaining_Start",
+					PostLineAnim = "Circe_Explaining_End",
+
+					Text = "Oh, {#Emph}hahahaha! {#Prev}I shall make no admissions to such claims; but here's a secret of my own: Witch's Delight is far less potent than you think. The love of your Familiars is the thing." },
 				PrePortraitExitFunctionName = "CirceBlessingChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
@@ -2162,6 +2610,34 @@ UnitSetData.NPC_Circe =
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
 
+			CirceAboutPalmistry01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0260",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End", 
+					Portrait = "Portrait_Circe_Serious_01",
+					Text = "Might I have another look at your hands, little miss? {#Emph}Mm, oh, hmm... {#Prev}still nothing after all this time. At least, not the one on the left. Perchance my knack for palmistry is merely insufficient..." },
+
+				{ Cue = "/VO/MelinoeField_4752", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Madame, I can practically see clear through my left hand. It's resisted your readings as long as it's been this way. Why would anything have changed?" },
+
+				{ Cue = "/VO/Circe_0261",
+					Portrait = "Portrait_Circe_Serious_01",
+					Text = "I know, I know, it's just... I've not met someone whose palms reveal {#Emph}nothing {#Prev}of their future in this way! The Fates must have had something in store for you, but I can see no trace!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+
 			CircePostTrueEnding01 =
 			{
 				PlayOnce = true,
@@ -2312,6 +2788,30 @@ UnitSetData.NPC_Circe =
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
 
+			CirceAboutSayingLittle01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "CirceGift08" }
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChanting,
+
+				{ Cue = "/VO/Circe_0262",
+					Text = "It's grown more peaceful lately, hasn't it? For what this matter is, with all the ghastly sailing-ships and such. But there exists a pleasant rhythm to it now. Creates a sense of quietude..." },
+
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
 
 			-- Repeatable
 			CirceChat01 =
@@ -2586,6 +3086,281 @@ UnitSetData.NPC_Circe =
 					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
 					PostLineAnim = "Circe_Explaining_End",
 					Text = "We are by nature not immutable, and to transform ourselves is to become {#Emph}who we are..." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat23 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0270",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "As much as I have come to prefer solitude, I welcome your arrival even more." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat24 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0271",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "Perchance this night you may make use of an enchantment I've prepared?" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat25 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0272",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "That mountain over there still needs you even now, doesn't it, little miss?" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat26 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0273",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "The journey can be strenuous, so please, do rest from all your seafaring whilst here." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat27 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0274",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "Which of my various enchantments is of greatest benefit to you tonight, poppet?" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat28 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0275",
+					Emote = "PortraitEmoteCheerful",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "I told my piggies that I thought you would arrive again this eve, {#Emph}ahah! {#Prev}And here you are!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat29 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0276",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "I've my enchantments at the ready so as not to stall your voyage longer than you wish." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat30 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0277",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "We are well-hidden and protected here, poppet. On that you have my word." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat31 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0278",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "Our Lady Hecate has prepared you to fend well for yourself in the wilds!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat32 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0279",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "I sometimes miss the Crossroads, but plainly my piggies need me here." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat33 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0280",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "I cannot change who or what you are, but assuredly most anything else!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat34 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0281",
+					Portrait = "Portrait_Circe_Serious_01",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "Few troubles reach this isle, but I know the gods of Olympus have their share." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat35 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						IgnoreCurrentRun = true,
+						SumPrevRuns = 6,
+						Path = { "SpawnRecord", "NPC_Circe_01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0282",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "It has been far too many nights since last you visited, poppet! Do come back soon!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat36 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "PrevRun", "Cleared" },
+					},
+				},
+
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0283",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "May this night's outcome prove just as fortuitous as was the one before!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat37 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0284",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "Please, rest here for a moment prior to returning to those ghastly ships out there!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat38 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0285",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "You found me once again, poppet, and for that feat I owe you an enchanting prize!" },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat39 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0286",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Pensive_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Pensive_End",
+					Text = "The climb you have to make is difficult but let us see to it that you are well-prepared." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+			CirceChat40 =
+			{
+				UseableOffSource = true,
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ Cue = "/VO/Circe_0324",
+					Emote = "PortraitEmoteCheerful",
+					PreLineThreadedFunctionArgs = { Name = "Circe_Explaining_Start", WaitTime = 0.5, AngleNPCToHero = true, },
+					PostLineAnim = "Circe_Explaining_End",
+					Text = "Welcome to my little isle, little miss! And show to me your palms." },
+				PrePortraitExitFunctionName = "CirceBlessingChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
+			},
+
+			CirceDreamRun =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.CirceChantingRepeatable,
+
+				{ SkipDialogue = true, PostLineWait = 0, InputDelay = 0, BoxAnimation = "BlankObstacle", BoxExitAnimation = "Blank" },
+
 				PrePortraitExitFunctionName = "CirceBlessingChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.CirceBlessingChoices,
 			},
@@ -2946,6 +3721,9 @@ GlobalVoiceLines.CirceGreetingLines =
 						PathTrue = { "GameState", "TextLinesRecord", "CirceGift02" },
 					},
 					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+					{
 						SumPrevRuns = 5,
 						IgnoreCurrentRun = true,
 						Path = { "RoomsEntered", "O_Story01" },
@@ -2962,6 +3740,22 @@ GlobalVoiceLines.CirceGreetingLines =
 					},
 				},
 			},
+		},
+		{
+			PlayOnce = true,
+			PlayOnceContext = "DreamRunCirceIntroVO",
+			BreakIfPlayed = true,
+			PreLineWait = 0.3,
+			UsePlayerSource = true,
+			AllowTalkOverTextLines = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun", },
+				},
+			},
+
+			{ Cue = "/VO/MelinoeField_5652", Text = "Is that really you, Madame Circe?" },
 		},
 		{
 			RandomRemaining = true,
@@ -3080,6 +3874,23 @@ GlobalVoiceLines.MiscEndVoiceLines_Circe =
 		{ Cue = "/VO/Circe_0243", Text = "Now off with you, {#Emph}hmhm!" },
 	},
 	{
+		PreLineWait = 0.45,
+		ObjectType = "NPC_Circe_01",
+		AllowTalkOverTextLines = true,
+		PreLineAnim = "Circe_Salute",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord" },
+				HasAny = { "CirceAboutScyllaQuestComplete01" },
+			},
+			{
+				PathFalse = { "CurrentRun", "Hero", "TraitDictionary", "ExPolymorphBoon" },
+			},
+		},
+		{ Cue = "/VO/Circe_0218", Text = "Perchance some other night..." },
+	},
+	{
 		RandomRemaining = true,
 		PreLineWait = 0.45,
 		ObjectType = "NPC_Circe_01",
@@ -3088,7 +3899,8 @@ GlobalVoiceLines.MiscEndVoiceLines_Circe =
 		GameStateRequirements =
 		{
 			{
-				PathFalse = { "CurrentRun", "SpeechRecord", "/VO/Circe_0243" },
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = { "/VO/Circe_0243", "/VO/Circe_0218" },
 			},
 		},
 
@@ -3148,6 +3960,42 @@ GlobalVoiceLines.MiscEndVoiceLines_Circe =
 				},
 			},
 		},
+		{ Cue = "/VO/Circe_0315", Text = "{#Emph}<Chuckle>",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "TraitDictionary" },
+					HasAny = { "CirceEnlargeTrait", "CirceShrinkTrait" },
+				},
+			},
+		},
+		{ Cue = "/VO/Circe_0316", Text = "{#Emph}<Chuckle>",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "TraitDictionary" },
+					HasAny = { "CirceEnlargeTrait", "CirceShrinkTrait" },
+				},
+			},
+		},
+		{ Cue = "/VO/Circe_0317", Text = "{#Emph}<Laugh>",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "TraitDictionary" },
+					HasAny = { "CirceEnlargeTrait", "CirceShrinkTrait" },
+				},
+			},
+		},
+		{ Cue = "/VO/Circe_0318", Text = "{#Emph}<Laugh>",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "Hero", "TraitDictionary" },
+					HasAny = { "CirceEnlargeTrait", "CirceShrinkTrait" },
+				},
+			},
+		},		
 		{ Cue = "/VO/Circe_0243", Text = "Now off with you, {#Emph}hmhm!",
 			GameStateRequirements =
 			{
@@ -3160,6 +4008,23 @@ GlobalVoiceLines.MiscEndVoiceLines_Circe =
 				},
 			},
 		},
+	},
+	{
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunCirceFirstBoonVO",
+		BreakIfPlayed = true,
+		PreLineWait = 0.5,
+		UsePlayerSource = true,
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun", },
+			},
+		},
+		TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+		{ Cue = "/VO/MelinoeField_5653", Text = "Madame Circe must know much of dreams..." },
 	},
 	{
 		BreakIfPlayed = true,
@@ -3219,6 +4084,31 @@ GlobalVoiceLines.MiscEndVoiceLines_Circe =
 		{ Cue = "/VO/MelinoeField_1897", Text = "Felt that for sure..." },
 	},
 	{ GlobalVoiceLines = "ThankingCharacterVoiceLines" },
+}
+
+GlobalVoiceLines.CirceGatherReactionVoiceLines =
+{
+	RandomRemaining = true,
+	BreakIfPlayed = true,
+	PreLineWait = 0.65,
+	SuccessiveChanceToPlay = 0.5,
+	ObjectType = "NPC_Circe_01",
+	Cooldowns =
+	{
+		{ Name = "CirceSpokeRecently", Time = 4 },
+	},
+
+
+	{ Cue = "/VO/Circe_0265", Text = "Do help yourself." },
+	{ Cue = "/VO/Circe_0266", Text = "A gift from the isle.", PlayFirst = true },
+	{ Cue = "/VO/Circe_0320", Text = "A gift from the isle!" },
+	{ Cue = "/VO/Circe_0267", Text = "You're very welcome!" },
+	{ Cue = "/VO/Circe_0268", Text = "Yours to keep!" },
+	{ Cue = "/VO/Circe_0269", Text = "For your craft." },
+	{ Cue = "/VO/Circe_0319", Text = "Use it well!" },
+	{ Cue = "/VO/Circe_0321", Text = "You're welcome!" },
+	{ Cue = "/VO/Circe_0322", Text = "All yours!" },
+	{ Cue = "/VO/Circe_0323", Text = "Take it!" },
 }
 
 OverwriteTableKeys( EnemyData, UnitSetData.NPC_Circe )

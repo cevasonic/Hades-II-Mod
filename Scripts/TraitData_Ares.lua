@@ -437,6 +437,15 @@
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Ares",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			{
 				WeaponName = "WeaponTorch",
@@ -1395,15 +1404,15 @@
 			},
 			Rare =
 			{
-				Multiplier = 1.2,
+				Multiplier = 20/15,
 			},
 			Epic =
 			{
-				Multiplier = 1.4,
+				Multiplier = 25/15,
 			},
 			Heroic =
 			{
-				Multiplier = 1.6,
+				Multiplier = 30/15,
 			},
 		},	
 		AcquireFunctionName = "SetupBloodDropDisplay",
@@ -1414,21 +1423,23 @@
 			FunctionName = "CheckAresManaBloodDrop",
 			Args = 
 			{
-				Chance = 
-				{ 
-					BaseValue = 0.10, 
-					AbsoluteStackValues =
-					{
-						[1] = 0.03,
-						[2] = 0.02,
-					},
-				},
+				Chance = 0.2,
 				Sound = "/Leftovers/Menu Sounds/CoinFlash",
 				Name = "BloodDrop",
 				ReportValues = { ReportedDropChance = "Chance" }
 			},
 		},
-		DropManaRestore = 15,
+		DropManaRestore = 
+		{
+			BaseValue = 15,	
+			AbsoluteStackValues =
+			{
+				[1] = 5,
+				[2] = 4,
+				[3] = 3,
+				[4] = 2,
+			},
+		},
 		StatLines =
 		{
 			"ManaRegenStatDisplay3",
@@ -1437,14 +1448,14 @@
 		{
 			{
 				Key = "ReportedDropChance",
-				ExtractAs = "TooltipManaRecovery",
+				ExtractAs = "TooltipDropChance",
 				Format = "LuckModifiedPercent",
 				HideSigns = true,
+				SkipAutoExtract = true,
 			},
 			{
 				Key = "DropManaRestore",
 				ExtractAs = "DropManaRestore",
-				SkipAutoExtract = true,
 			}
 		}
 	},
@@ -1461,15 +1472,15 @@
 			},
 			Rare =
 			{
-				Multiplier = 140/100,
+				Multiplier = 160/120,
 			},
 			Epic =
 			{
-				Multiplier = 180/100,
+				Multiplier = 200/120,
 			},
 			Heroic =
 			{
-				Multiplier = 220/100,
+				Multiplier = 240/120,
 			},
 		},
 		OnEffectApplyFunction = 
@@ -1481,11 +1492,12 @@
 				DamageMultiplier =
 				{
 					BaseValue = 1,
+					DecimalPlaces = 3,
 					AbsoluteStackValues =
 					{
-						[1] = 40/100,
-						[2] = 30/100,
-						[3] = 20/100,
+						[1] = 40/120,
+						[2] = 30/120,
+						[3] = 20/120,
 					},
 				},
 				ReportValues = { ReportedDamage = "DamageMultiplier" }
@@ -1692,50 +1704,46 @@
 			},
 			Rare =
 			{
-				Multiplier = 12/10,
+				Multiplier = 5/3,
 			},
 			Epic =
 			{
-				Multiplier = 14/10,
+				Multiplier = 7/3,
 			},
 			Heroic =
 			{
-				Multiplier = 16/10,
+				Multiplier = 9/3,
 			},
 		},
-		AcquireFunctionName = "SetupBloodDropDisplay",
-		OnExpire = { FunctionName = "CheckBloodDropDisplay", },
-		OnEnemyDamagedAction = 
+		BloodDropOrRendFallingBladeArgs = 
 		{
-			ValidWeapons = WeaponSets.HeroPrimarySecondaryWeapons,
-			FunctionName = "CheckAresBloodDrop",
-			Args = 
-			{
-				RequiredEffect = "AresStatus",
-				Chance = 
-				{ 
-					BaseValue = 0.10,
-					MaximumValue = 1.0,
-					AbsoluteStackValues =
-					{
-						[1] = 0.02,
-						[2] = 0.01,
-					},
+			ProjectileName = "ProjectileAresSwordGenerated",
+			Range = 1050,
+			Multiplier = {
+				BaseValue = 1,
+				DecimalPlaces = 3,
+				AbsoluteStackValues =
+				{
+					[1] = 10/30,
+					[2] = 10/30,
+					[3] = 5/30,
 				},
-				Name = "BloodDrop",
-				ReportValues = { ReportedDropChance = "Chance" }
 			},
+			ReportValues = { ReportedDamage = "Multiplier" }
 		},
 		StatLines =
 		{
-			"BloodDropChanceStatDisplay1",
+			"CurseDamageStatDisplay1",
 		},
 		ExtractValues =
 		{
 			{
-				Key = "ReportedDropChance",
-				ExtractAs = "Chance",
-				Format = "LuckModifiedPercent",
+				Key = "ReportedDamage",
+				ExtractAs = "Damage",
+				Format = "MultiplyByBase",
+				BaseType = "Projectile",
+				BaseName = "ProjectileAresSwordGenerated",
+				BaseProperty = "Damage",
 			},
 			{
 				ExtractAs = "AresCurseDuration",
@@ -1767,15 +1775,15 @@
 			},
 			Rare =
 			{
-				Multiplier = 12/10,
+				Multiplier = 13/10,
 			},
 			Epic =
 			{
-				Multiplier = 14/10,
+				Multiplier = 16/10,
 			},
 			Heroic =
 			{
-				Multiplier = 16/10,
+				Multiplier = 19/10,
 			},
 		},
 
@@ -1790,8 +1798,10 @@
 				MaximumValue = 1.0,
 				AbsoluteStackValues =
 				{
-					[1] = 0.02,
-					[2] = 0.01,
+					[1] = 0.03,
+					[2] = 0.02,
+					[3] = 0.02,
+					[4] = 0.01,
 				},
 			},
 			ReportValues = 
@@ -2131,7 +2141,7 @@
 	{
 		InheritFrom = { "LegendaryTrait", "EarthBoon" },
 		Icon = "Boon_Ares_41",
-		BloodDropMultiplier = 2,
+		MissingEffectDamageIncrement = 100,
 		MagnetizeBloodDrops = true,
 		StatLines =
 		{
@@ -2140,9 +2150,25 @@
 		ExtractValues =
 		{
 			{
-				Key = "BloodDropMultiplier",
-				ExtractAs = "Multiplier",
-				Format = "PercentDelta"
+				Key = "MissingEffectDamageIncrement",
+				ExtractAs = "Increase",
+				IncludeSigns = true,
+			},
+			{
+				ExtractAs = "AresCurseDuration",
+				SkipAutoExtract = true,
+				External = true,
+				BaseType = "EffectData",
+				BaseName = "AresStatus",
+				BaseProperty = "Duration",
+			},
+			{
+				ExtractAs = "AresCursePowerBonus",
+				SkipAutoExtract = true,
+				External = true,
+				BaseType = "EffectLuaData",
+				BaseName = "AresStatus",
+				BaseProperty = "BonusBaseDamageOnInflict",
 			},
 		},
 		FlavorText = "DoubleBloodDropBoon_FlavorText",

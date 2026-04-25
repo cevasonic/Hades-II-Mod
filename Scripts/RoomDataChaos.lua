@@ -140,12 +140,15 @@ RoomSetData.Chaos =
 		UsePromptOffsetY = 120,
 
 		LocationText = "Location_Secret",
+		DreamLocationText = "Location_Secret_Dream",
 		LocationAnimName = "LocationBackingIrisChaosIn_Biome",
 		LocationAnimOutName = "LocationBackingIrisChaosOut_Biome",
 		SaveProfileLocationText = "Location_Secret",
+		DreamSaveProfileLocationText = "Location_Secret_Dream",
 		LocationTextColor = { 20, 0, 255, 255 },
 
 		ResultText = "RunHistoryScreenResult_Secret",
+		DreamResultText = "RunHistoryScreenResult_Secret_Dream",
 		BiomeName = "Secrets",
 		PauseBiomeState = true,
 
@@ -217,8 +220,22 @@ RoomSetData.Chaos =
 				{ Cue = "/VO/MelinoeField_0807", Text = "Still intact..." },
 				{ Cue = "/VO/MelinoeField_0808", Text = "Almighty Chaos...?" },
 				{ Cue = "/VO/MelinoeField_0809", Text = "Hail, Chaos!" },
-				{ Cue = "/VO/MelinoeField_0810", Text = "Just me...!" },
-				{ Cue = "/VO/MelinoeField_0811", Text = "You called...?" },
+				{ Cue = "/VO/MelinoeField_0810", Text = "Just me...!",
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_0811", Text = "You called...?",
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_0804", Text = "This old place...",
 					GameStateRequirements =
 					{
@@ -226,6 +243,15 @@ RoomSetData.Chaos =
 							Path = { "GameState", "UseRecord", "TrialUpgrade" },
 							Comparison = ">=",
 							Value = 10,
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5556", Text = "Am I in Chaos, or the other way around...?",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
 						},
 					},
 				},
@@ -276,7 +302,8 @@ RoomSetData.Chaos =
 		GameStateRequirements =
 		{
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName", },
+				IsNone = { "N" },
 			},
 		},
 
@@ -312,6 +339,7 @@ RoomSetData.Chaos =
 		},
 
 		Using = { Animation = { "Portrait_Chaos_Default_01", }, },
+		ZoomFractionAlt = 0.86,
 	},
 	Chaos_02 =
 	{
@@ -322,7 +350,8 @@ RoomSetData.Chaos =
 				PathTrue = { "GameState", "RoomCountCache", "Chaos_01" },
 			},
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName", },
+				IsNone = { "N" },
 			},
 		},
 
@@ -357,6 +386,7 @@ RoomSetData.Chaos =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.85,
 
 	},
 	Chaos_03 =
@@ -403,6 +433,7 @@ RoomSetData.Chaos =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.87,
 
 	},
 	Chaos_04 =
@@ -414,9 +445,11 @@ RoomSetData.Chaos =
 				PathTrue = { "GameState", "RoomCountCache", "Chaos_01" },
 			},
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName", },
+				IsNone = { "N" },
 			},
 		},
+		ZoomFractionAlt = 0.87,
 
 	},
 	Chaos_05 =
@@ -431,9 +464,11 @@ RoomSetData.Chaos =
 				PathTrue = { "GameState", "RoomCountCache", "Chaos_01" },
 			},
 			{
-				PathTrue = { "CurrentRun", "BiomesReached", "F" },
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName", },
+				IsNone = { "N" },
 			},
 		},
+		ZoomFractionAlt = 0.85,
 
 	},
 	Chaos_06 =
@@ -451,6 +486,7 @@ RoomSetData.Chaos =
 			[622181] = 330,
 			[622252] = 250,
 		},
+		ZoomFractionAlt = 0.87,
 	},	
 }
 AddTableKeysCheckDupes( RoomData, RoomSetData.Chaos )

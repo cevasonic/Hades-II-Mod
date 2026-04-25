@@ -1658,6 +1658,10 @@ UnitSetData.NPC_Chronos =
 				PathFromSource = true,
 				PathFalse = { "Exiting" },
 			},
+			{
+				PathFromSource = true,
+				PathFalse = { "BlockSpecialInteract" },
+			},
 		},
 		SpecialInteractCooldown = 60,
 		InteractVoiceLines =
@@ -1692,6 +1696,7 @@ UnitSetData.NPC_Chronos =
 					},
 				},
 				{ Cue = "/VO/Melinoe_5166", Text = "May time flow freely forth.",
+					PlayFirst = true,
 					GameStateRequirements =
 					{
 						{
@@ -1712,7 +1717,7 @@ UnitSetData.NPC_Chronos =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_5074" },
+							IsAny = { "/VO/Melinoe_5074", "/VO/Melinoe_1701", "/VO/Melinoe_1705" },
 						},
 					},
 				},
@@ -1721,7 +1726,7 @@ UnitSetData.NPC_Chronos =
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1698", "/VO/Melinoe_1699", "/VO/Melinoe_5075" },
+							IsAny = { "/VO/Melinoe_5074", "/VO/Melinoe_1698", "/VO/Melinoe_1699", "/VO/Melinoe_5075" },
 						},
 					},
 				},
@@ -1761,6 +1766,15 @@ UnitSetData.NPC_Chronos =
 						{
 							Path = { "LastLinePlayed" },
 							IsAny = { "/VO/Melinoe_1704", "/VO/Melinoe_1705", "/VO/Melinoe_1709" },
+						},
+					},
+				},
+				{ Cue = "/VO/Chronos_1111", Text = "May time flow freely forth...",
+					GameStateRequirements = 
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Melinoe_5166" },
 						},
 					},
 				},
@@ -2038,6 +2052,9 @@ UnitSetData.NPC_Chronos =
 				},
 				OnQueuedFunctionName = "NeoChronosNPCSetup",
 				OnQueuedFunctionArgs = { RequiredRoomInteraction = true },
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestRescueFatesProgress" },
 
 				{ Cue = "/VO/MelinoeField_4141", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
@@ -2631,7 +2648,6 @@ UnitSetData.NPC_Chronos =
 				},
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				InteractDistance = 650,
 				InteractOffsetX = -500,
 
@@ -2749,6 +2765,9 @@ UnitSetData.NPC_Chronos =
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				OnQueuedFunctionName = "NeoChronosNPCSetup",
 				OnQueuedFunctionArgs = { RequiredRoomInteraction = true, HideUntilWithinDistance = true },
@@ -2788,6 +2807,9 @@ UnitSetData.NPC_Chronos =
 					},
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 				OnQueuedFunctionName = "NeoChronosNPCSetup",
@@ -3428,25 +3450,28 @@ GlobalVoiceLines.ChronosGoldifyVoiceLines =
 			},
 		},
 	},
-	{
-		RandomRemaining = true,
-		BreakIfPlayed = true,
-		PreLineWait = 0.45,
-		ObjectType = "NPC_Nyx_Story_01",
-		PreLineAnim = "Nyx_Greeting",
-		-- SkipCooldownCheckIfNonePlayed = true,
-		Cooldowns =
-		{
-			{ Name = "NyxSpokeRecently", Time = 6 },
-		},
+	{ GlobalVoiceLines = "NyxMiscReactionLines" },
+}
 
-		{ Cue = "/VO/Nyx_0151", Text = "Oh..." },
-		{ Cue = "/VO/Nyx_0152", Text = "Odd..." },
-		{ Cue = "/VO/Nyx_0153", Text = "Unusual..." },
-		{ Cue = "/VO/Nyx_0154", Text = "Creation..." },
-		{ Cue = "/VO/Nyx_0155", Text = "Chaos...?", PlayFirst = true },
-		{ Cue = "/VO/Nyx_0156", Text = "{#Emph}Hmm..." },
+GlobalVoiceLines.NyxMiscReactionLines =
+{
+	RandomRemaining = true,
+	BreakIfPlayed = true,
+	PreLineWait = 0.45,
+	ObjectType = "NPC_Nyx_Story_01",
+	PreLineAnim = "Nyx_Greeting",
+	-- SkipCooldownCheckIfNonePlayed = true,
+	Cooldowns =
+	{
+		{ Name = "NyxSpokeRecently", Time = 6 },
 	},
+
+	{ Cue = "/VO/Nyx_0151", Text = "Oh..." },
+	{ Cue = "/VO/Nyx_0152", Text = "Odd..." },
+	{ Cue = "/VO/Nyx_0153", Text = "Unusual..." },
+	{ Cue = "/VO/Nyx_0154", Text = "Creation..." },
+	{ Cue = "/VO/Nyx_0155", Text = "Chaos...?", PlayFirst = true },
+	{ Cue = "/VO/Nyx_0156", Text = "{#Emph}Hmm..." },
 }
 
 GlobalVoiceLines.MiscEndVoiceLines_Chronos =
@@ -3897,9 +3922,34 @@ GlobalVoiceLines.AnomalyEnteredVoiceLines =
 		{ Cue = "/VO/MelinoeField_0191", Text = "This isn't real..." },
 		{ Cue = "/VO/MelinoeField_0192", Text = "Trapped..." },
 		{ Cue = "/VO/MelinoeField_0193", Text = "This again..." },
-		{ Cue = "/VO/MelinoeField_0194", Text = "He's trying to slow me down..." },
-		{ Cue = "/VO/MelinoeField_0195", Text = "Is this really Asphodel...?" },
-		-- { Cue = "/VO/MelinoeField_0196", Text = "This is Elysium..." },
+		{ Cue = "/VO/MelinoeField_0194", Text = "He's trying to slow me down...",
+			GameStateRequirements =
+			{
+				{
+					PathFalse = { "GameState", "ReachedTrueEnding" },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
+			},
+		},
+		{ Cue = "/VO/MelinoeField_0195", Text = "Is this really Asphodel...?",
+			GameStateRequirements =
+			{
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
+			},
+		},
+		{ Cue = "/VO/MelinoeField_5555", Text = "A nightmare in a dream...",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+			},
+		},
 	},
 }
 GlobalVoiceLines.AnomalyCombatBeginsVoiceLines =
@@ -3988,6 +4038,118 @@ GlobalVoiceLines.ChronosAlertVoiceLines =
 {
 	PreLineWait = 0.95,
 	{
+		-- dreamrun intro
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+		{
+			PlayOnce = true,
+			PlayOnceContext = "DreamRunFirstTartarusVisitVO",
+			NoTarget = true,
+			Source = { LineHistoryName = "NPC_Hypnos_DreamRun", LineHistoryNameKeepInDreamRun = true, SubtitleColor = Color.HypnosVoice },
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+			{ Cue = "/VO/Intercom_8294", Text = "{#Emph}Hah{#Prev}, I {#Emph}always {#Prev}wanted to talk to {#Emph}everyone {#Prev}in Tartarus like this!",OverlayAnim = "HypnosOverlay" },
+		},
+		{
+			PlayOnce = true,
+			PlayOnceContext = "DreamRunFirstTartarusVisitVO",
+			BreakIfPlayed = true,
+			UsePlayerSource = true,
+			PreLineWait = 0.1,
+
+			{ Cue = "/VO/MelinoeField_5558", Text = "{#Emph}Erm{#Prev}, that's great, Lord Hypnos!" },
+		},
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		NoTarget = true,
+		Source = { LineHistoryName = "NPC_Hypnos_DreamRun", LineHistoryNameKeepInDreamRun = true, SubtitleColor = Color.HypnosVoice },
+		SuccessiveChanceToPlay = 0.75,
+		SuccessiveChanceToPlayAll = 0.75,
+		TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/Intercom_8294", Text = "{#Emph}Hah{#Prev}, I {#Emph}always {#Prev}wanted to talk to {#Emph}everyone {#Prev}in Tartarus like this!", OverlayAnim = "HypnosOverlay",
+			GameStateRequirements =
+			{
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/Intercom_8294" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
+				},
+			},
+		},
+		{ Cue = "/VO/Intercom_8295", Text = "Welcome to Tartarus! I'll see you if you die!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8297", Text = "Thanks for stopping by the bottom of the Underworld!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8300", Text = "This is not how I remember Tartarus {#Emph}at all!", OverlayAnim = "HypnosOverlay_Disappointed" },
+		{ Cue = "/VO/Intercom_8301", Text = "When these guys shoot at you, just get out of the way!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8302", Text = "I want to see you kill all {#Emph}these {#Prev}guys, then whichever guys are next!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8303", Text = "{#Emph}Uh-oh{#Prev}, they know you're here! And, {#Emph}so do I!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8304", Text = "Your dad would normally say something scary here!", OverlayAnim = "HypnosOverlay_Disappointed" },
+		{ Cue = "/VO/Intercom_8305", Text = "Your dad would say something like, {#Emph}everything in the vicinity must go!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8306", Text = "Welcome back to Tartarus again! Sorry about the mess!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8307", Text = "Hey you made it all the way to Tartarus! {#Emph}Dream-Tartarus!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8308", Text = "Too bad you can't just get Charon to give you a lift!", OverlayAnim = "HypnosOverlay_Disappointed" },
+		{ Cue = "/VO/Intercom_8309", Text = "All right, I just {#Emph}know {#Prev}this is going to be {#Emph}good!", OverlayAnim = "HypnosOverlay" },
+		{ Cue = "/VO/Intercom_8296", Text = "You got here pretty early tonight huh?",
+			PlayFirst = true,
+			OverlayAnim = "HypnosOverlay",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Intercom_8294" }
+				},
+				{
+					Path = { "CurrentRun", "EnteredBiomes" },
+					Comparison = "==",
+					Value = 1,
+				},
+			},
+		},
+		{ Cue = "/VO/Intercom_8298", Text = "Your brother started here in Tartarus, and so did {#Emph}you {#Prev}tonight!",
+			PlayFirst = true,
+			OverlayAnim = "HypnosOverlay",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Intercom_8294" }
+				},
+				{
+					Path = { "CurrentRun", "EnteredBiomes" },
+					Comparison = "==",
+					Value = 1,
+				},
+			},
+		},
+		{ Cue = "/VO/Intercom_8299", Text = "{#Emph}Come on{#Prev}, this is {#Emph}it! {#Prev}You almost made it to the very end!",
+			PlayFirst = true,
+			OverlayAnim = "HypnosOverlay",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "SpeechRecord", "/VO/Intercom_8294" }
+				},
+				{
+					Path = { "CurrentRun", "EnteredBiomes" },
+					Comparison = "==",
+					Value = 4,
+				},
+			},
+		},
+	},
+	{
 		RandomRemaining = true,
 		NoTarget = true,
 		Source = { LineHistoryName = "NPC_LordHades_01", SubtitleColor = Color.HadesVoice },
@@ -3997,6 +4159,9 @@ GlobalVoiceLines.ChronosAlertVoiceLines =
 		{
 			{
 				PathTrue = { "GameState", "ReachedTrueEnding" },
+			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" },
 			},
 		},
 
@@ -4053,6 +4218,20 @@ GlobalVoiceLines.ChronosAlertVoiceLines =
 		{ Cue = "/VO/Intercom_7371", Text = "Proceed with caution, or whatever is the most efficient course." },
 	},
 	{
+		BreakIfPlayed = true,
+		UsePlayerSource = true,
+		PreLineWait = 0.1,
+		GameStateRequirements = 
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "SpeechRecord" },
+				HasAny = { "/VO/Intercom_7352" },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_4583", Text = "Grandfather has arranged all this...?" },
+	},
+	{
 		RandomRemaining = true,
 		NoTarget = true,
 		Source = { LineHistoryName = "NPC_Chronos_01", SubtitleColor = Color.ChronosVoice },
@@ -4060,9 +4239,19 @@ GlobalVoiceLines.ChronosAlertVoiceLines =
 		TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
 		GameStateRequirements =
 		{
+			OrRequirements =
 			{
-				PathFalse = { "GameState", "ReachedTrueEnding" },
-			},
+				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			}
 		},
 
 		{ Cue = "/VO/Intercom_0473", Text = "You are trespassing on private property...", PlayFirst = true },
@@ -4161,14 +4350,38 @@ GlobalVoiceLines.ChronosAlertVoiceLines =
 
 	},
 	{
+		PlayOnce = true,
+		BreakIfPlayed = true,
+		UsePlayerSource = true,
+		PreLineWait = 0.45,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_5557", Text = "Chronos still in control... so this is a {#Emph}bad {#Prev}dream." },
+	},
+	{
 		UsePlayerSource = true,
 		RandomRemaining = true,
 		SuccessiveChanceToPlay = 0.25,
 		PreLineWait = 0.45,
 		GameStateRequirements =
 		{
+			OrRequirements =
 			{
-				PathFalse = { "GameState", "ReachedTrueEnding" },
+				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 			},
 		},
 

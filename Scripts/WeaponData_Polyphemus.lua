@@ -303,15 +303,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 1,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -403,15 +395,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 1,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -506,15 +490,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 1,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -585,6 +561,8 @@ WeaponSetData =
 			PostAttackAnimation = "Enemy_Polyphemus_BoulderThrow_End",
 
 			PreAttackDuration = 1.0,
+			PreAttackEndMinWaitTime = 0.42,
+			PreAttackStartMinWaitTime = 0.42,
 			FireDuration = 0.8,
 			PostAttackDuration = 2.75,
 			FireProjectileStartDelay = 0.35,

@@ -90,6 +90,7 @@
 					Text = "Great Selene, I am honored by your presence here. The task proceeds at pace I think, although as you well know, we have much left to do. I'm grateful you've been watching over me." },
 
 				{ Cue = "/VO/Selene_0109",
+					PreLineAnim = "Selene_Salute",
 					PostLineThreadedFunctionName = "SeleneExitPresentation", PostLineFunctionArgs = { SkipAnim = true, WaitTime = 3.2 },
 					Text = "And I am grateful for the opportunity. I am the Eye of Night, but you, I think, have come to be her sword. Until we see each other once again under her veil." },
 
@@ -110,7 +111,6 @@
 				Partner = "NPC_Hecate_01",
 				UseText = "UseListenNPC",
 				-- BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				TeleportToId = 566613,
 				-- TeleportOffsetX = -100,
 				-- TeleportOffsetY = 100,
@@ -166,6 +166,7 @@
 				OnQueuedThreadedFunctionName = "CenterInteractRange",
 
 				{ Cue = "/VO/Selene_0106",
+					PreLineAnim = "Selene_Greet",
 					Text = "It gladdens me to see you, Hecate. I have observed the stalemate upon Olympus holds, although the Titan Chronos musters forces in Ephyra still. Shall I continue monitoring them?" },
 
 				{ Cue = "/VO/Hecate_0199", Portrait = "Portrait_Hec_Default_01", Speaker = "NPC_Hecate_01", PreLineWait = 0.35,
@@ -301,6 +302,7 @@
 					Text = "A reunion you made possible, with Hecate and the Unseen. Your services shall be remembered, O Melinoë, Princess. Now go... for there are more reunions to be had." },
 
 				{ Cue = "/VO/Selene_0373",
+					PreLineAnim = "Selene_Salute",
 					PortraitExitAnimation = "Portrait_Selene_InPerson_01_Exit",
 					-- PostLineRemoveContextArt = true,
 					-- PostLineFunctionName = "NyxFarewellPresentation",
@@ -337,6 +339,7 @@
 					Text = "I must say, I did not expect that we could ever draw you down this far, Sister Selene. I thought perhaps not even Headmistress could in all her experience!" },
 
 				{ Cue = "/VO/Selene_0374",
+					PreLineAnim = "Selene_Greet",
 					PreLineThreadedFunctionName = "EnsembleFamilyEnterPresentation",
 					Text = "If you are ready, little star, then let us go, lest we outstay our greetings and farewells. I am honored to have seen these halls, and to return to shadow with you on this night in victory, not haste." },
 
@@ -352,6 +355,7 @@
 				{
 					{
 						ObjectType = "NPC_Selene_01",
+						PreLineAnim = "Selene_Salute",
 						PreLineThreadedFunctionName = "ChariotDeparturePresentation",
 
 						{ Cue = "/VO/Selene_0377", Text = "Then let us ride into the dark above." },
@@ -430,7 +434,24 @@ GlobalVoiceLines.SeleneSaluteLines =
 		{ Cue = "/VO/Melinoe_1711", Text = "Together we shine, Sister." },
 		{ Cue = "/VO/Melinoe_1698", Text = "Salutations." },
 		{ Cue = "/VO/Melinoe_1699", Text = "Salutations!" },
-		{ Cue = "/VO/Melinoe_1700", Text = "Death to Chronos!" },
+		{ Cue = "/VO/Melinoe_1700", Text = "Death to Chronos!",
+			GameStateRequirements =
+			{
+				OrRequirements =
+				{
+					{
+						{
+							PathFalse = { "GameState", "TextLinesRecord", "TrueEnding01" },
+						},
+					},
+					{
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/Chronos_1058" },
+						},
+					},
+				},
+			},
+		},
 		{ Cue = "/VO/Melinoe_1882", Text = "Moonlight gui— {#Emph}ugh. {#Prev}Sorry. Habit.",
 			PlayFirst = true,
 			GameStateRequirements =
@@ -562,6 +583,7 @@ GlobalVoiceLines.SeleneSaluteLines =
 		PreLineWait = 0.31,
 		RandomRemaining = true,
 		ObjectType = "NPC_Selene_01",
+		PreLineAnim = "Selene_Salute",
 		GameStateRequirements =
 		{
 			{
@@ -692,6 +714,11 @@ GlobalVoiceLines.SeleneVictoryVoiceLines =
 		{
 			PathTrue = { "GameState", "TextLinesRecord", "SeleneAboutAltFightQuest01" },
 		},
+		{
+			Path = { "GameState", "GamePhase" },
+			Comparison = "~=",
+			Value = 5,
+		},
 		OrRequirements =
 		{
 			{
@@ -702,14 +729,10 @@ GlobalVoiceLines.SeleneVictoryVoiceLines =
 			},
 			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 3,
-				},
-				{
 					Path = { "CurrentRun", "CurrentRoom", "Name", },
 					IsAny = { "P_Boss01" },
 				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 

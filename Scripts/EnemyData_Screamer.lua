@@ -3,10 +3,11 @@ UnitSetData.Screamer =
 	-- chases you, conical scream attack
 	Screamer =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 		IntroEncounterName = "ScreamerIntro",
 
 		HealthBarOffsetY = -210,
+		HealthBarType = "Medium",
 
 		ActivateAnimation = "Enemy_Screamer_Spawn",
 		ActivateFx = "EnemyPreSpawnTerrainMedium",
@@ -128,7 +129,7 @@ UnitSetData.Screamer =
 
 	Screamer2 =
 	{
-		InheritFrom = { "Elite", "Screamer" },
+		InheritFrom = { "Elite", "BaseHEnemy", "Screamer" },
 		MaxHealth = 1100,
 		HealthBuffer = 1250,
 
@@ -181,13 +182,18 @@ UnitSetData.Screamer =
 
 	Screamer2_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "Screamer2" },
+		InheritFrom = { "SuperElite", "BaseIEnemy", "Screamer2" },
 		GenusName = "Screamer",
 
 		MaxHealth = 1000,
 		HealthBuffer = 5000,
 
 		StartAggroed = true,
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 
 		DefaultAIData =
 		{

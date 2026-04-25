@@ -2150,7 +2150,7 @@ LootSetData.Poseidon =
 						PathFalse = { "CurrentRun", "UseRecord", "PoseidonUpgrade" }
 					},
 					{
-						PathTrue = { "GameState", "ReachedTrueEnding" },
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
@@ -2347,6 +2347,9 @@ LootSetData.Poseidon =
 					{
 						PathFalse = { "PrevRun", "Cleared" }
 					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
@@ -2375,6 +2378,9 @@ LootSetData.Poseidon =
 					{
 						PathTrue = { "CurrentRun", "BiomesReached", "N" },
 					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
@@ -2399,6 +2405,9 @@ LootSetData.Poseidon =
 					},
 					{
 						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
@@ -3301,6 +3310,29 @@ LootSetData.Poseidon =
 					Emote = "PortraitEmoteDepressed",
 					Text = "Oh, what a horrifying night this is, as though our very nightmares walk the earth, or swim across the sea! Our foes are taken with such frenzy that this couldn't possibly be {#Emph}your {#Prev}doing, unless you've lost your senses like the rest?" },
 			},
+			PoseidonAboutDreamRuns01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "PoseidonUpgrade" }
+					},
+					{
+						SumPrevRuns = 4,
+						IgnoreCurrentRun = true,
+						Path = { "IsDreamRun" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Poseidon_0434",
+					Emote = "PortraitEmoteSurprise",
+					Text = "Where have you {#Emph}been{#Prev}, my niece?! I scarce recall when last I spoke at you this way. Perhaps you have been resting up? Even we gods grow weary every now and then, and you've been through a lot! Haven't we all?!" },
+			},
 
 			-- legendary
 			PoseidonLegendaryPickUp01 =
@@ -3375,6 +3407,57 @@ LootSetData.Poseidon =
 				{ Cue = "/VO/Poseidon_0379",
 					Emote = "PortraitEmoteFiredUp",
 					Text = "You have discovered by now all my many Boons! I'm always thinking about more, of course! Used to have lots of different ones if you must know! But times have changed, and Brother Zeus says we must concentrate!" },
+			},
+
+			PoseidonAboutDoubleRewardBoon01 =
+			{
+				PlayOnce = true,
+				ForcedUpgradeOptions =
+				{
+					{
+						Type = "Trait",
+						ItemName = "DoubleRewardBoon",
+						Rarity = "Heroic",
+					},
+					{
+						Type = "Trait",
+						ItemName = "FocusDamageShaveBoon",
+						Rarity = "Common",
+					},
+					{
+						Type = "Trait",
+						ItemName = "OmegaPoseidonProjectileBoon",
+						Rarity = "Common",
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "PoseidonUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "BiomesReached" },
+						HasNone = { "H", "P" },
+					},
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "TraitCache", "DoubleRewardBoon" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "LifetimeTraitStats", "DoubleRewardBoon", "UseCount" },
+						Comparison = ">=",
+						Value = 15,
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Poseidon_0435",
+					Emote = "PortraitEmoteFiredUp",
+					Text = "You sure like Sea Star, don't you, Niece? Well I don't blame you, as it's {#Emph}my own Boon! {#Prev}Sure it doesn't give you anything right now, but down the line, it might just net you more, and more, and more! Go on, {#Emph}take it! {#Prev}I practically insist!" },
 			},
 
 			PoseidonLegacyBoonIntro01 =
@@ -3555,7 +3638,8 @@ LootSetData.Poseidon =
 						PathTrue = { "CurrentRun", "UseRecord", "ApolloUpgrade" }
 					},
 					{
-						PathFalse = { "GameState", "TextLinesRecord", "ZeusPalaceFirstMeeting" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
 					},
 					{
 						Path = { "CurrentRun", "TextLinesRecord" },
@@ -4817,7 +4901,7 @@ LootSetData.Poseidon =
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
 				{ Cue = "/VO/Poseidon_0365",
-					Text = "Now that's a trim ship, with the Underworld Boatman at the helm! Perhaps I ought not call him Underworld Boatman anymore, for he's become a proper captain now! I'll have to keep the currents clear for him!" },
+					Text = "Now that's a trim ship, with the Underworld Boatman at the helm! Perhaps I ought not call him {#Emph}Underworld Boatman {#Prev}anymore, for he's become a proper {#Emph}captain {#Prev}now! I'll have to keep the currents clear for him!" },
 			},
 			PoseidonLootBought06 =
 			{
@@ -5392,22 +5476,6 @@ LootSetData.Poseidon =
 			{ Cue = "/VO/Melinoe_1735", Text = "Well this is quite a catch." },
 		},
 
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
-		},
-
 		FullSuperActivatedVoiceLines =
 		{
 			Queue = "Interrupt",
@@ -5578,11 +5646,136 @@ GlobalVoiceLines.PoseidonDoubleRewardReactionLines =
 			--
 		},
 		{ Cue = "/VO/Poseidon_0202", Text = "{#Emph}Hahaha{#Prev}, yes!", PlayFirst = true },
+		{ Cue = "/VO/Poseidon_0436", Text = "{#Emph}Hahaha, yes!",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "PoseidonAboutDoubleRewardBoon01" }
+				},
+			},
+		},
 		{ Cue = "/VO/Poseidon_0242", Text = "Yes, {#Emph}haha!", PlayFirst = true },
 		{ Cue = "/VO/Poseidon_0343", Text = "Have {#Emph}another!" },
 		{ Cue = "/VO/Poseidon_0344", Text = "How about {#Emph}two!" },
 		{ Cue = "/VO/Poseidon_0345", Text = "And {#Emph}another!" },
 		{ Cue = "/VO/Poseidon_0346", Text = "{#Emph}One {#Prev}more!" },
+
+		{ Cue = "/VO/Poseidon_0447", Text = "Another Onion!",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathFromArgs = true,
+					Path = { "RewardName" },
+					IsAny = { "RoomRewardConsolationPrize" },
+				},
+			},
+		},
+		{ Cue = "/VO/Poseidon_0448", Text = "Extra Onions!",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathFromArgs = true,
+					Path = { "RewardName" },
+					IsAny = { "RoomRewardConsolationPrize" },
+				},
+			},
+		},
+
+		{ Cue = "/VO/Poseidon_0438", Text = "Make it {#Emph}two!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = "==",
+					Value = 2,
+				},
+			},
+		},
+		{ Cue = "/VO/Poseidon_0439", Text = "It's a {#Emph}double!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = "==",
+					Value = 2,
+				},
+			},
+		},
+
+		{ Cue = "/VO/Poseidon_0440", Text = "Third time tonight!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = "==",
+					Value = 3,
+				},
+			},
+		},
+		{ Cue = "/VO/Poseidon_0441", Text = "Third time!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = "==",
+					Value = 3,
+				},
+			},
+		},
+
+		{ Cue = "/VO/Poseidon_0442", Text = "Feeling generous!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = "==",
+					Value = 4,
+				},
+			},
+		},
+		{ Cue = "/VO/Poseidon_0443", Text = "Fourth time!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = "==",
+					Value = 4,
+				},
+			},
+		},
+
+		{ Cue = "/VO/Poseidon_0444", Text = "You won it all!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = ">=",
+					Value = 5,
+				},
+			},
+		},
+		{ Cue = "/VO/Poseidon_0445", Text = "How many {#Emph}is {#Prev}that?!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = ">=",
+					Value = 5,
+				},
+			},
+		},
+		{ Cue = "/VO/Poseidon_0446", Text = "Boundless riches!",
+			GameStateRequirements =
+			{
+				{
+					Path = { "CurrentRun", "PoseidonDoubleRewardCount" },
+					Comparison = ">=",
+					Value = 5,
+				},
+			},
+		},
 	},
 }
 GlobalVoiceLines.PoseidonRoomRewardBonusReactionLines =

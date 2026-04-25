@@ -18,31 +18,6 @@ function AddResource( name, amount, source, args )
 		DebugAssert({ Condition = false, Text = "Missing ResourceData for "..name, Owner = "James" })
 		return
 	end
-	if CurrentRun and CurrentRun.Hero and not CurrentRun.Hero.IsDead then
-		local healthGained = 0
-		local traitValues = GetHeroTraitValues("OnResourceMaxHealth")
-		for i, traitData in pairs (traitValues) do
-			if traitData.ResourceNamesLookup[name] then
-				healthGained = healthGained + traitData.Amount * roundedAmount
-			end
-		end
-		local manaGained = 0
-		local traitValues = GetHeroTraitValues("OnResourceMaxMana")
-		for i, traitData in pairs (traitValues) do
-			if traitData.ResourceNamesLookup[name] then
-				manaGained = manaGained + traitData.Amount * roundedAmount
-			end
-		end
-		if healthGained > 0 and manaGained > 0 then
-			AddMaxHealth( healthGained, "ResourceMaxHealth", { Silent = true })
-			AddMaxMana( manaGained, "ResourceMaxMana", { Silent = true })
-			thread( BonusHealthAndManaPresentation, healthGained, manaGained , 0.5 )
-		elseif healthGained > 0 then
-			AddMaxHealth( healthGained, "ResourceMaxHealth" )
-		elseif manaGained > 0 then
-			AddMaxMana( manaGained, "ResourceMaxMana" )
-		end
-	end
 	GameState.Resources[name] = (GameState.Resources[name] or 0) + roundedAmount
 	if not args.NoLifetimeEffect then
 		GameState.LifetimeResourcesGained[name] = (GameState.LifetimeResourcesGained[name] or 0) + roundedAmount
@@ -327,7 +302,7 @@ function OpenInventoryScreen( args )
 				if slotIndex ~= screen.ActiveCategoryIndex then
 					local hasNewItem = false
 					for i, itemName in ipairs(screen.ItemCategories[slotIndex]) do
-						if CanShowResourceInInventory( ResourceData[itemName] ) and not GameState.ResourcesViewed[itemName] then
+						if CanShowResourceInInventory( ResourceData[itemName], screen.Args ) and not GameState.ResourcesViewed[itemName] then
 							hasNewItem = true
 						end
 					end
@@ -465,16 +440,22 @@ function InventoryScreenDisplayCategory( screen, categoryIndex, args )
 		return
 	end
 
-	if screen.Args.PlantTarget ~= nil and GameState.WorldUpgrades.WorldUpgradeGardenMultiPlant then
-		components.PinButton.OnPressedFunctionName = "GardenMultiPlantSeed"
+	local initialSelection = nil
+	if screen.Args.PlantTarget ~= nil then
+		if GameState.WorldUpgrades.WorldUpgradeGardenMultiPlant then
+			components.PinButton.OnPressedFunctionName = "GardenMultiPlantSeed"
+		end
+		if GameState.GardenLastSeedPlanted ~= nil and HasResource( GameState.GardenLastSeedPlanted, 1 ) then
+			initialSelection = GameState.GardenLastSeedPlanted
+		end
 	end
-	
+
 	local resourceLocation = { X = screen.GridStartX, Y = screen.GridStartY }
 	local columnNum = 1
 	for i, resourceName in ipairs( category ) do
 
 		local resourceData = ResourceData[resourceName]
-		if CanShowResourceInInventory( resourceData ) then
+		if CanShowResourceInInventory( resourceData, screen.Args ) then
 
 			local textLines = nil
 			local canBeGifted = false
@@ -539,6 +520,8 @@ function InventoryScreenDisplayCategory( screen, categoryIndex, args )
 					button.ContextualAction = "Menu_Plant"
 					button.OnPressedFunctionName = "GardenPlantSeed"
 
+					initialSelection = initialSelection or resourceName
+
 					if GameState.WorldUpgrades.WorldUpgradeGardenMultiPlant then
 						local numEmptyPlots = 0
 						for id, plot in pairs( GameState.GardenPlots ) do
@@ -583,6 +566,7 @@ function InventoryScreenDisplayCategory( screen, categoryIndex, args )
 					button.ContextualAction = "Menu_Gift"
 					button.OnPressedFunctionName = "GiveSelectedGift"
 					button.TextLines = textLines
+					initialSelection = initialSelection or resourceName
 				else
 					SetRGB({ Id = button.Id, Color = Color.Black })
 					button.MouseOverText = "InventoryScreen_GiftNotAvailable"
@@ -604,7 +588,7 @@ function InventoryScreenDisplayCategory( screen, categoryIndex, args )
 			button.Viewable = not screen.Args.CategoryLocked or button.OnPressedFunctionName ~= nil
 			if button.Viewable then
 				-- highlight the initial selection, or the last resource you collected
-				if resourceName == args.InitialSelection then
+				if resourceName == initialSelection then
 					screen.CursorStartX = resourceLocation.X
 					screen.CursorStartY = resourceLocation.Y
 				elseif resourceName == GameState.UnviewedLastResourceGained then
@@ -699,6 +683,10 @@ function InventoryScreenSelectCategory( screen, button )
 end
 
 function CloseInventoryScreen( screen, button )
+	if screen == nil then
+		return
+	end
+
 	killTaggedThreads( "MultiPlantPulse" )
 
 	SetPlayerVulnerable( "Inventory" )
@@ -1125,8 +1113,17 @@ function InventoryScreenUpdate( screen, args, elapsed )
 	end
 end
 
-function CanShowResourceInInventory( resourceData )
-	return (GameState.LifetimeResourcesGained[resourceData.Name] or 0) > 0 or ( resourceData.RevealGameStateRequirements ~= nil and IsGameStateEligible( resourceData, resourceData.RevealGameStateRequirements ) )
+function CanShowResourceInInventory( resourceData, args )
+	if args.PlantTarget ~= nil and not GardenData.Seeds[resourceData.Name] then
+		return false
+	end
+	if (GameState.LifetimeResourcesGained[resourceData.Name] or 0) > 0 then
+		return true
+	end
+	if resourceData.RevealGameStateRequirements ~= nil and IsGameStateEligible( resourceData, resourceData.RevealGameStateRequirements ) then
+		return true
+	end
+	return false
 end
 
 function ValidateResourceCategories()

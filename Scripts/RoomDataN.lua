@@ -6,6 +6,7 @@ RoomSetData.N =
 		RichPresence = "#RichPresence_N",
 		Icon = "GUI\\Screens\\BountyBoard\\Biome_Ephyra",
 		ResultText = "RunHistoryScreenResult_Ephyra",
+		DreamResultText = "RunHistoryScreenResult_Ephyra_Dream",
 		IgnoreForRewardStoreCount = true,
 		
 		HarvestPointBase = "DrownedChambersHarvestPointBase01",
@@ -323,6 +324,7 @@ RoomSetData.N =
 		},
 
 		SaveProfileLocationText = "BiomeN_Short",
+		DreamSaveProfileLocationText = "BiomeN_Short_DreamRun",
 
 		LegalEncounters = EncounterSets.NEncountersDefault,
 		DevotionEncounters = {"DevotionTestN"},
@@ -384,6 +386,14 @@ RoomSetData.N =
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeN_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -395,6 +405,14 @@ RoomSetData.N =
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeN_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 
 		ZoomFraction = 0.825,
@@ -404,19 +422,25 @@ RoomSetData.N =
 	{
 		InheritFrom = { "BaseN", "BiomeStartRoom" },
 		SaveProfileLocationText = "Location_SurfaceMisc_Short",
+		DreamSaveProfileLocationText = "BiomeN_Short_DreamRun",
 		Starting = true,
 		HasFishingPoint = true,
 		SecretSpawnChance = 0.09,
 		MaxAppearancesThisBiome = 1,
+		RemoveTimerBlock = "InterBiome",
 
 		LegalEncounters = { "OpeningEmpty", "OpeningGeneratedN" },
 		NextRoomSet = { "N" },
 		LinkedRoom = "N_PreHub01",
+		HideRewardPreview = true,
 		Ambience = "/Ambience/EphyraOutsideAmbience",
 
 		SpawnRewardOnId = 40055,
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.88,
 		ZoomStartFraction = 0.80,
+
+		AltHeroSpawnAngle = 90,
 
 		DisableRewardMagnetisim = true,
 		TeleportCatFamiliarOnEncounterStart = true,
@@ -667,12 +691,15 @@ RoomSetData.N =
 						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "ForceApolloBoonKeepsake" },
 					},
 					{
-						Path = { "GameState", "TraitUses", "ForceApolloKeepsake" },
+						Path = { "GameState", "TraitUses", "ForceApolloBoonKeepsake" },
 						Comparison = ">=",
 						Value = 4,
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "HermesAboutApolloKeepsake01" }
+					},
+					{
+						PathTrue = { "GameState", "UseRecord", "HermesUpgrade" },
 					},
 				},
 			},
@@ -686,6 +713,15 @@ RoomSetData.N =
 				Args = { TrackName = "/Music/IrisMusicFilthyArp_MC", },
 			},
 			]]--
+			{
+				FunctionName = "EndBiomeRecords",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" }
+					},
+				},
+			},
 		},
 
 		EnterVoiceLines =
@@ -693,7 +729,6 @@ RoomSetData.N =
 			{
 				PlayOnce = true,
 				BreakIfPlayed = true,
-				RandomRemaining = true,
 				PreLineWait = 2.35,
 				GameStateRequirements =
 				{
@@ -708,16 +743,11 @@ RoomSetData.N =
 		RewardSpawnVoiceLines =
 		{
 			-- packaged bounties
-			[1] = { GlobalVoiceLines = "StartPackagedBountyRunVoiceLines" },
+			{ GlobalVoiceLines = "StartPackagedBountyRunVoiceLines" },
 			-- other general cases
-			[2] = { GlobalVoiceLines = "TaskBegunVoiceLines" },
+			{ GlobalVoiceLines = "TaskBegunVoiceLines" },
 			-- biome state changes
-			[3] = { GlobalVoiceLines = "BiomeStateChangeStartVoiceLines" },
-		},
-
-		ExitVoiceLines =
-		{
-			{ GlobalVoiceLines = "StorytellerRunStartVoiceLines" },
+			{ GlobalVoiceLines = "BiomeStateChangeStartVoiceLines" },
 		},
 
 		InspectPoints =
@@ -820,6 +850,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		SaveProfileLocationText = "Location_SurfaceMisc_Short",
+		DreamSaveProfileLocationText = "BiomeN_Short_DreamRun",
 		LegalEncounters = { "PreHubGeneratedN" },
 		SecretSpawnChance = 0.09,
 		
@@ -843,9 +874,6 @@ RoomSetData.N =
 				Path = { "GameState", "LifetimeResourcesGained", "OreNBronze" },
 				Comparison = "<",
 				Value = 1,
-			},
-			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
 			},
 		},
 
@@ -890,6 +918,21 @@ RoomSetData.N =
 			},
 		},
 
+		EnterVoiceLines =
+		{
+			{
+				PlayOnce = true,
+				BreakIfPlayed = true,
+				PreLineWait = 1.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				{ Cue = "/VO/MelinoeField_4579", Text = "The dead don't seem to want to leave..." },
+			},
+		},
 		ExitVoiceLines =
 		{
 			UsePlayerSource = true,
@@ -915,6 +958,7 @@ RoomSetData.N =
 			{ Cue = "/VO/MelinoeField_0364", Text = "Heading in." },
 			{ Cue = "/VO/MelinoeField_0365", Text = "Into Ephyra." },
 		},
+		ZoomFractionAlt = 0.95,
 	},
 
 	N_Hub =
@@ -1004,7 +1048,7 @@ RoomSetData.N =
 
 		--IntroSequenceDuration = 1.0,
 		ZoomFraction = 0.55,
-		ZoomFractionSwitch = 0.55,
+		ZoomFractionAlt = 0.63,
 		CameraZoomWeights =
 		{
 			[660496] = 1.00, -- start point of entrance hallway
@@ -1091,10 +1135,11 @@ RoomSetData.N =
 		ThreadedEvents =
 		{
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeN",
+					DreamText = "Location_BiomeN_Dream",
 					AnimationName = "InfoBannerEphyraIn",
 					AnimationOutName = "InfoBannerEphyraOut",
 					Delay = 2.0,
@@ -1942,6 +1987,7 @@ RoomSetData.N =
 		StartUnthreadedEvents = EncounterSets.ShopRoomEvents_N,
 		NoReroll = true,
 		ZoomFraction = 0.875,
+		ZoomFractionAlt = 1.0,
 		Ambience = "/Ambience/EphyraCityAmbience",
 		
 		SurfaceShopSpawnChance = 0.25,
@@ -1952,7 +1998,7 @@ RoomSetData.N =
 				PathTrue = { "GameState", "WorldUpgrades", "WorldUpgradeSurfacePenaltyCure", },
 			},
 			{
-				Path = { "CurrentRun", "RoomCountCache", },
+				Path = { "CurrentRun", "BiomeRoomCountCache", },
 				HasAny = { "N_PreHub01", "Chaos_01", "Chaos_02", "Chaos_03", "Chaos_04", "Chaos_05", "Chaos_06" },
 			},
 		},
@@ -1980,6 +2026,8 @@ RoomSetData.N =
 		Ambience = "/Ambience/EphyraOutsideAmbience",
 
 		LinkedRooms = { "N_Boss01", "N_Boss02" },
+
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
 
 		GameStateRequirements =
 		{
@@ -2020,6 +2068,12 @@ RoomSetData.N =
 
 		IgnoreStemMixer = true,
 		MusicMutedStems = { "Drums", "Bass", "Guitar", },
+		MusicMutedStemsRequirements =
+		{
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" }
+			},
+		},
 
 		InspectPoints =
 		{
@@ -2120,6 +2174,7 @@ RoomSetData.N =
 			},
 
 		},
+		ZoomFractionAlt = 0.97,
 
 	},
 
@@ -2128,14 +2183,49 @@ RoomSetData.N =
 		InheritFrom = { "BaseN" },
 		GameStateRequirements =
 		{
+			NamedRequirementsFalse = { "BossDifficultyActive" },
+		},
+
+		HarvestPointForceRequirements =
+		{
 			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 1,
-				},
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "N_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantNMoss" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantNMoss" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "N_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantNGarlicSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantNGarlicSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "N_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "OreNBronze" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreNBronze" },
 			},
 		},
 
@@ -2155,6 +2245,9 @@ RoomSetData.N =
 		ResetBinksOnExit = true,
 		LegalEncounters = { "BossPolyphemus01", },
 		ForcedReward = "MixerNBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
+		CloseDoorsOnUse = false,
 		NoReroll = true,
 
 		BackupCauseOfDeath = "Polyphemus",
@@ -2164,6 +2257,7 @@ RoomSetData.N =
 		IntroSequenceDuration = 2.7,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.8,
 
 		SheepExitId = 658446,
 
@@ -2178,6 +2272,7 @@ RoomSetData.N =
 					ProcessTextLinesIds = { 558039 },
 					SetupBossIds = { 558039 },
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "PolyphemusBossDreamRunIntro",
 				},
 			},
 		},
@@ -2249,19 +2344,54 @@ RoomSetData.N =
 		InheritFrom = { "BaseN" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 1,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		FlipHorizontal = false,
 		FlipHorizontalChance = 0,
+
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "N_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantNMoss" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantNMoss" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "N_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantNGarlicSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantNGarlicSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "N_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "OreNBronze" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreNBronze" },
+			},
+		},
 
 		RequiresLinked = true,
 		LinkedRoom = "N_PostBoss01",
@@ -2274,8 +2404,11 @@ RoomSetData.N =
 
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
-		LegalEncounters = { "BossPolyphemus02", },
+		LegalEncounters = { "BossPolyphemus02" },
 		ForcedReward = "MixerNBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
+		CloseDoorsOnUse = false,
 		NoReroll = true,
 
 		BackupCauseOfDeath = "Polyphemus",
@@ -2287,6 +2420,7 @@ RoomSetData.N =
 		IntroSequenceDuration = 2.7,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.82,
 
 		StartUnthreadedEvents = {},
 
@@ -2300,6 +2434,7 @@ RoomSetData.N =
 					SetupBossIds = { 675068, },
 					SetupUnitIdAIs = { 737907 },
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "PolyphemusBossDreamRunIntro",
 				},
 			},
 		},
@@ -2313,19 +2448,21 @@ RoomSetData.N =
 					MedeaId = 737907,
 					Delay = 1.0,
 					Angle = 242,
-					ProcessTextLinesIds = { 675068, },
 					AlreadyPresentRequirements =
 					{
 						{
-							PathFromSource = true,
-							Path = { "QueuedBossIntroTextLines", "Name" },
-							IsAny = {
-								"PolyphemusAboutAltFight02",
-								"PolyphemusAboutAltFight06",
-								"PolyphemusAboutAltFight08",
-								"PolyphemusAboutAltFight09",
-								"PolyphemusAboutAltFight10",
-								"MedeaMiscStart22",
+							FunctionName = "RequiredQueuedTextLine",
+							FunctionArgs =
+							{
+								IsAny =
+								{
+									"PolyphemusAboutAltFight02",
+									"PolyphemusAboutAltFight06",
+									"PolyphemusAboutAltFight08",
+									"PolyphemusAboutAltFight09",
+									"PolyphemusAboutAltFight10",
+									"MedeaMiscStart22",
+								},
 							},
 						},
 					}
@@ -2414,6 +2551,7 @@ RoomSetData.N =
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.90,
 		ReverbValue = 1.0,
 		GlobalEcho = 0.0,
 
@@ -2712,7 +2850,7 @@ RoomSetData.N =
 		GameStateRequirements =
 		{
 			{
-				Path = { "CurrentRun", "RoomCountCache", },
+				Path = { "CurrentRun", "BiomeRoomCountCache", },
 				HasAny = { "N_PreHub01", "Chaos_01", "Chaos_02", "Chaos_03", "Chaos_04", "Chaos_05", "Chaos_06" },
 			}
 		},
@@ -2837,6 +2975,7 @@ RoomSetData.N =
 
 		EntranceDirection = "Left",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.95,
 	},
 
 	N_MiniBoss02 =
@@ -2886,6 +3025,7 @@ RoomSetData.N =
 
 		EntranceDirection = "Right",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.95,
 
 		ThreadEnterVoiceLines = true,
 		EnterVoiceLines =
@@ -2900,8 +3040,20 @@ RoomSetData.N =
 					Path = { "CurrentRun", "CurrentRoom", "Encounter", "Name" },
 					IsAny = { "MiniBossBoar" },
 				},
+				{
+					PathFalse = { "CurrentRun", "CurrentRoom", "Encounter", "SpawnsSkipped" },
+				},
 			},
 
+			{ Cue = "/VO/MelinoeField_5680", Text = "If it isn't the boar of my dreams...!",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 			{ Cue = "/VO/MelinoeField_3707", Text = "The Boar of Erymanthus...", PlayFirst = true },
 			{ Cue = "/VO/MelinoeField_3708", Text = "That rotting boar again." },
 			{ Cue = "/VO/MelinoeField_3710", Text = "You don't remember me, do you?" },
@@ -2956,6 +3108,7 @@ RoomSetData.N =
 		LegalEncounters = EncounterSets.NEncountersBigger,
 
 		ZoomFraction = 0.78,
+		ZoomFractionAlt = 0.92,
 
 		OnUseSetRunData =
 		{
@@ -2986,7 +3139,8 @@ RoomSetData.N =
 		{
 			[558353] = "N_Sub01",
 			[558352] = "N_Sub03",
-		}
+		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	N_Combat03 =
@@ -3005,7 +3159,8 @@ RoomSetData.N =
 		PredeterminedDoorRooms =
 		{
 			[558353] = "N_Sub04",
-		}
+		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	N_Combat04 =
@@ -3027,7 +3182,8 @@ RoomSetData.N =
 		{
 			[558834] = "N_Sub02",
 			[558410] = "N_Sub06",
-		}
+		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	N_Combat05 =
@@ -3048,7 +3204,8 @@ RoomSetData.N =
 			[558354] = "N_Sub02",
 			[558378] = "N_Sub07",
 			[558379] = "N_Sub03",
-		}
+		},
+		ZoomFractionAlt = 0.95,
 	},
 
 	N_Combat06 =
@@ -3058,6 +3215,7 @@ RoomSetData.N =
 		FlipHorizontalChance = 1.0,
 
 		ZoomFraction = 0.78,
+		ZoomFractionAlt = 0.92,
 		
 		OnUseSetRunData =
 		{
@@ -3087,6 +3245,7 @@ RoomSetData.N =
 				NextHeroEndPoint = 617136,
 			}
 		},
+		ZoomFractionAlt = 0.94,
 	},
 
 	N_Combat08 =
@@ -3102,6 +3261,7 @@ RoomSetData.N =
 				NextHeroEndPoint = 561185,
 			}
 		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	N_Combat09 =
@@ -3124,7 +3284,8 @@ RoomSetData.N =
 			[566392] = "N_Sub11",
 			[566536] = "N_Sub08",
 			[566394] = "N_Sub14",
-		}
+		},
+		ZoomFractionAlt = 0.88,
 	},
 
 	N_Combat10 =
@@ -3134,6 +3295,7 @@ RoomSetData.N =
 		LegalEncounters = EncounterSets.NEncountersBigger,
 
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.88,
 		
 		OnUseSetRunData =
 		{
@@ -3171,6 +3333,7 @@ RoomSetData.N =
 		{
 			[558352] = "N_Sub01",
 		},
+		ZoomFractionAlt = 0.89,
 	},
 
 	N_Combat12 =
@@ -3182,6 +3345,7 @@ RoomSetData.N =
 		ReverbValue = 1.0,
 
 		ZoomFraction = 0.850,
+		ZoomFractionAlt = 0.97,
 
 		LegalEncounters = EncounterSets.NEncountersSmaller,
 		IneligibleRewards = RewardSets.HubCombatRoomEasyBans,
@@ -3209,6 +3373,7 @@ RoomSetData.N =
 		LegalEncounters = EncounterSets.NEncountersBigger,
 
 		ZoomFraction = 0.785,
+		ZoomFractionAlt = 0.90,
 		
 		OnUseSetRunData =
 		{
@@ -3234,6 +3399,7 @@ RoomSetData.N =
 				NextHeroEndPoint = 561399,
 			}
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	N_Combat15 =
@@ -3241,6 +3407,7 @@ RoomSetData.N =
 		InheritFrom = { "N_CombatData", "BaseN" },
 
 		ZoomFraction = 0.785,
+		ZoomFractionAlt = 0.84,
 
 		LegalEncounters = EncounterSets.NEncountersBigger,
 		
@@ -3267,6 +3434,7 @@ RoomSetData.N =
 		LegalEncounters = EncounterSets.NEncountersBigger,
 
 		ZoomFraction = 0.795,
+		ZoomFractionAlt = 0.91,
 		
 		OnUseSetRunData =
 		{
@@ -3287,6 +3455,7 @@ RoomSetData.N =
 		InheritFrom = { "N_CombatData", "BaseN" },
 
 		ZoomFraction = 0.825,
+		ZoomFractionAlt = 0.96,
 
 		ReverbValue = 1.7,
 
@@ -3311,6 +3480,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		ZoomFraction = 0.765,
+		ZoomFractionAlt = 0.90,
 
 		LegalEncounters = EncounterSets.NEncountersBigger,
 
@@ -3332,6 +3502,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		ZoomFraction = 0.72,
+		ZoomFractionAlt = 0.84,
 		Ambience = "/Ambience/EphyraCityAmbience",
 
 		LegalEncounters = EncounterSets.NEncountersBigger,
@@ -3350,6 +3521,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.88,
 		HasHarvestPoint = false,
 		ReverbValue = 1.7,
 
@@ -3373,6 +3545,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		ZoomFraction = 0.70,
+		ZoomFractionAlt = 0.84,
 
 		LegalEncounters = EncounterSets.NEncountersBigger,
 		
@@ -3390,6 +3563,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		ZoomFraction = 0.785,
+		ZoomFractionAlt = 0.87,
 		ReverbValue = 1.0,
 		OnUseSetRunData =
 		{
@@ -3410,6 +3584,7 @@ RoomSetData.N =
 	{
 		InheritFrom = { "N_CombatData", "BaseN" },
 		ZoomFraction = 0.785,
+		ZoomFractionAlt = 0.89,
 		ReverbValue = 1.0,
 		OnUseSetRunData =
 		{
@@ -3532,13 +3707,14 @@ RoomSetData.N =
 		LinkedRoom = "N_Hub",
 
 		ZoomFraction = 0.875,
+		ZoomFractionAlt = 0.95,
 		GameStateRequirements =
 		{
 			{
 				PathTrue = { "GameState", "TextLinesRecord", "HeraclesFirstMeeting" },
 			},
 			{
-				Path = { "CurrentRun", "RoomCountCache", },
+				Path = { "CurrentRun", "BiomeRoomCountCache", },
 				HasAny = { "N_PreHub01", "Chaos_01", "Chaos_02", "Chaos_03", "Chaos_04", "Chaos_05", "Chaos_06" },
 			},
 			NamedRequirementsFalse = { "StandardPackageBountyActive" },
@@ -3611,11 +3787,13 @@ RoomSetData.N_SubRooms =
 	{
 		DebugOnly = true,
 		ResultText = "RunHistoryScreenResult_Ephyra",
+		DreamResultText = "RunHistoryScreenResult_Ephyra_Dream",
 
 		IndividualRewardStore = "SubRoomRewards",
 		IgnoreForRewardStoreCount = true,
 
 		SaveProfileLocationText = "BiomeN_Short",
+		DreamSaveProfileLocationText = "BiomeN_Short_DreamRun",
 		MaintainSpellCharge = true,
 		IgnoreEncounterUses = true,
 		SkipRoomsPerUpgrade = true,
@@ -3714,6 +3892,7 @@ RoomSetData.N_SubRooms =
 
 		EntranceDirection = "Left",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.93,
 	},
 
 	N_Sub04 =
@@ -3737,6 +3916,7 @@ RoomSetData.N_SubRooms =
 		InheritFrom = { "BaseN_SubRooms" },
 
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.92,
 		EntranceDirection = "Left",
 	},
 
@@ -3754,6 +3934,7 @@ RoomSetData.N_SubRooms =
 	{
 		InheritFrom = { "BaseN_SubRooms" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.93,
 
 		EntranceDirection = "Left",
 	},
@@ -3762,6 +3943,7 @@ RoomSetData.N_SubRooms =
 	{
 		InheritFrom = { "BaseN_SubRooms" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.94,
 
 		EntranceDirection = "Right",
 
@@ -3773,6 +3955,7 @@ RoomSetData.N_SubRooms =
 	{
 		InheritFrom = { "BaseN_SubRooms" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.95,
 
 		EntranceDirection = "Left",
 
@@ -3784,6 +3967,7 @@ RoomSetData.N_SubRooms =
 	{
 		InheritFrom = { "BaseN_SubRooms" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.93,
 		Ambience = "/Ambience/EphyraCityAmbience",
 
 		EntranceDirection = "Right",
@@ -3796,6 +3980,7 @@ RoomSetData.N_SubRooms =
 	{
 		InheritFrom = { "BaseN_SubRooms" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.95,
 		EntranceDirection = "Right",
 	},
 
@@ -3803,6 +3988,7 @@ RoomSetData.N_SubRooms =
 	{
 		InheritFrom = { "BaseN_SubRooms" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.93,
 		EntranceDirection = "Right",
 	},
 
@@ -3812,6 +3998,7 @@ RoomSetData.N_SubRooms =
 		ReverbValue = 1.0,
 		Ambience = "/Ambience/EphyraCityAmbienceOutdoorNoFire",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.94,
 
 		EntranceDirection = "Left",
 
@@ -3824,6 +4011,7 @@ RoomSetData.N_SubRooms =
 		InheritFrom = { "BaseN_SubRooms" },
 		Ambience = "/Ambience/EphyraCityAmbienceOutdoorNoFire",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.93,
 		EntranceDirection = "Right",
 	},
 }

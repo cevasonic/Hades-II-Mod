@@ -1072,7 +1072,7 @@ function CreateScreenFromData( screen, componentData, args )
 
 		for name, data in pairs( componentData ) do
 			--DebugPrint({ Text = "componentName = "..name })
-			if type(data) == "table" and not data.Skip and not data.Ordered and name ~= "Ordered" and not skipComponents[name] and (data.Requirements == nil or IsGameStateEligible( screen, data.Requirements ) ) then
+			if type(data) == "table" and not data.Skip and not data.Ordered and name ~= "Order" and not skipComponents[name] and (data.Requirements == nil or IsGameStateEligible( screen, data.Requirements ) ) then
 				local component = CreateComponentFromData( componentData, data, args )
 				component.Screen = screen
 				screen.Components[name] = component				
@@ -1240,7 +1240,20 @@ function CreateGroupHealthBar( encounter )
 
 	SetScaleX({ Ids = { ScreenAnchors.BossHealthBack, ScreenAnchors.BossHealthFill, fallOffBar, scorchBarId }, Fraction = 1, Duration = 0 })
 
-	local barName = EncounterData[encounter.Name].HealthBarTextId or encounter.Name
+	local encounterData = EncounterData[encounter.Name] or encounter
+	local barName = encounterData.HealthBarTextId or encounter.Name
+
+	if encounterData.AltHealthBarTextIds ~= nil then
+		local eligibleTextIds = {}
+		for k, altTextIdData in pairs( encounterData.AltHealthBarTextIds ) do
+			if altTextIdData.GameStateRequirements == nil or IsGameStateEligible( altTextIdData, altTextIdData.GameStateRequirements ) then
+				table.insert( eligibleTextIds, altTextIdData.TextId )
+			end
+		end
+		if not IsEmpty(eligibleTextIds) then
+			barName = GetRandomValue(eligibleTextIds)
+		end
+	end
 
 	CreateTextBox({ Id = ScreenAnchors.BossHealthBack, Text = barName,
 			Font = "CaesarDressing", FontSize = 22, ShadowRed = 0, ShadowBlue = 0, ShadowGreen = 0,

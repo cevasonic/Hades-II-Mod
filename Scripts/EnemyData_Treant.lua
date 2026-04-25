@@ -3,7 +3,7 @@ UnitSetData.Treant =
 	
 	Treant =
 	{
-		InheritFrom = { "Elite", "BaseVulnerableEnemy" },
+		InheritFrom = { "Elite", "BaseFEnemy", "BaseVulnerableEnemy" },
 		RunHistoryKilledByName = "Treant",
 
 		ActivateFx = "EnemyPreSpawnTerrainLarge",
@@ -78,7 +78,7 @@ UnitSetData.Treant =
 
 	TreantTail =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 		GenusName = "Treant",
 
 		ActivateFx = "nil",
@@ -141,7 +141,7 @@ UnitSetData.Treant =
 
 	Treant2 =
 	{
-		InheritFrom = { "Treant", "Elite", "BaseVulnerableEnemy", },
+		InheritFrom = { "BaseHEnemy", "Treant", "Elite", "BaseVulnerableEnemy", },
 		MaxHealth = 850,
 		HealthBuffer = 1850,
 		ActivateAnimation = "Enemy_Treant_Spawn_Quick",
@@ -197,7 +197,7 @@ UnitSetData.Treant =
 
 	TreantTail2 =
 	{
-		InheritFrom = { "TreantTail" },
+		InheritFrom = { "BaseHEnemy", "TreantTail" },
 		GenusName = "Treant2",
 
 		MaxHealth = 460,
@@ -216,12 +216,17 @@ UnitSetData.Treant =
 
 	Treant2_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "Treant2", },
+		InheritFrom = { "SuperElite", "BaseIEnemy", "Treant2", },
 		GenusName = "Treant2",
 
 		MaxHealth = 1000,
 		HealthBuffer = 5000,
 		BlockRaiseDead = false,
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 
 		WeaponOptions =
 		{
@@ -231,8 +236,13 @@ UnitSetData.Treant =
 
 	TreantTail2_SuperElite =
 	{
-		InheritFrom = { "TreantTail2" },
+		InheritFrom = { "BaseIEnemy", "TreantTail2" },
 		GenusName = "Treant2",
+		
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 
 		MaxHealth = 200,
 		HealthBuffer = 1000,

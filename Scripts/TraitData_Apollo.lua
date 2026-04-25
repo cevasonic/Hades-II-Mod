@@ -476,6 +476,15 @@ OverwriteTableKeys( TraitData, {
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Apollo",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			{
 				FalseTraitName = "LobCloseAttackAspect",
@@ -2292,24 +2301,19 @@ OverwriteTableKeys( TraitData, {
 					"WeaponTorch",
 
 					"WeaponSuit",
+					"WeaponSuit2",
+					"WeaponSuitDouble",
+					"WeaponSuitDash",
 				},
 				WeaponProperty = "ProjectileWaveInterval",
 				ChangeValue = 0.2,
 				ExcludeLinked = true,
 			},
 			{
-				FalseTraitName = "LobCloseAttackAspect",
 				WeaponName = "WeaponLob",
 				WeaponProperty = "ProjectileWaveInterval",
 				ChangeValue = 0.2,
-				ExcludeLinked = true,
-			},
-			{
-				TraitName = "LobCloseAttackAspect",
-				WeaponName = "WeaponLob",
-				WeaponProperty = "ProjectileWaveInterval",
-				ChangeValue = 0.05,
-				ExcludeLinked = true,
+				ExcludeLinked = true, 
 			},
 			{
 				WeaponNames = 
@@ -2337,6 +2341,9 @@ OverwriteTableKeys( TraitData, {
 					"WeaponLob",
 
 					"WeaponSuit",
+					"WeaponSuit2",
+					"WeaponSuitDouble",
+					"WeaponSuitDash",
 				},
 				ExcludeLinked = true,
 				WeaponProperty = "AdditionalProjectileWaveChance",
@@ -2502,6 +2509,15 @@ OverwriteTableKeys( TraitData, {
 				WeaponProperty = "NumProjectileWaves",
 				ChangeType = "Multiply",
 				ChangeValue = 2,
+			},
+			{
+				TraitName = "StaffRaiseDeadAspect",
+				WeaponNames = { "WeaponStaffSwing5" },
+				ProjectileName = "ProjectileStaffWall",
+				ExcludeLinked = true,
+				ProjectileProperty = "ImmunityDuration",
+				ChangeType = "Multiply",
+				ChangeValue = 0.5,
 			},
 			{
 				WeaponName = "WeaponAxeSpecialSwing",

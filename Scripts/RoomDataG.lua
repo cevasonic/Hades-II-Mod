@@ -6,6 +6,7 @@ RoomSetData.G =
 		RichPresence = "#RichPresence_G",
 		Icon = "GUI\\Screens\\BountyBoard\\Biome_Oceanus",
 		ResultText = "RunHistoryScreenResult_Oceanus",
+		DreamResultText = "RunHistoryScreenResult_Oceanus_Dream",
 		
 		ValidateSecretData = true,
 		HasHarvestPoint = true,
@@ -316,7 +317,9 @@ RoomSetData.G =
 		-- ShopSecretMusic = "/Music/CharonShopTheme",
 
 		LocationText = "Location_BiomeG",
+		DreamLocationText = "Location_BiomeG_Dream",
 		SaveProfileLocationText = "Location_BiomeG",
+		DreamSaveProfileLocationText = "Location_BiomeG_Dream",
 
 		NarrativeContextArt = "DialogueBackground_Oceanus",
 		NarrativeContextArtFlippable = false,
@@ -371,6 +374,14 @@ RoomSetData.G =
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeG_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -380,6 +391,14 @@ RoomSetData.G =
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
+				},
+			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeG_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
 				},
 			},
 		},
@@ -406,6 +425,8 @@ RoomSetData.G =
 		ForceAtBiomeDepthMax = 8,
 		LinkedRooms = { "G_Boss01", "G_Boss02" },
 
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
+
 		RushMaxRangeOverride = 475,
 
 		GameStateRequirements =
@@ -419,6 +440,49 @@ RoomSetData.G =
 		PickaxePointChance = 0.4,
 		ExorcismPointChance = 0.3,
 		FishingPointChance = 0.3,
+
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "G_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantGLotus" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantGLotus" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "G_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantGCattailSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantGCattailSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "G_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "OreGLime" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreGLime" },
+			},
+		},
 
 		WellShopSpawnChance = 0.0,
 		ChallengeSpawnChance = 0.0,
@@ -478,7 +542,16 @@ RoomSetData.G =
 								{ Name = "MelinoeAnyQuipSpeech" },
 							},
 
-							{ Cue = "/VO/MelinoeField_0257", Text = "What's everybody queuing for...?", PlayFirst = true },
+							{ Cue = "/VO/MelinoeField_0257", Text = "What's everybody queuing for...?", PlayFirst = true,
+								GameStateRequirements =
+								{
+									{
+										Path = { "GameState", "RoomsEntered", "G_Boss01" },
+										Comparison = "<=",
+										Value = 5,
+									},
+								}
+							},
 							{ Cue = "/VO/MelinoeField_0258", Text = "Here for the show?" },
 							{ Cue = "/VO/MelinoeField_0259", Text = "Show's about to start..." },
 							{ Cue = "/VO/MelinoeField_0260", Text = "I have a season pass." },
@@ -541,6 +614,7 @@ RoomSetData.G =
 				},
 			},
 		},
+		ZoomFractionAlt = 0.93,
 
 		-- so that guitars don't cut out & create silence at start of G_Boss01
 		IgnoreStemMixer = true,
@@ -552,15 +626,7 @@ RoomSetData.G =
 		InheritFrom = { "BaseG" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 2,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 
 		BackupCauseOfDeath = "Scylla",
@@ -580,13 +646,16 @@ RoomSetData.G =
 		ResetBinksOnExit = true,
 		LegalEncounters = { "BossScylla01", },
 		ForcedReward = "MixerGBossDrop",
+		CanSpawnDreamReward = true,
+		SkipTimedDropResourceInDream = true,
 		NoReroll = true,
 
 		EntranceFunctionName = "RoomEntranceBossBiomeG",
-		EntranceFunctionArgs = { ScyllaId = 557843 },
+		EntranceFunctionArgs = { ScyllaId = 557843, DreamEnterWait = 0.75 },
 		IntroSequenceDuration = 2.7,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.68,
+		ZoomFractionAlt = 0.78,
 		FlipHorizontalChance = 0.0,
 
 		FamiliarsPreferSpawnPointMovement = true,
@@ -610,6 +679,7 @@ RoomSetData.G =
 					-- Vocals handled in Scylla's EndTextLinesThreadedFunctionName
 					SkipBossMusic = true,
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "ScyllaBossDreamRunIntro",
 				},
 			},
 		},	
@@ -617,6 +687,11 @@ RoomSetData.G =
 		StartThreadedEvents =
 		{
 			--{ FunctionName = "FloodManager", GameStateRequirements = { ChanceToPlay = 0.0, }, Args = { Types = { "FloodTrap" }, IntervalMin = 7.0, IntervalMax = 15.0, FirstIntervalMin = 2.0, FirstIntervalMax = 3.0 } },
+		},
+
+		EnterDreamVoiceLines =
+		{
+			{ GlobalVoiceLines = "ScyllaShowStartVoiceLines" },
 		},
 
 		EnterVoiceLines =
@@ -684,8 +759,27 @@ RoomSetData.G =
 						}
 					}
 				}
-			}
+			},
+			[801075] =
+			{
+				Name = "ScyllaFan",
+				DestroyIfNotSetup = true,
+				SetupGameStateRequirements =
+				{
+					NamedRequirements = { "ScyllaFanActive" },
+				},
 
+				SetupEvents =
+				{
+					{
+						FunctionName = "SetupScyllaFan",
+					},
+				},
+
+				LineHistoryName = "NPC_ScyllaFan_01",
+				SubtitleColor = Color.OdysseusVoice,
+				BlockStatusAnimations = true,
+			},
 		},
 
 		InspectPoints =
@@ -752,15 +846,7 @@ RoomSetData.G =
 		InheritFrom = { "BaseG" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 2,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		BackupCauseOfDeath = "Scylla",
@@ -780,8 +866,10 @@ RoomSetData.G =
 
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
-		LegalEncounters = { "BossScylla02", },
+		LegalEncounters = { "BossScylla02" },
 		ForcedReward = "MixerGBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		NoReroll = true,
 
 		EntranceFunctionName = "RoomEntranceBoss02BiomeG",
@@ -789,10 +877,12 @@ RoomSetData.G =
 		{
 			ScyllaId = 609649,
 			TentacleIdsOrdered = { 737568, 737569, 737572, 737573, 737571, 737570 },
+			DreamEnterWait = 0.75,
 		},
 		IntroSequenceDuration = 2.7,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.63,
+		ZoomFractionAlt = 0.75,
 		FlipHorizontalChance = 0.0,
 
 		FamiliarsPreferSpawnPointMovement = true,
@@ -820,6 +910,7 @@ RoomSetData.G =
 					-- Vocals handled in Scylla's EndTextLinesThreadedFunctionName
 					SkipBossMusic = true,
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "ScyllaBossDreamRunIntro",
 				},
 			},
 		},
@@ -833,6 +924,40 @@ RoomSetData.G =
 		StartThreadedEvents =
 		{
 			--{ FunctionName = "FloodManager", GameStateRequirements = { ChanceToPlay = 0.0, }, Args = { Types = { "FloodTrap" }, IntervalMin = 7.0, IntervalMax = 15.0, FirstIntervalMin = 2.0, FirstIntervalMax = 3.0 } },
+		},
+
+		EnterDreamVoiceLines =
+		{
+			{ GlobalVoiceLines = "ScyllaShowStartVoiceLines" },
+		},
+
+		EnterVoiceLines =
+		{
+			{ GlobalVoiceLines = "ScyllaGreetingLines" },
+		},
+
+		ObstacleData =
+		{
+			[801077] =
+			{
+				Name = "ScyllaFan",
+				DestroyIfNotSetup = true,
+				SetupGameStateRequirements =
+				{
+					NamedRequirements = { "ScyllaFanActive" },
+				},
+
+				SetupEvents =
+				{
+					{
+						FunctionName = "SetupScyllaFan",
+					},
+				},
+
+				LineHistoryName = "NPC_ScyllaFan_01",
+				SubtitleColor = Color.OdysseusVoice,
+				BlockStatusAnimations = true,
+			},
 		},
 
 		InspectPoints =
@@ -916,6 +1041,7 @@ RoomSetData.G =
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.9,
 
 		FlipHorizontalChance = 0.0,
 		IntroSequenceDuration = 0.9,
@@ -1169,7 +1295,6 @@ RoomSetData.G =
 		LegalEncounters = { "Empty" },
 		Starting = true,
 		IntroSequenceDuration = 0.9,
-		NoReward = true,
 		NoReroll = true,
 		SkipLastKillPresentation = true,
 		HideRewardPreview = true,
@@ -1192,7 +1317,24 @@ RoomSetData.G =
 		--ExorcismPointChance = 0.02,
 		FishingPointChance = 0.02,
 
+		ForcedRewardStore = "RunProgress",
+		IneligibleRewards = RewardSets.OpeningRoomBans,
+		SpawnRewardOnId = 40055,
+		DisableRewardMagnetisim = true,
+		RewardGameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				Path = { "CurrentRun", "EnteredBiomes" },
+				Comparison = "==",
+				Value = 0,
+			},
+		},
+
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.90,
 		CameraZoomWeights =
 		{
 			[569393] = 1.00,
@@ -1287,10 +1429,11 @@ RoomSetData.G =
 		{
 			Threaded = true,
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeG",
+					DreamText = "Location_BiomeG_Dream",
 					AnimationName = "InfoBannerOceanusIn",
 					AnimationOutName = "InfoBannerOceanusOut",
 					Delay = 2.0,
@@ -1440,8 +1583,14 @@ RoomSetData.G =
 				SuccessiveChanceToPlayAll = 0.25,
 				GameStateRequirements =
 				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "BlockDeathKeepsake" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					NamedRequirements = { "TrueFatesQuestCanBeCompleted" },
-					NamedRequirementsFalse = { "ReachedEpilogue" },
 				},
 
 				{ Cue = "/VO/MelinoeField_5026", Text = "All right, Fates, where are you...?", PlayFirst = true },
@@ -1638,16 +1787,6 @@ RoomSetData.G =
 					},
 				},
 				{ Cue = "/VO/MelinoeField_0133", Text = "{#Emph}Brr{#Prev}, that's cold..." },
-				--[[
-				{ Cue = "/VO/MelinoeField_0134", Text = "No Siren song this time...", PreLineWait = 7.65,
-					GameStateRequirements =
-					{
-						{
-							PathFalse = { "AudioState", "SecretMusicId" },
-						}
-					},
-				},
-				]]--
 			},
 		},
 
@@ -1692,6 +1831,7 @@ RoomSetData.G =
 		FrogFamiliarMaxLeapDistance = 800,
 
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.95,
 
 		-- Ambience = "/Leftovers/Object Ambiences/ShipwreckAmbience",
 		SpawnRewardGlobalVoiceLines = "FoundShopVoiceLines",
@@ -1751,6 +1891,7 @@ RoomSetData.G =
 		LegalEncounters = { "MiniBossWaterUnit" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.82,
+		ZoomFractionAlt = 0.91,
 
 		ForcedRewardStore = "RunProgress",
 		EligibleRewards = { "Boon" },
@@ -1830,6 +1971,7 @@ RoomSetData.G =
 		LegalEncounters = { "MiniBossCrawler" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.82,
+		ZoomFractionAlt = 0.95,
 
 		RushMaxRangeOverride = 475,
 
@@ -1897,6 +2039,7 @@ RoomSetData.G =
 		LegalEncounters = { "MiniBossJellyfish" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.90,
 
 		ForcedRewardStore = "RunProgress",
 		EligibleRewards = { "Boon" },
@@ -1971,12 +2114,14 @@ RoomSetData.G =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.90,
 	},
 
 	G_Combat02 =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		LockExtraExitsChance = 0.35,
+		ZoomFractionAlt = 0.90,
 	},
 
 	G_Combat03 =
@@ -1992,6 +2137,7 @@ RoomSetData.G =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.89,
 	},
 
 	G_Combat04 =
@@ -2010,6 +2156,7 @@ RoomSetData.G =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	G_Combat05 =
@@ -2027,6 +2174,7 @@ RoomSetData.G =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.87,
 	},
 
 	G_Combat06 =
@@ -2043,6 +2191,7 @@ RoomSetData.G =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.89,
 	},
 
 	G_Combat07 =
@@ -2061,12 +2210,14 @@ RoomSetData.G =
 				Value = 3,
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	G_Combat08 =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.85,
 		
 		IneligibleRewards = { "Devotion" },
 
@@ -2087,6 +2238,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.96,
 		LockExtraExitsChance = 0.35,
 
 		RushMaxRangeOverride = 475,
@@ -2105,6 +2257,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.96,
 
 		RushMaxRangeOverride = 475,
 
@@ -2122,6 +2275,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.94,
 
 		RushMaxRangeOverride = 475,
 
@@ -2139,6 +2293,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.88,
 
 		GameStateRequirements =
 		{
@@ -2154,6 +2309,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.9,
 
 		GameStateRequirements =
 		{
@@ -2169,6 +2325,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.91,
 		
 		RushMaxRangeOverride = 475,
 
@@ -2186,6 +2343,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.735,
+		ZoomFractionAlt = 0.84,
 
 		GameStateRequirements =
 		{
@@ -2201,6 +2359,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.9,
 		
 		GameStateRequirements =
 		{
@@ -2216,6 +2375,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.93,
 		
 		RushMaxRangeOverride = 525,
 		
@@ -2233,6 +2393,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.93,
 
 		GameStateRequirements =
 		{
@@ -2253,6 +2414,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.9,
 
 		GameStateRequirements =
 		{
@@ -2268,6 +2430,7 @@ RoomSetData.G =
 	{
 		InheritFrom = { "BaseG_Combat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.9,
 
 		GameStateRequirements =
 		{
@@ -2365,6 +2528,7 @@ RoomSetData.G =
 			},
 
 		},
+		ZoomFractionAlt = 0.93,
 
 	},
 
@@ -2511,6 +2675,7 @@ RoomSetData.G =
 		},
 
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.93,
 		TimerBlock = "StoryRoom",
 
 		FlipHorizontalChance = 0.0,

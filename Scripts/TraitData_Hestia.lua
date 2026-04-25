@@ -400,6 +400,15 @@ OverwriteTableKeys( TraitData, {
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Hestia",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			{
 				FalseTraitName = "LobCloseAttackAspect",
@@ -1598,10 +1607,12 @@ OverwriteTableKeys( TraitData, {
 				MultihitProjectileWhitelist = 
 				{
 					"ProjectileStaffSingle",
+					"ProjectileDaggerThrow",
 				},
 				MultihitProjectileConditions = 
 				{
 					ProjectileStaffSingle = { Cooldown = 0.5 },
+					ProjectileDaggerThrow = { Cooldown = 0.12, },
 				},
 				ManaGain = 
 				{

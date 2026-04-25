@@ -493,7 +493,7 @@ function CheckManaOnHit( victim, functionArgs, triggerArgs )
 	if triggerArgs.SourceProjectile ~= nil and functionArgs.MultihitProjectileWhitelistLookup and functionArgs.MultihitProjectileWhitelistLookup[triggerArgs.SourceProjectile] and functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile] then
 		local conditions = functionArgs.MultihitProjectileConditions[triggerArgs.SourceProjectile]
 		passesHitCheck = true
-		if conditions.Cooldown and not CheckCooldown( "PoseidonSplash", conditions.Cooldown ) then
+		if conditions.Cooldown and not CheckCooldown( "HestiaMana", conditions.Cooldown ) then
 			passesHitCheck = false
 		end
 	end

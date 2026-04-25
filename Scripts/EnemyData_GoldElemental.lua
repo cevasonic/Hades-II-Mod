@@ -2,7 +2,7 @@ UnitSetData.GoldElemental =
 {
 	GoldElemental =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 
 		MaxHealth = 510,
 		HealthBarOffsetY = -200,

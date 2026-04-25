@@ -175,7 +175,6 @@ UnitSetData.SatyrSapper =
 
 		SpellSummonDataOverrides =
 		{
-			HideHealthBar = false,
 			WeaponOptions =
 			{
 				"SatyrSapperRocket_PrometheusAlly"

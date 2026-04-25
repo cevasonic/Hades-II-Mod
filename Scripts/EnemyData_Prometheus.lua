@@ -2,7 +2,7 @@ UnitSetData.Prometheus =
 {
 	Prometheus =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BasePEnemy", "BaseVulnerableEnemy"},
 		Portrait = "Portrait_Prometheus_Default_01",
 		Groups = { "NPCs", "GroundEnemies" },
 		SubtitleColor = Color.PrometheusVoice,
@@ -32,17 +32,22 @@ UnitSetData.Prometheus =
 		SpeechCooldownTime = 9,
 		SelfBuffDamage = 100, -- used for text
 
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
+
 		OnDeathFunctionName = "PrometheusKillPresentation",
 		OnDeathFunctionArgs =
 		{
 			Message = "PrometheusDefeatedMessage",
 			CameraPanTime = 1.5,
 			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
-			BatsAfterDeath = false,
 			FlashRed = true,
 			FlashDuration = 0.45,
 			DeathFlashOffsetY = 50,
 			AddInterBiomeTimerBlock = true,
+			IsBiomeBoss = true,
 			EndAngle = 210,
 			KillerEndAngle = 30,
 			PanZoomFraction = 1.3,
@@ -53,8 +58,13 @@ UnitSetData.Prometheus =
 		DeathFx = "PrometheusDeathFxIn",
 		DeathSound = "/SFX/StabSplatterEndSequence",
 		DeathPanOffsetY = -170,
-
 		ClearChillOnDeath = true,
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
 
 		SpawnAnimation = "Enemy_Prometheus_IntroIdle",
 
@@ -63,19 +73,98 @@ UnitSetData.Prometheus =
 		HealthBarOffsetY = -275,
 		AltHealthBarTextIds =
 		{
-			{ TextId = "NPC_Prometheus_01",
+			{
+				TextId = "NPC_Prometheus_01",
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				TextId = "Prometheus_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
+				},
+			},
+			{
+				TextId = "Prometheus_DreamRun02",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
 				},
 			},
 		},
 
-		BossDifficultyShrineRequiredCount = 3,
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.26,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.46,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.4,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.75,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.8,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	--PlayerMultiplier = 1,
+				},
+			},
+		},
+
 		SetupEvents =
 		{
 			{
@@ -102,14 +191,29 @@ UnitSetData.Prometheus =
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/PrometheusDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 3,
-						},
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
@@ -310,7 +414,13 @@ UnitSetData.Prometheus =
 				NewVulnerability = false,
 				AIData =
 				{
-					AIEndLastAlive = true,
+					AIEndRequirements =
+					{
+						{
+							FunctionName = "RequiredNoneAlive",
+							FunctionArgs = { Names = { "Heracles" } },
+						}
+					},
 				},
 				EndThreadNameWaits = { "PrometheusHeraclesRoleSwitcher" },
 			},
@@ -543,7 +653,14 @@ UnitSetData.Prometheus =
 				{ Cue = "/VO/Prometheus_0175", Text = "Do you see?" },
 				{ Cue = "/VO/Prometheus_0176", Text = "I'll not hold back." },
 				{ Cue = "/VO/Prometheus_0177", Text = "I'll burn you to ash.", PlayFirst = true },
-				{ Cue = "/VO/Prometheus_0393", Text = "You're not prepared for what awaits you at the summit!" },
+				{ Cue = "/VO/Prometheus_0393", Text = "You're not prepared for what awaits you at the summit!",
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/Prometheus_0394", Text = "Come, show me what little foresight you can muster!" },
 				{ Cue = "/VO/Prometheus_0395", Text = "You need but to evade three waves of flame, but {#Emph}where?" },
 				{ Cue = "/VO/Prometheus_0396", Text = "Choose your path carefully, Agent of Change! Lest you burn." },
@@ -928,6 +1045,16 @@ UnitSetData.Prometheus =
 			{ Cue = "/VO/Prometheus_0210", Text = "{#Emph}Ah{#Prev}, yes." },
 			{ Cue = "/VO/Prometheus_0211", Text = "Is that all?" },
 			{ Cue = "/VO/Prometheus_0212", Text = "No you don't." },
+			{ Cue = "/VO/Prometheus_0239", Text = "How dare you." },
+			{ Cue = "/VO/Prometheus_0241", Text = "I'll get you for that." },
+			{ Cue = "/VO/Prometheus_0240", Text = "You'll regret that!", PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "SpeechRecord", "/VO/Prometheus_0213" },
+					},
+				},
+			},
 			{ Cue = "/VO/Prometheus_0213", Text = "You'll regret that...",
 				GameStateRequirements =
 				{
@@ -992,12 +1119,75 @@ UnitSetData.Prometheus =
 				{ Cue = "/VO/Prometheus_0465", Text = "This was to be my future, then..." },
 				{ Cue = "/VO/Prometheus_0466", Text = "You cannot break me; that I know." },
 				{ Cue = "/VO/Prometheus_0467", Text = "The strength of Hades... blast..." },
-				{ Cue = "/VO/Prometheus_0468", Text = "Far worse... awaits... above..." },
+				{ Cue = "/VO/Prometheus_0468", Text = "Far worse... awaits... above...",
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/Prometheus_0470", Text = "I shall never... submit to you..." },
 				{ Cue = "/VO/Prometheus_0472", Text = "Who would have... fought for you...?" },
 				{ Cue = "/VO/Prometheus_0446", Text = "So... swift... {#Emph}urgh..." },
-				{ Cue = "/VO/Prometheus_0447", Text = "In the blink... of an eye..." },
-				{ Cue = "/VO/Prometheus_0448", Text = "I could not... keep up..." },
+				{ Cue = "/VO/Prometheus_0447", Text = "In the blink... of an eye...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						OrRequirements =
+						{
+							{
+								{
+									PathTrue = { "CurrentRun", "EncounterClearStats", "BossPrometheus01" },
+								},
+								{
+									Path = { "CurrentRun", "EncounterClearStats", "BossPrometheus01", "ClearTime" },
+									Comparison = "<=",
+									Value = 40.0
+								},
+							},
+							{
+								{
+									PathTrue = { "CurrentRun", "EncounterClearStats", "BossPrometheus02" },
+								},
+								{
+									Path = { "CurrentRun", "EncounterClearStats", "BossPrometheus02", "ClearTime" },
+									Comparison = "<=",
+									Value = 40.0
+								},
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/Prometheus_0448", Text = "I could not... keep up...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						OrRequirements =
+						{
+							{
+								{
+									PathTrue = { "CurrentRun", "EncounterClearStats", "BossPrometheus01" },
+								},
+								{
+									Path = { "CurrentRun", "EncounterClearStats", "BossPrometheus01", "ClearTime" },
+									Comparison = "<=",
+									Value = 45.0
+								},
+							},
+							{
+								{
+									PathTrue = { "CurrentRun", "EncounterClearStats", "BossPrometheus02" },
+								},
+								{
+									Path = { "CurrentRun", "EncounterClearStats", "BossPrometheus02", "ClearTime" },
+									Comparison = "<=",
+									Value = 45.0
+								},
+							},
+						},
+					},
+				},
 				{ Cue = "/VO/Prometheus_0462", Text = "My wounds... shall heal again...",
 					GameStateRequirements =
 					{
@@ -1007,15 +1197,31 @@ UnitSetData.Prometheus =
 					},
 				},
 				{ Cue = "/VO/Prometheus_0449", Text = "You're... far too quick...",
+					PlayFirst = true,
 					GameStateRequirements =
 					{
+						OrRequirements =
 						{
-							FunctionName = "RequiredHealthFraction",
-							FunctionArgs = { Comparison = ">=", Value = 0.6 },
-						},
-						{
-							FunctionName = "RequiredConsecutiveClearsOfRoom",
-							FunctionArgs = { Name = "P_Boss01", Count = 3 },
+							{
+								{
+									PathTrue = { "CurrentRun", "EncounterClearStats", "BossPrometheus01" },
+								},
+								{
+									Path = { "CurrentRun", "EncounterClearStats", "BossPrometheus01", "ClearTime" },
+									Comparison = "<=",
+									Value = 40.0
+								},
+							},
+							{
+								{
+									PathTrue = { "CurrentRun", "EncounterClearStats", "BossPrometheus02" },
+								},
+								{
+									Path = { "CurrentRun", "EncounterClearStats", "BossPrometheus02", "ClearTime" },
+									Comparison = "<=",
+									Value = 40.0
+								},
+							},
 						},
 					},
 				},
@@ -1025,17 +1231,16 @@ UnitSetData.Prometheus =
 						{
 							PathTrue = { "GameState", "RoomsEntered", "Q_Boss01" },
 						},
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
 					},
 				},
 				{ Cue = "/VO/Prometheus_0469", Text = "Even with Heracles, I... {#Emph}urgh...",
 					PlayFirst = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 3,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/Prometheus_0460", Text = "I cannot stop you... yet I fight...",
@@ -1070,23 +1275,12 @@ UnitSetData.Prometheus =
 						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+						NamedRequirementsFalse = { "StandardPackageBountyActive" },
 					},
 				},
-
-				--[[
-				{ Cue = "/VO/Prometheus_0107", Text = "...We'll meet again...!", PlayFirst = true },
-				{ Cue = "/VO/Prometheus_0108", Text = "...Curse you gods...!" },
-				{ Cue = "/VO/Prometheus_0109", Text = "...I'll get you gods for this!" },
-				{ Cue = "/VO/Prometheus_0110", Text = "...Gods save you!" },
-				{ Cue = "/VO/Prometheus_0254", Text = "...We're not finished!" },
-				{ Cue = "/VO/Prometheus_0255", Text = "...This changes nothing!" },
-				{ Cue = "/VO/Prometheus_0256", Text = "...I shall be back!" },
-				{ Cue = "/VO/Prometheus_0257", Text = "...Time cannot be stopped!", PlayFirst = true },
-				{ Cue = "/VO/Prometheus_0258", Text = "...Aetos, we fly!" },
-				{ Cue = "/VO/Prometheus_0259", Text = "...Fly, Aetos!" },
-				{ Cue = "/VO/Prometheus_0260", Text = "...Get us out, Aetos!" },
-				{ Cue = "/VO/Prometheus_0261", Text = "...You'll never defeat us!" },
-				]]--
 			},
 		},
 
@@ -1096,6 +1290,7 @@ UnitSetData.Prometheus =
 			{
 				{ Name = "BossVanquishedSpeech", Time = 60 },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
 			{ GlobalVoiceLines = "SeleneVictoryVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
@@ -1111,15 +1306,31 @@ UnitSetData.Prometheus =
 				{ Cue = "/VO/MelinoeField_2520", Text = "Go lick your wounds." },
 				{ Cue = "/VO/MelinoeField_2521", Text = "Saw that coming." },
 				{ Cue = "/VO/MelinoeField_2522", Text = "Enough of his foresight." },
+				{ Cue = "/VO/MelinoeField_2806", Text = "Bye, Aetos." },
+				{ Cue = "/VO/MelinoeField_2807", Text = "Fly on home!" },
+				{ Cue = "/VO/MelinoeField_5594", Text = "Perhaps we could have met as allies, not as foes...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5595", Text = "Letting me beat you even in my dreams...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_3742", Text = "They're in league...",
 					PlayFirst = true, PlayOnce = true,
 					GameStateRequirements =
 					{
-						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 3,
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_5202", Text = "They're tough...",
@@ -1127,13 +1338,9 @@ UnitSetData.Prometheus =
 					GameStateRequirements =
 					{
 						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 3,
-						},
-						{
 							PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_3742" },
 						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_5203", Text = "How long have they conspired...?",
@@ -1141,13 +1348,9 @@ UnitSetData.Prometheus =
 					GameStateRequirements =
 					{
 						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 3,
-						},
-						{
 							PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_3742" },
 						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_5204", Text = "So long, you two...!",
@@ -1155,14 +1358,10 @@ UnitSetData.Prometheus =
 					GameStateRequirements =
 					{
 						{
-							Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-							Comparison = ">=",
-							Value = 3,
-						},
-						{
 							Path = { "GameState", "SpeechRecord" },
 							HasAll = { "/VO/MelinoeField_5202", "/VO/MelinoeField_5203" },
 						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 				},
 				{ Cue = "/VO/MelinoeField_2523", Text = "See you later!",
@@ -1309,16 +1508,12 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathFalse = { "GameState", "TextLinesRecord", "PrometheusAboutAltFight01_B" },
 					},
 					{
 						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/MelinoeField_3551", UsePlayerSource = true,
@@ -1362,16 +1557,12 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathFalse = { "GameState", "TextLinesRecord", "PrometheusAboutAltFight01" },
 					},
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/MelinoeField_3999", UsePlayerSource = true,
@@ -1418,13 +1609,9 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 					OrRequirements =
 					{
 						{
@@ -1462,11 +1649,6 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
 					},
 					{
@@ -1479,6 +1661,7 @@ UnitSetData.Prometheus =
 						Comparison = "<=",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0304",
 					Text = "If there exists a downside to having the ferocious strength of Heracles at one's call, it must be overconfidence. How could we possibly not prevail, I theorized. Well... there were ways." },
@@ -1500,13 +1683,9 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "HeraclesGift03" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3751", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Intense_01",
@@ -1530,13 +1709,9 @@ UnitSetData.Prometheus =
 						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3752", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Intense_01",
@@ -1560,13 +1735,9 @@ UnitSetData.Prometheus =
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusAboutAltFight05" },
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3929", UsePlayerSource = true,
 					Text = "Aetos has you to himself again! They say that Heracles once slew an entire flock of voracious birds... must make yours a bit uneasy." },
@@ -1588,13 +1759,9 @@ UnitSetData.Prometheus =
 						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0309",
 					PreLineAnim = "Heracles_Hub_Greet",
@@ -1616,11 +1783,7 @@ UnitSetData.Prometheus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3753", UsePlayerSource = true,
 					Text = "We have some matters to discuss, Prometheus! So why not ask your big friend there to step aside? It would be rather rude of him to eavesdrop on our private conversations." },
@@ -1648,11 +1811,7 @@ UnitSetData.Prometheus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0316",
 					Text = "If I may, Heracles? It is not necessary to converse with her like this. We could simply attack without warning." },
@@ -1673,14 +1832,10 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						Path = { "CurrentRun", "EncountersOccurredCache" },
 						HasAny = { "HeraclesCombatN", "HeraclesCombatN2", "HeraclesCombatO", "HeraclesCombatO2", "HeraclesCombatP", "HeraclesCombatP2" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3755", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Intense_01",
@@ -1701,11 +1856,7 @@ UnitSetData.Prometheus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0221",
 					Source = "NPC_Heracles_01",
@@ -1721,15 +1872,11 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						Path = { "GameState", "LastBossHealthBarRecord", "Heracles" },
 						Comparison = "<=",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0222",
 					Source = "NPC_Heracles_01",
@@ -1751,11 +1898,7 @@ UnitSetData.Prometheus =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3757", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Intense_01",
@@ -1782,15 +1925,11 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						Path = { "GameState", "SpentShrinePointsCache" },
 						Comparison = ">=",
 						Value = 10,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0226",
 					Source = "NPC_Heracles_01",
@@ -1814,15 +1953,11 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						Path = { "GameState", "SpentShrinePointsCache" },
 						Comparison = ">=",
 						Value = 20,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0228",
 					Source = "NPC_Heracles_01",
@@ -1845,11 +1980,6 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						Path = { "GameState", "LastBossHealthBarRecord", "Prometheus" },
 						Comparison = "<=",
 						Value = 0,
@@ -1859,6 +1989,7 @@ UnitSetData.Prometheus =
 						Comparison = "<=",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0230",
 					Source = "NPC_Heracles_01",
@@ -1913,11 +2044,7 @@ UnitSetData.Prometheus =
 						Path = { "GameState", "EquippedFamiliar" },
 						IsNone = { "FrogFamiliar", "RavenFamiliar", "CatFamiliar", "HoundFamiliar", "PolecatFamiliar" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0128",
 					Text = "My forces almost stopped you but they didn't quite succeed. Yet even now you're outnumbered against Aetos and me." },
@@ -1944,11 +2071,7 @@ UnitSetData.Prometheus =
 						Path = { "GameState", "EquippedFamiliar" },
 						IsAny = { "FrogFamiliar", "RavenFamiliar", "CatFamiliar", "HoundFamiliar", "PolecatFamiliar" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0128_B",
 					Text = "My forces almost stopped you but they didn't quite succeed. Now you're against Aetos and me." },
@@ -2355,6 +2478,10 @@ UnitSetData.Prometheus =
 						HasAll = { "DoraAboutPrometheus02" }
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/MelinoeField_2886", UsePlayerSource = true,
 					Text = "Tell me, Titan: Do you recall a mortal woman by the name of Dora? Her Shade responded strangely when I mentioned you, but can't seem to remember what you did." },
 				{ Cue = "/VO/Prometheus_0137",
@@ -2377,6 +2504,10 @@ UnitSetData.Prometheus =
 						HasAll = { "DoraAboutPrometheus03", "DoraGrantsCosmeticsShop01", "DoraBathHouse02" }
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/Prometheus_0139",
 					Text = "Your companion, Dora... she does not remember me, not yet. But she shall! And in so doing, remember why she chose to forget me to begin with... and forget so much more." },
 				{ Cue = "/VO/MelinoeField_2888", UsePlayerSource = true,
@@ -2396,6 +2527,10 @@ UnitSetData.Prometheus =
 						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutMemories02" },
 					},
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpDora" },
+
 				{ Cue = "/VO/MelinoeField_3951", UsePlayerSource = true,
 					Text = "You {#Emph}do {#Prev}know Dora, don't you? She and some brother of yours... they were {#Emph}wed? {#Prev}And somehow this resulted in her letting loose all sorts of daemons in the mortal world?" },
 
@@ -2777,6 +2912,16 @@ UnitSetData.Prometheus =
 					PreLineThreadedFunctionName = "PlayPrometheusTauntAnim",
 					PreLineFunctionName = "StartBossRoomMusic",
 					Text = "That I do. I but spur you to consider the possibility, and your place in their scheme; and, I suppose, in mine." },
+
+				PrePortraitExitFunctionName = "QueueQuestProgressUpdate",
+				PrePortraitExitFunctionArgs =
+				{
+					QuestName = "QuestRescueFatesProgress",
+					GameStateRequirements =
+					{
+						NamedRequirements = { "TrueFatesQuestUnlocked" },
+					},
+				},
 			},
 
 			PrometheusAboutBrothers01 =
@@ -2865,11 +3010,7 @@ UnitSetData.Prometheus =
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0336",
 					Text = "You bear an artifact belonging to one whom I know, I sense it there. How did you get it...? {#Emph}Ah{#Prev}, no need to say; doubtless the gifting custom of Olympus, nothing more." },
@@ -2891,7 +3032,7 @@ UnitSetData.Prometheus =
 						Path = { "RoomsEntered" },
 						TableValuesToCount = { "F_Opening01", "F_Opening02", "F_Opening03" },
 						Comparison = ">=",
-						Value = 4,
+						Value = 3,
 					},
 				},
 				{ Cue = "/VO/Prometheus_0324",
@@ -2911,7 +3052,7 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTimeStop" },
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeStormStop" },
 					},
 					{
 						PathFalse = { "GameState", "TyphonDefeatedWithStormStop" },
@@ -2936,7 +3077,7 @@ UnitSetData.Prometheus =
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "ZeusPalaceFirstMeeting" },
+						HasAny = { "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
 					},
 					{
 						PathTrue = { "GameState", "WorldUpgradesRevealed", "WorldUpgradeTimeStop" },
@@ -3014,7 +3155,7 @@ UnitSetData.Prometheus =
 				},
 				{ Cue = "/VO/MelinoeField_3961", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Intense_01",
-					Text = "The war is over, Titan! Drop the act. You still refer to Chronos as your master, and seem no less charitable towards the gods, despite now doing this for their sake not just yours." },
+					Text = "The war is over, Titan! Drop the act. You still refer to Chronos as your master, and seem no more charitable towards the gods, despite now doing this for their sake not just yours." },
 
 				{ Cue = "/VO/Prometheus_0350",
 					Text = "You know as well as I that the conditions of your climb need to approximate your prior path, if you are going to succeed. And I admit that the result I seek would otherwise not be possible. Thus, here we find ourselves." },
@@ -3145,11 +3286,7 @@ UnitSetData.Prometheus =
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" }
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/MelinoeField_3970", UsePlayerSource = true,
 					Text = "What of your companion Heracles? I suppose he's been in on your scheme this entire time as well. Appearing to defy the gods while serving them anyway." },
@@ -3214,7 +3351,7 @@ UnitSetData.Prometheus =
 							"BountyDaggerHeat12PBoss",
 							"BountyStaffHeat16PBoss",
 
-							"BountyShrineStaffPBoss ",
+							"BountyShrineStaffPBoss",
 							"BountyShrineDaggerPBoss",
 							"BountyShrineTorchPBoss",
 							"BountyShrineAxePBoss",
@@ -3242,7 +3379,7 @@ UnitSetData.Prometheus =
 						Path = { "GameState", "ActiveShrineBounty" },
 						IsAny =
 						{
-							"BountyShrineStaffQBoss ",
+							"BountyShrineStaffQBoss",
 							"BountyShrineDaggerQBoss",
 							"BountyShrineTorchQBoss",
 							"BountyShrineAxeQBoss",
@@ -3493,11 +3630,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0482",
 					PreLineThreadedFunctionName = "PlayPrometheusTauntAnim",
@@ -3508,11 +3641,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0483",
 					PreLineThreadedFunctionName = "PlayPrometheusTauntAnim",
@@ -3523,11 +3652,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0484",
 					PreLineThreadedFunctionName = "PlayPrometheusTauntAnim",
@@ -3540,11 +3665,6 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Prometheus" },
 					},
 					{
@@ -3552,6 +3672,7 @@ UnitSetData.Prometheus =
 						Comparison = "<=",
 						Value = 0,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0485",
 					PreLineThreadedFunctionName = "PlayPrometheusTauntAnim",
@@ -3624,16 +3745,12 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						SumPrevRuns = 3,
 						Path = { "RoomsEntered", "P_Boss01" },
 						Comparison = ">=",
 						Value = 3,
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0640",
 					Source = "NPC_Heracles_01",
@@ -3649,13 +3766,9 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						PathTrue = { "CurrentRun", "UseRecord", "HermesUpgrade" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0690",
 					Source = "NPC_Heracles_01",
@@ -3671,14 +3784,10 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						Path = { "CurrentRun" },
 						HasAny = { "ActiveBounty", "ActiveShrineBounty" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0691",
 					Source = "NPC_Heracles_01",
@@ -3690,11 +3799,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0349",
 					Source = "NPC_Heracles_01",
@@ -3708,11 +3813,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0642",
 					Source = "NPC_Heracles_01",
@@ -3728,14 +3829,10 @@ UnitSetData.Prometheus =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
-					{
 						FunctionName = "RequiredConsecutiveDeathsInRoom",
 						FunctionArgs = { Name = "P_Boss01", Count = 1 },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0402",
 					Source = "NPC_Heracles_01",
@@ -3749,11 +3846,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0342",
 					Source = "NPC_Heracles_01",
@@ -3765,11 +3858,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0340",
 					Source = "NPC_Heracles_01",
@@ -3781,11 +3870,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0031",
 					Source = "NPC_Heracles_01",
@@ -3800,11 +3885,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Heracles_0024",
 					Source = "NPC_Heracles_01",
@@ -3890,11 +3971,7 @@ UnitSetData.Prometheus =
 			{
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0030",
 					Portrait = "Portrait_Prometheus_Defeated_01",
@@ -3950,11 +4027,7 @@ UnitSetData.Prometheus =
 				PlayFirst = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Prometheus_0452_B",
 					Portrait = "Portrait_Prometheus_Defeated_01",
@@ -4108,11 +4181,7 @@ GlobalVoiceLines.PrometheusSpawnWaveLines =
 	{ Cue = "/VO/Prometheus_0253", Text = "I do not fight alone!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = "<",
-				Value = 3,
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 	},
 }
@@ -4238,7 +4307,8 @@ GlobalVoiceLines.PrometheusEagleComboLines =
 	ObjectType = "Prometheus",
 	Cooldowns =
 	{
-		-- { Name = "PrometheusSpokeRecently", Time = 4 },
+		{ Name = "PrometheusSpokeRecently", Time = 4 },
+		{ Name = "PrometheusFightStartQuip", Time = 4 },
 	},
 	TriggerCooldowns = { "PrometheusSpokeRecently", },
 
@@ -4250,6 +4320,7 @@ GlobalVoiceLines.PrometheusEagleComboLines =
 	{ Cue = "/VO/Prometheus_0076", Text = "Together, Aetos!" },
 	{ Cue = "/VO/Prometheus_0077", Text = "Get her, Aetos!" },
 	{ Cue = "/VO/Prometheus_0078", Text = "Aetos!" },
+	{ Cue = "/VO/Prometheus_0232", Text = "Aetos!" },
 	{ Cue = "/VO/Prometheus_0079", Text = "Talon Dive!" },
 	{ Cue = "/VO/Prometheus_0259", Text = "Fly, Aetos!" },
 	{ Cue = "/VO/Prometheus_0498", Text = "Get her!" },

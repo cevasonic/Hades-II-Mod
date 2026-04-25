@@ -21,6 +21,7 @@ RoomSetData.C =
 		SurfaceShopSpawnChance = 0.0,
 
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.0,
 		IntroSequenceDuration = 0.65,
 
 		FlipHorizontalChance = 0.0,
@@ -28,10 +29,14 @@ RoomSetData.C =
 
 		SecretMusic = "/Music/BlankMusicCue",
 		NextRoomResumeMusic = true,
+		BlockGiftBoons = true,	--Don't serve boons that drop objects
 
 		LocationText = "Location_BiomeC",
+		DreamLocationText = "Location_BiomeC_Dream",
 		SaveProfileLocationText = "Location_BiomeC",
+		DreamSaveProfileLocationText = "Location_BiomeC_Dream",
 		ResultText = "RunHistoryScreenResult_Elysium",
+		DreamResultText = "RunHistoryScreenResult_Elysium_Dream",
 		PauseBiomeState = true,
 
 		EntranceFunctionName = "RoomEntranceCBossPresentation",
@@ -76,6 +81,7 @@ RoomSetData.C =
 					DelayedStart = true,
 					SkipAngleTowardTarget = true,
 					SkipBossMusic = true,
+					DreamRunIntroFunctionName = "ZagreusBossDreamRunIntro",
 				},
 			},
 		},
@@ -89,29 +95,60 @@ RoomSetData.C =
 				SetupGameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "SorryButNoNotAtThisTime" },
+						PathTrue = { "GameState", "SpeechRecord", "/VO/Melinoe_5524" },
 					},
 				},
 				DestroyIfNotSetup = true,
-				InteractDistance = 200,
-				DistanceTriggers =
+
+				SetupEvents =
 				{
 					{
-						WithinDistance = 850,
-						ChanceToPlay = 0.25,
-						TriggerOnceThisRun = true,
-						FunctionName = "PlayEmoteSimple",
-						GameStateRequirements =
-						{
-							{
-								PathTrue = { "CurrentRun", "EnemyKills", "Zagreus" },
-							},
-						},
+						Threaded = true,
+						FunctionName = "DistanceTrigger",
 						Args =
 						{
-							TargetId = 543023,
-							AnimationName = "StatusIconSmileRed",
-							OffsetZ = 58,
+							Repeat = true,
+							WithinDistance = 450,
+
+							PostTriggerEvents =
+							{
+								{
+									GameStateRequirements =
+									{
+										{
+											PathTrue = { "CurrentRun", "EnemyKills", "Zagreus" },
+										},
+									},
+									FunctionName = "GenericPresentation",
+									Args =
+									{
+										VoiceLines =
+										{
+											RandomRemaining = true,
+											UsePlayerSource = true,
+											PlayOnceFromTableThisRun = true,
+											-- SuccessiveChanceToPlay = 0.25,
+
+											PreLineThreadedFunctionName = "PlayEmoteSimple",
+											PreLineThreadedFunctionArgs =
+											{
+												TargetId = 543023,
+												AnimationName = "StatusIconSmileRed",
+												OffsetZ = -30,
+											},
+
+											{ Cue = "/VO/MelinoeField_4804", Text = "Good to see you again, good Shade!", PlayFirst = true },
+											{ Cue = "/VO/MelinoeField_4805", Text = "He fought well, good Shade." },
+											{ Cue = "/VO/MelinoeField_4806", Text = "Hello again, good Shade!" },
+											{ Cue = "/VO/MelinoeField_4807", Text = "You're not upset are you, good Shade?" },
+											{ Cue = "/VO/MelinoeField_5361", Text = "Forgive me, won't you, good Shade?" },
+											{ Cue = "/VO/MelinoeField_5362", Text = "I don't mean to test your loyalties, good Shade...!" },
+											{ Cue = "/VO/MelinoeField_5363", Text = "Cheers for believing in us, good Shade!" },
+											{ Cue = "/VO/MelinoeField_5364", Text = "Sorry about the outcome here, good Shade." },
+										},
+									},
+								},
+							},
 						},
 					},
 				},

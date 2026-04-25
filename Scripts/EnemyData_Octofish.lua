@@ -3,7 +3,7 @@ UnitSetData.Octofish =
 
 	Octofish =
 	{
-		InheritFrom = { "OceanusUnitData", "BaseVulnerableEnemy" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "BaseVulnerableEnemy" },
 
 		ActivateAnimation = "Enemy_Octofish_Spawn",
 		ActivateDuration = 0.9,
@@ -122,10 +122,15 @@ UnitSetData.Octofish =
 
 	Octofish_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "Octofish_Miniboss" },
+		InheritFrom = { "SuperElite", "BaseIEnemy", "Octofish_Miniboss" },
 		MaxHealth = 1000,
 		HealthBuffer = 5000,
 		BlockRaiseDead = false,
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 	},
 
 }

@@ -6,7 +6,8 @@
 		InheritFrom = { "NPC_Neutral", "NPC_Giftable" },
 
 		Portrait = "Portrait_Arachne_Default_01",
-		AnimOffsetZ = 80,
+		AnimOffsetZ = 180,
+		HitSparkOffsetZ = 100,
 		Groups = { "NPCs" },
 		SpeakerName = "Arachne",
 		LoadPackages = { "Arachne", },
@@ -22,6 +23,52 @@
 		UpgradeSelectedSound = "/SFX/Menu Sounds/KeepsakeArachneSash2",
 		MenuTitle = "ArachneCostumeMenu_Title",
 		BoonInfoTitleText = "Codex_BoonInfo_Arachne",
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					ForceTextLines = "ArachneDreamRun",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/ArachneDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+					{
+						PathFalse = { "CurrentRun", "Hero", "IsDead" },
+					},
+				},
+			},
+		},
 
 		FlavorTextIds =
 		{
@@ -466,6 +513,13 @@
 						Comparison = ">=",
 						Value = 3,
 					},
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "N_Opening01" },
+						Comparison = ">=",
+						Value = 2,
+					},
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
@@ -478,6 +532,87 @@
 					Text = "I'm sorry that I worried you. My task requires that I head up to the surface now, as well as down below. It's a big adjustment for me there." },
 				{ Cue = "/VO/Arachne_0088",
 					Text = "You went {#Emph}that {#Prev}way? {#Emph}Ha ha ha ha{#Prev}, I don't so much as miss it anymore, where I came from. Well, you must know your way around. But if you need a local's point of view, you need but ask." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneAboutTimePassing01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeSurfacePenaltyCure" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneAboutSurface01" },
+					},
+					{
+						SumPrevRuns = 4,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "N_Opening01" },
+						Comparison = ">=",
+						Value = 2,
+					},
+					{
+						PathFalse = { "PrevRun", "RoomsEntered", "F_Story01" },
+					},
+					{
+						Path = { "GameState", "GamePhase" },
+						Comparison = "~=",
+						Value = 5,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				{ Cue = "/VO/Arachne_0426",
+					Text = "You've lately been up to the surface more and more. You don't truly like it better there, do you?" },
+
+				{ Cue = "/VO/MelinoeField_4412", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Oh, no. I wouldn't go that far. I'm there out of necessity more than for pleasure's sake. The climate doesn't suit me at all." },
+
+				{ Cue = "/VO/Arachne_0427",
+					Text = "I like it better down here, too. It's more secluded... quieter. But still a hint of moonlight to bring out the best in everything. I'm glad you're back." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneAboutDreamRuns01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneAboutSurface01" },
+					},
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "IsDreamRun" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 2,
+					},
+				},
+
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				{ Cue = "/VO/Arachne_0501",
+					Text = "I missed you, my friend. More matters on Olympus pulling you away, I suppose? Oh, it's none of my business. Though I am truly glad you're back." },
+
+				{ Cue = "/VO/MelinoeField_5297", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "{#Emph}Oh{#Prev}, thanks Arachne, it's good to see you again. Lately I've been dabbling in dream, trying to better understand the mysteries in our own heads. I got a bit preoccupied, I think." },
+
+				{ Cue = "/VO/Arachne_0502",
+					Text = "{#Emph}<Sigh> {#Prev}If only we could understand what's going on in our own little heads! Do let me know if you ever figure it out. Why, sometimes I think life itself is just a dream... don't you?" },
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
@@ -528,6 +663,39 @@
 				{ Cue = "/VO/Arachne_0047",
 					Emote = "PortraitEmoteFiredUp",
 					Text = "Don't even start with that! My weavings and my garments aren't just for show, they're practical evening-wear! {#Emph}You{#Prev}, my friend, are helping them fulfill their life's purpose, {#Emph}ha ha ha..." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneAboutTapestry01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgrades", "Cosmetic_ArachneTapestry" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				{ Cue = "/VO/MelinoeField_4421", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "There's a beautiful tapestry we have back at the Crossroads now... it's woven with such skill that I could tell immediately it was from you. Would you come see it sometime?" },
+
+				{ Cue = "/VO/Arachne_0443",
+					Portrait = "Portrait_Arachne_Brooding_01",
+					Text = "Oh no, my friend, I've no intention to return. The great big witch and I are on the outs! But now you all have something to remember me by." },
+
+				{ Cue = "/VO/MelinoeField_4422", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I'm sorry to hear that, though I understand. I noticed the tapestry depicts the Olympians in a rather unusual way..." },
+
+				{ Cue = "/VO/Arachne_0444",
+					Text = "Athena didn't care for that depiction. But your beautiful eyes can see things her dull gray eyes can't, {#Emph}ha ha ha ha ha." },
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
@@ -728,7 +896,7 @@
 				{ Cue = "/VO/Arachne_0116",
 					Text = "About last time... I know that there are others in your life, whom you care about. And that makes me glad. You should feel {#Emph}loved! {#Prev}A lot! But look at {#Emph}me... {#Prev}all I can do a lot is {#Emph}weave." },
 				{ Cue = "/VO/MelinoeField_1803", UsePlayerSource = true,
-					Portrait = "Portrait_Mel_Vulnerable_01",
+					Portrait = "Portrait_Mel_Empathetic_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "Your size has nothing to do with the love you can give. But how you feel about yourself... it must affect the love you can receive. Whether you can believe it to be true." },
@@ -1177,7 +1345,8 @@
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
-			ArachneAboutCurse04 =
+			-- ArachneAboutCurse04 conflated with HecateWithArachne01_FollowUp
+			ArachneAboutCurse05 =
 			{
 				PlayOnce = true,
 				UseableOffSource = true,
@@ -1190,35 +1359,9 @@
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "HecateWithArachne01_FollowUp" },
 					},
-				},
-				-- OnQueuedThreadedFunctionName = "AmbientChatting",
-				-- OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
-
-				{ Cue = "/VO/MelinoeField_1794", UsePlayerSource = true,
-					PreLineWait = 0.35,
-					Portrait = "Portrait_Mel_Vulnerable_01",
-					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
-					Text = "...Are you all right, my friend?" },
-				{ Cue = "/VO/Arachne_0094",
-					Emote = "PortraitEmoteSurprise",
-					PostLineThreadedFunctionName = "MuteSpeaker",
-					Text = "I... {#Emph}yes! {#Prev}Yes, I've some new dresses for you. Here! Which one do you desire?" },
-				PrePortraitExitFunctionName = "ArachneCostumeChoice",
-				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
-			},
-			ArachneAboutCurse05 =
-			{
-				PlayOnce = true,
-				UseableOffSource = true,
-				PreBlockSpecialInteract = true,
-				InitialGiftableOffSource = true,
-				GiftableOffSource = true,
-				GameStateRequirements =
-				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "ArachneAboutCurse04" },
+						HasNone = { "ArachneCurseQuest01" },
 					},
 				},
 				-- OnQueuedThreadedFunctionName = "AmbientChatting",
@@ -1328,6 +1471,9 @@
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpArachne" },
 
 				{ Cue = "/VO/MelinoeField_4392", UsePlayerSource = true,
 					PreLineThreadedFunctionName = "PlayCharacterAnim",
@@ -1439,6 +1585,7 @@
 				PlayOnce = true,
 				UseableOffSource = true,
 				InitialGiftableOffSource = true,
+				SkipQuestStatusCheck = true,
 				GameStateRequirements =
 				{
 					{
@@ -1474,9 +1621,9 @@
 
 				{ Cue = "/VO/Arachne_0391",
 
-					-- heart unlock
-					PostLineThreadedFunctionName = "RelationshipAdvancedPresentation",
-					PostLineThreadedFunctionArgs = { Delay = 0.25 },
+					-- heart unlock + major quest complete
+					PostLineThreadedFunctionName = "MajorQuestCompletedPresentation",
+					PostLineThreadedFunctionArgs = { Delay = 0.25, QuestName = "MajorQuestCompleted_Arachne", ShowHeartUnlock = true, SkipQuestStatusCheck = true },
 
 					Text = "Well, you know. I always had a touch of temper on me. Feels good to let it all out once in a while, come what may! And I've been weaving like there's no tomorrow since." },
 
@@ -1484,6 +1631,55 @@
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
 
+			ArachneAboutCurseQuest02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ArachneAboutCurseQuest01", "ArachneGift08" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "UseRecord", "NPC_Athena_01" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				{ Cue = "/VO/Arachne_0498",
+					Portrait = "Portrait_Arachne_Brooding_01",
+					Text = "Do you still see her anymore? Gray-eyed Athena, that is. She must have moved on from little old me, and is back to dealing with her god-sized problems, I suppose." },
+
+				{ Cue = "/VO/MelinoeField_5295", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "I do still see Lady Athena every so often, yes. It's back to normal between us... or so I pretend. I grew up hating my grandfather. Now I have a cousin I resent as well." },
+
+				{ Cue = "/VO/Arachne_0499",
+					Text = "Now don't you let your heart do that to you, my friend. Take it from me! Mortals aren't stuck with their families quite like gods, and I think you've all had enough fighting for a while." },
+
+				{ Cue = "/VO/MelinoeField_5296", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I just... I almost miss not knowing some of these relatives of mine as well as I do now. My feelings about them often fluctuate... admiration one moment, frustration the next." },
+
+				{ Cue = "/VO/Arachne_0500",
+					Text = "That's just how it is with families, at least for most of us. Though yours isn't {#Emph}all {#Prev}bad. Who knows? Maybe the rest of them will learn a thing or two from {#Emph}you {#Prev}eventually. {#Emph}Ha ha ha ha..." },
+
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
 			ArachneAboutHecate01 =
 			{
 				PlayOnce = true,
@@ -1493,6 +1689,9 @@
 					{
 						Path = { "PrevRun", "RoomCountCache" },
 						HasAny = { "F_Boss01", "F_Boss02" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArachneWithHecateInHub02" },
 					},
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
@@ -1553,6 +1752,9 @@
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						PathTrue = { "GameState", "UseRecord", "NPC_Artemis_Field_01" },
 					},
 					{
@@ -1562,6 +1764,9 @@
 						CountPathTrue = true,
 						Comparison = ">=",
 						Value = 1,
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArachneCurseQuest01" },
 					},
 				},
 				OnQueuedThreadedFunctionName = "AmbientChatting",
@@ -1643,6 +1848,46 @@
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
+			ArachneAboutKeepsake02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasAny = { "ArmorGainKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "ArmorGainKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+					{
+						SumPrevRuns = 8,
+						Path = { "TextLinesRecord", "ArachneGift01" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				{ Cue = "/VO/Arachne_0430",
+					Text = "You've come a long way with that sash I made for you. Much more durable than your garden variety silk dress, isn't it?" },
+
+				{ Cue = "/VO/MelinoeField_4423", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "It certainly is. And nothing makes me feel confident throwing myself into the fray quite like this gift you gave me all those nights ago." },
+
+				{ Cue = "/VO/Arachne_0431",
+					Text = "I'm glad. Even if I can't exactly come along with you myself, having one of my garments is the next best thing." },
+
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
 
 			ArachneAboutFrogFamiliar01 =
 			{
@@ -1694,6 +1939,35 @@
 					Text = "Don't worry, this is Toula, my familiar. And she'll keep her feline instincts well in check around Arachne, won't you, girl?" },
 				{ Cue = "/VO/Arachne_0132",
 					Text = "I used to love cats... they just don't get on with me quite like they used to. For obvious reasons, I suppose..." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneAboutRavenFamiliar01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "RavenFamiliar" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
+
+				{ Cue = "/VO/Arachne_0428",
+					Portrait = "Portrait_Arachne_Brooding_01",
+					Text = "You know how come I'm in these woods instead of up above? Because we don't get many birds down here. So, keep that white-winged one away from me, would you?" },
+
+				{ Cue = "/VO/MelinoeField_4413", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Raki here wouldn't so much as look at you...! Though, he's not like other ravens in that way. But I'm sorry I brought him here at all. I should have realized." },
+
+				{ Cue = "/VO/Arachne_0429",
+					Text = "Oh, it's all right, silly. Long as he behaves himself while I'm about. I won't ever trust birds, but... I trust you." },
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
@@ -1901,9 +2175,25 @@
 					},
 				},
 
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpArachne" },
+
 				{ Cue = "/VO/Arachne_0103",
 					Emote = "PortraitEmoteSurprise",
 					Text = "Another customer already! You just missed the great big witch. Not often that I'm honored with her presence. Next you see her out there, give her a good one for me, would you? {#Emph}Hm ha ha ha..." },
+
+				{ Cue = "/VO/MelinoeField_1794", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "...Are you all right, my friend?" },
+
+				{ Cue = "/VO/Arachne_0094",
+					Emote = "PortraitEmoteSurprise",
+					PostLineThreadedFunctionName = "MuteSpeaker",
+					Text = "I... {#Emph}yes! {#Prev}Yes, I've some new dresses for you. Here! Which one do you desire?" },
+
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
@@ -1921,9 +2211,18 @@
 				OnQueuedThreadedFunctionName = "AmbientChatting",
 				OnQueuedFunctionArgs = PresetEventArgs.ArachneMuttering,
 
-				{ Cue = "/VO/Arachne_0120",
-					Emote = "PortraitEmoteCheerful",
-					Text = "All right, my friend, the time has come to unveil my latest designs; woven with care, especially for you! {#Emph}Behold! {#Prev}And more importantly, enjoy!" },
+				{ Cue = "/VO/Arachne_0424",
+					Text = "I know your every measurement by now, my friend, and think I know the style you prefer, and so... I have a little something here I thought you'd like." },
+
+				{ Cue = "/VO/MelinoeField_4411", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Casual_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Truly? Arachne, I don't see how you could possibly outdo yourself, though I'm prepared to watch you try, if you insist!" },
+
+				{ Cue = "/VO/Arachne_0425",
+					Text = "Oh that I do. Look here... silk, the color of blood. The color of your family. It's very delicate, but if you want it, it's all yours." },
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
@@ -1962,7 +2261,7 @@
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAny = { "ZagreusPastMeeting03", "ZeusPalaceFirstMeeting" },
+						HasAny = { "ZagreusPastMeeting03", "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
 					},
 					{
 						PathFalse = { "GameState", "TyphonDefeatedWithStormStop" },
@@ -2538,6 +2837,198 @@
 				PrePortraitExitFunctionName = "ArachneCostumeChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
 			},
+			ArachneChat31 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneGift08" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0369",
+					Text = "These all are freshly woven and should fit you perfectly, my friend!" },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat32 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0370",
+					Text = "Whichever one of these most suits your fancy right now, it's all yours." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat33 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 4,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "F_Story01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0371",
+					Text = "I was hoping you'd show up again! Been a few nights since last time, hasn't it?" },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat34 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 3,
+						IgnoreCurrentRun = true,
+						Path = { "RoomsEntered", "N_Opening01" },
+						Comparison = ">=",
+						Value = 2,
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0372",
+					Text = "You've been up top lately, haven't you? Then welcome back!" },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat35 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					--
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0373",
+					Text = "My dresses aren't made to last, but I just know you'll make the most of them!" },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat36 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneWithHecateInHub01" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0374",
+					Text = "This should protect you from the great big witch and whatever comes next." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat37 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					--
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0375",
+					Text = "I can afford you some protection, and a beautiful new look!" },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat38 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneGift09" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0376",
+					Text = "You don't ever seem to give up, my friend. So I won't either." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat39 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneGift09" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0377",
+					Text = "I like being alone and like being with you. So this has been a real treat!" },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+			ArachneChat40 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneGift09" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ Cue = "/VO/Arachne_0378",
+					Text = "Would you just look at all this silk? {#Emph}Ha ha ha ha ha..." },
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
+
+			ArachneDreamRun =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+				OnQueuedThreadedFunctionName = "AmbientChatting",
+				OnQueuedFunctionArgs = PresetEventArgs.ArachneMutteringRepeatable,
+
+				{ SkipDialogue = true, PostLineWait = 0, InputDelay = 0, BoxAnimation = "BlankObstacle", BoxExitAnimation = "Blank" },
+
+				PrePortraitExitFunctionName = "ArachneCostumeChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.ArachneCostumeChoices,
+			},
 
 		},
 
@@ -2932,7 +3423,8 @@
 		},
 
 		AlwaysShowInvulnerabubbleOnInvulnerableHit = true,
-		InvincibubbleScale = 0.7,
+		InvincibubbleAnim = "Invincibubble_Arachne",
+		InvincibubbleScale = 1.0,
 		RepulseOnMeleeInvulnerableHit = 150,
 		OnHitVoiceLines =
 		{
@@ -3012,8 +3504,17 @@
 					},
 					]]--
 				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.ArachneHubGreeting,
+				OnQueuedEvents =
+				{
+					{
+						FunctionName = "CheckDistanceTriggerThread",
+						Args = PresetEventArgs.ArachneHubGreeting,
+					},
+					{
+						FunctionName = "OverwriteSelf",
+						Args = { AnimOffsetZ = 50 },
+					},
+				},
 
 				{ Cue = "/VO/Arachne_0065",
 					Portrait = "Portrait_Arachne_Default_02",
@@ -3072,7 +3573,6 @@
 				OnQueuedFunctionArgs = { WebObstacle = 800720, },
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				GiftableOffSource = true,
 				TeleportToId = 800721,
@@ -3125,12 +3625,14 @@
 					},
 					NamedRequirementsFalse = { "ArachneBrooding", "ClearBeforeTrueEnding", "HecateMissing" },
 				},
-
 				OnQueuedFunctionName = "SetupArachneDangling",
 				OnQueuedFunctionArgs = { WebObstacle = 800720, },
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpArachne" },
+
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				GiftableOffSource = true,
 				TeleportToId = 800721,
@@ -3244,15 +3746,37 @@ GlobalVoiceLines.CostumeChangedVoiceLines =
 		},
 
 		{ Cue = "/VO/Melinoe_1731", Text = "Why this is beautiful, thank you...!", PlayFirst = true },
+		{ Cue = "/VO/MelinoeField_4771", Text = "It's beautiful." },
+		{ Cue = "/VO/MelinoeField_4772", Text = "It's perfect." },
+		{ Cue = "/VO/MelinoeField_4773", Text = "I love it." },
+		{ Cue = "/VO/MelinoeField_4776", Text = "Fits perfectly." },
+		{ Cue = "/VO/MelinoeField_4777", Text = "It's lovely!" },
+		{ Cue = "/VO/MelinoeField_4780", Text = "It's just right." },
 		{ Cue = "/VO/Melinoe_1412", Text = "I think I like it...",
 			GameStateRequirements =
 			{
 				{
 					Path = { "LastLinePlayed" },
-					IsNone = { "/VO/Arachne_0184", "/VO/Arachne_0185", "/VO/Arachne_0186" },
+					IsNone = { "/VO/Arachne_0184" },
 				},
 			},
 		},
+	},
+	{
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunArachneFirstBoonVO",
+		BreakIfPlayed = true,
+		PreLineWait = 0.2,
+		UsePlayerSource = true,
+		TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+		-- high-priority guaranteed PlayOnce version, then a repeatable version below; this pattern is used elsewhere
+		{ Cue = "/VO/MelinoeField_5645", Text = "You're officially a dream-weaver, Arachne." },
 	},
 	{
 		PreLineWait = 0.2,
@@ -3284,6 +3808,22 @@ GlobalVoiceLines.CostumeChangedVoiceLines =
 		{ Cue = "/VO/MelinoeField_2378", Text = "Thanks, Arachne." },
 		{ Cue = "/VO/Melinoe_0350", Text = "{#Emph}<Laugh>" },
 		{ Cue = "/VO/Melinoe_0351", Text = "{#Emph}<Laugh>" },
+		{ Cue = "/VO/MelinoeField_5645", Text = "You're officially a dream-weaver, Arachne.",
+			PlayFirst = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/MelinoeField_5645" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
+				},
+			},
+		},
 	},
 }
 
@@ -3395,31 +3935,50 @@ GlobalVoiceLines.ArachneGreetingLines =
 {
 	Queue = "Interrupt",
 	{
-		RandomRemaining = true,
-		BreakIfPlayed = true,
-		ObjectType = "NPC_Arachne_01",
-		PreLineAnim = "Arachne_Greet",
+		{
+			RandomRemaining = true,
+			ObjectType = "NPC_Arachne_01",
+			PreLineAnim = "Arachne_Greet",
 
-		{ Cue = "/VO/Arachne_0133", Text = "Oh!" },
-		{ Cue = "/VO/Arachne_0134", Text = "Ah, it's you!" },
-		{ Cue = "/VO/Arachne_0135", Text = "Oh, welcome!" },
-		{ Cue = "/VO/Arachne_0136", Text = "You've come back!" },
-		{ Cue = "/VO/Arachne_0137", Text = "Do my eyes deceive?" },
-		{ Cue = "/VO/Arachne_0138", Text = "My friend!" },
-		{ Cue = "/VO/Arachne_0139", Text = "Is it truly you?" },
-		{ Cue = "/VO/Arachne_0140", Text = "{#Emph}<Gasp>" },
-		{ Cue = "/VO/Arachne_0141", Text = "A customer!" },
-		{ Cue = "/VO/Arachne_0142", Text = "My finest customer!" },
-		{ Cue = "/VO/Arachne_0143", Text = "Why hello there!" },
-		{ Cue = "/VO/Arachne_0144", Text = "Good evening!" },
-		{ Cue = "/VO/Arachne_0145", Text = "Welcome back!" },
-		{ Cue = "/VO/Arachne_0146", Text = "Ah, {#Emph}haha!" },
-		{ Cue = "/VO/Arachne_0147", Text = "Hello again!" },
-		{ Cue = "/VO/Arachne_0148", Text = "Oh, it's been too long!" },
-		{ Cue = "/VO/Arachne_0149", Text = "Got some cocoons for you!" },
-		{ Cue = "/VO/Arachne_0150", Text = "Some new cocoons there!" },
-		{ Cue = "/VO/Arachne_0356", Text = "Oh...!", PlayFirst = true },
-		{ Cue = "/VO/Arachne_0357", Text = "{#Emph}Huh...!" },
+			{ Cue = "/VO/Arachne_0133", Text = "Oh!" },
+			{ Cue = "/VO/Arachne_0134", Text = "Ah, it's you!" },
+			{ Cue = "/VO/Arachne_0135", Text = "Oh, welcome!" },
+			{ Cue = "/VO/Arachne_0136", Text = "You've come back!" },
+			{ Cue = "/VO/Arachne_0137", Text = "Do my eyes deceive?" },
+			{ Cue = "/VO/Arachne_0138", Text = "My friend!" },
+			{ Cue = "/VO/Arachne_0139", Text = "Is it truly you?" },
+			{ Cue = "/VO/Arachne_0140", Text = "{#Emph}<Gasp>" },
+			{ Cue = "/VO/Arachne_0141", Text = "A customer!" },
+			{ Cue = "/VO/Arachne_0142", Text = "My finest customer!" },
+			{ Cue = "/VO/Arachne_0143", Text = "Why hello there!" },
+			{ Cue = "/VO/Arachne_0144", Text = "Good evening!" },
+			{ Cue = "/VO/Arachne_0145", Text = "Welcome back!" },
+			{ Cue = "/VO/Arachne_0146", Text = "Ah, {#Emph}haha!" },
+			{ Cue = "/VO/Arachne_0147", Text = "Hello again!" },
+			{ Cue = "/VO/Arachne_0148", Text = "Oh, it's been too long!" },
+			{ Cue = "/VO/Arachne_0149", Text = "Got some cocoons for you!" },
+			{ Cue = "/VO/Arachne_0150", Text = "Some new cocoons there!" },
+			{ Cue = "/VO/Arachne_0356", Text = "Oh...!", PlayFirst = true },
+			{ Cue = "/VO/Arachne_0357", Text = "{#Emph}Huh...!" },
+			{ Cue = "/VO/Arachne_0470", Text = "{#Emph}<Gasp>" },
+			{ Cue = "/VO/Arachne_0471", Text = "Oh..." },
+		},
+		{
+			PlayOnce = true,
+			PlayOnceContext = "DreamRunArachneIntroVO",
+			BreakIfPlayed = true,
+			UsePlayerSource = true,
+			AllowTalkOverTextLines = true,
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+			},
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech", },
+
+			{ Cue = "/VO/MelinoeField_5644", Text = "Still spinning even in my dreams..." },
+		},
 	},
 }
 
@@ -3526,7 +4085,7 @@ GlobalVoiceLines.ArachneMutteringLines =
 		{ Cue = "/VO/Arachne_0447", Text = "{#Emph}Blue, and black, and burgundy," },
 		{ Cue = "/VO/Arachne_0448", Text = "{#Emph}Silk of every color, see?" },
 		{ Cue = "/VO/Arachne_0449", Text = "{#Emph}Delicate and spun with care," },
-		{ Cue = "/VO/Arachne_0450", Text = "{#Emph}Strong as silver, thin as hair...", BreakIfPlayed = true  },
+		{ Cue = "/VO/Arachne_0450", Text = "{#Emph}Strong as silver, thin as hair...", BreakIfPlayed = true },
 	},
 	{
 		PreLineWait = 0.75,
@@ -3551,7 +4110,7 @@ GlobalVoiceLines.ArachneMutteringLines =
 		{ Cue = "/VO/Arachne_0452", Text = "{#Emph}Just a spider, small and black," },
 		{ Cue = "/VO/Arachne_0453", Text = "{#Emph}Eight long legs and fuzzy back," },
 		{ Cue = "/VO/Arachne_0454", Text = "{#Emph}Eyes like gems and web so fine," },
-		{ Cue = "/VO/Arachne_0455", Text = "{#Emph}Godlike skill but not divine...", BreakIfPlayed = true  },
+		{ Cue = "/VO/Arachne_0455", Text = "{#Emph}Godlike skill but not divine...", BreakIfPlayed = true },
 	},
 	{
 		PreLineWait = 0.75,
@@ -3576,7 +4135,57 @@ GlobalVoiceLines.ArachneMutteringLines =
 		{ Cue = "/VO/Arachne_0457", Text = "{#Emph}My fangs aren't venomous, I swear." },
 		{ Cue = "/VO/Arachne_0458", Text = "{#Emph}Come closer, and I'll prove it true!" },
 		{ Cue = "/VO/Arachne_0459", Text = "{#Emph}I know that many wouldn't dare," },
-		{ Cue = "/VO/Arachne_0460", Text = "{#Emph}but they are nothing and you're you...", BreakIfPlayed = true  },
+		{ Cue = "/VO/Arachne_0460", Text = "{#Emph}but they are nothing and you're you...", BreakIfPlayed = true },
+	},
+	{
+		PreLineWait = 0.75,
+		--Actor = "StrangerOcclusionP",
+		ObjectType = "NPC_Arachne_01",
+		RecheckRequirementsForSubLines = true,
+		GameStateRequirements = 
+		{
+			{
+				PathFalse = { "CurrentRun", "TriggerRecord", "ArachneInterrupt" },
+			},
+			{
+				PathFalse = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+		{ Cue = "/VO/Arachne_0472", Text = "{#Emph}Swaddled in a warm cocoon," },
+		{ Cue = "/VO/Arachne_0473", Text = "{#Emph}The spiderlings all multiply" },
+		{ Cue = "/VO/Arachne_0474", Text = "{#Emph}And come on out of there so soon" },
+		{ Cue = "/VO/Arachne_0475", Text = "{#Emph}To spin more little webs, and die." },
+		{ Cue = "/VO/Arachne_0476", Text = "{#Emph}Ha ha ha...", PreLineWait = 1.5 },
+
+		{ Cue = "/VO/Arachne_0472", Text = "{#Emph}Swaddled in a warm cocoon," },
+		{ Cue = "/VO/Arachne_0473", Text = "{#Emph}The spiderlings all multiply" },
+		{ Cue = "/VO/Arachne_0474", Text = "{#Emph}And come on out of there so soon" },
+		{ Cue = "/VO/Arachne_0475", Text = "{#Emph}To spin more little webs, and die.", BreakIfPlayed = true },
+	},
+	{
+		PreLineWait = 0.75,
+		--Actor = "StrangerOcclusionP",
+		ObjectType = "NPC_Arachne_01",
+		RecheckRequirementsForSubLines = true,
+		GameStateRequirements = 
+		{
+			{
+				PathFalse = { "CurrentRun", "TriggerRecord", "ArachneInterrupt" },
+			},
+			{
+				PathFalse = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+		{ Cue = "/VO/Arachne_0477", Text = "{#Emph}I don't like gods, and gods don't like me," },
+		{ Cue = "/VO/Arachne_0478", Text = "{#Emph}They're all so big and so strong." },
+		{ Cue = "/VO/Arachne_0479", Text = "{#Emph}They should be ruling the land and the sea," },
+		{ Cue = "/VO/Arachne_0480", Text = "{#Emph}Not listening to my little song." },
+		{ Cue = "/VO/Arachne_0481", Text = "{#Emph}And again...", PreLineWait = 1.5 },
+
+		{ Cue = "/VO/Arachne_0477", Text = "{#Emph}I don't like gods, and gods don't like me," },
+		{ Cue = "/VO/Arachne_0478", Text = "{#Emph}They're all so big and so strong." },
+		{ Cue = "/VO/Arachne_0479", Text = "{#Emph}They should be ruling the land and the sea," },
+		{ Cue = "/VO/Arachne_0480", Text = "{#Emph}Not listening to my little song.", BreakIfPlayed = true },
 	},
 }
 GlobalVoiceLines.ArachneGatherReactionVoiceLines =

@@ -756,7 +756,7 @@ function DoAttackerAILoop( enemy, aiData )
 			return true
 		end
 		enemy.AINotifyName = "CanAttack"..enemy.ObjectId
-		NotifyOnCanAttack({ Id = enemy.ObjectId, Notify = enemy.AINotifyName, Timeout = 9.0 })
+		NotifyOnCanAttack({ Id = enemy.ObjectId, Notify = enemy.AINotifyName, Timeout = 16.0 })
 		waitUntil( enemy.AINotifyName )
 	end
 
@@ -3055,7 +3055,9 @@ function AggroUnit( enemy, hostileAggro )
 	end
 	
 	local previouslyStealthed = IsEmpty(MapState.AggroedUnits)
-	MapState.AggroedUnits[enemy.ObjectId] = true
+	if not enemy.SkipMapStateAggroTracking then
+		MapState.AggroedUnits[enemy.ObjectId] = true
+	end
 	
 	if previouslyStealthed then
 		thread( UpdateSpellActiveStatus )
@@ -3448,10 +3450,13 @@ function LeapIntoRangeAI( enemy, currentRun )
 end
 
 function Leap( enemy, aiData, leapType )
-	if not CanMove({ Id = enemy.ObjectId }) then
+	if enemy.IsPolymorphed then
 		return
 	end
 	if not enemy.IgnoreCastSlow and enemy.ActiveEffects.ImpactSlow ~= nil and enemy.ActiveEffects.ImpactSlow > 0 then
+		return
+	end
+	if not CanMove({ Id = enemy.ObjectId }) then
 		return
 	end
 
@@ -4332,6 +4337,16 @@ function AIFireProjectile( enemy, aiData, projectileData )
 		collideWithGroups = enemy.ProjectilesCollideWithGroupsCharmed
 	end
 
+	local dataProperties = aiData.ProjectileDataOverrides
+	if enemy.AlwaysTraitor and HeroHasTrait("BurnSprintBoon") then
+		if not IsEmpty( aiData.ProjectileDataOverrides ) then
+			dataProperties = DeepCopyTable( aiData.ProjectileDataOverrides)	
+		else
+			dataProperties = {}
+		end
+		dataProperties.CanBeProjectileDefenseDestroyedByLayer = "null"
+	end
+
 	local projectileId = CreateProjectileFromUnit({ Name = aiData.ProjectileName,
 		Id = projectileOwnerId,
 		DestinationId = destinationId,
@@ -4341,7 +4356,7 @@ function AIFireProjectile( enemy, aiData, projectileData )
 		FiredByTraitor = aiData.FireAlliedToPlayer,
 		TargetIdOverride = aiData.TargetIdOverride,
 		CollideWithGroups = collideWithGroups,
-		DataProperties = aiData.ProjectileDataOverrides,
+		DataProperties = dataProperties,
 		BarrelLength = aiData.BarrelLength,
 		SpawnFromMarker = aiData.SpawnFromMarker,
 		ScaleMultiplier = aiData.ProjectileScaleMultiplier or enemy.ProjectileScaleMultiplier,
@@ -5127,6 +5142,9 @@ function UnitSplit( enemy, aiData )
 	end
 	ClearEffect({ Id = enemy.ObjectId, All = true })
 	EffectPostClearAll( enemy )
+	if SessionMapState.CurrentExProjectile then
+		SetProjectileProperty({ ProjectileId = SessionMapState.CurrentExProjectile, Property = "RetargetDirty", Value = true, DataValue = false })
+	end
 
 	enemy.SplitIds = {}
 
@@ -5315,10 +5333,12 @@ function HeraclesPostCombat( enemy )
 		ApplyForce({ Id = consumableId, Speed = 350, Angle = GetAngle({ Id = enemy.ObjectId }), SelfApplied = true })
 	end
 
-	CheckAvailableTextLines( enemy )
-	SetAvailableUseText( enemy )
 	RemoveInteractBlock( enemy, "HeraclesPostCombat" )
 
+	if not CurrentRun.IsDreamRun then
+		CheckAvailableTextLines( enemy )
+	end
+	SetAvailableUseText( enemy )
 	if enemy.NextInteractLines == nil then
 		if CanReceiveGift( enemy ) then
 			MapState.RoomRequiredObjects[enemy.ObjectId] = nil
@@ -5587,11 +5607,8 @@ function StagedAI( enemy )
 		RandomSynchronize( 3 + k )
 		enemy.AIStageActive = k
 
-		if aiStage.EMStageDataOverrides ~= nil then
-			local pactLevel = GetNumShrineUpgrades( enemy.ShrineUpgradeName )
-			if pactLevel >= enemy.BossDifficultyShrineRequiredCount then
-				OverwriteTableKeys(aiStage, aiStage.EMStageDataOverrides)
-			end
+		if aiStage.EMStageDataOverrides ~= nil and IsBossDifficultyShrineUpgradeActive() then
+			OverwriteTableKeys(aiStage, aiStage.EMStageDataOverrides)
 		end
 
 		if aiStage.AIData ~= nil then
@@ -5599,7 +5616,7 @@ function StagedAI( enemy )
 			enemy.AIEndWithSpawnedEncounter = nil
 			enemy.AIEndGroupHealthThreshold = nil
 			MapState.GroupHealthWaiters[enemy.ObjectId] = nil
-			enemy.AIEndLastAlive = nil
+			enemy.AIEndRequirements = nil
 			enemy.ReachedAIStageEnd = nil
 			enemy.ChainedWeapon = nil
 			enemy.ActiveWeaponCombo = nil
@@ -5806,7 +5823,7 @@ function ReachedAIStageEnd(enemy)
 	if enemy.AIEndGroupHealthThreshold and encounter.GroupHealth / encounter.GroupMaxHealth <= enemy.AIEndGroupHealthThreshold then
 		return true
 	end
-	if enemy.AIEndLastAlive and TableLength(RequiredKillEnemies) <= 1 then
+	if enemy.AIEndRequirements ~= nil and IsGameStateEligible(enemy, enemy.AIEndRequirements) then
 		return true
 	end
 	return false
@@ -6476,6 +6493,7 @@ function ErisOilTransition(enemy, args)
 	ActivatePrePlacedUnits( enemy, { Ids = newOilIds } )
 	SetAlpha({ Ids = newOilIds, Fraction = 0, Duration = 0 })
 	SetAlpha({ Ids = newOilIds, Fraction = 1, Duration = 1.0 })
+	MapState.OilPuddleIds = GetIdsByType({ Names = { "OilPuddle", "OilPuddle02", "OilPuddle03", "OilPuddle04" }})
 	CheckCooldown("NewOilSpawned", 1)
 end
 

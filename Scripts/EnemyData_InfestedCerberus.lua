@@ -2,7 +2,7 @@ UnitSetData.InfestedCerberus =
 {
 	InfestedCerberus =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseHEnemy", "BaseVulnerableEnemy"},
 		MaxHealth = 21500,
 
 		AttachedAnimationName = "CerbBibFront",
@@ -15,15 +15,23 @@ UnitSetData.InfestedCerberus =
 		Groups = { "GroundEnemies" },
 
 		OnDeathFunctionName = "InfestedCerberusKillPresentation",
-		OnDeathFunctionArgs = { Message = "CerberusDefeatedMessage", CameraPanTime = 1.5, StartSound = "/Leftovers/Menu Sounds/EmoteShocked", BatsAfterDeath = false, FlashRed = true, AddInterBiomeTimerBlock = true },
+		OnDeathFunctionArgs = { Message = "CerberusDefeatedMessage", CameraPanTime = 1.5, StartSound = "/Leftovers/Menu Sounds/EmoteShocked", FlashRed = true, AddInterBiomeTimerBlock = true },
 		DeathAnimation = "Enemy_InfestedCerberus_DeathTransition",
 		UsingGrannyModel = "Cerberus_Mesh",
 		DeathPanOffsetY = -140,
 		DeathFx = "CerberusTeleportCloud",
 		DeathAngle = 210,
 
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
+
 		BackstabDistance = 320,
 		BackstabDistanceScaleY = 0.6,
+		NeverDeferRootPresentation = true,
 
 		OnHitFlash = { MaxFraction = 0.45 },
 
@@ -42,21 +50,89 @@ UnitSetData.InfestedCerberus =
 					{
 						PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_0934" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 3,
-					},
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					}
 				},
 			},
-			{ TextId = "InfestedCerberus_AltFight01",
+			{
+				TextId = "InfestedCerberus_AltFight01",
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+			{
+				TextId = "InfestedCerberus_DreamRun01",
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.5,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.7,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.75,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.07,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.75,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.34,
 				},
 			},
 		},
@@ -90,7 +166,6 @@ UnitSetData.InfestedCerberus =
 				Args =
 				{
 					MaxHealth = 31500,
-					GrannyTexture = "GR2/InfestedCerberusEM_Color",
 					AISetupDelay = 1.0,
 					AIEndHealthThreshold = 0.65,
 					InvulnerableHitFx = "SatyrShieldBlock",
@@ -140,19 +215,92 @@ UnitSetData.InfestedCerberus =
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 3,
-						},
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/InfestedCerberusEM_Color",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/InfestedCerberusDream_Color",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/InfestedCerberusDreamEM_Color",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					PreBossHealthBarSetupFunctionName = "InfestedCerberusSpawnPostEndingPresentation",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+
+			
 		},
-		BossDifficultyShrineRequiredCount = 3,
 
 		HealthBarOffsetY = -275,
 		IgnoreInvincibubbleOnHit = true,
@@ -278,6 +426,12 @@ UnitSetData.InfestedCerberus =
 						PreLineWait = 2.35,
 						SuccessiveChanceToPlay = 0.75,
 						SuccessiveChanceToPlayAll = 0.25,
+						GameStateRequirements =
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
 
 						{ Cue = "/VO/MelinoeField_1243", Text = "Come to your senses, boy!" },
 						{ Cue = "/VO/MelinoeField_2118", Text = "Hey, get back here...!", PlayFirst = true },
@@ -298,7 +452,7 @@ UnitSetData.InfestedCerberus =
 						BreakIfPlayed = true,
 						RandomRemaining = true,
 						UsePlayerSource = true,
-						PreLineWait = 1.5,
+						PreLineWait = 2.15,
 						SuccessiveChanceToPlay = 0.75,
 						SuccessiveChanceToPlayAll = 0.25,
 
@@ -306,11 +460,7 @@ UnitSetData.InfestedCerberus =
 							PreLineWait = 2.25,
 							GameStateRequirements =
 							{
-								{
-									Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-									Comparison = ">=",
-									Value = 3,
-								},
+								NamedRequirements = { "BossDifficultyActive" },
 							}
 						},
 						{ Cue = "/VO/MelinoeField_2120", Text = "You all stay out of this!", PlayFirst = true },
@@ -396,6 +546,7 @@ UnitSetData.InfestedCerberus =
 					TransitionArgs =
 					{
 						GrannyTexture = "GR2/InfestedCerberusEM2_Color",
+						DreamGrannyTexture = "GR2/InfestedCerberusDreamEM2_Color",
 						TransitionRadialCount = 2,
 						TransitionRadialInitialId = 621276,
 						TransitionRadialIds = { 739776, 739811, 739924, 792223, 739937, 739788, 739780 },
@@ -412,11 +563,7 @@ UnitSetData.InfestedCerberus =
 						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
 						GameStateRequirements =
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = ">=",
-								Value = 3,
-							},
+							NamedRequirements = { "BossDifficultyActive" },
 						},
 
 						{ Cue = "/VO/MelinoeField_3533", Text = "He's cooling off...!", PlayFirst = true, },
@@ -461,6 +608,9 @@ UnitSetData.InfestedCerberus =
 					PlayFirst = true,
 					GameStateRequirements =
 					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
 						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
@@ -524,6 +674,7 @@ UnitSetData.InfestedCerberus =
 
 				{ Cue = "/VO/MelinoeField_0936", Text = "Where did he go...?", BreakIfPlayed = true },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
 				BreakIfPlayed = true,
@@ -535,6 +686,24 @@ UnitSetData.InfestedCerberus =
 				{ Cue = "/VO/MelinoeField_0937", Text = "Feel better, Cerberus..." },
 				{ Cue = "/VO/MelinoeField_0938", Text = "You're safe now, you're all right...", PlayFirst = true },
 				{ Cue = "/VO/MelinoeField_0939", Text = "You're looking better already..." },
+				{ Cue = "/VO/MelinoeField_5572", Text = "I wonder what you dream of, boy...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5573", Text = "We'll soon make better memories than this...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 				{ Cue = "/VO/MelinoeField_0941", Text = "You're free again, for now.",
 					GameStateRequirements =
 					{
@@ -751,11 +920,7 @@ UnitSetData.InfestedCerberus =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Storyteller_0472", PreLineWait = 0.75, IsNarration = true, LineHistoryName = "Speaker_Homer", SubtitleColor = Color.NarratorVoice, StartSound = "/VO/CerberusWhine",
 					Portrait = "Portrait_Cerberus_Default_01",
@@ -792,11 +957,7 @@ UnitSetData.InfestedCerberus =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 3,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},				
 				{ Cue = "/VO/Storyteller_0490", PreLineWait = 0.75, IsNarration = true, LineHistoryName = "Speaker_Homer", SubtitleColor = Color.NarratorVoice, StartSound = "/VO/CerberusWhine",
 					Portrait = "Portrait_Cerberus_Default_01",

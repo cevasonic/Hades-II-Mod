@@ -34,6 +34,8 @@ OverwriteTableKeys( EncounterData,
 		BlockHighlightEncounter = true,
 		SkipIntroEncounterCheck = true,
 		NoFirstWaveStartDelay = true,
+		
+		DreamBiomeData = "nil",
 
 		ManualWaveTemplates =
 		{
@@ -103,6 +105,8 @@ OverwriteTableKeys( EncounterData,
 		BlockHighlightEncounter = true,
 		SkipIntroEncounterCheck = true,
 		NoFirstWaveStartDelay = false,
+
+		DreamBiomeData = "nil",
 
 		UnthreadedEvents = EncounterSets.EncounterEventsMiniBossWaterUnit,
 
@@ -179,6 +183,8 @@ OverwriteTableKeys( EncounterData,
 		BlockHighlightEncounter = true,
 		SkipIntroEncounterCheck = true,
 		NoFirstWaveStartDelay = false,
+		
+		DreamBiomeData = "nil",
 
 		UnthreadedEvents = EncounterSets.EncounterEventsMiniBossJellyfish,
 
@@ -419,6 +425,8 @@ OverwriteTableKeys( EncounterData,
 		BlockHighlightEncounter = true,
 		SkipIntroEncounterCheck = true,
 
+		DreamBiomeData = "nil",
+
 		ManualWaveTemplates =
 		{
 			-- Wave 1
@@ -488,6 +496,8 @@ OverwriteTableKeys( EncounterData,
 
 		BlockHighlightEncounter = true,
 		SkipIntroEncounterCheck = true,
+		
+		DreamBiomeData = "nil",
 
 		ManualWaveTemplates =
 		{
@@ -559,6 +569,18 @@ OverwriteTableKeys( EncounterData,
 		UseGroupHealthBar = true,
 		GroupHealthBarTypes = { "Charybdis", "CharybdisTentacle" },
 		HealthBarTextId = "Charybdis_Full",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Charybdis_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		StartGlobalVoiceLines = "MiniBossEncounterStartVoiceLines",
 		BossKillGlobalVoiceLines = "MiniBossEncounterEndVoiceLines",
@@ -812,6 +834,8 @@ OverwriteTableKeys( EncounterData,
 		SkipIntroEncounterCheck = true,
 		NoFirstWaveStartDelay = false,
 
+		GameStateRequirements = {},
+
 		ManualWaveTemplates =
 		{
 			-- Wave 1
@@ -843,54 +867,6 @@ OverwriteTableKeys( EncounterData,
 		{
 			WakeUpDelay = 2.1,
 		},
-	},
-
-	MiniBossHarpy =
-	{
-		InheritFrom = { "MinibossEncounter", "GeneratedP", },
-		PreSpawnEnemies = false,
-		SpawnAggroed = false,
-
-		MinWaves = 1,
-		MaxWaves = 1,
-		MinTypes = 1,
-		MaxTypes = 1,
-		TypeCountDepthRamp = 0,
-		EnemyCountDepthRamp = 0,
-		MaxEliteTypes = 2,
-		ActiveEnemyCapBase = 10,
-		ActiveEnemyCapMax = 10,
-
-		SpawnIntervalMin = 5.0,
-		SpawnIntervalMax = 10.0,
-
-		MoneyDropCapMin = 15,
-		MoneyDropCapMax = 15,
-		MoneyDropCapDepthRamp = 0,
-
-		BlockHighlightEncounter = true,
-		SkipIntroEncounterCheck = true,
-		NoFirstWaveStartDelay = false,
-
-		ManualWaveTemplates =
-		{
-			-- Wave 1
-			[1] =
-			{
-				Spawns =
-				{
-					{
-						Name = "HarpyDropper_MiniBoss",
-						TotalCount = 1,
-						ForceFirst = true,
-					},
-				},
-				SkipWaitForAllDead = true
-			},
-		},
-
-		StartGlobalVoiceLines = "MiniBossEncounterStartVoiceLines",
-		CancelSpawnsOnKill = { "HarpyDropper_MiniBoss" },
 	},
 
 	MiniBossBrute =
@@ -962,6 +938,18 @@ OverwriteTableKeys( EncounterData,
 		UseGroupHealthBar = true,
 		GroupHealthBarTypes = { "Stalker_Miniboss", },
 		--HealthBarTextId = "Charybdis_Full",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "MiniBossStalker_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 		
 		UnthreadedEvents = EncounterSets.EncounterEventsDefault,
 

@@ -293,7 +293,6 @@ RoomSets =
 
 		"P_MiniBoss01",
 		"P_MiniBoss02",
-		"P_MiniBoss03",
 
 		"P_Combat01",
 		"P_Combat02",
@@ -374,7 +373,15 @@ RoomSets =
 	C =
 	{
 		"C_Boss01",
-	}
+	},
+
+	Dream =
+	{
+		"Dream_Intro",
+		"Dream_PostBoss01",
+		"Dream_PostBoss02",
+		"Dream_PostBoss03",
+	},
 }
 
 NextRoomSets =
@@ -386,4 +393,17 @@ NextRoomSets =
 	N_SubRooms = "O",
 	O = "P",
 	P = "Q",
+}
+
+RoomSetIcons =
+{
+	F = "BiomeErebusIcon",
+	G = "BiomeOceanusIcon",
+	H = "BiomeFieldsIcon",
+	I = "BiomeTartarusIcon",
+	N = "BiomeEphyraIcon",
+	O = "BiomeThessalyIcon",
+	P = "BiomeOlympusIcon",
+	Q = "BiomeSummitIcon",
+	Mystery = "BiomeMysteryIcon",
 }

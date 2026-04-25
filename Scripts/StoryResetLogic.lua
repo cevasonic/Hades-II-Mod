@@ -84,18 +84,9 @@ function ConfirmStoryResetPresentation( usee )
 
 	FadeIn({ Color = Color.Black, Duration = 0.3 })
 
-	local gameOutroData = DeepCopyTable( GameOutroData.Outro_StoryReset01 )
+	local gameOutroData = GameOutroData.Outro_StoryReset01
 	GameState.PlayedRunOutros[gameOutroData.Name] = true
-	gameOutroData.Header = gameOutroData.Header or gameOutroData.Name
-	RunInterstitialPresentation( gameOutroData,
-		{
-			Animations =
-			{
-				{
-					AnimationName = "RemBGOutroStart",
-				},
-			}
-		} )
+	RunInterstitialPresentation( gameOutroData )
 
 	DoStoryReset()
 

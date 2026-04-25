@@ -59,6 +59,10 @@ AutomaticExtractProperties =
 	{
 		MultiplyHeroValue = "PoseidonFontMultiplier",
 	},
+	AresCursePowerBonus = 
+	{
+		AddHeroValue = "MissingEffectDamageIncrement",
+	},
 	MoonBeamDamage = 
 	{
 		AddHeroValue = "ReportedMoonBeamDamageBoost",
@@ -70,6 +74,10 @@ AutomaticExtractProperties =
 	PolymorphDuration = 
 	{
 		AddHeroValue = "PolymorphDuration",
+	},
+	PolymorphDamage = 
+	{
+		AddHeroValue = "ReportedPolymorphDamageBoost",
 	},
 	ExDamageMultiplier =
 	{
@@ -878,7 +886,7 @@ TextFormats =
 	EndCreditsInlineCreditTitle =
 	{
 		Graft = true,
-		Font = "P22UndergroundSCMedium",
+		Font = "CreditsTitleP22UndergroundSCMedium",
 		FontSize = 22,
 		Color = { 0.55, 0.79, 0.92 },
 	},
@@ -907,7 +915,7 @@ TextFormats =
 	EndCreditsInlineCreditH3 =
 	{
 		Graft = true,
-		Font = "P22UndergroundSCMedium",
+		Font = "CreditsTitleP22UndergroundSCMedium",
 		FontSize = 22,
 		Color = { 0.97, 0.94, 0.73 },
 		ShadowColor = { 0, 0, 0, 1 },
@@ -957,9 +965,17 @@ IconData =
 	{
 		TexturePath = "Items\\Loot\\MaxManaDrop_Text",
 	},
+	MaxManaDrop_Flipped =
+	{
+		TexturePath = "Items\\Loot\\MaxManaDrop_Text_Flipped",
+	},
 	TalentDrop =
 	{
 		TexturePath = "Items\\Loot\\TalentDrop\\TalentDrop_Text",
+	},
+	TalentDrop_Flipped =
+	{
+		TexturePath = "Items\\Loot\\TalentDrop\\TalentDrop_Text_Flipped",
 	},
 
 	RandomLoot = 
@@ -1433,6 +1449,10 @@ IconData =
 	{
 		TexturePath = "GUI\\Icons\\Gift",
 	},
+	GiftPointsIconAlt =
+	{
+		TexturePath = "GUI\\Icons\\Gift",
+	},
 	GiftPointsRareIcon =
 	{
 		TexturePath = "Items\\Resources\\Other\\GiftPointsRare_Text",
@@ -1442,6 +1462,10 @@ IconData =
 		TexturePath = "Items\\Resources\\Other\\GiftPointsEpic_Text",
 	},
 	SuperGiftPointsIcon =
+	{
+		TexturePath = "GUI\\Icons\\SuperGift",
+	},
+	SuperGiftPointsIconAlt =
 	{
 		TexturePath = "GUI\\Icons\\SuperGift",
 	},
@@ -1460,6 +1484,10 @@ IconData =
 		TexturePath = "Items\\Resources\\Other\\HypnosPoints_Text",
 	},
 	IcarusPointsIcon =
+	{
+		TexturePath = "Items\\Resources\\Other\\IcarusPoints_Text",
+	},
+	IcarusPointsIconAlt =
 	{
 		TexturePath = "Items\\Resources\\Other\\IcarusPoints_Text",
 	},
@@ -2085,11 +2113,23 @@ IconData =
 	{
 		TexturePath = "Items\\Resources\\Boss\\MixerGBoss_Text",
 	},
+	MixerShadowIconAlt =
+	{
+		TexturePath = "Items\\Resources\\Alchemy\\Shadow_Text",
+	},
 	CardUpgradePointsIcon =
 	{
 		TexturePath = "Items\\Resources\\Other\\CardUpgradePoints_Text",
 	},
+	CardUpgradePointsIconAlt =
+	{
+		TexturePath = "Items\\Resources\\Other\\CardUpgradePoints_Text",
+	},
 	FamiliarPointsIcon =
+	{
+		TexturePath = "Items\\Resources\\Alchemy\\FamiliarPoints_Text",
+	},
+	FamiliarPointsIconAlt =
 	{
 		TexturePath = "Items\\Resources\\Alchemy\\FamiliarPoints_Text",
 	},
@@ -2100,6 +2140,10 @@ IconData =
 	TrashPointsIcon =
 	{
 		TexturePath = "Items\\Resources\\Other\\TrashPoints_Text",
+	},
+	DreamPointsIcon =
+	{
+		TexturePath = "Items\\Resources\\Other\\DreamPoints_Text",
 	},
 	PlantFNightshadeIcon =
 	{
@@ -2155,11 +2199,11 @@ IconData =
 	},
 	PlantQSnakereedSeedIcon =
 	{
-		TexturePath = "GUI\\Icons\\TempIcon",
+		TexturePath = "Items\\Resources\\Plant\\PlantQSnakereedSeed_Text",
 	},
 	PlantQSnakereedIcon =
 	{
-		TexturePath = "GUI\\Icons\\TempIcon_Text",
+		TexturePath = "Items\\Resources\\Plant\\PlantQSnakereed_Text",
 	},
 	BountyEyeIcon =
 	{
@@ -2193,6 +2237,46 @@ IconData =
 	{
 		TexturePath = "GUI\\Screens\\RunHistory\\Icon-Chaos",
 	},
+	DreamIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-Dream",
+	},
+	BiomeErebusIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeErebus",
+	},
+	BiomeOceanusIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeOceanus",
+	},
+	BiomeFieldsIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeFields",
+	},
+	BiomeTartarusIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeTartarus",
+	},
+	BiomeEphyraIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeEphyra",
+	},
+	BiomeThessalyIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeThessaly",
+	},
+	BiomeOlympusIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeOlympus",
+	},
+	BiomeSummitIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeSummit",
+	},
+	BiomeMysteryIcon =
+	{
+		TexturePath = "GUI\\Screens\\RunHistory\\Icon-BiomeMystery",
+	},
 }
 
 -- Remembrances
@@ -2213,6 +2297,14 @@ RunIntroData =
 		PauseMusic = true,
 		SubtitleColor = Color.NarratorVoice,
 		SpeakerName = "Storyteller",
+
+		Animations =
+		{
+			{
+				AnimationName = "RemBGIntroStart",
+			},
+		},
+
 		VoiceLines =
 		{
 			{ Cue = "/VO/Storyteller_0042", Text = "{#Emph}Few tales are told of Hades, whose reign as grim lord of the dead came to a sudden end when, all at once, his past caught up with him.", PreLineWait = 0.72, NoTarget = true },
@@ -2419,6 +2511,22 @@ UIData =
 			OutlineThickness = 0, OutlineColor = {1, 1, 1, 1},
 			TextSymbolScale = 0.5,
 			CharacterFadeTime = 0, CharacterFadeInterval = 0,
+		},
+	},
+
+	InterstitialSkipPrompt =
+	{
+		X = 1880,
+		Y = 1020,
+		TextArgs =
+		{
+			Text = "Interstitial_SkipPrompt",
+			Justification = "RIGHT",
+			ShadowColor = {0, 0, 0, 128}, ShadowOffset = {0, 2}, ShadowBlur = 0,
+			OutlineThickness = 0, OutlineColor = {1, 1, 1, 1},
+			Font = "P22UndergroundSCMedium",
+			FontSize = 22,
+			Color = Color.White,
 		},
 	},
 }

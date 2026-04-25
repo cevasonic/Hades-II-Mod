@@ -70,7 +70,7 @@ function SetupFlashback01( source, args )
 
 	if args.TextLineSet ~= nil then
 		ProcessTextLines( hecate, args.TextLineSet )
-		PlayRandomRemainingTextLines( hecate, args.TextLineSet )
+		PlayFirstEligibleTextLines( hecate, args.TextLineSet )
 	end
 
 end
@@ -231,7 +231,7 @@ function SetupFlashback02( source, args )
 		{
 			-- None
 		},
-		{ Cue = "/VO/Melinoe_2929", Text = "What... where... Father...", PreLineWait = 0.6 },
+		{ Cue = "/VO/Melinoe_2929", Text = "What... where... Father...", PreLineWait = 0.6, LineHistoryColor = HeroData.NarrativeFadeInColor, },
 	}
 	thread( PlayVoiceLines, voiceLines )
 
@@ -282,7 +282,7 @@ function Flashback02Objective( source, args )
 			{
 				-- None
 			},
-			{ Cue = "/VO/Hades_0170", Text = "What am I waiting for..." },
+			{ Cue = "/VO/Hades_0170", Text = "What am I waiting for...", LineHistoryColor = Color.HadesVoice },
 		}
 		thread( PlayVoiceLines, voiceLines )
 
@@ -322,7 +322,7 @@ function SetupFlashback02_DeathArea( source, args )
 		{
 			-- None
 		},
-		{ Cue = "/VO/Hades_0002", Text = "{#Emph}<Gasp>" },
+		{ Cue = "/VO/Hades_0002", Text = "{#Emph}<Gasp>", LineHistoryColor = Color.HadesVoice },
 	}
 	thread( PlayVoiceLines, endVoiceLines )
 

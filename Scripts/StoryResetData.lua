@@ -168,9 +168,6 @@ StoryResetData =
 		"HecateAboutChronosBossW03",
 		"HecateAboutTimeStop01",
 		-- "HecateAboutStormStop01",
-		-- "HecateAboutStormStop01_B",
-		-- "HecateAboutChronosBossW04",
-		-- "HecateAboutStormStop01_B",
 		"HecateAboutChronosBossW04_A",
 		"HecateAboutChronosBossW04_B",
 		-- "HecateUnderworldRunCleared01",
@@ -202,8 +199,6 @@ StoryResetData =
 		"HecateBossAboutEndingPath02",
 		"HecateBossAboutEndingPath03",
 		"HecateBossAboutEndingPath04",
-
-		-- "HecateBossAboutChronosBossW00",
 
 		-- "HecateBossAboutFates01",
 		-- "HecateBossAboutChronosBossW01",
@@ -565,6 +560,7 @@ StoryResetData =
 		"HypnosAboutUltimateProgress02",
 		"HypnosPostTrueEnding01",
 		"HypnosPostTrueEnding02",
+		"HypnosDreamAboutStoryReset01",
 
 		-- chronos
 		"ChronosPostBattleMeeting01",
@@ -632,6 +628,7 @@ StoryResetData =
 		"ZagreusBossOutro01",
 
 		-- zeus + hera palace
+		"ZeusPalaceFirstMeetingAlt",
 		"ZeusPalaceFirstMeeting",
 		"ZeusPalaceMeeting02",
 		"ZeusPalaceMeeting03",
@@ -978,6 +975,7 @@ StoryResetData =
 		"/VO/Chronos_1416",
 
 		"/VO/Melinoe_5062", -- "Prince Zagreus."
+		"ZagreusTrueEndingSaluteVO",
 
 		"AchillesTrueEndGreetingVO",
 		"/VO/Achilles_0011",
@@ -1010,17 +1008,23 @@ StoryResetData =
 		"/VO/Melinoe_5712",
 		"/VO/MelinoeField_4182",
 		"/VO/MelinoeField_4180",
-		"/VO/MelinoeField_4181",
 
 		"LeavingErebusPostEndingIntroVO",
 		"/VO/MelinoeField_4584",
 
 		"/VO/Hades_0231", -- "Our daughter..."
 
+		-- zagreus boss intro
+		"/VO/Zagreus_0115",
+
 		-- hypnos quest
 		"/VO/Hypnos_0031",
 		"/VO/Melinoe_4708",
 		"/VO/Hypnos_0037",
+
+		-- epilogue quest
+		"/VO/MelinoeField_5026",
+		"/VO/Melinoe_5692",
 
 		-- epilogue intro
 		"/VO/MelinoeField_4072",

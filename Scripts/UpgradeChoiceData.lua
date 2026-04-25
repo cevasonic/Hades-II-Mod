@@ -250,7 +250,6 @@ ScreenData.UpgradeChoice =
 
 		OlympusBackground =
 		{
-			Graphic = "rectangle01",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
 		},

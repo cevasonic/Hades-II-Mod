@@ -25,32 +25,39 @@ OnProjectileBlock{
 				CallFunctionName( blocker.ProjectileBlockPresentationFunctionName, blocker, triggerArgs )
 			end
 		end
-		if weaponName ~= nil and WeaponData[weaponName] ~= nil then
-			if WeaponData[weaponName].ProjectileBlockFunctionName then
-				CallFunctionName(WeaponData[weaponName].ProjectileBlockFunctionName, triggerArgs, WeaponData[weaponName].ProjectileBlockFunctionArgs)
-			end
-			if WeaponData[weaponName].DoProjectileBlockPresentation then
-				if CheckCooldown("BlockAttackPresentation", 0.25) then
-					thread( BlockAttackPresentation, weaponName, blocker.ObjectId, attacker )
-				end
-				local blockRumble =
-				{
-					{ ScreenPreWait = 0, Fraction = 0.1, Duration = 0.2 },
-				}
-				thread( DoRumble, blockRumble )
-			end
-		end
-		
 		if attacker and attacker.ShotsDestroyedReactionVoiceLines then
 			thread( PlayVoiceLines, attacker.ShotsDestroyedReactionVoiceLines, nil, attacker, triggerArgs )
 		end
-		if blocker == CurrentRun.Hero then
-			for i, functionData in pairs( GetHeroTraitValues( "OnBlockDamageFunction" ) ) do
-				CallFunctionName( functionData.Name, blocker, functionData.Args, triggerArgs )
-			end
-		end
+		DoBlock( triggerArgs )
 	end
 }
+
+function DoBlock( triggerArgs )
+	local weaponName = triggerArgs.WeaponName
+	local blocker = triggerArgs.Blocker
+	local attacker = triggerArgs.Attacker
+	if weaponName ~= nil and WeaponData[weaponName] ~= nil then
+		if WeaponData[weaponName].ProjectileBlockFunctionName then
+			CallFunctionName(WeaponData[weaponName].ProjectileBlockFunctionName, triggerArgs, WeaponData[weaponName].ProjectileBlockFunctionArgs)
+		end
+		if WeaponData[weaponName].DoProjectileBlockPresentation then
+			if CheckCooldown("BlockAttackPresentation", 0.25) then
+				thread( BlockAttackPresentation, weaponName, blocker.ObjectId, attacker )
+			end
+			local blockRumble =
+			{
+				{ ScreenPreWait = 0, Fraction = 0.1, Duration = 0.2 },
+			}
+			thread( DoRumble, blockRumble )
+		end
+	end
+		
+	if blocker == CurrentRun.Hero then
+		for i, functionData in pairs( GetHeroTraitValues( "OnBlockDamageFunction" ) ) do
+			CallFunctionName( functionData.Name, blocker, functionData.Args, triggerArgs )
+		end
+	end
+end
 
 OnDodge{
 	function( triggerArgs )
@@ -370,7 +377,7 @@ function CalculateBaseDamageAdditions( attacker, victim, triggerArgs )
 				
 				if modifierData.MissingEffectDamage then
 					if modifierData.MissingEffectDamage and victim.TriggersOnHitEffects and victim.ActiveEffects and not victim.ActiveEffects[modifierData.MissingEffectName] then
-						local missingEffectDamage = modifierData.MissingEffectDamage
+						local missingEffectDamage = modifierData.MissingEffectDamage + GetTotalHeroTraitValue("MissingEffectDamageIncrement")
 						local missingEffectDamageMultiplier = 1 + GetTotalHeroTraitValue( "MissingEffectDamageIncreasePerUniqueGod" ) * attacker.UniqueGodCount
 						for i, data in ipairs( GetHeroTraitValues( "ActivatedMissingEffectDamageIncrease" ) ) do
 							if HeroHasTrait(data.TraitName) and GetHeroTrait(data.TraitName).Activated then
@@ -759,7 +766,7 @@ function CalculateDamageMultipliers( attacker, victim, weaponData, triggerArgs )
 					addDamageMultiplier( modifierData, modifierData.GroupMultiplier )
 				end
 
-				if modifierData.ChargeStageMultiplier and triggerArgs.ProjectileVolley and SessionMapState.ProjectileChargeStageReached[triggerArgs.ProjectileVolley] and SessionMapState.ProjectileChargeStageReached[triggerArgs.ProjectileVolley] >= modifierData.RequiredChargeStage then
+				if modifierData.ChargeStageMultiplier and triggerArgs.SourceProjectileVolley and SessionMapState.ProjectileChargeStageReached[triggerArgs.SourceProjectileVolley] and SessionMapState.ProjectileChargeStageReached[triggerArgs.SourceProjectileVolley] >= modifierData.RequiredChargeStage then
 					addDamageMultiplier( modifierData, modifierData.ChargeStageMultiplier )
 				end
 
@@ -916,7 +923,7 @@ function CalculateCritChance( attacker, victim, weaponData, triggerArgs )
 						( victim.HealthBuffer == nil or victim.MaxHealthBuffer == nil or victim.HealthBuffer == 0 or ( victim.HealthBuffer / victim.MaxHealthBuffer >= modifierData.TargetHighHealthPercentThreshold )) then
 						addCritMultiplier( modifierData, modifierData.TargetHighHealthChance, triggerArgs )
 					end
-					if modifierData.ValidVolleyChance and MapState.CritVolleys and MapState.CritVolleys [triggerArgs.SourceWeapon] and MapState.CritVolleys[triggerArgs.SourceWeapon][triggerArgs.ProjectileVolley] then
+					if modifierData.ValidVolleyChance and MapState.CritVolleys and MapState.CritVolleys [triggerArgs.SourceWeapon] and triggerArgs.SourceProjectileVolley and MapState.CritVolleys[triggerArgs.SourceWeapon][triggerArgs.SourceProjectileVolley] then
 						addCritMultiplier( modifierData, modifierData.ValidVolleyChance, triggerArgs )	
 					end
 					if modifierData.DifferentOmegaChance and SessionMapState.DifferentOmegaVolleys and triggerArgs.SourceProjectileVolley and
@@ -1157,13 +1164,13 @@ function Damage( victim, triggerArgs )
 			sourceEffectData = EffectData[triggerArgs.EffectName]
 		end
 		if not sourceProjectileData or not sourceProjectileData.IgnoreAllModifiers then
+			local multipliers = CalculateDamageMultipliers( attacker, victim, sourceWeaponData, triggerArgs )
 			local baseDamage = CalculateBaseDamage( attacker, victim, triggerArgs )
 			if not triggerArgs.IgnoreFutureModifiers then
 				baseDamage = baseDamage + CalculateBaseDamageAdditions( attacker, victim, triggerArgs )
 				if triggerArgs.MissingEffectDamageIncrease then
 					triggerArgs.MissingEffectDamagePercent = triggerArgs.MissingEffectDamageIncrease/baseDamage
 				end
-				local multipliers = CalculateDamageMultipliers( attacker, victim, sourceWeaponData, triggerArgs )
 				local additive = CalculateDamageAdditions( attacker, victim, sourceWeaponData, triggerArgs )
 				local critChance = CalculateCritChance( attacker, victim, sourceWeaponData, triggerArgs )
 				local ddChance = CalculateDoubleDamageChance( attacker, victim, sourceWeaponData, triggerArgs )
@@ -1177,6 +1184,10 @@ function Damage( victim, triggerArgs )
 				triggerArgs.DamageAmount = round(baseDamage * multipliers) + additive
 			else
 				triggerArgs.DamageAmount = baseDamage
+			end
+			if multipliers == 0 then
+				-- Regardless of additions, etc. a multiplier of 0 nulls out damage changes.
+				triggerArgs.DamageAmount = 0
 			end
 		end
 		if triggerArgs.IsCrit and (not sourceEffectData or not sourceEffectData.BlockCrit ) and (not sourceProjectileData or not sourceProjectileData.BlockCrit) then
@@ -1486,8 +1497,6 @@ function DamageEnemy( victim, triggerArgs )
 		return
 	end
 
-	thread( CheckOnDamagedPowers, victim, attacker, triggerArgs )
-
 	local healthProtected = ProcessHealthBuffer( victim, triggerArgs )
 	if not healthProtected then
 		if victim.AIEndHealthThreshold ~= nil then
@@ -1510,6 +1519,8 @@ function DamageEnemy( victim, triggerArgs )
 			victim.Health = 0
 		end
 	end
+	
+	thread( CheckOnDamagedPowers, victim, attacker, triggerArgs )
 
 	if not victim.EarlyExit and not victim.IsDead and victim.Health > 0 and triggerArgs.DamageAmount > 0 then
 		CreateHealthBar( victim )
@@ -1938,7 +1949,8 @@ end
 function SetCastArmEnabled( flag )
 	MapState.CastArmDisable[flag] = nil
 	if IsEmpty( MapState.CastArmDisable ) then
-		SetWeaponProperty({ WeaponName = "WeaponCastArm", DestinationId = CurrentRun.Hero.ObjectId, Property = "Enabled", Value = true })	
+		SetWeaponProperty({ WeaponName = "WeaponCastArm", DestinationId = CurrentRun.Hero.ObjectId, Property = "Enabled", Value = true })		
+		SetWeaponProperty({ WeaponName = "WeaponCastArm", DestinationId = CurrentRun.Hero.ObjectId, Property = "RequireControlRelease", Value = true, DataValue = false })
 	end
 end
 
@@ -2151,6 +2163,7 @@ function LastStandManaReserve( unit, args )
 				ManaFraction = 0.4,
 				HealFraction = 0.4,
 				Silent = true,
+				Priority = true,
 			})
 			numLastStands = numLastStands - 1
 			reservationCost = reservationCost + args.ManaReservationCost
@@ -2293,6 +2306,26 @@ function CheckLastStand( victim, triggerArgs )
 			StartPresentationFunctionName = "BlockDeathLastStandPresentationStart",
 			EndPresentationFunctionName = "BlockDeathLastStandPresentationEnd"
 		}
+		if triggerArgs.AttackerTable then
+			local killer = triggerArgs.AttackerTable
+			
+			local killedByName = killer.Name or triggerArgs.SourceWeapon
+			SessionMapState.BlockDeathLastKilledByName = killedByName or GameState.LastKilledByName
+			if CurrentRun.CurrentRoom.BackupCauseOfDeath ~= nil then
+				SessionMapState.BlockDeathCauseOfDeath = CurrentRun.CurrentRoom.BackupCauseOfDeath
+				SessionMapState.BlockDeathCauseOfDeathDisplay = CurrentRun.CurrentRoom.BackupCauseOfDeath
+				if CurrentRun.CurrentRoom.CauseOfDeathDisplayData and IsGameStateEligible(CurrentRun.CurrentRoom, CurrentRun.CurrentRoom.CauseOfDeathDisplayData.GameStateRequirements ) then
+					SessionMapState.BlockDeathCauseOfDeathDisplay = CurrentRun.CurrentRoom.CauseOfDeathDisplayData.Name
+				end
+			elseif killer.Name ~= nil and killer.ObjectId ~= nil and not killer.SkipModifiers and not killer.ExcludeCauseOfDeath then
+				SessionMapState.BlockDeathCauseOfDeath = GetGenusName( killer )
+				SessionMapState.BlockDeathCauseOfDeathDisplay = SessionMapState.BlockDeathCauseOfDeath
+				if killer.CauseOfDeathDisplayData and IsGameStateEligible(killer, killer.CauseOfDeathDisplayData.GameStateRequirements ) then
+					SessionMapState.BlockDeathCauseOfDeathDisplay = killer.CauseOfDeathDisplayData.Name
+				end
+			end
+		end
+		RecreateLifePips()
 	elseif not IsEmpty(victim.LastStands ) then
 		lastStandData = table.remove( victim.LastStands )
 	end
@@ -3101,24 +3134,17 @@ OnWeaponFired{
 	function( triggerArgs )
 
 		local weaponName = triggerArgs.name
+		local weaponData = triggerArgs.OwnerTable.WeaponDataOverride[weaponName] or WeaponData[weaponName]
+
         if triggerArgs.OwnerTable.ObjectId == CurrentRun.Hero.ObjectId then
             CheckPlayerOnFirePowers( triggerArgs )
 		end
 
         -- chaos curse effects
-		if triggerArgs.OwnerTable == CurrentRun.Hero and not CurrentRun.Hero.Frozen and not CurrentRun.Hero.InvulnerableFlags.BlockDeath then
-			for i, data in ipairs( CurrentRun.Hero.HeroTraitValuesCache.DamageOnFireWeapons ) do
-				if Contains( data.WeaponNames, triggerArgs.name ) and ( data.IsEx == nil or ( data.IsEx and IsExWeapon( triggerArgs.name, {Combat = true}, triggerArgs ))) then
-					thread( PlayVoiceLines, HeroVoiceLines.SelfDamageVoiceLines, false )
-					SacrificeHealth( { SacrificeHealthMin = data.Damage, SacrificeHealthMax = data.Damage, MinHealth = 1, AttackerName = "TrialUpgrade" } )
-					if CurrentRun.CurrentRoom.Encounter ~= nil then
-						CurrentRun.CurrentRoom.Encounter.TookChaosCurseDamage = true
-					end
-				end
-			end
+		if triggerArgs.OwnerTable == CurrentRun.Hero and not CurrentRun.Hero.Frozen and not CurrentRun.Hero.InvulnerableFlags.BlockDeath and weaponData and not weaponData.ManualCheckDamageOnFire then
+			CheckDamageOnFire( triggerArgs )
 		end
 
-		local weaponData = triggerArgs.OwnerTable.WeaponDataOverride[weaponName] or WeaponData[weaponName]
 		local projectileData = nil
 		if triggerArgs.ProjectileName and ProjectileData[triggerArgs.ProjectileName] then
 			projectileData = ProjectileData[triggerArgs.ProjectileName]
@@ -3490,7 +3516,7 @@ OnHit{
 				
 				if (MapState.DaggerBlockShieldActive and HeroHasTrait("DaggerBlockAspect")) then
 					triggerArgs.InvulnerablePassthrough = true
-				elseif HeroHasTrait( "ReserveManaHitShieldBoon" ) then
+				elseif HeroHasTrait( "ReserveManaHitShieldBoon" ) and triggerArgs.DamageAmount > 0  then
 				-- Player hit
 					local tempInvulnerabilityTrait = nil
 					for k, currentTrait in ipairs( CurrentRun.Hero.Traits ) do
@@ -3507,6 +3533,13 @@ OnHit{
 				end
 			end
 		else
+			if victim == CurrentRun.Hero then
+				if triggerArgs.SourceProjectile and triggerArgs.InvulnerableFromCoverage and HeroHasTrait("ReserveManaHitShieldBoon") then
+					if CurrentRun.Hero.Weapons.WeaponSuit and GetProjectileDataValue({ Id = triggerArgs.ProjectileId, Property = "CanBeProjectileDefenseDestroyedByName2" }) then
+						thread( DoBlock, { Attacker = attacker, Blocker = victim, WeaponName = "WeaponSuitCharged" })
+					end
+				end
+			end
 			-- Enemy hit
 			if victim.CanBeAggroed and victim.IsAggroed == false and attackerId == CurrentRun.Hero.ObjectId and (sourceProjectileData == nil or not sourceProjectileData.SkipAggro) then
 				thread( AggroUnit, victim, true )
@@ -3599,7 +3632,9 @@ OnHit{
 						traitData.RemainingBlocks = traitData.RemainingBlocks - 1
 						thread( PolecatFamiliarGuard, MapState.FamiliarUnit, { AttackerId = triggerArgs.AttackerId, ImpactAngle = triggerArgs.ImpactAngle, RemainingBlocks = traitData.RemainingBlocks } )
 						AddEffectBlock({ Id = CurrentRun.Hero.ObjectId, Name = "MedeaPoison" })
+						AddEffectBlock({ Id = CurrentRun.Hero.ObjectId, Name = "Inked" })
 						thread( RemoveEffectBlockOnDelay, CurrentRun.Hero.ObjectId, 0.25, "MedeaPoison" )
+						thread( RemoveEffectBlockOnDelay, CurrentRun.Hero.ObjectId, 0.25, "Inked" )
 						return
 					end
 				end
@@ -3906,7 +3941,7 @@ function Kill( victim, triggerArgs )
 		if victim.OnDeathThreadedFunctionName ~= nil then
 			thread( CallFunctionName, victim.OnDeathThreadedFunctionName, victim, victim.OnDeathFunctionArgs )
 		end
-		if victim.IsBoss and not victim.BlockPostBossMetaUpgrades and ( not victim.UseGroupHealthBar or victim.GroupHealthBarOwner ) then
+		if victim.IsBoss and not victim.BlockPostBossMetaUpgrades and ( not victim.UseGroupHealthBar or victim.GroupHealthBarOwner ) and CurrentRun.EnteredBiomes < GameData.FullRunBiomeCount then
 			local delay = 3.5
 			local keepsakeDelay = 3.5
 			if GetTotalHeroTraitValue("StoredGold") > 0 then
@@ -3915,7 +3950,10 @@ function Kill( victim, triggerArgs )
 				thread( GushMoney, { Delay = moneyDelay, Amount = bankBoon.StoredGold, LocationId = CurrentRun.Hero.ObjectId, Radius = 100, Source = "BankBoon" } )
 				thread( BankPayoutPresentation, bankBoon.StoredGold, moneyDelay )
 				delay = delay + moneyDelay + 0.5
-				RemoveTrait( CurrentRun.Hero, "BankBoon" )
+				bankBoon.StoredGold = 0
+				bankBoon.BlockInRunRarify = true
+				bankBoon.CustomTrayText = "BankBoon_Expired"
+				bankBoon.TrayStatLines = {}
 			end
 
 			if GetTotalHeroTraitValue("PostBossCards") > 0 then
@@ -3955,6 +3993,7 @@ function Kill( victim, triggerArgs )
 			-- skip
 		else
 			local newUnit = DeepCopyTable( EnemyData[victim.SpawnUnitOnDeath] )
+			local newUnitIds = nil
 			if ( victim.Charmed or victim.AlwaysTraitor ) then 
 				newUnit.BlocksLootInteraction = false
 				newUnit.AlwaysTraitor = true
@@ -3968,7 +4007,7 @@ function Kill( victim, triggerArgs )
 				newUnit.UseActivatePresentation = false
 			end
 			if newUnit.IsUnitGroup then
-				SpawnUnitGroup(newUnit, nil, { SpawnOnIds = { victim.ObjectId } }, victim.ObjectId )
+				newUnitIds = SpawnUnitGroup(newUnit, nil, { SpawnOnIds = { victim.ObjectId } }, victim.ObjectId )
 			else
 				newUnit.ObjectId = SpawnUnit({ Name = victim.SpawnUnitOnDeath, Group = "Standing", DestinationId = victim.ObjectId })
 				thread(SetupUnit, newUnit, CurrentRun)
@@ -3978,6 +4017,23 @@ function Kill( victim, triggerArgs )
 			end
 			if victim.SpawnUnitOnDeathSetGeometryToMarkers ~= nil then
 				SetGeometry({ Id = newUnit.ObjectId, DestinationNames = victim.SpawnUnitOnDeathSetGeometryToMarkers, UseMarkerHull = true })
+			end
+			local encounter = nil
+			if MapState.EncounterOverride then
+				encounter = MapState.EncounterOverride
+			elseif CurrentRun and CurrentRun.CurrentRoom then
+				if CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.InProgress then
+					encounter = CurrentRun.CurrentRoom.Encounter
+				elseif CurrentRun.CurrentRoom.ChallengeEncounter and CurrentRun.CurrentRoom.ChallengeEncounter.InProgress then
+					encounter = CurrentRun.CurrentRoom.ChallengeEncounter
+				end
+			end
+			if encounter and encounter.RecordSpawnedEnemiesForBlockDeath then
+				if newUnit.ObjectId then
+					table.insert( SessionMapState.MidEncounterSpawns, newUnit.ObjectId)
+				elseif newUnitIds ~= nil then
+					ConcatTableValues( SessionMapState.MidEncounterSpawns, newUnitIds )
+				end
 			end
 		end
 	end
@@ -4167,12 +4223,16 @@ function CheckOnKillWeaponUpgrades( killerId, victim, killingWeapon )
 	local dropCap = {}
 	local dropChance = {}
 	local invalidDrops = {}
+	local dropOverrides = {}
 	for i, dropData in ipairs( CurrentRun.Hero.HeroTraitValuesCache.DropOnKill ) do
 		local checkValidLifeOnKill = ( dropData.ValidEnemies == nil and victim.DropItemsOnDeath ) or (dropData.ValidEnemies ~= nil and Contains( dropData.ValidEnemies, victim.GenusName ) or Contains( dropData.ValidEnemies, victim.Name ))
 		if checkValidLifeOnKill then
 			IncrementTableValue( dropChance, dropData.Name, dropData.Chance )
 			if dropData.RoomCap and TableLength(GetIdsByType({ Name = dropData.Name })) > (dropData.RoomCap - 1) then
 				invalidDrops[dropData.Name] = true
+			end
+			if dropData.Overrides then
+				dropOverrides[dropData.Name] = ShallowCopyTable( dropData.Overrides )
 			end
 			if dropData.DropCap then
 				IncrementTableValue( dropCap, dropData.Name, dropData.DropCap )
@@ -4182,7 +4242,6 @@ function CheckOnKillWeaponUpgrades( killerId, victim, killingWeapon )
 			end
 		end
 	end
-
 	for key, dropChances in pairs( dropChance ) do
 		while dropChances > 0 do
 			local validDrop = true
@@ -4194,7 +4253,14 @@ function CheckOnKillWeaponUpgrades( killerId, victim, killingWeapon )
 			end
 			if RandomChance(dropChances * GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true })) and validDrop then
 				local id = SpawnObstacle({ Name = key, DestinationId = victim.ObjectId, Group = "Standing" })
-				local reward = CreateConsumableItem( id, key, 0)
+				local reward = CreateConsumableItem( id, key, 0 )
+				if dropOverrides[key] then
+					for consumableKey, value in pairs(dropOverrides[key]) do
+						if consumableKey ~= "ReportValues" then
+							reward[consumableKey] = value
+						end
+					end
+				end
 				reward.NPCDrop = true
 				ApplyConsumableItemResourceMultiplier( CurrentRun, reward )
 				ApplyUpwardForce({ Id = id, Speed = RandomFloat( 200, 300 ) })
@@ -4565,7 +4631,7 @@ function GameplaySetElapsedTimeMultiplier( args )
 	end
 		
 	SetThingProperty({ Property = "ElapsedTimeMultiplier", Value = currentMultiplier, DataValue = false, ValueChangeType = "Absolute", AllProjectiles = true })
-	SetThingProperty({ Property = "ElapsedTimeMultiplier", Value = currentMultiplier/ startingMultiplier, ValueChangeType = "Multiply", DataValue = false, DestinationNames = { "EnemyTeam", "RoomWeapon" } })
+	SetThingProperty({ Property = "ElapsedTimeMultiplier", Value = currentMultiplier/ startingMultiplier, ValueChangeType = "Multiply", DataValue = false, DestinationNames = { "EnemyTeam", "RoomWeapon", "Summons" } })
 
 	local elapsedTimePropertyTable = { Property = "ElapsedTimeMultiplier", Value = 0.0, ValueChangeType = "Absolute", DataValue = false, DestinationId = 1 }
 	for enemyId, enemy in pairs( ActiveEnemies ) do
@@ -4663,7 +4729,9 @@ function EquipPlayerWeapon( weaponData, args )
 	ConcatTableValues( toEquip, WeaponSets.HeroWeaponSets[weaponData.Name] )	
 	EquipWeapon({ DestinationId = heroId, Names = toEquip, LoadPackages = args.LoadPackages })
 	OverwriteTableKeys( MapState.EquippedWeapons, ToLookup(toEquip) )
-
+	if weaponData.SprintDisableEffectName then
+		SetWeaponProperty({ WeaponName = "WeaponSprint", DestinationId = CurrentRun.Hero.ObjectId, Property = "DisableFireWithEffect2", Value = weaponData.SprintDisableEffectName })
+	end
 	if MapState.WeaponSpawns ~= nil then
 		for spawnId, spawn in pairs( MapState.WeaponSpawns ) do
 			Kill( spawn )
@@ -4896,7 +4964,7 @@ function CheckUnitInvulnerableHit(blocker, args)
 	end
 
 	if blocker.InvulnerableHitSound ~= nil then
-		PlaySound({ Id = blocker.ObjectId, Name = blocker.InvulnerableHitSound })
+		PlaySound({ Id = blocker.ObjectId, Name = blocker.InvulnerableHitSound, ManagerCap = 52 })
 	end
 end
 
@@ -5127,8 +5195,7 @@ function HandleStoredProjectileDeath(projectileData, triggerArgs)
 	storedAmmo.LocationX = storedAmmo.LocationX + offset.X
 	storedAmmo.LocationY = storedAmmo.LocationY + offset.Y
 	storedAmmo.Angle = triggerArgs.Angle
-
-	if victim ~= nil and victim.ObjectId == CurrentRun.Hero.ObjectId then -- Hit Hero
+	if victim ~= nil and victim.ObjectId == CurrentRun.Hero.ObjectId and not triggerArgs.InvulnerableImpact then -- Hit Hero
 
 		if victim.IsDead then
 			return
@@ -5218,5 +5285,11 @@ function AmmoPackPickupTrigger(ammoPack, args)
 
 	if zag ~= nil then
 		AmmoPackPickup(ammoPack, zag, args)
+	end
+end
+
+function RecordBossKillerName( victim, args, triggerArgs )
+	if triggerArgs.AttackerTable ~= nil then
+		SessionMapState.BossKillerName = triggerArgs.AttackerTable.Name
 	end
 end

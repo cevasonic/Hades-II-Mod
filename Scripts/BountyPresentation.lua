@@ -3,7 +3,13 @@ function PackagedBountyEarnedPresentation( bountyData )
 	PlaySound({ Name = "/Leftovers/Menu Sounds/EmoteAscendedDark" })
 	PlaySound({ Name = "/SFX/Menu Sounds/BiomeMapRewardIcon" })
 
-	thread( PlayVoiceLines, HeroVoiceLines.PackagedBountyClearedVoiceLines )
+	CurrentRun.Hero.Mute = true -- prevent Mel from saying OnAddVoiceLines etc.
+
+	if SetThreadWait( "InfoBanner", 0.01 ) then
+		wait( 0.2 )
+	end
+
+	thread( PlayVoiceLines, HeroVoiceLines.PackagedBountyClearedVoiceLines, nil, nil, { IgnoreMute = true } )
 
 	DisplayInfoBanner( nil, {
 		TitleText = bountyData.TitleText or "BountyCompleteMessage",
@@ -76,7 +82,7 @@ end
 
 function BountyBoardOpenedPresentation( screen )
 
-	thread( PlayVoiceLines, HeroVoiceLines.BountyBoardOpenedVoiceLines )
+	thread( PlayVoiceLines, HeroVoiceLines.BountyBoardOpenedVoiceLines, nil, nil, { HasUnviewedBounty = screen.HasUnviewedBounty } )
 	wait( 0.5 )
 	for i = 1, 5 do
 		local intensityComponent = screen.Components["IntensityEye"..i]

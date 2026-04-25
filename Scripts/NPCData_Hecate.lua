@@ -50,24 +50,13 @@
 				PreLineWait = 0.25,
 				RandomRemaining = true,
 				UsePlayerSource = true,
-				SuccessiveChanceToPlay = 0.2,
+				SuccessiveChanceToPlay = 0.35,
 				Cooldowns =
 				{
 					{ Name = "MelinoeSaluteSpeech", Time = 4 },
 				},
 
 				{ Cue = "/VO/Melinoe_1706", Text = "Be well, Headmistress.", PlayFirst = true },
-				{ Cue = "/VO/Melinoe_5299", Text = "Be well, Hecate.",
-					GameStateRequirements =
-					{
-						{
-							PathTrue = { "GameState", "TextLinesRecord", "HecateAboutSayingLittle01" },
-						},
-						{
-							PathFalse = { "CurrentRun", "TextLinesRecord", "HecateAboutSayingLittle01" },
-						},
-					},
-				},
 				{ Cue = "/VO/Melinoe_1697", Text = "Together we shine." },
 				{ Cue = "/VO/Melinoe_0025", Text = "Together we shine." },
 				{ Cue = "/VO/Melinoe_5164", Text = "Be well, Hecate.",
@@ -76,6 +65,50 @@
 					{
 						{
 							PathTrue = { "GameState", "TextLinesRecord", "HecateFishing02" },
+						},
+						{
+							Path = { "CurrentRun", "SpeechRecord" },
+							HasNone =
+							{
+								-- "/VO/Melinoe_5164",
+								"/VO/Melinoe_5299",
+								"/VO/Melinoe_5720",
+							},
+						},
+					},
+				},
+				{ Cue = "/VO/Melinoe_5299", Text = "Be well, Hecate.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "HecateFishing02" },
+						},
+						{
+							Path = { "CurrentRun", "SpeechRecord" },
+							HasNone =
+							{
+								"/VO/Melinoe_5164",
+								-- "/VO/Melinoe_5299",
+								"/VO/Melinoe_5720",
+							},
+						},
+
+					},
+				},
+				{ Cue = "/VO/Melinoe_5720", Text = "Be well, Hecate.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "HecateFishing02" },
+						},
+						{
+							Path = { "CurrentRun", "SpeechRecord" },
+							HasNone =
+							{
+								"/VO/Melinoe_5164",
+								"/VO/Melinoe_5299",
+								-- "/VO/Melinoe_5720",
+							},
 						},
 					},
 				},
@@ -204,7 +237,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_1706", "/VO/Melinoe_5164" },
+							IsAny = { "/VO/Melinoe_1706", "/VO/Melinoe_5164", "Melinoe_5299", "Melinoe_5720" },
 						},
 					},
 				},
@@ -214,7 +247,7 @@
 					{
 						{
 							Path = { "LastLinePlayed" },
-							IsAny = { "/VO/Melinoe_5299" },
+							IsAny = { "/VO/Melinoe_5299", "/VO/Melinoe_5164", "Melinoe_5299", "Melinoe_5720" },
 						},
 					},
 				},
@@ -458,7 +491,6 @@
 			{
 				PlayOnce = true,
 				-- StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				GameStateRequirements =
 				{
 					{
@@ -568,7 +600,6 @@
 			{
 				PlayOnce = true,
 				-- StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				GameStateRequirements =
 				{
 					{
@@ -1059,7 +1090,7 @@
 					{
 						Path = { "GameState", "UseRecord", "SpellDrop" },
 						Comparison = "<=",
-						Value = 10,
+						Value = 15,
 					},
 					{
 						PathFalse = { "GameState", "RoomsEntered", "I_Boss01" },
@@ -1070,21 +1101,14 @@
 
 				{ Cue = "/VO/Hecate_0014",
 					Text = "Sister Selene tells me that she lent you her brilliance and might. You were able to draw her down even within this place?" },
+
 				{ Cue = "/VO/Melinoe_0043", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
 					Text = "I found a source of moonlight and invoked Selene's aid using the Words, Headmistress. I can't imagine the extent of her power." },
+
 				{ Cue = "/VO/Hecate_0015",
 					Text = "You know her power perfectly well. You simply haven't had the opportunities to wield it. You shall have them very soon, I think." },
-				EndVoiceLines =
-				{
-					{
-						PreLineWait = 0.35,
-						UsePlayerSource = true,
-						RequiredMinElapsedTime = 3,
-
-					},
-				},
 			},
 			HecateAboutNemesis01 =
 			{
@@ -1167,6 +1191,50 @@
 						PreLineWait = 0.4,
 						ObjectType = "NPC_Hecate_01",
 						{ Cue = "/VO/Hecate_0855", Text = "He did require a place to stay." },
+					},
+				},
+			},
+			HecateAboutHypnosWakeUp02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HypnosDreamRunStart01" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "IsDreamRun" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_1006",
+					Text = "You saw that Hypnos brought something for you? A {#Emph}special order from the House{#Prev}, so I was notified. And I don't mean that little pile yonder where he used to doze." },
+
+				{ Cue = "/VO/Melinoe_5813", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I have! At first I thought it was a place of rest there in the training grounds. But it's a means by which I can connect more deeply to my dreams... to my worries and such." },
+
+				{ Cue = "/VO/Hecate_1007",
+					PreLineAnim = "Hecate_Hub_Scoff",
+					Text = "Melinoë, the point of resting is to set your worries well aside. But I know some are inescapable, and if this is a means for you to still these restless corners of your mind, then so be it. Do take what time you wish with that." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+						{ Cue = "/VO/Melinoe_5814", Text = "I might as well!" },
 					},
 				},
 			},
@@ -1399,6 +1467,9 @@
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
 						PathTrue = { "GameState", "TextLinesRecord", "PrometheusAboutMortals01" },
 					},
 					{
@@ -1412,10 +1483,12 @@
 					PreLineAnim = "Hecate_Hub_Explaining_Start",
 					PostLineAnim = "Hecate_Hub_Explaining_End",
 					Text = "The fire-thief Prometheus insists on barring your path toward the mountain summit still. What nonsense has he filled your head with recently?" },
+
 				{ Cue = "/VO/Melinoe_4048", UsePlayerSource = true,
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "He seems to bear a deep sense of responsibility and guilt for mortalkind. I'm concerned he aims to spread dissension in our ranks... some Shades who serve our cause must harbor sympathies." },
+
 				{ Cue = "/VO/Hecate_0761",
 					PreLineAnim = "Hecate_Hub_Stern_Start",
 					PostLineAnim = "Hecate_Hub_Stern_End",
@@ -1441,8 +1514,7 @@
 						PathFalse = { "GameState", "TyphonDefeatedWithStormStop" },
 					},
 					{
-						Path = { "CurrentRun", "RoomsEntered" },
-						HasAny = { "Q_Boss01", "Q_Boss02" },
+						PathTrue = { "CurrentRun", "EnemyKills", "TyphonHead" },
 					},
 					{
 						SumPrevRuns = 4,
@@ -1501,7 +1573,7 @@
 				{ Cue = "/VO/Melinoe_5289", UsePlayerSource = true,
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "Then consider the claim verified. I almost expected some great feast or ceremony considering all it took. Though I suppose that's not the way the will of Night is done. " },
+					Text = "Then consider the claim verified. I almost expected some great feast or ceremony considering all it took. Though I suppose that's not the way the will of Night is done." },
 
 				{ Cue = "/VO/Hecate_0850",
 					Text = "Nyx herself would say, {#Emph}seek to be valuable, not to be known. {#Prev}Selene and I at least know what you achieved. But if 'tis glory you desire, you were born in the wrong realm." },
@@ -1685,7 +1757,6 @@
 						Path = { "GameState", "TextLinesRecord" },
 						HasNone = {
 								"HecateAboutUltimateProgress03",
-								"HecateAboutChronosBossW04",
 								"HecateAboutChronosBossW04_A",
 								"HecateAboutChronosBossW04_B",
 							},
@@ -1697,6 +1768,7 @@
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZagreusPastMeeting05" },
 					},
+					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -1772,6 +1844,7 @@
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZagreusPastMeeting05" },
 					},
+					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -1847,6 +1920,52 @@
 				},
 			},
 
+			HecateAboutUltimateProgressSurface01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "ZagreusPastMeeting04" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
+					},
+					NamedRequirementsFalse = { "HecateMissing" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_0982",
+					Text = "I commend your singular focus in dealing with Chronos in your father's House... however, I must admit the matter facing your mountain relatives can no longer be ignored." },
+
+				{ Cue = "/VO/Melinoe_5792", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Headmistress, you're suggesting I should shift my attention to the surface, when we're this close to victory?" },
+
+				{ Cue = "/VO/Hecate_0983",
+					PreLineAnim = "Hecate_Hub_Stern_Start",
+					PostLineAnim = "Hecate_Hub_Stern_End",
+					Text = "We're not as close to victory as you surmise. For one, the Dissolution of Time requires a key reagent you do not yet have. 'Tis not something you'll find below; I realize that now, and so should you." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+						{ Cue = "/VO/Melinoe_5793", Text = "Then I'll find it above." },
+					},
+				},
+			},
+
 			-- alt below
 			HecateAboutTyphonFight01 =
 			{
@@ -1872,7 +1991,6 @@
 							"HecateBossAboutTyphonFight01_B",
 							"HecateAboutTyphonFight03",
 							"HecateAboutTyphonFight03_B",
-							"HecateAboutChronosBossW04",
 							"HecateAboutChronosBossW04_A",
 							"HecateAboutChronosBossW04_B",
 						},
@@ -1938,7 +2056,6 @@
 							"HecateBossAboutTyphonFight01_B",
 							"HecateAboutTyphonFight03",
 							"HecateAboutTyphonFight03_B",
-							"HecateAboutChronosBossW04",
 							"HecateAboutChronosBossW04_A",
 							"HecateAboutChronosBossW04_B",
 						},
@@ -2002,8 +2119,7 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasNone = { "ZeusPalaceMeeting02", "HecateAboutStormStop01", "HecateAboutStormStop01_B", "HecateAboutChronosBossW04"
-						},
+						HasNone = { "ZeusPalaceMeeting02", "HecateAboutStormStop01" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "HecateAboutTyphonFight02_B" }
@@ -2039,7 +2155,7 @@
 				GameStateRequirements =
 				{
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						PathFalse = { "GameState", "TyphonDefeatedWithStormStop" },
 					},
 					{
 						PathTrue = { "GameState", "RoomsEntered", "Q_Boss01" },
@@ -2049,7 +2165,7 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "ZeusPalaceFirstMeeting", "HecateAboutTyphonFight02" },
+						HasAny = { "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TextLinesRecord", "ZeusPalaceMeeting02" },
@@ -2164,6 +2280,11 @@
 					{
 						Path = { "GameState", "EnemyKills", "TyphonHead" },
 						Comparison = "==",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "RoomsEntered", "Q_Boss01" },
+						Comparison = ">",
 						Value = 1,
 					},
 				},
@@ -2367,6 +2488,9 @@
 				{
 					{
 						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateAboutChronosBossEarlyL01" },
 					},
 					{
 						PathTrue = { "CurrentRun", "RoomsEntered", "I_Boss01" },
@@ -2610,77 +2734,6 @@
 					},
 				},
 			},
-			-- alts below (that don't grant StormStop)
-			-- if you have made enough Typhon progress (ZeusPalaceMeeting02), but not earned StormStop
-			HecateAboutChronosBossW04 =
-			{
-				PlayOnce = true,
-				UseableOffSource = true,
-				StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
-				InitialGiftableOffSource = true,
-				GameStateRequirements =
-				{
-					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
-					},
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "ZagreusPastMeeting05", "ZeusPalaceMeeting02" },
-					},
-					{
-						PathTrue = { "CurrentRun", "EnemyKills", "Chronos" },
-					},
-					-- three paths to stop the storm
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasNone =
-						{
-							"HecateAboutStormStop01",
-							"HecateAboutStormStop01_B",
-							-- "HecateAboutChronosBossW04"
-						},
-					},
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasNone =
-						{
-							-- "HecateAboutChronosBossW04",
-							"HecateAboutChronosBossW04_A",
-							"HecateAboutChronosBossW04_B",
-						},
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
-
-				{ Cue = "/VO/Melinoe_4733", UsePlayerSource = true,
-					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "My father's spear, Gigaros... it was there in the Prince's chambers for me to find. Zagreus must have gotten access to it in his time, as I have now. One final step, then?" },
-
-				{ Cue = "/VO/Hecate_0786",
-					PreLineAnim = "Hecate_Hub_Affirm",
-					PostLineFunctionName = "UnblockHubExitForNarrative",
-					Text = "First let us put what you discovered to the test. Once the incantation I shall teach you is complete, seek out Typhon... and use the spear essence after his strength has waned." },
-
-				EndFunctionName = "DisplayInfoToast",
-				EndFunctionArgs = { Duration = 2.5, Title = "WorldUpgradeAdded", Text = "WorldUpgradeStormStop" },
-
-				EndVoiceLines =
-				{
-					{
-						PreLineWait = 0.4,
-						UsePlayerSource = true,
-						{ Cue = "/VO/Melinoe_4734", Text = "What shall become of Typhon once I do?" },
-					},
-					{
-						PreLineWait = 0.52,
-						ObjectType = "NPC_Hecate_01",
-						PreLineAnim = "HecateHubGreet",
-						{ Cue = "/VO/Hecate_0787", Text = "...He'll be nothing." },
-					},
-				},
-			},
 			-- significant ZagreusPastMeeting progress, if you have found Typhon but not made much progress against him
 			HecateAboutChronosBossW04_A =
 			{
@@ -2704,7 +2757,6 @@
 						Path = { "GameState", "TextLinesRecord" },
 						HasNone =
 						{
-							"HecateAboutChronosBossW04",
 							-- "HecateAboutChronosBossW04_A",
 							"HecateAboutChronosBossW04_B",
 						},
@@ -2771,7 +2823,6 @@
 						Path = { "GameState", "TextLinesRecord" },
 						HasNone =
 						{
-							"HecateAboutChronosBossW04",
 							"HecateAboutChronosBossW04_A",
 							-- "HecateAboutChronosBossW04_B",
 						},
@@ -3277,6 +3328,9 @@
 					{
 						PathTrue = { "CurrentRun", "BiomesReached", "F" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -3317,6 +3371,9 @@
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAny = { "ArachneAboutCurse01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "NPC_Arachne_01" },
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "AthenaAboutArachne03" },
@@ -3438,6 +3495,9 @@
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "ArachneWithHecateInHub02" },
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArachneAboutCurseQuest01" }
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -3540,7 +3600,7 @@
 					{
 						Path = { "GameState", "UseRecord", "NPC_Medea_01" },
 						Comparison = ">=",
-						Value = 5,
+						Value = 4,
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
@@ -3563,6 +3623,125 @@
 						UsePlayerSource = true,
 						RequiredMinElapsedTime = 2,
 						{ Cue = "/VO/Melinoe_2516", Text = "I'll be checking up on her." },
+					},
+				},
+			},
+
+			HecateAboutMedeaAltFight01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "N_Boss02" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_1008",
+					Text = "Medea notified me that the two of you have had your little altercations recently but that I ought not to be concerned. 'Twas apparently the will of Night that brought it forth!" },
+
+				{ Cue = "/VO/Melinoe_5815", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "Lady Medea speaks true, though I'd not expected her to side with the Cyclops Polyphemus in these altercations of ours. You didn't order her to test me, then?" },
+
+				{ Cue = "/VO/Hecate_1009",
+					PreLineAnim = "Hecate_Hub_Affirm",
+					Text = "I ordered her to heed the Oath, and it appears she has. Well, 'tis a good way to bring out her enthusiasm for her work if nothing else." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+						{ Cue = "/VO/Melinoe_5816", Text = "And her enthusiasm for a Cyclops..." },
+					},
+				},
+			},
+
+			HecateAboutOdysseusWandering01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuestComplete01" },
+					},
+					{
+						SumPrevRuns = 2,
+						Path = { "TextLinesRecord", "OdysseusLooseEndsQuestComplete01" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+					NamedRequirements = { "OdysseusWandering" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_0856",
+					Text = "Our Tactician has decided to take his leave. Off to settle some of his personal affairs, he says. As good a time as any, I suppose." },
+
+				{ Cue = "/VO/Melinoe_5294", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "I'm not used to seeing Odysseus away for long. He'll be back, won't he? He's always been so devoted to this place." },
+
+				EndVoiceLines =
+				{
+					{
+
+						PreLineWait = 0.4,
+						ObjectType = "NPC_Hecate_01",
+						{ Cue = "/VO/Hecate_0857", Text = "We shall see what he decides. The choice is his." },
+					},
+				},
+			},
+			HecateAboutOdysseusReturn01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "OdysseusLooseEndsQuestComplete01" },
+					},
+					NamedRequirementsFalse = { "OdysseusWandering" },
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_0984",
+					Text = "I know he thanked you personally though I wish to express my gratitude in turn that you were able to assist our Tactician with matters that weighed on him. I suppose all of us here are haunted by our past in some way." },
+
+				{ Cue = "/VO/Melinoe_5794", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "Odysseus did all the work. I merely arranged a few meetings where distance would have been a factor. Though, I know it's best to avoid using our craft in such matters." },
+
+				{ Cue = "/VO/Hecate_0985",
+					PreLineAnim = "HecateHubGreet",
+					Text = "If you did not use our craft to sway the outcomes of these meetings, then you did not overstep. For his part, Odysseus has seemed more at ease, having finally confronted those unresolved troubles of his... and perhaps finally sailed past." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.38,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 2,
+						TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+						{ Cue = "/VO/Melinoe_5795", Text = "I'm glad to hear it." },
 					},
 				},
 			},
@@ -3706,6 +3885,206 @@
 				},
 			},
 
+			HecateAboutComradeQuests01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = {
+							"ArachneCurseQuestComplete01",
+							"EchoAboutNarcissus07"
+						},
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_0986",
+					Text = "There's that faint line on your brow betraying your frustrations, Melinoë. I too can sense them in your heart. Sound them out, and rid yourself of them." },
+
+				{ Cue = "/VO/Melinoe_5796", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					Text = "Oh, I was just thinking about curses. To be turned into a spider... forced to repeat everything you hear... stuck forever staring at your own reflection. Craft such as ours can inflict such ailments, yet cannot undo them?" },
+
+				{ Cue = "/VO/Hecate_0987",
+					PreLineAnim = "HecateHubGreet",
+					Text = "You refer to the specific and imaginative afflictions of certain comrades of yours. Tell me, do they suffer still? Or have you aided them to the best of your ability, without relying solely on our craft?" },
+
+				{ Cue = "/VO/Melinoe_5797", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01ReturnToIdle", PreLineAnimTarget = "Hero",
+					Text = "Surely there's more I could have done for them, had I not restrained myself from using my abilities to the fullest." },
+
+				{ Cue = "/VO/Hecate_0988",
+					PreLineAnim = "Hecate_Hub_Affirm",
+					Text = "You could have acted negligently, yes. Instead you acted with restraint. Is that not for the best in matters concerning those for whom we care? You helped them cease being defined by their curses, and gave them new strength." },
+
+				{ Cue = "/VO/Melinoe_5798", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "How can you be so certain? I haven't even said whom I'm referring to." },
+
+				{ Cue = "/VO/Hecate_0989",
+					PreLineAnim = "Hecate_Hub_Scoff",
+					Text = "Melinoë, I can figure it out. And I likewise know your comrades are grateful to you for all that you've done." },
+
+				{ Cue = "/VO/Melinoe_5799", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "You say such things to alleviate my mood." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Hecate_01",
+						PreLineAnim = "HecateHubGreet",
+						{ Cue = "/VO/Hecate_0990", Text = "Correct. Yet 'tis also the truth." },
+					},
+				},
+			},
+			HecateAboutComradeQuests02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = {
+							"ArachneCurseQuestComplete01",
+							"OdysseusAboutReturn01",
+							-- "EchoAboutNarcissus07",
+							"DoraAboutMemoryQuest01",
+							-- "HypnosFinalDreamMeeting01",
+						},
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_0991",
+					Text = "I must commend you, Melinoë... helping our Tactician come to grips with his old connections, Arachne with her curse, that Shade-follower of yours with her memories, and more. You could have focused solely on your task." },
+
+				{ Cue = "/VO/Melinoe_5800", UsePlayerSource = true,
+					-- Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					Text = "Would you not have preferred that, Headmistress? As I was trying to aid my comrades, I sometimes couldn't shake the sense that I was doing something wrong. What's more, I couldn't even solve their problems. Not entirely..." },
+
+				{ Cue = "/VO/Hecate_0992",
+					PreLineAnim = "HecateHubGreet",
+					Text = "There are such problems that take root deeply enough that they become a part of us. These cannot be solved, so much as accepted and understood. Your comrades may never have achieved this without you, at least not anytime soon." },
+
+				{ Cue = "/VO/Melinoe_5801", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01ReturnToIdle", PreLineAnimTarget = "Hero",
+					Text = "{#Emph}Lost souls must first accept that they are lost{#Prev}, you used to say. That's true of more than just the Shades of Erebus, though, isn't it..." },
+
+				{ Cue = "/VO/Hecate_0993",
+					PreLineAnim = "Hecate_Hub_Affirm",
+					Text = "Correct. You are the Princess of the Underworld, and you possess a gift. 'Tis not your magickal acuity, for that you learned painstakingly. Rather, you inspire others to believe in themselves... as well as you." },
+
+				{ Cue = "/VO/Melinoe_5802", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "I have strong-willed comrades... I hardly think that I've inspired them." },
+
+				{ Cue = "/VO/Hecate_0994",
+					PreLineAnim = "Hecate_Hub_Stern_Start",
+					PostLineAnim = "Hecate_Hub_Stern_End",
+					Text = "{#Emph}You are a goddess. {#Prev}Do not diminish your accomplishments, especially to me." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5803", Text = "Very well. And thank you." },
+					},
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Hecate_01",
+						PreLineAnim = "HecateHubGreet",
+						{ Cue = "/VO/Hecate_0995", Text = "We all thank {#Emph}you." },
+					},
+				},
+			},
+
+			HecateAboutDoraQuest01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = {
+							"DoraAboutMemories01",
+						},
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_0996",
+					Text = "You incanted the Return of Latent Memories on that Shade companion who yet haunts your residence. You were certain she desired this, and was prepared to face the truth?" },
+
+				{ Cue = "/VO/Melinoe_5804", UsePlayerSource = true,
+					-- Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Mel_Vulnerable_01", WaitTime = 4.2 },
+
+					Text = "I had seldom seen Dora want for something more, and she has a strong spirit. Wait, were you aware of her past?" },
+
+				{ Cue = "/VO/Hecate_0997",
+					PreLineAnim = "Hecate_Hub_Scoff",
+					Text = "I held to my suspicions, but 'twas not for me to speak of it. The complications between gods and mortals started long ago, and now cannot be easily untangled, if at all." },
+
+				{ Cue = "/VO/Melinoe_5805", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "Am I supposed to just accept that my relatives may have been so careless or cruel with all these beings who look up to them? Perhaps Prometheus is right about us gods." },
+
+				{ Cue = "/VO/Hecate_0998",
+					PreLineAnim = "Hecate_Hub_Stern_Start",
+					PostLineAnim = "Hecate_Hub_Stern_End",
+					Text = "Prometheus makes sweeping condemnations. Live long enough, Melinoë, and you too shall make decisions you regret. Dora certainly has! Some of your relatives surely have, as well. All we can do is learn, and move on if we can." },
+
+				{ Cue = "/VO/Melinoe_5806", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01ReturnToIdle", PreLineAnimTarget = "Hero",
+					Text = "You said {#Emph}some {#Prev}of my relatives. You think others may be more like Dora was... oblivious to the mistakes of the past?" },
+
+				{ Cue = "/VO/Hecate_0999",
+					PreLineAnim = "Hecate_Hub_Explaining_Start",
+					PostLineAnim = "Hecate_Hub_Explaining_End",
+					Text = "I think they could not dwell on it, especially of late, with harder lessons from the past taking precedence. Perhaps at some point, you shall help your relatives make peace with all of this. When they are ready to face their own truth." },
+
+				{ Cue = "/VO/Melinoe_5807", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero", 
+					Text = "Would it be foolish and naive for me to try?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.37,
+						ObjectType = "NPC_Hecate_01",
+						PreLineAnim = "HecateHubGreet",
+						{ Cue = "/VO/Hecate_1000", Text = "'Twould be foolish and naive for me to say so." },
+					},
+				},
+			},
+
 			HecateAboutFamily01 =
 			{
 				PlayOnce = true,
@@ -3743,7 +4122,7 @@
 					Text = "You always reminded me of your father, Melinoë, but lately you remind me of your mother... more and more. The concern for others that you sometimes show... it can be an exploitable weakness." },
 				{ Cue = "/VO/Melinoe_0154", UsePlayerSource = true,
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "I would never put any such concerns ahead of the task, Headmistress." },
 				{ Cue = "/VO/Hecate_0038",
 					PreLineAnim = "Hecate_Hub_Affirm",
@@ -4060,6 +4439,47 @@
 				},
 			},
 
+			HecateAboutCauldronEmpty01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "WorldUpgrades" },
+						HasAll = ScreenData.GhostAdmin.ItemCategories[1],
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "UseRecord", "GhostAdmin" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 0,
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Melinoe_5300", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "It's strange, I... can't think of anything to cast of late. Here at the cauldron I mean. Has that ever happened to you?" },
+
+				{ Cue = "/VO/Hecate_0941",
+					Text = "How often do you see me casting at the cauldron? 'Tis a natural part of your advancement. More incantations shall come to you eventually, although perhaps not soon. I know this is difficult for you, but don't worry about it." },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						RequiredMinElapsedTime = 3,
+						{ Cue = "/VO/Melinoe_5301", Text = "All right, fine." },
+					},
+				},
+			},
+
 			HecateAboutGarden01 =
 			{
 				PlayOnce = true,
@@ -4203,7 +4623,7 @@
 				{ Cue = "/VO/Melinoe_3453", UsePlayerSource = true,
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
 					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
-					Text = "The Altar is a threshold through which we all pass, going to and from these Crossroads. A gateway to the past, present, and future. I know it isn't mine alone; it's ours. " },
+					Text = "The Altar is a threshold through which we all pass, going to and from these Crossroads. A gateway to the past, present, and future. I know it isn't mine alone; it's ours." },
 				EndVoiceLines =
 				{
 					{
@@ -4789,6 +5209,10 @@
 					{
 						PathFalse = { "GameState", "WorldUpgradesAdded", "WorldUpgradeSurfacePenaltyCure" },
 					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasNone = { "HecateAboutUltimateProgressSurface01" },
+					},
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -5141,6 +5565,7 @@
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "ZagreusPastMeeting04_3" },
 					},
+					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -5377,6 +5802,7 @@
 					{
 						PathTrue = { "CurrentRun", "RoomsEntered", "I_Boss01" },
 					},
+					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				OnQueuedFunctionName = "CheckDistanceTriggerThread",
 				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
@@ -5807,16 +6233,6 @@
 				StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
 				GameStateRequirements =
 				{
-					-- three paths to stop the storm
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasNone =
-						{
-							-- "HecateAboutStormStop01",
-							"HecateAboutStormStop01_B",
-							"HecateAboutChronosBossW04"
-						},
-					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
 						HasAll = { "ZagreusPastMeeting02", "ZeusPalaceMeeting02" },
@@ -5860,72 +6276,6 @@
 						{ Cue = "/VO/Melinoe_4737", Text = "{#Emph}Disintegration of Monstrosity..." },
 					},
 				},
-			},
-			HecateAboutStormStop01_B =
-			{
-				PlayOnce = true,
-				UseableOffSource = true,
-				InitialGiftableOffSource = true,
-				StatusAnimation = "StatusIconWantsToTalkImportant_NPC",
-				GameStateRequirements =
-				{
-					-- three paths to stop the storm
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasNone =
-						{
-							"HecateAboutStormStop01",
-							-- "HecateAboutStormStop01_B",
-							"HecateAboutChronosBossW04"
-						},
-					},
-					{
-						PathTrue = { "GameState", "TextLinesRecord", "HecateAboutChronosBossW04_B" },
-					},
-					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasAny = {
-							"ZeusPalaceMeeting03",
-							-- "ZeusPalaceMeeting03_A",
-							-- "ZeusPalaceMeeting03_B"
-						}
-					},
-				},
-				OnQueuedFunctionName = "CheckDistanceTriggerThread",
-				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
-
-				{ Cue = "/VO/Hecate_0758",
-					PreLineAnim = "Hecate_Hub_Scoff",
-					Text = "Chronos must believe he has the upper hand now that Olympus has the Father of All Monsters bearing down on them night after night. But he has made a grave mistake..." },
-
-				{ Cue = "/VO/Melinoe_4736", UsePlayerSource = true,
-					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
-					Text = "Headmistress, are we finally prepared? To use the Temporal Spear against Typhon... and then Chronos after that." },
-
-				{ Cue = "/VO/Hecate_0790",
-					PreLineAnim = "Hecate_Hub_Affirm",
-					PostLineFunctionName = "UnblockHubExitForNarrative",
-					Text = "I do believe we are at last, Melinoë. Once the incantation I shall teach you is complete, seek that monster, and then use the spear essence after his strength has waned." },
-
-				EndFunctionName = "DisplayInfoToast",
-				EndFunctionArgs = { Duration = 2.5, Title = "WorldUpgradeAdded", Text = "WorldUpgradeStormStop" },
-
-				EndVoiceLines =
-				{
-					{
-						PreLineWait = 0.4,
-						UsePlayerSource = true,
-						{ Cue = "/VO/Melinoe_4734", Text = "What shall become of Typhon once I do?" },
-					},
-					{
-						PreLineWait = 0.52,
-						ObjectType = "NPC_Hecate_01",
-						PreLineAnim = "HecateHubGreet",
-						{ Cue = "/VO/Hecate_0787", Text = "...He'll be nothing." },
-					},
-				},
-
 			},
 
 			HecateAboutStormStopNotCast01 =
@@ -6190,6 +6540,57 @@
 				},
 			},
 
+			HecatePostTrueEnding05 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = {
+							"ZeusPalacePostTrueEnding01",
+							"HecateAboutDoraQuest01",
+						},
+					},
+				},
+				OnQueuedFunctionName = "CheckDistanceTriggerThread",
+				OnQueuedFunctionArgs = PresetEventArgs.HecateGreeting,
+
+				{ Cue = "/VO/Hecate_1001",
+					PreLineAnim = "Hecate_Hub_Explaining_Start",
+					PostLineAnim = "Hecate_Hub_Explaining_End",
+					Text = "Your magick may have proven instrumental to the reconciliation of your family recently, but it shall only take you and any of them so far. Consider how rigorously you trained... all shall need to put forth a similar effort now." },
+
+				{ Cue = "/VO/Melinoe_5808", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "All these inter-family relationships need be tended like a garden. But my relatives have always struggled to communicate and get along, haven't they? Father couldn't even maintain ties with the Olympians." },
+
+				{ Cue = "/VO/Hecate_1002",
+					PreLineAnim = "Hecate_Hub_Scoff",
+					Text = "'Tis not one of your family's greatest strengths, that much is true. And it may never become one. Nonetheless, we have seen the consequences of the mistakes of the past, and those ought never to recur. You'll see to it, won't you?" },
+
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.4,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_5809", Text = "With all my heart." },
+					},
+					{
+						PreLineWait = 0.35,
+						ObjectType = "NPC_Hecate_01",
+						PreLineAnim = "HecateHubGreet",
+						{ Cue = "/VO/Hecate_1003", Text = "I trust that shall suffice." },
+					},
+				},
+			},
+
 			HecateBathHouseEpilogue01 =
 			{
 				PauseMusicPlayerMusic = true,
@@ -6216,7 +6617,7 @@
 				{ Cue = "/VO/Melinoe_4884", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Proud_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					PreLineThreadedFunctionName = "PlayEmoteAnimFromSource", PreLineThreadedFunctionArgs = { Emote = "None", Portrait = "Portrait_Mel_Empathetic_01", WaitTime = 6.3 },
 
 					Text = "Thank you, Headmistress. I get the impression that they sought {#Emph}me {#Prev}more so than the other way around, but at least we know they're safe. They... also mentioned {#Emph}you." },
@@ -6616,6 +7017,17 @@
 				PreBlockSpecialInteract = true,
 				PostBlockSpecialInteract = true,
 			},
+			HermesWithHecate01 =
+			{
+				Partner = "NPC_Hermes_01",
+				PlayOnce = true,
+				UseableOffSource = true,
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				StatusAnimation = false,
+				PreBlockSpecialInteract = true,
+				PostBlockSpecialInteract = true,
+			},
 			ArachneWithHecateInHub01 =
 			{
 				Partner = "NPC_Arachne_Home_01",
@@ -6901,6 +7313,239 @@
 					Text = "...willow bark, sulfur, wing of bat, onion-skin..." },
 			},
 
+			HecateChat23 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "GamePhase", },
+						Comparison = "==",
+						Value = 5,
+					},
+				},
+				{ Cue = "/VO/Hecate_0929",
+					Text = "The moon is new and offers us abundant possibility in what's to come." },
+			},
+			HecateChat24 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Hecate_0930",
+					Text = "Proceed as though your path is yours to choose; no one decides for you." },
+			},
+			HecateChat25 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 4,
+					},
+				},
+				{ Cue = "/VO/Hecate_0931",
+					Text = "Had enough of the Underworld? The surface could surely use a witch's touch." },
+			},
+			HecateChat26 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = "==",
+						Value = 4,
+					},
+				},
+				{ Cue = "/VO/Hecate_0932",
+					Text = "The Underworld always has need of you if the surface is well enough in hand." },
+			},
+			HecateChat27 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "Cleared" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				{ Cue = "/VO/Hecate_0933",
+					Text = "So many victories, you stand to forget the bitter taste of defeat altogether." },
+			},
+			HecateChat28 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "Cleared" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				{ Cue = "/VO/Hecate_0934",
+					Text = "Accumulating victories as though they were reagents that you'd put into a pot." },
+			},
+			HecateChat29 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "EnemyKills", "TyphonHead" },
+					},
+				},
+				{ Cue = "/VO/Hecate_0935",
+					Text = "One fewer remnant of the Father of All Monsters exists, as I surmise. Well done." },
+			},
+			HecateChat30 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "EnemyKills", "TyphonHead" },
+					},
+				},
+				{ Cue = "/VO/Hecate_0936",
+					Text = "Another possibility of Typhon, dead and gone. We heard the positive result." },
+			},
+			HecateChat31 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+				{ Cue = "/VO/Hecate_0937",
+					Text = "How strange it must be, having to confront old Chronos in his misconception of your father's House." },
+			},
+			HecateChat32 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+				{ Cue = "/VO/Hecate_0938",
+					Text = "Do give those remnants of old Chronos a curse or two on my behalf." },
+			},
+			HecateChat33 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Hecate_0939",
+					Text = "We can but learn, Melinoë. Go on, and see what else this world has to teach." },
+			},
+			HecateChat34 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "SeleneAboutAltFightQuest03" }
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 12,
+					},
+				},
+				{ Cue = "/VO/Hecate_0940",
+					Text = "Fear is palpable tonight. But you're no stranger to that sense by now." },
+			},
+
+			OdysseusWithHecateChat01 =
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				CopyDataFromPartner = true,
+			},
+			OdysseusWithHecateChat02 =
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				CopyDataFromPartner = true,
+			},
+			OdysseusWithHecateChat03 =
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				CopyDataFromPartner = true,
+			},
+			OdysseusWithHecateChat04 =
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				CopyDataFromPartner = true,
+			},
+			OdysseusWithHecateChat05 =
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				CopyDataFromPartner = true,
+			},
+			OdysseusWithHecateChat06 =
+			{
+				Partner = "NPC_Odysseus_01",
+				-- PlayOnce = true,
+				UseableOffSource = true,
+				StatusAnimation = false,
+				CopyDataFromPartner = true,
+			},
 		},
 
 		GiftTextLineSets =
@@ -7020,6 +7665,7 @@
 				PauseMusicPlayerMusic = true,
 				PlayOnce = true,
 				OnGiftTrack = true,
+				AltEvent = "HecateGift06_B",
 				Cost =
 				{
 					GiftPoints = 1,
@@ -7027,21 +7673,29 @@
 				GameStateRequirements =
 				{
 					{
+						PathFalse = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateGift06_B" }
+					},
+					{
 						PathTrue = { "GameState", "TextLinesRecord", "HecateBathHouse02" },
 					},
 				},
 				{ Cue = "/VO/Hecate_0540",
 					Text = "I thought I said you needn't curry favor with me thus. I shall take this bottle, nonetheless; if but to penalize you for not offering it up instead to someone more deserving of your affection." },
 				{ Cue = "/VO/Melinoe_2167", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "I can think of no one else I would rather have this than you, Headmistress. You've made me the goddess I am, and not a night goes by that I'm not grateful for it." },
 				{ Cue = "/VO/Hecate_0541",
-					Text = "How often must I say, I'm not your mother, Melinoë. You needn't lavish me with such unbridled praise. I raised you to destroy our common foe. You owe no gratitude to me." },
+					PreLineAnim = "Hecate_Hub_Scoff",
+					Text = "How often must I say, I'm not your mother, Melinoë. You needn't lavish me with such unbridled praise... I raised you to destroy our common foe. You owe no gratitude to me." },
 				{ Cue = "/VO/Melinoe_2168", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Empathetic_01",
 					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "You've often said, what we intend and what we do are not the same. I know you're not my birthmother, so what? You've cared for me; that's more than enough." },
 				{ Cue = "/VO/Hecate_0542",
 					Text = "I've used you, and I'm using you still. Can't you see that? I've attempted not to hide this fact from you. Yet you turn it aside." },
@@ -7049,6 +7703,8 @@
 					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
 					Text = "You have raised me in accordance with the promises you made to my father. He never asked you to coddle me, did he? Surely he wanted me to fend for myself." },
 				{ Cue = "/VO/Hecate_0543",
+					PreLineAnim = "Hecate_Hub_Stern_Start",
+					PostLineAnim = "Hecate_Hub_Stern_End",
 					Text = "And do you think you can? You remain under my auspices, take aid from Olympus! You're not as independent as I planned. And furthermore, I've inadvertently caused you to think I've made you better off!" },
 				{ Cue = "/VO/Melinoe_2170", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Vulnerable_01",
@@ -7056,6 +7712,75 @@
 					Text = "I believe you have. I know no other way. It fills me with sorrow, knowing you feel undeserving of the love I have for you." },
 				{ Cue = "/VO/Hecate_0544",
 					PreLineWait = 0.35,
+					PreLineAnim = "HecateHubGreet",
+					Text = "...Set your sorrow well aside for now. I'll drink your Nectar and enjoy it, if you please." },
+				EndVoiceLines =
+				{
+					{
+						PreLineWait = 0.45,
+						UsePlayerSource = true,
+						{ Cue = "/VO/Melinoe_2171", Text = "I would." },
+					},
+				},
+			},
+
+			HecateGift06_B =
+			{
+				PauseMusicPlayerMusic = true,
+				PlayOnce = true,
+				OnGiftTrack = true,
+				AltEvent = "HecateGift06",
+				Cost =
+				{
+					GiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" }
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateGift06" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateBathHouse02" },
+					},
+				},
+				{ Cue = "/VO/Hecate_0540",
+					Text = "I thought I said you needn't curry favor with me thus. I shall take this bottle, nonetheless; if but to penalize you for not offering it up instead to someone more deserving of your affection." },
+				{ Cue = "/VO/Melinoe_2167", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I can think of no one else I would rather have this than you, Headmistress. You've made me the goddess I am, and not a night goes by that I'm not grateful for it." },
+				{ Cue = "/VO/Hecate_0541",
+					PreLineAnim = "Hecate_Hub_Scoff",
+					Text = "How often must I say, I'm not your mother, Melinoë. You needn't lavish me with such unbridled praise... I raised you to destroy our common foe. You owe no gratitude to me." },
+				{ Cue = "/VO/Melinoe_2168", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Empathetic_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You've often said, what we intend and what we do are not the same. I know you're not my birthmother, so what? You've cared for me; that's more than enough." },
+				{ Cue = "/VO/Hecate_1010",
+					PreLineAnim = "Hecate_Hub_Affirm",
+					Text = "I've used you to achieve a particular result, and not even the one I sought. Surely you see that? I've attempted not to hide this fact from you. Yet you turn it aside." },
+				{ Cue = "/VO/Melinoe_2169", UsePlayerSource = true,
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "You have raised me in accordance with the promises you made to my father. He never asked you to coddle me, did he? Surely he wanted me to fend for myself." },
+				{ Cue = "/VO/Hecate_1011",
+					Emote = "PortraitEmoteFiredUp",
+					PreLineAnim = "Hecate_Hub_Stern_Start",
+					PostLineAnim = "Hecate_Hub_Stern_End",
+					Text = "Well, you do not! You remain under my auspices; take aid from Olympus! You may think for yourself, but remain dependent on many others. And furthermore, I've inadvertently caused you to think I've made you better off!" },
+				{ Cue = "/VO/Melinoe_2170", UsePlayerSource = true,
+					PreLineWait = 0.35,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkBrooding01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkBrooding01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I believe you have. I know no other way. It fills me with sorrow, knowing you feel undeserving of the love I have for you." },
+				{ Cue = "/VO/Hecate_0544",
+					PreLineWait = 0.5,
 					PreLineAnim = "HecateHubGreet",
 					Text = "...Set your sorrow well aside for now. I'll drink your Nectar and enjoy it, if you please." },
 				EndVoiceLines =
@@ -7088,8 +7813,8 @@
 					},
 				},
 				{ Cue = "/VO/Melinoe_5029", UsePlayerSource = true,
-					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Portrait = "Portrait_Mel_Proud_01",
 					Text = "Why don't we head to the taverna once again? You honored {#Emph}me {#Prev}before, and I would dearly like to honor {#Emph}you." },
 
@@ -7100,7 +7825,7 @@
 				{ Cue = "/VO/Melinoe_5030", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Empathetic_01",
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Text = "Headmistress, you're the reason all of us are here. The Shades adore you, and wish to commemorate that this great task you devised is finally complete!" },
 
 				{ Cue = "/VO/Hecate_0831",
@@ -7142,7 +7867,7 @@
 				},
 				{ Cue = "/VO/Melinoe_5032", UsePlayerSource = true,
 					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
-					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkExplaining01ReturnToIdle", PostLineAnimTarget = "Hero",
 					Portrait = "Portrait_Mel_Proud_01",
 					Text = "You mentioned holding onto Ambrosia for the next celebratory occasion, so I wanted to donate more for when the time comes. To the next great victory of the Unseen!" },
 
@@ -7188,7 +7913,8 @@
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "HecateGift06" },
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "HecateGift06", "HecateGift06_B" },
 					},
 					{
 						PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -7299,7 +8025,11 @@
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "HecateGift06", "HecateTaverna01", "HecatePostTrueEnding02" },
+						HasAll = { "HecateTaverna01", "HecatePostTrueEnding02" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "HecateGift06", "HecateGift06_B" },
 					},
 					{
 						PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -7410,6 +8140,9 @@
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateBathHouseEpilogue01" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_3892", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Casual_01",
@@ -7430,6 +8163,135 @@
 						{ Cue = "/VO/Melinoe_2095", Text = "They're missing out I'm sure." },
 					},
 				},
+			},
+
+			HecateTavernaRepeatable01 =
+			{
+				Cost =
+				{
+					SuperGiftPoints = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateBathHouseEpilogue01" },
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeTaverna" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "HecateTavernaRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- before taverna
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0905",
+						PreLineAnim = "Hecate_Hub_Scoff",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "Oh, very well. So long as we don't make a show of it." },
+
+					{ Cue = "/VO/Hecate_0908",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "I shall accompany you though only for a single drink, if that." },
+
+					{ Cue = "/VO/Hecate_0911",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "All right, let's steal away there for a bit. Who shall stop us?" },
+				},
+
+				-- at taverna
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0906",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "...To think Olympus once had limitless stores of this stuff..." },
+
+					{ Cue = "/VO/Hecate_0909",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "...Our Shades are spending much of their existence here..." },
+
+					{ Cue = "/VO/Hecate_0912",
+						SkipContextArt = true,
+						PreLineFunctionName = "TavernaStartPresentation",
+
+						PostLineThreadedFunctionName = "LoungeRevelryPresentation",
+						PostLineFunctionArgs = { Sound2 = "/EmptyCue", Sound3 = "/EmptyCue", TimeTicks = 20 },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "...The taste of this stuff truly does seem to improve with time." },
+				},
+
+				-- after taverna
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0907",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "Now that our moods are lighter, shall we get back to it?" },
+
+					{ Cue = "/VO/Hecate_0910",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "'Twas a better bottle of Ambrosia than most! Thank you." },
+
+					{ Cue = "/VO/Hecate_0913",
+						PreLineFunctionName = "TavernaEndPresentation",
+						PreLineWait = 0.35,
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostTavernaArgs,
+
+						Text = "We owed ourselves that short respite. Now, where were we?" },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Hecate",
 			},
 
 			HecateFishing01 =
@@ -7613,8 +8475,174 @@
 						{ Cue = "/VO/Melinoe_5039", Text = "Of course. Thank you, Headmistress... Hecate." },
 					},
 				},
+
+				PrePortraitExitFunctionName = "QueueQuestProgressUpdate",
+				PrePortraitExitFunctionArgs =
+				{
+					QuestName = "QuestRescueFatesProgress",
+					GameStateRequirements =
+					{
+						NamedRequirements = { "TrueFatesQuestUnlocked" },
+					},
+				},
 			},
 
+			HecateFishingRepeatable01 =
+			{
+				Cost =
+				{
+					GiftPointsEpic = 1,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeFishingPoint" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateFishing02" },
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "HecateFishingRepeatable01", "HecateFishing02" },
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+
+				-- start fishing
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0899",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "You truly have something to prove at yonder fishing pier...?" },
+
+					{ Cue = "/VO/Hecate_0901",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+
+						PreLineAnim = "HecateHubGreet",
+
+						Text = "Fine! Let us see how your fishing technique has improved." },
+
+					{ Cue = "/VO/Hecate_0903",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "I do suppose all is in order, more or less... then to the pier." },
+
+					{ Cue = "/VO/Hecate_0981",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "Well then, come and show me what you've learned of how to fish." },
+
+					{ Cue = "/VO/Hecate_0377",
+						PostLineRemoveContextArt = true,
+						PostLineFunctionName = "FishingPierStartPresentation",
+						PostLineFunctionArgs = { StartFishingImmediately = true },
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 16, IncludeFishingSFX = true },
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "Well... I do suppose that staring at the waters of the Cocytus may be of benefit at present..." },
+				},
+
+				-- end fishing
+				[2] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0900",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Long has the River Cocytus offered its abundances to us." },
+
+					{ Cue = "/VO/Hecate_0902",
+						PreLineFunctionName = "FishingPierEndPresentation",
+
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "'Tis always a contemplative time there by the riverside..." },
+
+					{ Cue = "/VO/Hecate_0904",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Always much to see and contemplate by that riverside..." },
+
+					{ Cue = "/VO/Hecate_0394",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "Well, surely we are richer in spirit for that excursion." },
+
+					{ Cue = "/VO/Hecate_0395",
+						PreLineFunctionName = "FishingPierEndPresentation",
+	
+						PostLineFunctionName = "ResourceGiftedInEventPresentation",
+						PostLineFunctionArgs = { ResourceName = "FishFRare", SoundName = "/Leftovers/SFX/BigFishSplash", GiftWaitTime = 0 },
+
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostFishingArgs,
+
+						Text = "A welcome detour, though we both had best get back to the task at hand." },
+				},
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Hecate",
+			},
 
 			HecateBathHouse01 =
 			{
@@ -7634,7 +8662,7 @@
 						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
 					},
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "HecateGift02" },
+						PathTrue = { "GameState", "TextLinesRecord", "HecateGift01" },
 					},
 					{
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
@@ -7778,9 +8806,9 @@
 					PostLineFunctionName = "BathHouseQuipPresentation",
 					PostLineThreadedFunctionName = "TimePassesPresentation",
 					PostLineThreadedFunctionArgs = { TimeTicks = 12, },
-
 					EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
 					PostLineRemoveContextArt = true,
+
 					Text = "I'll watch the moss, you watch the splashing. Deal?" },
 				{ Cue = "/VO/Hecate_0258",
 					PreLineFunctionName = "BathHouseEndPresentation",
@@ -7813,6 +8841,9 @@
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateBathHouseEpilogue01" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_0668", UsePlayerSource = true,
 					Portrait = "Portrait_Mel_Empathetic_01",
@@ -7821,15 +8852,167 @@
 					PreLineWait = 0.35,
 					PostLineThreadedFunctionName = "GiftPointRareRefundPresentation",
 					Text = "As much as I would enjoy basking in the springs, I've incantations to complete, wards to reinforce.... No, I cannot. Not now." },
-				EndVoiceLines =
+			},
+
+			HecateBathHouseRepeatable01 =
+			{
+				PauseMusicPlayerMusic = true,
+				DoNotFlipContextArt = true,
+				Cost =
+				{
+					GiftPointsRare = 1,
+				},
+				GameStateRequirements =
 				{
 					{
-						PreLineWait = 0.45,
-						UsePlayerSource = true,
-						-- Maybe some other time.
-						-- { Cue = "/VO/Melinoe_0461", Text = "Maybe some other time." },
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeBathHouse" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateFishing02" },
+					},
+					{
+						PathFalse = { "CurrentRun", "TimePassageOccurred" },
+						HintId = "Codex_TimePassesGiftUsed",
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TextLinesRecord" },
+						TableValuesToCount = { "HecateBathHouseRepeatable01" },
+						Comparison = "<=",
+						Value = 0,
 					},
 				},
+
+				-- before the bath
+				[1] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0890",
+						PostLineRemoveContextArt = true,
+						PreLineAnim = "HecateHubGreet",
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "Very well. A proper rinsing ought be had now and again." },
+
+					{ Cue = "/VO/Hecate_0893",
+						PostLineRemoveContextArt = true,
+						PreLineAnim = "Hecate_Hub_Scoff",
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "Oh, why not. Even a brief time in those springs ought to do." },
+
+					{ Cue = "/VO/Hecate_0896",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Default_01",
+						PortraitExitAnimation = "Portrait_Hec_Default_01_Exit",
+						Text = "Yes, let us purify ourselves again in the heat of the springs." },
+				},
+
+				-- Mel in the bath
+				[2] = HeroRepeatableTextLines.BathHouseIntroTextLines,
+
+				-- Hecate in the bath
+				[3] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0891",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Bath_01",
+						PortraitExitAnimation = "Portrait_Hec_Bath_01_Exit",
+						Text = "...These waters burble constantly, but what do they say...?" },
+
+					{ Cue = "/VO/Hecate_0894",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Bath_01",
+						PortraitExitAnimation = "Portrait_Hec_Bath_01_Exit",
+						Text = "...{#Emph}<Sigh> {#Prev}Well if anything is on your mind, do speak of it." },
+
+					{ Cue = "/VO/Hecate_0897",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Bath_01",
+						PortraitExitAnimation = "Portrait_Hec_Bath_01_Exit",
+						Text = "...'Twas not always that such comforts were available to us." },
+
+					{ Cue = "/VO/Hecate_0242",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Bath_01",
+						PortraitExitAnimation = "Portrait_Hec_Bath_01_Exit",
+						Text = "...{#Emph}Hrm{#Prev}, the waters are sufficiently salted and adequately hot." },
+
+					{ Cue = "/VO/Hecate_0244",
+						PostLineFunctionName = "BathHouseQuipPresentation",
+						PostLineThreadedFunctionName = "TimePassesPresentation",
+						PostLineThreadedFunctionArgs = { TimeTicks = 12 },
+						EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+						PostLineRemoveContextArt = true,
+
+						Portrait = "Portrait_Hec_Bath_01",
+						PortraitExitAnimation = "Portrait_Hec_Bath_01_Exit",
+						Text = "...{#Emph}Mm. {#Prev}We're like two nettles boiling in a cauldron, aren't we?" },
+				},
+
+				-- after the bath
+				[4] =
+				{
+					RandomRemaining = true,
+
+					{ Cue = "/VO/Hecate_0892",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "Such moments of comfort make the effort all worthwhile." },
+
+					{ Cue = "/VO/Hecate_0895",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "You were quiet back there but appeared to be at ease..." },
+
+					{ Cue = "/VO/Hecate_0898",
+						PreLineWait = 0.25,
+						NarrativeContextArt = "DialogueBackgroundBiome_Woods",
+						PreLineFunctionName = "BathHouseEndPresentation",
+						PostLineThreadedFunctionName = "InCombatTextEvent",
+						PostLineThreadedFunctionArgs = GameData.PostBathHouseArgs,
+						Emote = "PortraitEmoteSparkly",
+
+						Text = "{#Emph}Ah. {#Prev}I trust you left all your concerns to boil in that pool." },
+				},
+
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Hecate",
 			},
 
 			HecateFishingDecline01 =
@@ -7852,6 +9035,9 @@
 						PathFalse = { "CurrentRun", "TimePassageOccurred" },
 						HintId = "Codex_TimePassesGiftUsed",
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateBathHouseEpilogue01" },
+					},
 				},
 				{ Cue = "/VO/Melinoe_5306", UsePlayerSource = true,
 					Text = "Do you suppose we could take a brief break from all this and stop by the river over at the pier?" },
@@ -7869,7 +9055,6 @@
 					},
 				},
 			},
-
 		},
 
 		MissingDistanceTrigger =

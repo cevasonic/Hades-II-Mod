@@ -86,6 +86,16 @@ OverwriteTableKeys( WorldUpgradeData,
 						},
 
 				-- SGV
+				{ Cue = "/VO/Dora_0254", Text = "{#Emph}Why not, indeed...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "LastLinePlayed" },
+							IsAny = { "/VO/Melinoe_1400" },
+						},
+					},
+				},
 				{ Cue = "/VO/Dora_0255", Text = "{#Emph}It shall be done.",
 					PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs,
 				},
@@ -112,35 +122,6 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			{
 				RandomRemaining = true,
-				SuccessiveChanceToPlayAll = 0.1,
-				PreLineWait = 0.35,
-
-				{ Cue = "/VO/Melinoe_1403", Text = "No harm in having just a bit of luxury..." },
-				{ Cue = "/VO/Melinoe_1401", Text = "Always wanted something like this in the tent...",
-					GameStateRequirements =
-					{
-						{
-							PathFromSource = true,
-							Path = { "DefaultCategoryIndex" },
-							Comparison = "==",
-							Value = 1,
-						},
-					}
-				},
-				{ Cue = "/VO/Melinoe_1404", Text = "That ought to raise the Shades' morale a bit...",
-					GameStateRequirements =
-					{
-						{
-							PathFromSource = true,
-							Path = { "DefaultCategoryIndex" },
-							Comparison = "!=",
-							Value = 1,
-						},
-					}
-				},
-			},
-			{
-				RandomRemaining = true,
 				BreakIfPlayed = true,
 				SuccessiveChanceToPlay = 0.75,
 				ObjectType = "NPC_Skelly_01",
@@ -155,8 +136,6 @@ OverwriteTableKeys( WorldUpgradeData,
 			},
 			{ GlobalVoiceLines = "DoraCosmeticReactionVoiceLines" },
 		},
-		RemoveGlobalVoiceLines = "CosmeticRemovedVoiceLines",
-		ReEquipGlobalVoiceLines = "CosmeticReAddedVoiceLines",
 	},
 
 	-- Mel's Tent
@@ -1561,7 +1540,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0707", Text = "A little something for Horns to rest his feet on.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0707", Text = "A little something for Horns to rest his feet on.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -1765,7 +1744,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0708", Text = "Thinking {#Emph}this {#Prev}ought to tip the scales in your favor.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0708", Text = "Thinking {#Emph}this {#Prev}ought to tip the scales in your favor.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -2023,7 +2002,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0709", Text = "Figure this thing's empty but haven't bothered to check.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0709", Text = "Figure this thing's empty but haven't bothered to check.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -2231,16 +2210,17 @@ OverwriteTableKeys( WorldUpgradeData,
 		RotateOnly = true,
 		AlwaysRevealImmediately = true,
 
-		RevealReactionVoiceLines =
+		CosmeticReAddedVoiceLines =
 		{
+			[1] = { GlobalVoiceLines = "CosmeticChangeVoiceLines" },
+			[2] =
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
+				SuccessiveChanceToPlay = 0.35,
 
-				{ Cue = "/VO/Dora_0452", Text = "I'll get some Shades to hang those up for you.",
-					PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+				{ Cue = "/VO/Dora_0452", Text = "I'll get some Shades to hang those up for you.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
 			},
-			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
 	},
 
@@ -3026,7 +3006,7 @@ OverwriteTableKeys( WorldUpgradeData,
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
-				{ Cue = "/VO/Dora_0719", Text = "How come you need to make it comfortable way over {#Emph}there?", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+				{ Cue = "/VO/Dora_0719", Text = "How come you need to make it comfortable way over {#Emph}there?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -4119,7 +4099,7 @@ OverwriteTableKeys( WorldUpgradeData,
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
-				{ Cue = "/VO/Dora_0704", Text = "Perfect for dropping important little pieces onto.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0704", Text = "Perfect for dropping important little pieces onto.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 		},
 	},
@@ -4202,7 +4182,7 @@ OverwriteTableKeys( WorldUpgradeData,
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
-				{ Cue = "/VO/Dora_0705", Text = "These must be perfectly safe to store out in the open.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0705", Text = "These must be perfectly safe to store out in the open.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -4241,7 +4221,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0703", Text = "Now that guy with the wings can work harder than ever!", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0703", Text = "Now that guy with the wings can work harder than ever!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -4757,7 +4737,7 @@ OverwriteTableKeys( WorldUpgradeData,
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
-				{ Cue = "/VO/Dora_0717", Text = "Should really help with the acoustics, whatever those are.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0717", Text = "Should really help with the acoustics, whatever those are.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 		},
 	},
@@ -4892,6 +4872,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			"Cosmetic_SkellyFloor01a",
 			"Cosmetic_SkellyFloor01b",
+			"Cosmetic_SkellyFloor01c",
 		},
 		RotateOnly = true,
 		AlwaysRevealImmediately = true,
@@ -4907,6 +4888,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			"Cosmetic_SkellyFloor01",
 			"Cosmetic_SkellyFloor01b",
+			"Cosmetic_SkellyFloor01c",
 		},
 		RotateOnly = true,
 
@@ -4949,6 +4931,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			"Cosmetic_SkellyFloor01",
 			"Cosmetic_SkellyFloor01a",
+			"Cosmetic_SkellyFloor01c",
 		},
 		RotateOnly = true,
 
@@ -4981,6 +4964,49 @@ OverwriteTableKeys( WorldUpgradeData,
 		},
 	},
 
+	Cosmetic_SkellyFloor01c =
+	{
+		Icon = "CosmeticIcon_SkellyFloor01c",
+		InheritFrom = { "DefaultCosmeticItem" },
+		SetAnimationIds = { 587209 },
+		SetAnimationValue = "Tilesets/Crossroads/Crossroads_Terrain_Cobblestone_03",
+		RemoveCosmetics =
+		{
+			"Cosmetic_SkellyFloor01",
+			"Cosmetic_SkellyFloor01a",
+			"Cosmetic_SkellyFloor01b",
+		},
+		RotateOnly = true,
+
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "RoomsEntered", "Dream_Intro" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 50,
+			DreamPoints = 2,
+		},
+
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+				{ Cue = "/VO/Dora_0793", Text = "One bed of flowers for the Commander to trample, coming right up.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Skelly_01",
+				RequiredSourceValueFalse = "InPartnerConversation",
+
+				{ Cue = "/VO/Skelly_0355", Text = "{#Emph}<Sniff> {#Prev}Damn sinuses..." },
+			},
+		},
+	},
+
 	Cosmetic_TrainingDummy01 =
 	{
 		Icon = "CosmeticIcon_TrainingDummy01",
@@ -4992,6 +5018,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			"Cosmetic_TrainingDummy01a",
 			"Cosmetic_TrainingDummy01b",
+			"Cosmetic_TrainingDummy01c",
 		},
 		RotateOnly = true,
 		AlwaysRevealImmediately = true,
@@ -5008,6 +5035,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			"Cosmetic_TrainingDummy01",
 			"Cosmetic_TrainingDummy01b",
+			"Cosmetic_TrainingDummy01c",
 		},
 		RotateOnly = true,
 
@@ -5054,6 +5082,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			"Cosmetic_TrainingDummy01",
 			"Cosmetic_TrainingDummy01a",
+			"Cosmetic_TrainingDummy01c",
 		},
 		RotateOnly = true,
 
@@ -5077,13 +5106,115 @@ OverwriteTableKeys( WorldUpgradeData,
 				ObjectType = "NPC_Skelly_01",
 				RequiredSourceValueFalse = "InPartnerConversation",
 
-				{ Cue = "/VO/Skelly_0157", Text = "Yeah!" },
+				{ Cue = "/VO/Skelly_0027", Text = "Would that I could see behind me now..." },
 			},
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
 				{ Cue = "/VO/Dora_0473", Text = "Good luck figuring out which one's the real dummy now.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_TrainingDummy01c =
+	{
+		Icon = "CosmeticIcon_TrainingDummy01c",
+		InheritFrom = { "DefaultCosmeticItem" },
+		CameraFocusId = 566610,
+		SetAnimationIds = { 566610, 566612, 567196, },
+		SetAnimationValue = "Tilesets/Crossroads/Crossroads_TrainingDummy_01c",
+		RemoveCosmetics =
+		{
+			"Cosmetic_TrainingDummy01",
+			"Cosmetic_TrainingDummy01a",
+			"Cosmetic_TrainingDummy01b",
+		},
+		RotateOnly = true,
+
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "ClearedDreamRunsCache" },
+				Comparison = ">=",
+				Value = 1,
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 100,
+			DreamPoints = 4,
+		},
+
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Skelly_01",
+				RequiredSourceValueFalse = "InPartnerConversation",
+
+				{ Cue = "/VO/Skelly_0157", Text = "Yeah!" },
+			},
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0794", Text = "This guy already looks unconscious, but go ahead and beat him up!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+		},
+	},
+
+	Cosmetic_DoraBench01 =
+	{
+		Icon = "CosmeticIcon_DoraBench01",
+		InheritFrom = { "DefaultCosmeticItem" },
+		SetAnimationIds = { 587424 },
+		SetAnimationValue = "Tilesets/Crossroads/Crossroads_Chair_01",
+		RemoveCosmetics =
+		{
+			"Cosmetic_DoraBench02",
+		},
+		RotateOnly = true,
+		AlwaysRevealImmediately = true,
+	},
+
+	Cosmetic_DoraBench02 =
+	{
+		Icon = "CosmeticIcon_DoraBench02",
+		InheritFrom = { "DefaultCosmeticItem" },
+		SetAnimationIds = { 587424 },
+		SetAnimationValue = "Tilesets/Crossroads/Crossroads_Chair_01d",
+		RemoveCosmetics =
+		{
+			"Cosmetic_DoraBench01",
+		},
+		RotateOnly = true,
+
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "RoomsEntered", "Dream_Intro" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 40,
+			DreamPoints = 1,
+		},
+
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/Melinoe_5920", Text = "This one's for you, Spirit!" },
+			},
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+				{ Cue = "/VO/Dora_0795", Text = "{#Emph}Ahh, then this shall be my throne forevermore!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5229,7 +5360,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0738", Text = "I wouldn't come anywhere {#Emph}near {#Prev}this place with {#Emph}that {#Prev}thing up.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0738", Text = "I wouldn't come anywhere {#Emph}near {#Prev}this place with {#Emph}that {#Prev}thing up.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5266,7 +5397,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0737", Text = "May any cats you run into out there bless your journey, Mel.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0737", Text = "May any cats you run into out there bless your journey, Mel.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5303,7 +5434,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0736", Text = "If I was a dog I'd probably be a little weirded out by that.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0736", Text = "If I was a dog I'd probably be a little weirded out by that.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5340,7 +5471,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0739", Text = "Is that a good-luck rat or something...? I like it!", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0739", Text = "Is that a good-luck rat or something...? I like it!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5352,13 +5483,14 @@ OverwriteTableKeys( WorldUpgradeData,
 		InheritFrom = { "DefaultCosmeticItem" },
 		ActivateIds = { 780532 },
 		ToggleCollision = true,
+		ToggleUseable = true,
 
 		GameStateRequirements =
 		{
 			{
 				PathTrue = { "GameState", "EnemyKills", "Zagreus" },
 			},
-			NamedRequirements = { "T5Cosmetic" },
+			NamedRequirements = { "T5Cosmetic", "HasEverReachedTrueEnding" },
 		},
 		Cost =
 		{
@@ -5373,6 +5505,222 @@ OverwriteTableKeys( WorldUpgradeData,
 
 				{ Cue = "/VO/Dora_0721", Text = "Original order for this got messed up so we got it at a major discount.",
 					PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
+			},
+			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_ThanCutout =
+	{
+		Icon = "CosmeticIcon_ThanCutout",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780655 },
+		DeactivateIds = { 587861, 588016 },
+		SharedDeactivateIds = { Cosmetic = "Cosmetic_HypnosStatue", Ids = { 561033 } },
+
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "ClearedDreamRunsCache" },
+				Comparison = ">=",
+				Value = 2,
+			},
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "AxePerfectCriticalAspect" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 200,
+			DreamPoints = 8,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/Melinoe_5919", Text = "A visage of Death to watch over me while I sleep! Why not." },
+			},
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0789", Text = "{#Emph}I am the only visage of Death you shall ever require!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraScaryAppearArgs },
+			},
+			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_AsteriusPlush =
+	{
+		Icon = "CosmeticIcon_AsteriusPlush",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780656 },
+		DeactivateIds = { 588091, 588080 },
+
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "ClearedDreamRunsCache" },
+				Comparison = ">=",
+				Value = 1,
+			},
+			{
+				PathTrue = { "GameState", "TextLinesRecord", "HypnosDreamGift01" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 150,
+			DreamPoints = 7,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0788", Text = "Can't get these in Elysium anymore... but we have our ways.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_DreamRug =
+	{
+		Icon = "CosmeticIcon_DreamRug",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780705 },
+
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "RoomsEntered", "Dream_Intro" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 70,
+			DreamPoints = 2,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0790", Text = "Now if you fall out of bed, you'll land on something soft...! Smart.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_Poppies =
+	{
+		Icon = "CosmeticIcon_Poppies",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780711, 780672, 780675, 780670, 780668, 780674, 780679,
+						780671, 780708, 780702, 780667, 780673, 780698, 780678,
+						780694, 780707, 780669, 780710, 780701, 780676, 780699,
+						780693, 780696, 780695, 780677, 780700, 780697, 780709, },
+
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "RoomsEntered", "Dream_Intro" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 60,
+			DreamPoints = 1,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0791", Text = "Could use an extra splash of color near that blanket thing.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_HypnosStatue =
+	{
+		Icon = "CosmeticIcon_HypnosStatue",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780706 },
+		DeactivateIds = { 561032 },
+		SharedDeactivateIds = { Cosmetic = "Cosmetic_ThanCutout", Ids = { 561033 } },
+		ToggleCollision = true,
+		ToggleUseable = true,
+
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "ClearedDreamRunsCache" },
+				Comparison = ">=",
+				Value = 1,
+			},
+			{
+				Path = { "GameState", "LifetimeResourcesGained", "DreamPoints" },
+				Comparison = ">=",
+				Value = 30,
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 1000,
+			DreamPoints = 10,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0797", Text = "Think they'd make a glorious statue of me if {#Emph}I {#Prev}slept all the time?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_StarJar =
+	{
+		Icon = "CosmeticIcon_StarJar",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780712, 780720, 780721, 780722, 780723, 780724, 780725, 780726, 780727 },
+		ToggleUseable = true,
+
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "LifetimeResourcesGained", "DreamPoints" },
+				Comparison = ">=",
+				Value = 1,
+			},
+			{
+				PathTrue = { "GameState", "TextLinesRecord", "HypnosDreamAboutDreamPoints01" },
+			},
+			{
+				PathFalse = { "CurrentRun", "TextLinesRecord", "HypnosDreamAboutDreamPoints01" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 125,
+			DreamPoints = 6,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+
+				{ Cue = "/VO/Dora_0792", Text = "It's just a basic jar filled with some star-shaped stickers, Mel.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			{ GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5417,8 +5765,7 @@ OverwriteTableKeys( WorldUpgradeData,
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
-				{ Cue = "/VO/Dora_0112", Text = "Whatever you say!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
-						},
+				{ Cue = "/VO/Dora_0112", Text = "Whatever you say!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5502,8 +5849,7 @@ OverwriteTableKeys( WorldUpgradeData,
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
 
-				{ Cue = "/VO/Dora_0113", Text = "I mean, I guess?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
-						},
+				{ Cue = "/VO/Dora_0113", Text = "I mean, I guess?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5536,7 +5882,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0725", Text = "Looks like that one guy by the table, what's-his-name.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0725", Text = "Looks like that one guy by the table, what's-his-name.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5568,7 +5914,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0726", Text = "Who needs the real Commander when you have this little guy?", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0726", Text = "Who needs the real Commander when you have this little guy?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5600,7 +5946,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0727", Text = "{#Emph}Aw{#Prev}, look at his tiny little horns. You think they're sharp?", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0727", Text = "{#Emph}Aw{#Prev}, look at his tiny little horns. You think they're sharp?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5632,7 +5978,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0728", Text = "It's the head witch! Can you take off her hat and mask?", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0728", Text = "It's the head witch! Can you take off her hat and mask?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5664,7 +6010,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0729", Text = "Almost feels like I'm being judged just by looking at her.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0729", Text = "Almost feels like I'm being judged just by looking at her.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5696,7 +6042,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0730", Text = "This that boatman guy the Shades go on about sometimes?", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0730", Text = "This that boatman guy the Shades go on about sometimes?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5728,7 +6074,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0731", Text = "That one guy with the wings! I'd recognize him anywhere.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0731", Text = "That one guy with the wings! I'd recognize him anywhere.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5760,7 +6106,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0732", Text = "Hey it's that one who shows up singing every now and then.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0732", Text = "Hey it's that one who shows up singing every now and then.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5792,7 +6138,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0733", Text = "Got a bad feeling about this one... probably nothing!", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0733", Text = "Got a bad feeling about this one... probably nothing!", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5824,7 +6170,7 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0734", Text = "I see you got by far the rarest, most valuable one in the series.", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0734", Text = "I see you got by far the rarest, most valuable one in the series.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5856,7 +6202,36 @@ OverwriteTableKeys( WorldUpgradeData,
 			{
 				PreLineWait = 0.35,
 				ObjectType = "NPC_Dora_01",
-				{ Cue = "/VO/Dora_0735", Text = "Could have sworn this one was supposed to come with a horse...", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+				{ Cue = "/VO/Dora_0735", Text = "Could have sworn this one was supposed to come with a horse...", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
+			},
+			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
+		},
+	},
+
+	Cosmetic_CollectableHypnos =
+	{
+		Icon = "CosmeticIcon_CollectableHypnos",
+		InheritFrom = { "DefaultCosmeticItem" },
+		ActivateIds = { 780666 },
+		AutoUnlockCosmeticName = "Cosmetic_CollectableShelf",
+
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "GameState", "TextLinesRecord", "HypnosDreamAboutWorries01" },
+			},
+		},
+		Cost =
+		{
+			CosmeticsPoints = 799,
+			DreamPoints = 10,
+		},
+		RevealReactionVoiceLines =
+		{
+			{
+				PreLineWait = 0.35,
+				ObjectType = "NPC_Dora_01",
+				{ Cue = "/VO/Dora_0796", Text = "{#Emph}Aw{#Prev}, look at how cozy he looks with his little blanket and all.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs, },
 			},
 			-- { GlobalVoiceLines = "PositiveReactionVoiceLines" },
 		},
@@ -5884,6 +6259,11 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			{
 				PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeMetaUpgradeSaveLayout" },
+			},
+			{
+				Path = { "GameState", "MaxMetaUpgradeCostCache" },
+				Comparison = ">=",
+				Value = 30,
 			},
 			{
 				Path = { "GameState", "WorldUpgradesAdded" },
@@ -6190,7 +6570,8 @@ ScreenData.CosmeticsShop =
 		{
 			Name = "CosmeticsShop_Tent",
 			CacheName = "Tent",
-			BackingAnimation = "CosmeticsShopBacking_Tent",
+			BackingAnimation = "CosmeticShopTentIn",
+			BackingAnimationOut = "CosmeticShopTentOut",
 			GameStateRequirements =
 			{
 				-- None
@@ -6239,7 +6620,8 @@ ScreenData.CosmeticsShop =
 		{
 			Name = "CosmeticsShop_Main",
 			CacheName = "HubMain",
-			BackingAnimation = "CosmeticsShopBacking_HubMain",
+			BackingAnimation = "CosmeticShopMainIn",
+			BackingAnimationOut = "CosmeticShopMainOut",
 			GameStateRequirements =
 			{
 				-- None
@@ -6324,7 +6706,8 @@ ScreenData.CosmeticsShop =
 		{
 			Name = "CosmeticsShop_Taverna",
 			CacheName = "Taverna",
-			BackingAnimation = "CosmeticsShopBacking_Taverna",
+			BackingAnimation = "CosmeticShopTavernaIn",
+			BackingAnimationOut = "CosmeticShopTavernaOut",
 			GameStateRequirements =
 			{
 				{
@@ -6391,7 +6774,8 @@ ScreenData.CosmeticsShop =
 		{
 			Name = "CosmeticsShop_PreRun",
 			CacheName = "PreRun",
-			BackingAnimation = "CosmeticsShopBacking_PreRun",
+			BackingAnimation = "CosmeticShopPreRunIn",
+			BackingAnimationOut = "CosmeticShopPreRunOut",
 			GameStateRequirements =
 			{
 				-- None
@@ -6409,9 +6793,13 @@ ScreenData.CosmeticsShop =
 			"Cosmetic_SkellyFloor01",
 			"Cosmetic_SkellyFloor01a",
 			"Cosmetic_SkellyFloor01b",
+			"Cosmetic_SkellyFloor01c",
 			"Cosmetic_TrainingDummy01",
 			"Cosmetic_TrainingDummy01a",
 			"Cosmetic_TrainingDummy01b",
+			"Cosmetic_TrainingDummy01c",
+			"Cosmetic_DoraBench01",
+			"Cosmetic_DoraBench02",
 			"Cosmetic_CatScratcher",
 			"Cosmetic_BirdHouse",
 			"Cosmetic_ExitCharm",
@@ -6434,6 +6822,15 @@ ScreenData.CosmeticsShop =
 			"Cosmetic_CollectableIcarus",
 			"Cosmetic_CollectableArtemis",
 			"Cosmetic_CollectableSelene",
+			"Cosmetic_CollectableHypnos",
+
+			-- Dream Decor
+			"Cosmetic_ThanCutout",
+			"Cosmetic_AsteriusPlush",
+			"Cosmetic_DreamRug",
+			"Cosmetic_Poppies",
+			"Cosmetic_HypnosStatue",
+			"Cosmetic_StarJar",
 		},
 	},
 
@@ -6469,6 +6866,8 @@ ScreenData.CosmeticsShop =
 	ScrollbarSliderBottomY = 690,
 
 	ResourceSpendTextOffsetY = 11,
+
+	CloseDestroyWait = 0.35,
 
 	ItemAvailableAffordableNameFormat =
 	{
@@ -6539,6 +6938,7 @@ ScreenData.CosmeticsShop =
 	TooltipX = 1690,
 	TooltipY = 1280,
 
+	ButtonGroupName = "HUD_Backing",
 	CostDisplay =
 	{
 		StartX = 450,
@@ -6549,6 +6949,7 @@ ScreenData.CosmeticsShop =
 		ResourceIconScale = 1.1,
 		InventoryIconOffsetX = -25,
 		InventoryIconScale = 0.45,
+		GroupName = "HUD_Backing",
 	},
 
 	ItemAvailableAnimation = "GhostAdminScreenCauldronButton",
@@ -6587,8 +6988,7 @@ ScreenData.CosmeticsShop =
 
 		BackgroundBack = 
 		{
-			AnimationName = "CosmeticsShopBacking_HubMain",
-			GroupName = "Combat_Menu",
+			AnimationName = "CosmeticShopMainIn",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
 			Alpha = 0.0,
@@ -6599,7 +6999,6 @@ ScreenData.CosmeticsShop =
 		ListBackground = 
 		{
 			Graphic = "WeaponShopBacking",
-			GroupName = "Combat_Menu",
 			X = 400,
 			Y = 430,
 			ScaleY = 0.77,
@@ -6608,7 +7007,6 @@ ScreenData.CosmeticsShop =
 		DoraPortrait =
 		{
 			AnimationName = "Portrait_Dora_Hardhat",
-			GroupName = "Combat_Menu",
 			X = 1600,
 			Y = 560,
 			Scale = 1,
@@ -6620,7 +7018,6 @@ ScreenData.CosmeticsShop =
 		ResourceCostBacking =
 		{
 			Graphic = "WeaponShopBacking",
-			GroupName = "Combat_Menu",
 			X = 300,
 			Y = 860,
 			ScaleY = 0.3,
@@ -6631,13 +7028,15 @@ ScreenData.CosmeticsShop =
 		InfoBoxBacking = 
 		{
 			AnimationName = "GUI\\Screens\\CriticalItemShop\\Backing_Scroll",
+			GroupName = "HUD_Backing",
 			X = 1165,
 			Y = 790,
 			Alpha = 0.0,
 			Children = 
 			{
 				InfoBoxDescription =
-				{ 
+				{
+					GroupName = "HUD_Backing",
 					OffsetX = -282,
 					OffsetY = -100,
 					TextArgs =
@@ -6658,6 +7057,7 @@ ScreenData.CosmeticsShop =
 
 				InfoBoxFlavor =
 				{
+					GroupName = "HUD_Backing",
 					OffsetX = -282,
 					OffsetY = 20,
 					TextArgs =
@@ -6697,7 +7097,6 @@ ScreenData.CosmeticsShop =
 		Scrollbar =
 		{
 			AnimationName = "PageScrollbar",
-			GroupName = "Combat_Menu_Overlay",
 			X = 30,
 			Y = 450,
 			Alpha = 0.0,
@@ -6706,7 +7105,6 @@ ScreenData.CosmeticsShop =
 		ScrollbarSlider =
 		{
 			AnimationName = "PageScrollbarSlider",
-			GroupName = "Combat_Menu_Overlay",
 			X = 30,
 			Y = 210,
 			Alpha = 0.0,
@@ -6716,7 +7114,6 @@ ScreenData.CosmeticsShop =
 		{
 			Graphic = "BlankInteractableObstacle",
 			AnimationName = "CodexButton_Up",
-			GroupName = "Combat_Menu_Overlay",
 			X = 30,
 			Y = 210,
 			Alpha = 0.0,
@@ -6739,7 +7136,6 @@ ScreenData.CosmeticsShop =
 		{
 			Graphic = "BlankInteractableObstacle",
 			AnimationName = "CodexButton_Down",
-			GroupName = "Combat_Menu_Overlay",
 			X = 30,
 			Y = 695,
 			Alpha = 0.0,
@@ -6786,7 +7182,6 @@ ScreenData.CosmeticsShop =
 				PinButton = 
 				{
 					Graphic = "ContextualActionButton",
-					GroupName = "Combat_Menu_Overlay",
 					Alpha = 0.0,
 					Data =
 					{
@@ -6801,7 +7196,6 @@ ScreenData.CosmeticsShop =
 				SelectButton =
 				{
 					Graphic = "ContextualActionButton",
-					GroupName = "Combat_Menu_Overlay",
 					Alpha = 0.0,
 					Data =
 					{
@@ -6815,7 +7209,6 @@ ScreenData.CosmeticsShop =
 				CloseButton = 
 				{
 					Graphic = "ContextualActionButton",
-					GroupName = "Combat_Menu_Overlay",
 					Data =
 					{
 						OnMouseOverFunctionName = "MouseOverContextualAction",
@@ -6834,8 +7227,8 @@ ScreenData.CosmeticsShop =
 	-- OpenPlayerAnimation = "MelTalkBrooding01",
 	-- handled in GhostAdminScreenClosedPresentation()
 	-- ClosePlayerAnimation = "MelTalkBrooding01ReturnToIdle",
-	OpenSound = "/Leftovers/World Sounds/RonEnter",
-	CloseSound = "/Leftovers/World Sounds/Caravan Interior/SteamAcidForage",
+	OpenSound = "/SFX/Menu Sounds/CosmeticsMenuOpen",
+	CloseSound = "/SFX/Menu Sounds/CosmeticsMenuClose",
 	CosmeticsOpenVoiceLines = 
 	{
 		Queue = "Never",
@@ -6852,7 +7245,10 @@ ScreenData.CosmeticsShop =
 				ObjectType = "NPC_Dora_01",
 				GameStateRequirements =
 				{
-					NamedRequirements = { "CosmeticsShopHasNewItems" },
+					{
+						PathFromArgs = true,
+						PathTrue = { "HasNewCosmetics" },
+					},
 				},
 
 				{ Cue = "/VO/Dora_0271", Text = "{#Emph}Mm{#Prev}, look at what we got.", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
@@ -6898,7 +7294,6 @@ ScreenData.CosmeticsShop =
 				{ Cue = "/VO/Dora_0239", Text = "What's it going to be?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
 				},
 				{ Cue = "/VO/Dora_0240", Text = "Any of these?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
-				  GameStateRequirements = { NamedRequirements = { "CosmeticsShopHasUnpurchasedItems" } },
 				},
 				{ Cue = "/VO/Dora_0241", Text = "What are we thinking?", PreLineFunctionName = "GenericPresentation", PreLineFunctionArgs = PresetAudioArgs.DoraNormalAppearArgs,
 				},

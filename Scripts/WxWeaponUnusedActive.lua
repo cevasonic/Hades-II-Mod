@@ -20,10 +20,12 @@ function GetRandomUnequippedWeapon( prevRun )
 
     -- 3. Trả về kết quả
     if not IsEmpty(candidateWeapons) then
-        -- Trả về vũ khí đã chơi (nếu có nhiều hơn 1, ví dụ do lỗi cache, sẽ chọn ngẫu nhiên)
-        return GetRandomValue(candidateWeapons)
+        local selectedWeapon = GetRandomValue(candidateWeapons)
+        DebugPrint({ Text = "Wx Mod: Selected weapon from cache: "..selectedWeapon })
+        return selectedWeapon
     else
         -- Fallback: Nếu không tìm thấy vũ khí cũ trong Cache, chọn ngẫu nhiên để tránh lỗi game
+        DebugPrint({ Text = "Wx Mod: No weapon found in cache, falling back to random." })
         return GetRandomValue( WeaponSets.HeroPrimaryWeapons )
     end
 end
@@ -112,6 +114,7 @@ function RecordRunStats()
     for weaponName, v in pairs(CurrentRun.WeaponsCache) do
         if IsWeaponEligible(CurrentRun, WeaponData[weaponName]) then
             CurrentRun.BonusUnusedWeaponName = weaponName
+            DebugPrint({ Text = "Wx Mod: Set BonusUnusedWeaponName to: "..weaponName })
             break
         end
     end

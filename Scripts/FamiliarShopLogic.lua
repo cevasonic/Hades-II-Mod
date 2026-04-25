@@ -254,11 +254,9 @@ function OpenFamiliarShopScreen( openedFrom, args )
 		components.CloseButton.OnPressedFunctionName = nil
 	end
 
-	SetAnimation({ DestinationId = components.FamiliarShopAnimalBacking.Id, Name = openedFrom.FamiliarShopGraphic })
+	SetAnimation({ DestinationId = components.FamiliarShopAnimalBacking.Id, Name = openedFrom.FamiliarScreenAnimationName })
 
 	FamiliarShopScreenOpenedPresentation( screen, args )
-
-	local components = screen.Components
 
 	wait( 0.3 )
 

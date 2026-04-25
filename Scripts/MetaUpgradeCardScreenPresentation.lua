@@ -13,8 +13,7 @@ function EquipMetaUpgradeCardPresentation( screen, button )
 	local metaUpgradeName = button.CardName
 	Flash({ Id = button.Id, Speed = 4, MinFraction = 0.5, MaxFraction = 0, Color = Color.Green, Duration = 0.125, ExpireAfterCycle = true })
 	PlaySound({ Name = "/SFX/Menu Sounds/IrisMenuConfirm", Id = button.Id })
-	thread( PlayVoiceLines, MetaUpgradeCardData[metaUpgradeName].EquipVoiceLines or GlobalVoiceLines.UnlockedCardVoiceLines, true )
-
+	thread( PlayVoiceLines, MetaUpgradeCardData[metaUpgradeName].EquipVoiceLines, true )
 	
 	local cardCost = MetaUpgradeCardData[ metaUpgradeName ].Cost
 	
@@ -70,7 +69,6 @@ end
 function CannotAffordMetaUpgradeLimitPresentation( screen, button )
 	Flash({ Id = button.Id, Speed = 4, MinFraction = 0.5, MaxFraction = 0, Color = Color.Gold, Duration = 0.125, ExpireAfterCycle = true })
 	PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo" })
-	thread( PlayVoiceLines, GlobalVoiceLines.CannotAffordMemUpgradeVoiceLines, true )
 end
 
 function MouseOverMetaUpgradeLimitPresentation( screen, button )
@@ -122,7 +120,7 @@ function UnlockMetaUpgradeCardPresentation( screen, button, metaUpgradeData )
 	Flash({ Id = button.Id, Speed = 4, MinFraction = 0.5, MaxFraction = 0, Color = Color.White, Duration = 0.125, ExpireAfterCycle = true })
 	PlaySound({ Name = "/SFX/Menu Sounds/HeartSlotUnlock", Id = button.Id })
 
-	thread( PlayVoiceLines, metaUpgradeData.UnlockedCardVoiceLines or GlobalVoiceLines.UnlockedCardVoiceLines, true )
+	thread( PlayVoiceLines, metaUpgradeData.UnlockedCardVoiceLines, true )
 end
 
 function RevealMetaUpgradeCardPresentation( screen, button, args )

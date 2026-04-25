@@ -418,7 +418,6 @@ end
 
 function ExorcismPointChosenPresentation( source )
 	LoadVoiceBanks({ Name = "Selene" })
-	Flash({ Id = source.ObjectId, Speed = 4.0, MinFraction = 0.3, MaxFraction = 0.7, Color = Color.White, Duration = 0.8 })
 	if source.LeftHintId == nil then
 		source.LeftHintId = SpawnObstacle({ Name = "BlankObstacle", DestinationId = source.ObjectId, OffsetX = -100, OffsetZ = 100, Group = "Combat_UI" })
 		SetAnimation({ Name = "GUI\\Icons\\MelArmLeftBacking", DestinationId = source.LeftHintId })
@@ -711,10 +710,13 @@ function ExorcismFailPresentation( source, args, user, move )
 	PlaySound({ Name = "/SFX/Menu Sounds/ObjectiveActivateShk2", Id = source.ObjectId })
 	StopSound({ Id = source.LoopingSoundId, Duration = 0.7 })
 	local hintIds = { source.LeftHintId, source.RightHintId }
-	SetAlpha({ Ids = hintIds, Fraction = 0, Duration = 0.0 })
+	Flash({ Ids = hintIds, Color = {0, 255, 192}, Duration = 0.2, Speed = 4, MinFraction = 0, MaxFraction = 0.5 })
+	SetAlpha({ Ids = hintIds, Fraction = 0, Duration = 0.2, EaseIn = 0, EaseOut = 1 })
+
 	for index, move in ipairs( source.MoveSequence ) do
 		local key = "MovePipId"..index
-		SetAlpha({ Id = source[key], Fraction = 0, Duration = 0.0 })
+		Flash({ Id = source[key], Color = {0, 255, 192}, Duration = 0.2, Speed = 4, MinFraction = 0, MaxFraction = 0.5 })
+		SetAlpha({ Id = source[key], Fraction = 0, Duration = 0.2, EaseIn = 0, EaseOut = 1 })
 	end
 	SetRGB({ Id = source.ObjectId, Color = Color.White, Duration = 0.35 })
 
@@ -768,10 +770,13 @@ function ExorcismSuccessPresentation( source, args, user )
 
 	PlaySound({ Name = "/SFX/Menu Sounds/WeaponUnlockPoof" })
 	local hintIds = { source.LeftHintId, source.RightHintId }
-	SetAlpha({ Ids = hintIds, Fraction = 0, Duration = 0.0 })
+	Flash({ Ids = hintIds, Color = {0, 255, 192}, Duration = 0.2, Speed = 4, MinFraction = 0, MaxFraction = 0.5 })
+	SetAlpha({ Ids = hintIds, Fraction = 0, Duration = 0.2, EaseIn = 0, EaseOut = 1 })
+
 	for index, move in ipairs( source.MoveSequence ) do
 		local key = "MovePipId"..index
-		SetAlpha({ Id = source[key], Fraction = 0, Duration = 0.0 })
+		Flash({ Id = source[key], Color = {0, 255, 192}, Duration = 0.2, Speed = 4, MinFraction = 0, MaxFraction = 0.5 })
+		SetAlpha({ Id = source[key], Fraction = 0, Duration = 0.2, EaseIn = 0, EaseOut = 1 })
 	end
 	DebugPrint({ Text = "Exorcism: Success" })
 	SetAnimation({ Name = "Melinoe_Tablet_ReturnToIdle", DestinationId = user.ObjectId })
@@ -1003,7 +1008,9 @@ function FishingEndPresentation( fishData, fishingAnimationPointId, args )
 
 		local fishingText = "Fishing_SuccessGoodTitle"
 
-		thread( PlayVoiceLines, fishData.FishIdentifiedVoiceLines, nil, nil, args )
+		if not CurrentRun.Hero.IsDead then
+			thread( PlayVoiceLines, fishData.FishIdentifiedVoiceLines, nil, nil, args )
+		end
 
 		thread( DisplayInfoBanner, nil, {
 			Icon = fishData.Name,

@@ -165,6 +165,7 @@ UnitSetData.Allies =
 	ShadeMercAspect = 
 	{
 		InheritFrom = { "ShadeMerc" },
+		FromAspect = true, -- used for VO
 		
 		CollisionReactions =
 		{

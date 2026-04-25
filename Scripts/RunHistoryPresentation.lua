@@ -3,7 +3,9 @@ function RunHistoryScreenOpenPresentation( screen )
 	thread( PlayVoiceLines, GlobalVoiceLines.OpenedRunHistoryScreenVoiceLines, true )
 
 	local animationIndex = nil
-	if WasBountyRun( CurrentRun ) then
+	if WasDreamRun( CurrentRun ) then
+		animationIndex = 7
+	elseif WasBountyRun( CurrentRun ) then
 		animationIndex = 5
 	elseif WasSurfaceRun( CurrentRun ) then
 		animationIndex = 3

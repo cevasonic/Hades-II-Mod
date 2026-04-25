@@ -107,7 +107,13 @@ end
 
 function ClearObjectives()
 	ScreenAnchors.Objectives = nil
-	HideObjectivesUI()
+	local fadeOutTime = 0.3
+	HideObjectivesUI( nil, { Duration = fadeOutTime } )
+	for k, objective in pairs( ScreenState.ActiveObjectives ) do
+		if objective.ObjectId ~= nil then
+			thread( DestroyOnDelay, { objective.ObjectId }, fadeOutTime )
+		end
+	end
 	ScreenState.ActiveObjectives = {}
 end
 
@@ -133,6 +139,13 @@ function ShowObjective( objectiveData, objectId )
 	end
 
 	local descriptionText = objectiveData.Description
+	if objectiveData.AlternateDescriptions ~= nil then
+		for k, altDescriptionData in pairs(objectiveData.AlternateDescriptions) do
+			if altDescriptionData.GameStateRequirements ~= nil and IsGameStateEligible(objectiveData, altDescriptionData.GameStateRequirements) then
+				descriptionText = altDescriptionData.Description
+			end
+		end
+	end
 	if SessionState.ObjectiveSwaps[objectiveData.Name] then
 		descriptionText = SessionState.ObjectiveSwaps[objectiveData.Name]
 	end
@@ -143,8 +156,8 @@ function ShowObjective( objectiveData, objectId )
 	SetAlpha({ Id = objectId, Fraction = 0, Duration = 0.0 })
 	CreateTextBox({
 		Id = objectId, Text = descriptionText, OffsetX = 20, Color = {0, 255, 64, 255},
-		Font = "LatoMedium", FontSize = 40, ShadowRed = 0, ShadowBlue = 0, ShadowGreen = 0,
-		ShadowAlpha = 1.0, ShadowBlur = 0, ShadowOffsetY = 3, ShadowOffsetX = 0, 
+		Font = "LatoMedium", FontSize = 40,
+		ShadowBlur = 0,
 		OutlineColor = {0, 0, 0, 1}, OutlineThickness = 0,
 		LuaKey = objectiveData.LuaKey, LuaValue = objectiveData.StartingLuaValue,
 		TextSymbolScale = 0.80,
@@ -156,7 +169,7 @@ function ShowObjective( objectiveData, objectId )
 	})
 	
 	local scaleTarget = 0.45
-	ModifyTextBox({ Id = objectId, ScaleTarget = objectiveData.StartingScaleTarget or scaleTarget, ScaleDuration = 0.0, ColorTarget = stringColor, ColorDuration = 0.5, EaseIn = 0.9, EaseOut = 1.0 })
+	ModifyTextBox({ Id = objectId, ScaleTarget = objectiveData.StartingScaleTarget or scaleTarget, ScaleDuration = 0.0, ColorTarget = stringColor, ColorDuration = 0.5 })
 	if IsEmpty( MapState.CombatUIHide ) and IsEmpty( MapState.ObjectiveUIHide ) then
 		SetAlpha({ Id = objectId, Fraction = 1.0, Duration = 0.05 })
 	end
@@ -277,7 +290,6 @@ function MarkObjectiveComplete( objectiveName )
 		ModifyTextBox({ Id = objectiveData.ObjectId,
 			ScaleTarget = 0.45, ScaleDuration = 1.25,
 			ColorTarget = Color.DimGray, ColorDuration = 1.25,
-			EaseIn = 0, EaseOut = 1,
 			DataProperties =
 			{
 				IgnoreFormatters = true,
@@ -293,8 +305,9 @@ function MarkObjectiveFailed( objectiveName, endSet )
 	if objectiveData == nil then
 		return
 	end
-	GameState.ObjectivesFailed[objectiveName] = (GameState.ObjectivesFailed[objectiveName] or 0) + 1
-	GameState.LastObjectiveFailedRun[objectiveName] = GetCompletedRuns() + 1
+	if not CurrentRun.IsDreamRun or CurrentHubRoom ~= nil then
+		GameState.LastObjectiveFailedRun[objectiveName] = GetCompletedRuns() + 1
+	end
 
 	if objectiveData.Status == "Active" then
 		--DebugPrint({ Text = "Let's complete "..objectiveData.Name })
@@ -353,13 +366,14 @@ function CheckActiveObjectivesStatus()
 	end
 end
 
-function HideObjectivesUI( flag )
+function HideObjectivesUI( flag, args )
+	args = args or {}
 	if flag ~= nil then
 		MapState.ObjectiveUIHide[flag] = true
 	end
 	for objectiveName, objective in pairs( ScreenState.ActiveObjectives ) do
 		objective.Hidden = true
-		SetAlpha({ Id = objective.ObjectId, Fraction = 0, Duration = 0.3 })
+		SetAlpha({ Id = objective.ObjectId, Fraction = 0, Duration = args.Duration or 0.3 })
 	end
 end
 

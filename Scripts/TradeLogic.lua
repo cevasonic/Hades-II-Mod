@@ -42,6 +42,8 @@
 
 	local components = screen.Components
 
+	wait( 0.15 ) -- Let background animate in a bit before showing contents
+
 	-- Give Option
 
 	local rarity = giveItemData.Rarity or "Common"
@@ -89,28 +91,6 @@
 		})
 	end
 
-	--[[
-	local backingAnim = ScreenData.UpgradeChoice.RarityBackingAnimations[rarity]
-	if backingAnim ~= nil then
-		SetAnimation({ Name = backingAnim, DestinationId = components.GiveInfoBoxBacking.Id })
-	end
-	]]
-
-	--[[
-	ModifyTextBox({ Id = components.GiveInfoBoxRarity.Id,
-		Text = rarityText,
-		Color = rarityColor
-	})
-	]]
-
-	--[[
-	if giveItemData.StatLines ~= nil then
-		local statLine = giveItemData.StatLines[1]
-		ModifyTextBox({ Id = components.GiveInfoBoxStatLineLeft.Id, AppendToId = components.GiveInfoBoxBacking.Id, Text = statLine, LuaKey = "TooltipData", LuaValue = giveItemData, FadeTarget = 1.0 })
-		ModifyTextBox({ Id = components.GiveInfoBoxStatLineRight.Id, AppendToId = components.GiveInfoBoxBacking.Id, Text = statLine, UseDescription = true, LuaKey = "TooltipData", LuaValue = giveItemData, FadeTarget = 1.0 })
-	end
-	]]
-
 	-- Get Option
 	--DebugPrint({ Text = "chosenGetOption.Name = "..tostring(chosenGetOption.Name) })
 
@@ -139,7 +119,6 @@
 	if getItemIcon ~= nil then
 		SetAnimation({ Name = getItemIcon, DestinationId = components.GetInfoBoxIcon.Id })
 		SetAlpha({ Id = components.GetInfoBoxIcon.Id, Fraction = 1.0, Duration = 0.2 })
-		--SetAlpha({ Id = components.GetInfoBoxFrame.Id, Fraction = 1.0, Duration = 0.2 })
 	end
 
 	ModifyTextBox({ Id = components.GetInfoBoxName.Id,
@@ -169,21 +148,13 @@
 		})
 	end
 
-	--[[
-	if getItemData.StatLines ~= nil then
-		local statLine = getItemData.StatLines[1]
-		ModifyTextBox({ Id = components.GetInfoBoxStatLineLeft.Id, AppendToId = components.GetInfoBoxBacking.Id, Text = statLine, LuaKey = "TooltipData", LuaValue = getItemData, FadeTarget = 1.0 })
-		ModifyTextBox({ Id = components.GetInfoBoxStatLineRight.Id, AppendToId = components.GetInfoBoxBacking.Id, Text = statLine, UseDescription = true, LuaKey = "TooltipData", LuaValue = getItemData, FadeTarget = 1.0 })
-	end
-	]]
-
 	if giveItemData.ResourceName ~= nil and not HasResource( giveItemData.ResourceName, giveItemData.Cost ) then
 		SetAlpha({ Id = components.AcceptButton.Id, Fraction = 0.0, Duration = 0.0 })
 		UseableOff({ Id = components.AcceptButton.Id })
 	end
 	
 	-- Short delay to let animations finish and prevent accidental input
-	wait(0.5)
+	wait( 0.35 )
 	--TeleportCursor({ DestinationId = components.SpellDescription.Id, ForceUseCheck = true })
 	screen.KeepOpen = true
 	HandleScreenInput( screen )
@@ -213,12 +184,24 @@ function TradeDoExchange( screen, args )
 			RemoveWeaponTrait( sellData.Name )	
 		end
 		CurrentRun.CurrentRoom.SellOptions = {}
+		
+		if LootObjects then
+			for itemId, item in pairs( LootObjects ) do
+				if IsAlive({ Id = itemId }) and ( not ScreenAnchors.ChoiceScreen or ScreenAnchors.ChoiceScreen.Source ~= item ) then
+					item.UpgradeOptions = nil
+				end
+			end
+		end
 	end
 	if giveOption.UseGetCost ~= nil then
 		SpendResource( getOption.CostResourceName, giveOption.Cost )
 	end
 	if giveOption.DamageAmount ~= nil then
-		Damage( CurrentRun.Hero, { triggeredById = CurrentRun.Hero.ObjectId, DamageAmount = giveOption.DamageAmount, PureDamage = true, } )
+		thread( Damage, CurrentRun.Hero, { triggeredById = CurrentRun.Hero.ObjectId, DamageAmount = giveOption.DamageAmount, PureDamage = true, } )
+		if CurrentRun.Hero.IsDead then
+			RemoveInputBlock({ Name = "TradeDoExchange" })
+			return
+		end
 	end
 
 	if args.TradePostCostFunctionName ~= nil then
@@ -260,11 +243,9 @@ function TradeScreenDecline( screen, button )
 end
 
 function CloseTradeScreen( screen, button )
+	SetAnimation({ DestinationId = screen.Components.Background.Id, Name = "TradeScreenOut" })
 	OnScreenCloseStarted( screen )
-	--WeaponShopCloseCategory( screen )
-	--WeaponShopScreenCloseStartPresentation( screen )
-	CloseScreen( GetAllIds( screen.Components ) )
+	CloseScreen( GetAllIds( screen.Components ), 0.0, screen, { FadeOutTime = 0.2, CloseDestroyWait = 0.26 } )
 	OnScreenCloseFinished( screen )
 	ShowCombatUI( screen.Name )
-	--WeaponShopScreenCloseFinishedPresentation( screen, button )
 end

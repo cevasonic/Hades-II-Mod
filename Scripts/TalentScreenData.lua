@@ -7,8 +7,9 @@
 	TooltipOffsetXStart = ScreenWidth - 240,
 	TooltipOffsetYStart = ScreenCenterY + 350,
 	DefaultTalentScale = 0.3,
-	TalentInactive = { 30, 30, 30, 255 },
-	TalentPriorSelected = { 47, 79, 79, 255 },
+	TalentNextAvailable = { 122, 122, 122, 255 },
+	TalentInactive = { 60, 60, 60, 255 },
+	TalentPriorSelected = { 255, 255, 255, 255 },
 
 	BlockPause = true,
 	BlockExitsReady = true,

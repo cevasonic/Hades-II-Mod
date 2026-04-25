@@ -279,6 +279,8 @@ OverwriteTableKeys( EncounterData,
 		ActiveEnemyCapMax = 8,
 		ActiveEnemyCapDepthRamp = 0.35,
 		DepthDifficultyRamp = 11,
+		
+		DreamBiomeData = "nil",
 
 		HardEncounterOverrideValues =
 		{
@@ -295,6 +297,8 @@ OverwriteTableKeys( EncounterData,
 		ActiveEnemyCapBase = 2.6,
 		ActiveEnemyCapMax = 8,
 		ActiveEnemyCapDepthRamp = 0.35,
+		
+		DreamBiomeData = "nil",
 
 		HardEncounterOverrideValues =
 		{
@@ -337,6 +341,8 @@ OverwriteTableKeys( EncounterData,
 		ActiveEnemyCapBase = 2.6,
 		ActiveEnemyCapMax = 8,
 		ActiveEnemyCapDepthRamp = 0.35,
+		
+		DreamBiomeData = "nil",
 
 		HardEncounterOverrideValues =
 		{

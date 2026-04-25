@@ -428,11 +428,7 @@ WeaponSetData =
 	{
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 2,
-			}
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		AIData =
@@ -520,11 +516,7 @@ WeaponSetData =
 	{
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 2,
-			}
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		AIData =

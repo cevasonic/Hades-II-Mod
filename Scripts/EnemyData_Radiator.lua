@@ -2,7 +2,7 @@ UnitSetData.Radiator =
 {	
 	Radiator =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 		IntroEncounterName = "RadiatorIntro",
 
 		MaxHealth = 45,
@@ -12,6 +12,7 @@ UnitSetData.Radiator =
 		PreferredSpawnPoint = "EnemyPointMelee",
 		Groups = { "FlyingEnemies" },
 		HealthBarOffsetY = -100,
+		HealthBarType = "Small",
 		Material = "Organic",
 
 		ActivateFx = "EnemyPreSpawnTerrainSmall",
@@ -106,7 +107,7 @@ UnitSetData.Radiator =
 
 	Radiator2 =
 	{
-		InheritFrom = { "OceanusUnitData", "Radiator" },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "Radiator" },
 		DeathFx = "EnemyDeathFxIris",
 		DamagedFxStyles =
 		{
@@ -117,6 +118,8 @@ UnitSetData.Radiator =
 		HealthBarOffsetY = -136,
 		MaxHealth = 120,
 		IsAggroedSound = "/SFX/Enemy Sounds/Radiator/EmoteTaunting",
+
+		HealthBarType = "Medium",
 
 		ActivateAnimation = "Enemy_Radiator_Idle",
 

@@ -3,7 +3,7 @@ UnitSetData.Zombie =
 
 	Zombie =
 	{
-		InheritFrom = { "BaseVulnerableEnemy","LowPolyEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy", "LowPolyEnemy" },
 
 		MaxHealth = 170,
 		HealthBarOffsetY = -200,
@@ -121,6 +121,7 @@ UnitSetData.Zombie =
 	Zombie_Passive =
 	{
 		InheritFrom = { "Zombie" },
+		GenusName = "Zombie",
 
 		AIOptions = { "IdleAI" },
 		CanBeAggroed = true,

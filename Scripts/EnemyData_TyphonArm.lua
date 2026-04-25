@@ -19,7 +19,6 @@ UnitSetData.TyphonArm =
 			Message = "PrometheusDefeatedMessage",
 			CameraPanTime = 1.5,
 			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
-			BatsAfterDeath = false,
 			FlashRed = true,
 		},
 
@@ -52,6 +51,7 @@ UnitSetData.TyphonArm =
 
 	TyphonArm_Incursion =
 	{
+		InheritFrom = { "BaseQEnemy" },
 		GenusName = "TyphonArm",
 		Groups = { "EnemyTeam", "FlyingEnemies" },
 		RunHistoryPortrait = "Codex_Portrait_TyphonArm",
@@ -61,6 +61,38 @@ UnitSetData.TyphonArm =
 		MaxHealth = 1,
 
 		ExitAnimation = "Enemy_TyphonArm_Exit",
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonArmDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 
 		OutgoingDamageModifiers =
 		{

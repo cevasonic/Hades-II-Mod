@@ -212,8 +212,15 @@ function RoomEntranceBountyStart( currentRun, currentRoom, args )
 	PanCamera({ Id = CurrentRun.Hero.ObjectId, OffsetY = -50, Duration = 0.01, Retarget = true, EaseIn = 0, EaseOut = 0.1 })
 	FocusCamera({ Fraction = CurrentRun.CurrentRoom.ZoomFraction * 0.92, Duration = 0.01 })
 	
-	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = CurrentRun.CurrentRoom.HeroEndPoint })
-	Teleport({ Id = CurrentRun.Hero.ObjectId, DestinationId = CurrentRun.CurrentRoom.HeroEndPoint })
+	local roomData = RoomData[currentRoom.Name] or currentRoom
+	if roomData.AltHeroSpawnAngle ~= nil then
+		SetGoalAngle({ Id = currentRun.Hero.ObjectId, Angle = roomData.AltHeroSpawnAngle, CompleteAngle = true })
+	elseif currentRoom.HeroEndPoint ~= nil then
+		AngleTowardTarget({ Id = currentRun.Hero.ObjectId, DestinationId = currentRoom.HeroEndPoint })
+	end
+	if currentRoom.HeroEndPoint ~= nil then
+		Teleport({ Id = currentRun.Hero.ObjectId, DestinationId = currentRoom.HeroEndPoint })
+	end
 	SetAnimation({ Name = "MelinoeCrossCastAnticReverse", DestinationId = CurrentRun.Hero.ObjectId, PlaySpeed = 0.15 })
 
 	CreateAnimation({ Name = "SorcerySummonPresentationFx", DestinationId = CurrentRun.Hero.ObjectId })
@@ -292,6 +299,25 @@ function GetDirectionalWipeAnimation( args )
 		end
 	end
 	return wipeAnim
+end
+
+function RoomEntranceDisplayLocationText( currentRoom )
+	local roomData = RoomData[currentRoom.Name] or currentRoom
+	if roomData.LocationText and not currentRoom.Encounter.BlockLocationText then
+		thread( DisplayBiomeLocationBanner, nil,
+		{
+			Text = roomData.LocationText,
+			DreamText = roomData.DreamLocationText,
+			SkipDreamSubtitle = true,
+			Delay = 0.65,
+			FadeColor = roomData.LocationTextColor or { 255, 0, 0, 255 },
+			Duration = 2.0,
+			AnimationName = roomData.LocationAnimName,
+			AnimationOutName = roomData.LocationAnimOutName,
+			IconBackingAnimationName = roomData.LocationTextAnimName,
+			IconBackingAnimationOutName = roomData.LocationTextAnimOutName,
+		} )
+	end
 end
 
 function RoomEntranceStandard( currentRun, currentRoom )
@@ -386,6 +412,10 @@ function RoomEntranceBoss( currentRun, currentRoom, args )
 
 	HideCombatUI("BossEntrance")
 	local roomIntroSequenceDuration = roomData.IntroSequenceDuration or RoomData.BaseRoom.IntroSequenceDuration or 0.0
+	if CurrentRun.IsDreamRun then
+		roomIntroSequenceDuration = args.DreamIntroSequenceDuration or roomIntroSequenceDuration
+		StartBossRoomMusic()
+	end
 	wait(0.03)
 
 	FadeIn({ Duration = 0.0 })
@@ -401,21 +431,32 @@ function RoomEntranceBoss( currentRun, currentRoom, args )
 	if currentRoom.CameraEndPoint ~= nil then
 		PanCamera({ Id = currentRoom.CameraEndPoint, Duration = roomData.IntroCameraPanDuration or roomIntroSequenceDuration })
 	end
+	
+	if currentRoom.Encounter and currentRoom.Encounter.SpawnsSkipped then
+		UnblockCombatUI("BossEntrance")
+		return
+	end
 
 	wait(0.03)
 
-	if roomData.ThreadEnterVoiceLines then
+	
+	if not CurrentRun.IsDreamRun then
+		if roomData.ThreadEnterVoiceLines then
 
-		thread( PlayVoiceLines, encounterData.EnterVoiceLines or roomData.EnterVoiceLines, true )
-		thread( PlayVoiceLines, GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true )
-		wait( roomIntroSequenceDuration )
+			thread( PlayVoiceLines, encounterData.EnterVoiceLines or roomData.EnterVoiceLines, true )
+			thread( PlayVoiceLines, GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true )
+			wait( roomIntroSequenceDuration )
 
-	else
-		if PlayVoiceLines( encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true ) then
-			wait(0.3)
 		else
-			wait(args.EnterWait or 1.8)
+			if PlayVoiceLines( encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true ) then
+				wait( 0.3 )
+			else
+				wait( args.EnterWait or 1.8)
+			end
 		end
+	else
+		thread( PlayVoiceLines, roomData.EnterDreamVoiceLines or encounterData.EnterVoiceLines or roomData.EnterVoiceLines or GlobalVoiceLines[roomData.EnterGlobalVoiceLines], true )
+		wait( args.DreamEnterWait or args.EnterWait or 1.8 )
 	end
 
 	if bossId ~= nil then
@@ -428,7 +469,11 @@ function RoomEntranceBoss( currentRun, currentRoom, args )
 		if args.BossIntroAngleTowardPlayer ~= nil then
 			AngleTowardTarget({ Id = bossId, DestinationId = CurrentRun.Hero.ObjectId })
 		end
-		wait( args.BossIntroDelay or 0 )
+		local introDelay = args.BossIntroDelay or 0
+		if CurrentRun.IsDreamRun then
+			introDelay = args.BossDreamIntroDelay or introDelay
+		end
+		wait( introDelay )
 		if args.BossIntroShake then
 			AdjustRadialBlurDistance({ Fraction = 1.5, Duration = 0.2 })
 			AdjustRadialBlurStrength({ Fraction = 1.5, Duration = 0.2 })
@@ -494,9 +539,6 @@ function RoomEntranceDrop( currentRun, currentRoom, args)
 	thread( PlayVoiceLines, currentRoom.Encounter.EnterVoiceLines or currentRoom.EnterVoiceLines, true )
 	thread( PlayVoiceLines, GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true )
 
-	if currentRoom.LocationText and not currentRoom.Encounter.BlockLocationText then
-		thread( DisplayInfoBanner, nil, { Text = currentRoom.LocationText, Delay = 0.65, FadeColor = currentRoom.LocationTextColor or { 255, 0, 0, 255 }, Duration = 2.0, AnimationName = currentRoom.LocationAnimName, AnimationOutName = currentRoom.LocationAnimOutName, IconBackingAnimationName = currentRoom.LocationTextAnimName, IconBackingAnimationOutName = currentRoom.LocationTextAnimOutName, } )
-	end
 	wait (0.33)
 	SetAnimation({ Name = args.LandingAnimation or "Melinoe_Drop_Entrance_Fire", DestinationId = CurrentRun.Hero.ObjectId })
 	SetAlpha({ Id = dropShadow, Fraction = 0, Duration = 0.03 })
@@ -512,9 +554,10 @@ function RoomEntranceDrop( currentRun, currentRoom, args)
 	wait( args.IntroHoldDuration or 0 )
 end
 
-function RoomEntrancePortal( currentRun, currentRoom )
+function RoomEntrancePortal( currentRun, currentRoom, args )
+	args = args or {}
+
 	AddInputBlock({ Name = "RoomEntrancePortal" })
-	local roomData = RoomData[currentRoom.Name] or currentRoom
 
 	local dropShadow = SpawnObstacle({ Name = "DrownedChambersEntranceShadowFade", DestinationId =  currentRoom.HeroEndPoint, OffsetY = -12, OffsetX = 0 })
 	SetAlpha({ Id = dropShadow, Fraction = 0.2, Duration = 0.01 })
@@ -546,8 +589,8 @@ function RoomEntrancePortal( currentRun, currentRoom )
 	thread( PlayVoiceLines, currentRoom.Encounter.EnterVoiceLines or currentRoom.EnterVoiceLines, true )
 	thread( PlayVoiceLines, GlobalVoiceLines[currentRoom.EnterGlobalVoiceLines], true )
 
-	if currentRoom.LocationText and not currentRoom.Encounter.BlockLocationText then
-		thread( DisplayInfoBanner, nil, { Text = currentRoom.LocationText, Delay = 0.65, FadeColor = currentRoom.LocationTextColor or { 255, 0, 0, 255 }, Duration = 2.0, AnimationName = currentRoom.LocationAnimName, AnimationOutName = currentRoom.LocationAnimOutName, IconBackingAnimationName = currentRoom.LocationTextAnimName, IconBackingAnimationOutName = currentRoom.LocationTextAnimOutName, } )
+	if not args.SkipLocationBanner then
+		RoomEntranceDisplayLocationText( currentRoom )
 	end
 	wait( 0.33 )
 	SetAnimation({ Name = "Melinoe_Drop_Entrance_Fire", DestinationId = CurrentRun.Hero.ObjectId })
@@ -569,13 +612,13 @@ function DelayedRemoveInputBlock( delay, inputBlockName )
 	RemoveInputBlock({ Name = inputBlockName })
 end
 
-function FullScreenFadeInAnimation( animationName, colorGradeName )
+function FullScreenFadeInAnimation( animationName, colorGradeName, colorGradeFadeDuration )
 	if ScreenAnchors.Transition ~= nil then
 		Destroy({ Id = ScreenAnchors.Transition })
 	end
 	AdjustColorGrading({ Name = colorGradeName or "Rain", Duration = 0 })
 	AdjustFullscreenBloom({ Name = "Off", Duration = 1 })
-	AdjustColorGrading({ Name = "Off", Duration = 1 })
+	AdjustColorGrading({ Name = "Off", Duration = colorGradeFadeDuration or 1 })
 	ScreenAnchors.Transition = CreateScreenObstacle({Name = "BlankObstacle", X = ScreenCenterX, Y = ScreenCenterY, Group = "Overlay" })
 	SetAnimation({ DestinationId = ScreenAnchors.Transition, Name = animationName or "RoomTransitionOut" })
 	local uniformAspectScale = ScreenScaleX
@@ -589,11 +632,11 @@ function FullScreenFadeInAnimation( animationName, colorGradeName )
 
 end
 
-function FullScreenFadeOutAnimation( animationName, colorGradeName )
+function FullScreenFadeOutAnimation( animationName, colorGradeName, colorGradeFadeDuration )
 	if ScreenAnchors.Transition ~= nil then
 		Destroy({ Id = ScreenAnchors.Transition })
 	end
-	AdjustColorGrading({ Name = colorGradeName or "Rain", Duration = 1.0 })
+	AdjustColorGrading({ Name = colorGradeName or "Rain", Duration = colorGradeFadeDuration or 1.0 })
 	ScreenAnchors.Transition = CreateScreenObstacle({Name = "BlankObstacle", X = ScreenCenterX, Y = ScreenCenterY, Group = "Overlay" })
 	animationName = animationName or "RoomTransitionIn"
 	SetAnimation({ DestinationId = ScreenAnchors.Transition, Name = animationName })
@@ -673,10 +716,10 @@ function StartRoomMusic( currentRun, currentRoom )
 	if secretMusic == nil and encounterData ~= nil then
 		secretMusic = encounterData.SecretMusic
 	end
-	if currentRoom.ChosenRewardType == "Shop" and not currentRoom.SkipShopSecretMusic then
+	if currentRoom.ChosenRewardType == "Shop" and not currentRoom.SkipShopSecretMusic and not currentRun.IsDreamRun then
 		secretMusic = roomData.ShopSecretMusic
 	end
-	if GameState.ReachedTrueEnding and roomData.TrueEndingSecretMusic then
+	if GameState.ReachedTrueEnding and roomData.TrueEndingSecretMusic and not currentRun.IsDreamRun then
 		secretMusic = roomData.TrueEndingSecretMusic
 	end
 	
@@ -757,10 +800,6 @@ function ReattachCameraOnInput( )
 	local notifyName = "ReattachCameraOnInput"
 	NotifyOnPlayerInput({ Notify = notifyName })
 	waitUntil( notifyName )
-
-	if CurrentRun.CurrentRoom.CancelReattachCameraOnInput then
-		return
-	end
 	
 	PanCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 2.0 })
 	UnzeroMouseTether( "StartRoomPresentation" )
@@ -889,13 +928,15 @@ function LeaveRoomStartPresentation( exitDoor )
 		thread( PlayVoiceLines, GlobalVoiceLines.RecordRunDepthVoiceLines )
 	end
 
-	if CurrentRun.CurrentRoom.ChallengeEncounter ~= nil and CurrentRun.CurrentRoom.ChallengeEncounter.InProgress then
+	if CurrentRun.CurrentRoom.ChallengeEncounter ~= nil and CurrentRun.CurrentRoom.ChallengeEncounter.EndedEarly then
 		thread( PlayVoiceLines, HeroVoiceLines.FleeingEncounterVoiceLines, false )
 	end
 
-	for id, unit in pairs( ShallowCopyTable( ActiveEnemies ) ) do
-		if exitDoor.ObjectId == unit.TakingExitDoorId then
-			thread( PlayVoiceLines, HeroVoiceLines.WonExitRaceVoiceLines, true )
+	if exitDoor.ObjectId ~= nil then
+		for id, unit in pairs( ShallowCopyTable( ActiveEnemies ) ) do
+			if exitDoor.ObjectId == unit.TakingExitDoorId then
+				thread( PlayVoiceLines, HeroVoiceLines.WonExitRaceVoiceLines, true )
+			end
 		end
 	end
 
@@ -1177,14 +1218,17 @@ function MaxHealthIncreaseText( args )
 		ExtractValues( CurrentRun.Hero, traitData, traitData )
 		maxHealthGained = traitData.TooltipHealth
 	end
-	thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = args.SpecialText, PreDelay = args.Delay, Duration = 0.9, LuaKey = "TooltipData", ShadowScale = 0.7, LuaValue = { TooltipHealth = maxHealthGained }})
+	thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, UseProgressiveStack = true, Text = args.SpecialText, PreDelay = args.Delay, Duration = 0.9, LuaKey = "TooltipData", ShadowScale = 0.7, LuaValue = { TooltipHealth = maxHealthGained }})
 end
 
 Using "ChronosOverlay"
 Using "ChaosOverlay"
+Using "HypnosOverlay"
+Using "HypnosOverlay_Disappointed"
 function DeathPresentation( currentRun, killer, args )
 
 	AddInputBlock({ Name = "DeathPresentation" })
+	EndAutoSprint({ Halt = true, EndWeapon = true })
 	ClearCameraClamp({ LerpTime = 0.4 })
 	ZeroMouseTether("DeathPresentation")
 	LockCameraMotion("DeathPresentation")
@@ -1209,6 +1253,9 @@ function DeathPresentation( currentRun, killer, args )
 	ExpireProjectiles({ Silent = true, BlockSpawns = true, IncludeToAdd = true })
 	ClearEffect({ Id = killer.ObjectId, All = true, BlockAll = true })
 	EffectPostClearAll( killer )
+	if MapState.EquippedWeapons.WeaponAxe then
+		ExpireProjectiles({ Id = CurrentRun.Hero.ObjectId, Weapon = "ProjectileAxeSpin", CancelQueuedProjectilesOnId = CurrentRun.Hero.ObjectId })
+	end
 	RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "All", Method = "cancelCharge" })
 	RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = "All", Method = "ForceControlRelease" })
 	SetThingProperty({ Property = "AllowAnyFire", Value = false, DestinationId = CurrentRun.Hero.ObjectId, DataValue = false })
@@ -1340,6 +1387,12 @@ function DeathPresentation( currentRun, killer, args )
 
 	if CurrentRun.BountyCleared then
 		PlaySound({ Name = "/Music/ChaosVictoryStinger" })
+	elseif CurrentRun.IsDreamRun then
+		if CurrentRun.Cleared then
+			PlaySound({ Name = "/Music/DreamVictoryStinger" })
+		else
+			PlaySound({ Name = "/Music/DreamLossStinger" })
+		end
 	elseif CurrentRun.Cleared then
 		if GameState.ReachedTrueEnding then
 			if CurrentRun.CurrentRoom.RoomSetName == "I" then
@@ -1418,6 +1471,38 @@ function DeathPresentation( currentRun, killer, args )
 				TextOffsetY = 25,
 			} )
 		end
+	elseif CurrentRun.IsDreamRun then
+		LoadVoiceBanks("Hypnos", nil, true)
+		if CurrentRun.Cleared then
+			local subtitleText = nil
+			local subtitleTimeData = nil
+			thread( DisplayInfoBanner, nil, {
+				Text = "DreamRunClearedMessage",
+				Delay = 0.75,
+				TextColor = Color.Turquoise,
+				FontScale = 0.85,
+				AnimationName = "InfoBannerDreamIn",
+				AnimationOutName = "InfoBannerDreamOut",
+				Duration = 4.25,
+				Layer = "Overlay",
+				TextOffsetY = 25,
+				ThreadName = "Outro",
+			} )
+		else
+			-- Dream Run failed
+			thread( DisplayInfoBanner, nil, {
+				Text = "DreamRunFailedMessage",
+				Delay = 0.75,
+				TextColor = Color.Turquoise,
+				FontScale = 0.85,
+				AnimationName = "InfoBannerDreamIn",
+				AnimationOutName = "InfoBannerDreamOut",
+				Duration = 4.25,
+				Layer = "Overlay",
+				TextOffsetY = 25,
+				ThreadName = "Outro",
+			} )
+		end
 	elseif CurrentRun.Cleared then
 		if GameState.ReachedTrueEnding then
 			thread( DisplayInfoBanner, nil, { Text = "OutroDeathMessageTrueEnding", Delay = 0.75, TextColor = Color.Turquoise, FontScale = 0.85, AnimationName = "LocationBackingIrisGenericIn", AnimationOutName = "LocationBackingIrisGenericOut", ThreadName = "Outro", Duration = 4.25, TextOffsetY = 50 } )
@@ -1425,7 +1510,8 @@ function DeathPresentation( currentRun, killer, args )
 			thread( DisplayInfoBanner, nil, { Text = "OutroDeathMessageAlt", Delay = 0.75, TextColor = Color.Turquoise, FontScale = 0.85, AnimationName = "LocationBackingIrisGenericIn", AnimationOutName = "LocationBackingIrisGenericOut", ThreadName = "Outro", Duration = 4.25, TextOffsetY = 50 } )
 		end
 	else
-		thread( DisplayInfoBanner, nil, { Text = "DeathMessage", Delay = 0.75, TextColor = Color.Turquoise, FontScale = 0.85, AnimationName = "LocationBackingIrisGenericIn", AnimationOutName = "LocationBackingIrisGenericOut", Duration = 4.25, TextOffsetY = 50 } )
+		local encounterData = EncounterData[currentRun.CurrentRoom.Encounter.Name] or currentRun.CurrentRoom.Encounter
+		thread( DisplayInfoBanner, nil, { Text = encounterData.DeathMessage or "DeathMessage", Delay = 0.75, TextColor = Color.Turquoise, FontScale = 0.85, AnimationName = "LocationBackingIrisGenericIn", AnimationOutName = "LocationBackingIrisGenericOut", Duration = 4.25, TextOffsetY = 50 } )
 	end
 
 	local timeToEscape = 1.00
@@ -1478,7 +1564,13 @@ function DeathPresentation( currentRun, killer, args )
 
 	local deathTauntTime = 3.6
 	local encounter = CurrentRun.CurrentRoom.Encounter
-	if CurrentRun.CurrentRoom.KilledByChaosCurse or CurrentRun.ActiveBounty then
+	if CurrentRun.IsDreamRun then
+		-- Hypnos Death Taunt
+		wait( 1.0 )
+		WaitForSpeechFinished()
+		thread( HadesSpeakingPresentation, { SubtitleColor = EnemyData.NPC_Hypnos_DreamRun.SubtitleColor }, { OverlayAnim = "HypnosOverlay", BlockScreenshake = true, PortraitDuration = 2, VoiceLines = EnemyData.NPC_Hypnos_DreamRun.DeathTauntVoiceLines, OverlayDeathFx = true, StartDelay = 0 } ) -- nopkg
+		wait( deathTauntTime - 1.0 )
+	elseif CurrentRun.CurrentRoom.KilledByChaosCurse or CurrentRun.ActiveBounty then
 		-- Chaos Death Taunt
 		LoadPackages({ Names = "Chaos", IgnoreAssert = true })
 		thread( HadesSpeakingPresentation, { SubtitleColor = LootData.TrialUpgrade.SubtitleColor }, { OverlayAnim = "ChaosOverlay", BlockScreenshake = true, PortraitDuration = 2, VoiceLines = LootData.TrialUpgrade.DeathTauntVoiceLines, OverlayDeathFx = true } ) -- nopkg
@@ -1545,9 +1637,10 @@ function DeathPresentation( currentRun, killer, args )
 
 	WaitForSpeechFinished()
 
-	-- un-chipmunkify Mel only after all speech has finished
+	-- un-chipmunkify/dreamify only after all speech has finished
 	currentRun.Hero.SpeechParams.Chipmunk = nil
 	SetAudioEffectState({ Name = "Chipmunk", Value = 0 })
+	SetAudioEffectState({ Name = "Dream", Value = 0 })
 
 	UnlockCameraMotion("DeathPresentation")
 	RemoveInputBlock({ Name = "DeathPresentation" })
@@ -1582,7 +1675,7 @@ end
 function DoomAppearancePresentation( prevEnemies )
 
 	local moros = DeepCopyTable( EnemyData.NPC_Moros_01 )
-	local textLines = GetRandomEligibleTextLines( moros, moros.DeathPresentationTextLineSets, {} )
+	local textLines = GetRandomEligibleTextLines( moros, moros.DeathPresentationTextLineSets, NarrativeData.NPC_Moros_01.DeathPresentationTextLinePriorities )
 	if textLines == nil then
 		return
 	end
@@ -1602,22 +1695,14 @@ function DoomAppearancePresentation( prevEnemies )
 	LoadPackages({ IgnoreAssert = true, Names = { "Fates" } })
 	SetAlpha({ Id = moros.ObjectId, Fraction = 0, Duration = 0 })
 	SetupUnit( moros, CurrentRun, { IgnoreAI = true, IgnoreAssert = true } )
-	--SetGoalAngle({ Id = moros.ObjectId, Angle = 250 })
 
 	wait( 3 )
-
-	--PanCamera({ Ids = moros.ObjectId, Duration = 0 })
-	--SetScale({ Id = moros.ObjectId, Fraction = 0.7 })
-	--RemoveFromGroup({ Id = moros.ObjectId, Name = "Standing" })
-
-	--CreateAnimation({ Name = "TeleportDisappear", DestinationId = moros.ObjectId })
-	--SetAlpha({ Id = moros.ObjectId, Fraction = 1, Duration = 0.1 })
 
 	AltAspectRatioFramesShow()
 	SecretMusicPlayer( "/Music/ChaosTheme_MC" )
 	DoomContextArtPresentation()
 
-	PlayVoiceLines( moros.EntranceVoiceLines, nil, moros )
+	PlayVoiceLines( moros.EntranceVoiceLines, nil, moros, { QueuedTextLinesName = textLines.Name } )
 
 	AddToGroup({ Ids = { currentRun.Hero.ObjectId, moros.ObjectId }, Name = "Combat_UI_World_Backing", DrawGroup = true })
 
@@ -1761,10 +1846,10 @@ function EndEarlyAccessPresentation()
 	CurrentRun.Hero.Mute = true
 	CurrentRun.ActiveBiomeTimer = false
 	ToggleCombatControl( CombatControlsDefaults, false, "EarlyAccessPresentation" )
-	
+
+	local allowOutroSkip = IsGameStateEligible( nil, NamedRequirementsData.AllowOutroSkip )
 	local gameOutroData = GetRandomEligiblePrioritizedItem( GameOutroData, GameOutroPriorities, GameState.PlayedRunOutros, GameState.RemainingRunOutros )
 	GameState.PlayedRunOutros[gameOutroData.Name] = true
-	gameOutroData.Header = gameOutroData.Header or gameOutroData.Name
 
 	wait( 0.1 )
 	StopAmbientSound({ All = true })
@@ -1775,13 +1860,7 @@ function EndEarlyAccessPresentation()
 	FadeOut({ Duration = 0.375, Color = Color.Black })
 	wait( 0.5 )
 
-	RunInterstitialPresentation( gameOutroData, { Animations =
-		{
-			{
-				AnimationName = "RemBGOutroStart",
-			},
-		} }
-	)
+	RunInterstitialPresentation( gameOutroData, { AllowSkip = allowOutroSkip } )
 
 	wait( 0.5 )
 
@@ -1836,7 +1915,7 @@ function SendCritters( args )
 			local scale = RandomFloat( args.CritterScaleMin, args.CritterScaleMax )
 			SetScale({ Id = critterId, Fraction = scale })
 		end
-		SetAngle({ Id = critterId, Angle = moveAngle, Speed = moveSpeed })
+		SetAngle({ Id = critterId, Angle = moveAngle })
 		Move({ Id = critterId, Angle = moveAngle, Speed = moveSpeed })
 		thread( KillCritter, critterId, args.KillTime or 5.0 )
 		local nextCritterWait = RandomFloat( args.MinInterval or 0.02, args.MaxInterval or 0.5 )
@@ -1872,7 +1951,7 @@ function BoonInteractPresentation( source, args, textLines )
 		end
 	end
 
-	Shake({ Id = source.ObjectId, Distance = 2, Speed = 300, Duration = 3, FalloffSpeed = 3000 })
+	Shake({ Id = source.ObjectId, Distance = 2, Speed = 300, Duration = 3 })
 
 	if not args.SkipAnim then
 		SetAnimation({ Name = args.Anim or "MelinoeBoonInteract", DestinationId = CurrentRun.Hero.ObjectId })
@@ -1917,10 +1996,9 @@ function UpgradeAcquiredPresentation( screen, upgradeData )
 	local lineSets = { HeroVoiceLines.ReturnToHubVoiceLines }
 	if not upgradeData.FromTrade and not upgradeData.IgnoreForFieldsRewardClaimedVO then
 		table.insert( lineSets, GlobalVoiceLines.FieldsRewardClaimedVoiceLines )
-	else
 	end
+	table.insert( lineSets, GlobalVoiceLines.ClaimedContractItemVoiceLines )
 	table.insert( lineSets, HeroVoiceLines.SwapUpgradePickedVoiceLines )
-	table.insert( lineSets, upgradeData.SwapUpgradePickedVoiceLines )
 	table.insert( lineSets, upgradeData.UpgradePickedVoiceLines )
 	table.insert( lineSets, HeroVoiceLines.UpgradePickedVoiceLines )
 	table.insert( lineSets, GlobalVoiceLines.MiscUpgradePickedVoiceLines )
@@ -1974,7 +2052,7 @@ function SpellDropInteractPresentation( source, args, textLines )
 		end
 	end
 
-	Shake({ Id = source.ObjectId, Distance = 3, Speed = 100, Duration = 1, FalloffSpeed = 3000 })
+	Shake({ Id = source.ObjectId, Distance = 3, Speed = 100, Duration = 1 })
 
 	AdjustFullscreenBloom({ Name = "Subtle", Duration = 0.3 })
 	ScreenAnchors.FullscreenAlertFxAnchor = CreateScreenObstacle({ Name = "BlankObstacle", Group = "Events", X = ScreenCenterX, Y = ScreenCenterY })
@@ -2107,7 +2185,7 @@ end
 
 function CannotRerollPresentation( run, target )
 
-	Shake({ Id = target.ObjectId, Distance = 1, Speed = 300, Duration = 0.3, FalloffSpeed = 3000 })
+	Shake({ Id = target.ObjectId, Distance = 1, Speed = 300, Duration = 0.3 })
 	PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo", Id = target.ObjectId })
 	thread( PlayVoiceLines, HeroVoiceLines.CannotRerollVoiceLines, true )
 end
@@ -2303,7 +2381,7 @@ function StartDevotionTestPresentation( currentRoom, alternateLootData, alternat
 	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = alternateLootId })
 	wait(1.0)
 	Shake({ Id = alternateLootData.ObjectId, Distance = 2, Speed = 250, Duration = 1.0  })
-	PanCamera({ Ids = alternateLootData.ObjectId, Duration = 3.5, EaseIn = 0.05, EaseOut = 0.03 })
+	PanCamera({ Id = alternateLootData.ObjectId, Duration = 3.5, EaseIn = 0.05, EaseOut = 0.03 })
 	thread( DoRumble, { { ScreenPreWait = 0.15, LeftFraction = 0.17, Duration = 1.0 }, } )
 	thread( InCombatText, alternateLootId, alternateLootData.LootRejectedText, 2.5, { ShadowScaleX = 1.4 } )
 
@@ -2311,9 +2389,13 @@ function StartDevotionTestPresentation( currentRoom, alternateLootData, alternat
 	wait(0.5)
 	PlaySound({ Name = "/SFX/Menu Sounds/PortraitEmoteAngerSFX" })
 
-	local textLines = GetRandomEligibleTextLines( alternateLootData, alternateLootData.RejectionTextLines, {} )
-	PlayTextLines( alternateLootData, textLines )
-	PanCamera({ Ids = CurrentRun.Hero.ObjectId, Duration = 1.0, EaseIn = 0.03, EaseOut = 0.03 })
+	if CurrentRun.IsDreamRun then
+		wait( 0.5 )
+	else
+		local textLines = GetRandomEligibleTextLines( alternateLootData, alternateLootData.RejectionTextLines, {} )
+		PlayTextLines( alternateLootData, textLines )
+	end
+	PanCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 1.0, EaseIn = 0.03, EaseOut = 0.03, FromCurrentLocation = true })
 
 	if alternateLootData.RejectionVoiceLines ~= nil then
 		thread( PlayVoiceLines, alternateLootData.RejectionVoiceLines )
@@ -2353,7 +2435,6 @@ function BiomeTimeCheckpointPresentation( run, additionalTime )
 		ShadowColor = {0,0,0,1},
 		ShadowOffsetY = 2,
 		ShadowOffsetX = 0,
-		ShadowAlpha = 1,
 		ShadowBlur = 0,
 	})
 
@@ -2477,6 +2558,9 @@ function SpawnChronosForTaunt( source, args )
 	newUnit.ObjectId = args.UnitId
 	CurrentRun.SpawnedChronosForTaunt = true
 	SetupUnit( newUnit, CurrentRun )
+	if newUnit.CancelExitIfInteractable and not CanReceiveGift( newUnit ) then
+		newUnit.BlockSpecialInteract = true
+	end
 end
 
 function ChronosExit( source, args )
@@ -2623,7 +2707,8 @@ function LeaveRoomSecretDoorPresentation( currentRun, secretDoor )
 	ToggleCombatControl( { "AdvancedTooltip" } , false, "LeaveRoom" )
 
 	local nextRoomData = RoomData[secretDoor.Room.Name] or secretDoor.Room
-
+	
+	SetAudioEffectState({ Name = "SpellCharge", Value = 0 })
 	-- preserve audio/VO presentation
 	CleanupCustomRoomSounds()
 	PlaySound({ Name = "/SFX/Menu Sounds/ChaosRoomEnterExit" })
@@ -2786,7 +2871,7 @@ function ChaosInteractPresentation( source, args, textLines )
 		end
 	end
 
-	Shake({ Id = source.ObjectId, Distance = 2, Speed = 300, Duration = 3, FalloffSpeed = 3000 })
+	Shake({ Id = source.ObjectId, Distance = 2, Speed = 300, Duration = 3 })
 	AdjustColorGrading({ Name = "ChaosInversion", Duration = 0 })
 	AdjustColorGrading({ Name = "Chaos", Duration = 1 })
 	AdjustFullscreenBloom({ Name = "FullscreenFlash", Duration = 0.6 })
@@ -3003,12 +3088,9 @@ function ExitToAnomalyPresentation(currentRun, exitDoor)
 	ToggleCombatControl( { "AdvancedTooltip" } , true, "LeaveRoom" )
 end
 
-
 function AnomalyEntrancePresentation(currentRun, currentRoom, args)
 	args = args or {}
 	AddInputBlock({ Name = "AnomalyEntrancePresentation" })
-
-	local currentRoomData = RoomData[currentRoom.Name] or currentRoom
 
 	if currentRoom.HeroEndPoint ~= nil then
 		AngleTowardTarget({ Id = currentRun.Hero.ObjectId, DestinationId = currentRoom.HeroEndPoint })
@@ -3048,9 +3130,7 @@ function AnomalyEntrancePresentation(currentRun, currentRoom, args)
 	PlaySound({ Name = "/Leftovers/SFX/FootstepsWheatHeavy2", Id = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/Leftovers/SFX/FootstepsWheatHeavy2", Id = CurrentRun.Hero.ObjectId, Delay = 0.2 })
 
-	if currentRoomData.LocationText and not currentRoom.Encounter.BlockLocationText then
-		thread( DisplayInfoBanner, nil, { Text = currentRoomData.LocationText, Delay = 0.65, FadeColor = currentRoomData.LocationTextColor or { 255, 0, 0, 255 }, Duration = 2.0, AnimationName = currentRoomData.LocationAnimName, AnimationOutName = currentRoomData.LocationAnimOutName, IconBackingAnimationName = currentRoomData.LocationTextAnimName, IconBackingAnimationOutName = currentRoomData.LocationTextAnimOutName, } )
-	end
+	RoomEntranceDisplayLocationText( currentRoom )
 	thread(DelayedRemoveInputBlock, args.InputBlockReleaseDelay or 0.1, "AnomalyEntrancePresentation")
 end
 
@@ -3087,17 +3167,22 @@ function AnomalyEndPresentation(eventSource, args)
 
 	thread( HadesSpeakingPresentation, {}, { SubtitleColor = Color.ChronosVoice, BlockColorGrade = true, OverlayAnim = "ChronosOverlay", VoiceLines = { GlobalVoiceLines = "AnomalySurvivedVoiceLines" }, StartSound = "/SFX/TimeSlowStart" } )
 
-	thread( PlayVoiceLines, HeroVoiceLines.AnomalyEncounterSurvivedVoiceLines, true )
-
 end
 
 function AnomalyExitPresentation(currentRun, exitDoor)
 	AddInputBlock({ Name = "AnomalyExitPresentation" })
+	EndAutoSprint({ Halt = true, EndWeapon = true })
+	EndRamWeapons({ Id = CurrentRun.Hero.ObjectId })
 	ToggleCombatControl( { "AdvancedTooltip" } , false, "LeaveRoom" )
-	HideCombatUI( "AnomalyExitPresentation" )
 
 	thread( PlayVoiceLines, GlobalVoiceLines.LeavingArenaVoiceLines )
 	LeaveRoomAudio( currentRun, exitDoor )
+
+	TraitTrayScreenClose( ActiveScreens.TraitTrayScreen )
+	CloseBoonInfoScreen( ActiveScreens.BoonInfo )
+	CloseCodexScreen( ActiveScreens.Codex )
+	CloseInventoryScreen( ActiveScreens.InventoryScreen )
+	HideCombatUI( "AnomalyExitPresentation" )
 
 	wait(0.1)
 
@@ -3160,9 +3245,7 @@ function EntranceFromAnomalyPresentation(currentRun, currentRoom, args)
 		thread( PlayVoiceLines, GlobalVoiceLines.AnomalyConcludedVoiceLines, true )
 	end
 
-	if currentRoom.LocationText and not currentRoom.Encounter.BlockLocationText then
-		thread( DisplayInfoBanner, nil, { Text = currentRoom.LocationText, Delay = 0.65, FadeColor = currentRoom.LocationTextColor or { 255, 0, 0, 255 }, Duration = 2.0, AnimationName = currentRoom.LocationAnimName, AnimationOutName = currentRoom.LocationAnimOutName, IconBackingAnimationName = currentRoom.LocationTextAnimName, IconBackingAnimationOutName = currentRoom.LocationTextAnimOutName, } )
-	end
+	RoomEntranceDisplayLocationText( currentRoom )
 	wait( roomIntroSequenceDuration )
 
 	LockCamera({ Id = currentRun.Hero.ObjectId, Duration = 2.0 })
@@ -3264,8 +3347,9 @@ function OlympusSkyEntrancePresentation( currentRun, currentRoom, args )
 	RemoveInputBlock({ Name = "StartRoomPresentation" })
 
 	-- Start these earlier than normal in this case
-	RunEventsGeneric( currentRun.CurrentRoom.Encounter.EncounterSpawnsStartEvents, currentRun.CurrentRoom.Encounter )
-	currentRun.CurrentRoom.Encounter.RanEncounterSpawnsStartEvents = true
+	local encounterData = EncounterData[currentRoom.Encounter.Name] or currentRoom.Encounter
+	RunEventsGeneric( encounterData.EncounterSpawnsStartEvents, currentRoom.Encounter )
+	currentRoom.Encounter.RanEncounterSpawnsStartEvents = true
 
 	SetAnimation({ Name = "HeroTouchdownCircle", DestinationId = CurrentRun.Hero.ObjectId })
 	SetAlpha({ Id = currentRun.Hero.ObjectId, Fraction = 0.0, Duration = 0.0 })
@@ -3302,7 +3386,7 @@ function OlympusSkyEntrancePresentation( currentRun, currentRoom, args )
 	AddInputBlock({ Name = "OlympusSkyEntrancePresentation" })
 
 	if IsLocationBlocked({ Id = currentRun.Hero.ObjectId }) then
-		LockCamera({ Id = currentRun.Hero.ObjectId, Duration = 0.3, Retarget = true })
+		LockCamera({ Id = currentRun.Hero.ObjectId, Duration = 0.3 })
 		local destinationId = GetClosest({ Id = currentRun.Hero.ObjectId, DestinationIds = GetIds({ Name = "SpawnPoints" }) })
 		if destinationId == nil or destinationId == 0 then
 			destinationId = currentRoom.HeroEndPoint
@@ -3532,6 +3616,7 @@ function RoomEntranceCBossPresentation(currentRun, currentRoom, args)
 	local zagreusId = GetIdsByType({ Name = "Zagreus" })[1]
 
 	AddInputBlock({ Name = "RoomEntranceCBossPresentation" })
+	HideCombatUI( "RoomEntranceCBossPresentation" )
 
 	PlaySound({ Name = "/SFX/TheseusCrowdCheer" })
 
@@ -3565,11 +3650,7 @@ function RoomEntranceCBossPresentation(currentRun, currentRoom, args)
 
 	wait(0.03)
 
-	thread( PlayVoiceLines, GlobalVoiceLines.ZagreusBossGreetingLines )
-
-	if currentRoom.LocationText and not currentRoom.Encounter.BlockLocationText then
-		thread( DisplayInfoBanner, nil, { Text = currentRoom.LocationText, Delay = 0.65, FadeColor = currentRoom.LocationTextColor or { 255, 0, 0, 255 }, Duration = 2.0, AnimationName = roomData.LocationAnimName, AnimationOutName = roomData.LocationAnimOutName, IconBackingAnimationName = currentRoom.LocationTextAnimName, IconBackingAnimationOutName = currentRoom.LocationTextAnimOutName, } )
-	end
+	RoomEntranceDisplayLocationText( currentRoom )
 	
 	wait( 0.33 )
 	SetAnimation({ Name = "Melinoe_Drop_Entrance_Fire_NoEquip", DestinationId = CurrentRun.Hero.ObjectId })
@@ -3580,11 +3661,18 @@ function RoomEntranceCBossPresentation(currentRun, currentRoom, args)
 	PlaySound({ Name = "/Leftovers/SFX/FootstepsWheatHeavy2", Id = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/Leftovers/SFX/FootstepsWheatHeavy2", Id = CurrentRun.Hero.ObjectId, Delay = 0.2 })
 	CreateAnimation({ Name = "DustPuffBNoDecal", DestinationId = CurrentRun.Hero.ObjectId })
-	RemoveInputBlock({ Name = "RoomEntranceCBossPresentation" })
-
 	Destroy({ Id = dropShadow })
 
-	wait( 2.0 )
+	if not CurrentRun.IsDreamRun then
+		PlayVoiceLines( GlobalVoiceLines.ZagreusBossGreetingLines )
+		wait( 0.4 )
+	else
+		thread( PlayVoiceLines, GlobalVoiceLines.ZagreusBossGreetingLines )
+		wait( args.DreamEnterWait or 0)
+	end
+
+	UnblockCombatUI( "RoomEntranceCBossPresentation" )
+	RemoveInputBlock({ Name = "RoomEntranceCBossPresentation" })
 
 end
 
@@ -3653,4 +3741,30 @@ function ContractExitPresentation(currentRun, exitDoor, args)
 
 	RemoveInputBlock({ Name = "LeaveRoomPresentation" })
 	ToggleCombatControl( { "AdvancedTooltip" } , true, "LeaveRoom" )
+end
+
+function DieHardShadeRevealPresentation( source )
+
+	local enemyCameraId = 543023
+
+	waitUnmodified( 0.9 )
+	SetAnimation({ DestinationId = ScreenAnchors.DialogueBackgroundId, Name = "DialogueBackgroundOut" })
+	waitUnmodified( 0.1 )
+	Destroy({ Id = ScreenAnchors.DialogueBackgroundId })
+
+	PanCamera({ Id = enemyCameraId, Duration = 2.3, OffsetY = 130, EaseIn = 0, EaseOut = 0.03 })
+	PlaySound({ Name = "/Leftovers/World Sounds/MapZoomInShortHigh" })
+
+	waitUnmodified( 0.3 )
+
+	thread( PlayEmoteSimple, nil, { TargetId = enemyCameraId, AnimationName = "StatusIconOhBoyRed", OffsetZ = -30, Delay = 1.5 } )
+
+	waitUnmodified( 3.5, RoomThreadName )
+
+	PlaySound({ Name = "/Leftovers/World Sounds/MapZoomInShortHigh" })
+	PanCamera({ Id = CurrentRun.Hero.ObjectId, Duration = 1.3 })
+
+	waitUnmodified( 0.5 )
+	CreateDialogueBackground()
+
 end

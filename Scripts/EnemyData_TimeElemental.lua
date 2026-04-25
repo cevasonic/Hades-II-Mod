@@ -2,7 +2,7 @@ UnitSetData.TimeElemental =
 {
 	TimeElemental =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseIEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 325,
 		HealthBarOffsetY = -170,

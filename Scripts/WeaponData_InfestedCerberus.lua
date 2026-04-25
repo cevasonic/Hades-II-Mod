@@ -112,6 +112,7 @@ WeaponSetData =
 			FireSounds =
 			{
 				{ Name = "/SFX/Enemy Sounds/Werewolf/EmoteAttacking" },
+				{ Name = "/SFX/Enemy Sounds/CorruptedCerberus/Cerberus_Bark2" },
 			},
 		},
 	},
@@ -179,6 +180,19 @@ WeaponSetData =
 		},
 
 		FireScreenshake = { Distance = 6, Speed = 400, Duration = 0.2, FalloffSpeed = 1000, Angle = 0, ScreenPreWait = 0.02 },
+	},
+
+
+	InfestedCerberusSwipe_NoReqs =
+	{
+		InheritFrom = { "InfestedCerberusSwipe", },
+		Requirements = {},
+		AIData =
+		{
+			DeepInheritance = true,
+			AttackDistance = 9999,
+			PreAttackRotationDampening = 0.15,
+		},
 	},
 
 	InfestedCerberusTurnSlam =
@@ -272,15 +286,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -319,15 +325,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -479,15 +477,7 @@ WeaponSetData =
 				IgnoreRequirements = true,
 				GameStateRequirements =
 				{
-					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 3,
-						},
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				DataOverrides =
 				{
@@ -568,6 +558,7 @@ WeaponSetData =
 				{
 					UsePlayerSource = true,
 					BreakIfPlayed = true,
+					RandomRemaining = true,
 					PreLineWait = 1.6,
 					SuccessiveChanceToPlayAll = 0.75,
 					SuccessiveChanceToPlay = 0.15,
@@ -855,15 +846,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = "<",
-								Value = 3,
-							},
-						}
+						NamedRequirementsFalse = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -951,15 +934,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1017,15 +992,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						}
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1111,6 +1078,7 @@ WeaponSetData =
 				{
 					PlayOnceFromTableThisRun = true,
 					BreakIfPlayed = true,
+					RandomRemaining = true,
 					PreLineWait = 1.25,
 					SuccessiveChanceToPlay = 0.15,
 					UsePlayerSource = true,
@@ -1180,15 +1148,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1334,15 +1294,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1484,15 +1436,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1820,6 +1764,7 @@ WeaponSetData =
 					},
 				},
 				{
+					RandomRemaining = true,
 					BreakIfPlayed = true,
 					PreLineWait = 1.25,
 					SuccessiveChanceToPlay = 0.15,
@@ -1878,15 +1823,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{
@@ -1913,11 +1850,11 @@ WeaponSetData =
 			DumbFireWeapons = { "InfestedCerberusUnburrowRadialInvertedCircle", },
 			ChainedWeaponOptions =
 			{
-				"InfestedCerberusSwipe",
 				"InfestedCerberusPoundL",
 				"InfestedCerberusPoundR",
 				"InfestedCerberusTurnSlam",
 				"InfestedCerberusFireBallCombo2",
+				"InfestedCerberusSwipe_NoReqs",
 			},
 		},
 	},
@@ -1948,15 +1885,7 @@ WeaponSetData =
 				{
 					GameStateRequirements =
 					{
-						{
-							FunctionName = "RequiredShrineLevel",
-							FunctionArgs =
-							{
-								ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-								Comparison = ">=",
-								Value = 3,
-							},
-						},
+						NamedRequirements = { "BossDifficultyActive" },
 					},
 					Data =
 					{

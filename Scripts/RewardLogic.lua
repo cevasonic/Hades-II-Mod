@@ -64,8 +64,12 @@ function ChooseRoomReward( run, room, rewardStoreName, previouslyChosenRewards, 
 	local roomData = RoomData[room.Name] or room
 
 	if not args.IgnoreForcedReward then
-		if room.NoReward then
+		if room.NoReward or ( roomData.RewardGameStateRequirements ~= nil and not IsGameStateEligible( room, roomData.RewardGameStateRequirements ) ) then
 			return nil
+		end
+
+		if CurrentRun.IsDreamRun and roomData.CanSpawnDreamReward then
+			return "DreamPointsDrop"
 		end
 
 		if CurrentRun.ActiveBounty ~= nil then
@@ -238,7 +242,7 @@ function SetupRoomReward( currentRun, room, previouslyChosenRewards, args )
 				if trait ~= nil and trait.ForceBoonName ~= nil and trait.Uses > 0 and not Contains(excludeLootNames, trait.ForceBoonName) then
 					lootData = { Name = trait.ForceBoonName }
 					room.ForcedBoonNames[trait.ForceBoonName] = true
-					thread( ForceBoonChosenPresentation, trait, lootData )
+					room.ForceBoonChosenTrait = trait
 					break
 				end
 			end

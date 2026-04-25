@@ -19,9 +19,8 @@ function PlayInteractAnimation( interactableObjectId, args )
 end
 
 function GetEquippedWeaponValue( key )
-	local weaponInteractAnim = nil
 	for weaponName, v in pairs( CurrentRun.Hero.Weapons ) do
-		local weaponData = WeaponData[weaponName]
+		local weaponData = GetWeaponData( CurrentRun.Hero, weaponName )
 		if weaponData ~= nil and weaponData[key] ~= nil then
 			return weaponData[key]
 		end
@@ -169,13 +168,11 @@ function SpecialInteractShade( usee, args )
 	wait( 1.25 )
 	RemoveInputBlock({ Name = "SpecialInteractShade" })
 	wait( 29.25, RoomThreadName )
-	if not usee.UseableToggleBlocked then
-		UseableOn({ Id = usee.ObjectId })
-	end
+	UseableOn({ Id = usee.ObjectId })
 end
 
 function SpecialInteractDieHardFanShade( usee, args )
-	UseableOff({ Id = usee.ObjectId })
+	AddInteractBlock( usee, "SpecialInteract" )
 	HideUseButton( usee.ObjectId, usee )
 	AddInputBlock({ Name = "SpecialInteractShade" })
 
@@ -197,6 +194,43 @@ function SpecialInteractDieHardFanShade( usee, args )
 	RemoveInputBlock({ Name = "SpecialInteractShade" })
 end
 
+function SpecialInteractDieHardFanShadeSendToElysium( usee, args )
+	AddInteractBlock( usee, "SendToElysium" )
+	HideUseButton( usee.ObjectId, usee )
+	AddInputBlock({ Name = "SpecialInteractShade" })
+
+	local unequipAnimation = GetEquippedWeaponValue("UnequipAnimation") or "MelinoeIdleWeaponless"
+	SetAnimation({ Name = unequipAnimation, DestinationId = CurrentRun.Hero.ObjectId })
+	AngleTowardTarget({ Id = CurrentRun.Hero.ObjectId, DestinationId = usee.ObjectId })
+
+
+	thread( PlayVoiceLines, usee.SendToElysiumVoiceLines, true, usee )
+
+	wait( 0.65 )
+
+	SetAnimation({ Name = "MelTalkExplaining01", DestinationId = CurrentRun.Hero.ObjectId })
+	thread( PlayEmoteSimple, usee, { AnimationName = "StatusIconOhBoyRed", OffsetZ = usee.EmoteOffsetZ, Delay = 3.2 } )
+
+	wait( 8.5 )
+	
+	Shake({ Id = usee.ObjectId, Speed = 100, Distance = 3 })
+	Flash({ Id = usee.ObjectId, Speed = 1.0, MinFraction = 0, MaxFraction = 0.35, Color = Color.White })
+
+	thread( PlayEmoteSimple, usee, { AnimationName = "StatusIconSmileRed", OffsetZ = usee.EmoteOffsetZ } )
+
+	wait( 1.8 )
+
+	PlaySound({ Name = "/SFX/GhostEvaporate", Id = usee.ObjectId })
+	PlaySound({ Name = "/SFX/Menu Sounds/WeaponUnlockPoof", Id = usee.ObjectId })
+
+	SetAnimation({ Name = "ExorcismGhostDissipate", DestinationId = usee.ObjectId })
+
+	SetAnimation({ Name = "MelTalkExplaining01ReturnToIdle", DestinationId = CurrentRun.Hero.ObjectId })
+
+	wait( 2.0 )
+	RemoveInputBlock({ Name = "SpecialInteractShade" })
+end
+
 function SpecialInteractLightRanged( usee, args )
 	UseableOff({ Id = usee.ObjectId })
 	HideUseButton( usee.ObjectId, usee )
@@ -211,9 +245,7 @@ function SpecialInteractLightRanged( usee, args )
 	wait( 1.25 )
 	RemoveInputBlock({ Name = "SpecialInteractShade" })
 	wait( 29.25, RoomThreadName )
-	if not usee.UseableToggleBlocked then
-		UseableOn({ Id = usee.ObjectId })
-	end
+	UseableOn({ Id = usee.ObjectId })
 end
 
 function LightRangedSalute( usee, args )
@@ -407,9 +439,7 @@ function GhostRecruitSpecialInteractPresentation( ghost, user )
 	wait( 1.25 )
 	RemoveInputBlock({ Name = "GhostRecruitSpecialInteractPresentation" })
 	wait( 120, RoomThreadName )
-	if not ghost.UseableToggleBlocked then
-		UseableOn({ Id = ghost.ObjectId })
-	end
+	UseableOn({ Id = ghost.ObjectId })
 end
 
 function NarcissusDropPresentation( consumable, args )
@@ -442,4 +472,13 @@ end
 function BloodDropUsePresentation( args, consumable )
 	PlaySound({ Name = "/SFX/Player Sounds/AresBlooddropPickup", Id = CurrentRun.Hero.ObjectId })
 	Move({ Id = consumable.ObjectId, DestinationId = CurrentRun.Hero.ObjectId, SuccessDistance = 50, Duration = 0.2 })
+end
+
+function NemesisInteractionBlockedPresentation( source, args )
+	local text = "UseBlockedByEnemies"
+	if IsGameStateEligible( nil, NamedRequirementsData.AthenaPresentAndWaiting ) then
+		text = "UseBlockedByMisc"
+	end
+	thread( InCombatText, CurrentRun.Hero.ObjectId, text, 1.0, { ShadowScale = 0.6 } )
+	PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo", Id = source.ObjectId })
 end

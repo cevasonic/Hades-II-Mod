@@ -2,7 +2,7 @@ UnitSetData.Boar =
 {
 	Boar =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseBossEnemy", "BaseNEnemy", "BaseVulnerableEnemy" },
 
 		BlockRaiseDead = true,
 		IsBoss = false,
@@ -24,6 +24,58 @@ UnitSetData.Boar =
 		
 		BlockRespawnShrineUpgrade = true,
 		StartAggroed = true,
+
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Boar_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/ErymanthianBoarDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		StunAnimations = 
 		{
@@ -83,6 +135,8 @@ UnitSetData.Boar =
 		WakeUpDelayMin = 0.0,
 		WakeUpDelayMax = 1.0,
 
+		SetupEvents = "nil",
+
 		DefaultAIData =
 		{
 			DeepInheritance = true,
@@ -96,7 +150,7 @@ UnitSetData.Boar =
 
 	Boar_SuperElite =
 	{
-		InheritFrom = { "SuperElite", "BaseVulnerableEnemy" },
+		InheritFrom = { "SuperElite", "BaseQEnemy", "BaseVulnerableEnemy" },
 		GenusName = "Boar",
 		MaxHealth = 3000,
 		HealthBuffer = 6000,

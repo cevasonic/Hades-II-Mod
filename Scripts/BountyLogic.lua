@@ -101,6 +101,7 @@ function BountyBoardScreenDisplayCategory( screen, categoryIndex )
 		button.OnMouseOverFunctionName = "MouseOverBounty"
 		button.OnMouseOffFunctionName = "MouseOffBounty"
 		button.Data = bountyData
+		button.GameStateRecord = "QuestsViewed"
 		button.Index = screen.NumItems
 		button.Screen = screen
 		AttachLua({ Id = button.Id, Table = button })
@@ -120,6 +121,7 @@ function BountyBoardScreenDisplayCategory( screen, categoryIndex )
 			components[newButtonKey] = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu" })
 			SetAnimation({ DestinationId = components[newButtonKey].Id , Name = "QuestLogNewQuest" })
 			Attach({ Id = components[newButtonKey].Id, DestinationId = components[bountyButtonKey].Id, OffsetX = screen.NewIconOffsetX, OffsetY = screen.NewIconOffsetY })
+			screen.HasUnviewedBounty = true
 		end
 
 		if IsGameStateEligible( bountyData, bountyData.CompleteGameStateRequirements ) then
@@ -450,6 +452,11 @@ function CheckPackagedBountyCompletion()
 	SetPlayerInvulnerable( "BountyComplete" )
 	SetThingProperty({ DestinationId = CurrentRun.Hero.ObjectId, Property = "StopsProjectiles", Value = false })
 
+	TraitTrayScreenClose( ActiveScreens.TraitTrayScreen )
+	CloseBoonInfoScreen( ActiveScreens.BoonInfo )
+	CloseCodexScreen( ActiveScreens.Codex )
+	CloseInventoryScreen( ActiveScreens.InventoryScreen )
+
 	PackagedBountyEarnedPresentation( bountyData )
 
 	GameState.PackagedBountyClears[bountyData.Name] = (GameState.PackagedBountyClears[bountyData.Name] or 0) + 1
@@ -720,7 +727,7 @@ function StartPackagedBounty( screen, button )
 	BountyPackagePreRunStartPresentation( bountyData, { ActiveBounty = bountyData.Name, ActiveBountyClears = GameState.PackagedBountyClears[bountyData.Name] or 0, ActiveBountyAttempts = GameState.PackagedBountyAttempts[bountyData.Name] } )
 	WaitForSpeechFinished()
 
-	StartOver( { StartingBiome = bountyData.StartingBiome, ForcedRewards = bountyData.ForcedRewards, ActiveBounty = bountyData.Name, RunOverrides = bountyData.RunOverrides, StartingRoomOverrides = bountyData.StartingRoomOverrides  } )
+	StartOver( { StartingBiome = bountyData.StartingBiome, ForcedRewards = DeepCopyTable( bountyData.ForcedRewards ), ActiveBounty = bountyData.Name, RunOverrides = bountyData.RunOverrides, StartingRoomOverrides = bountyData.StartingRoomOverrides  } )
 	RemoveInputBlock({ Name = "StartPackagedBounty" })
 end
 
@@ -737,6 +744,9 @@ function RestorePackagedBountyGameState()
 	GameState.ActiveShrineBounty = StoredGameState.ActiveShrineBounty
 	GameState.MetaUpgradeState = StoredGameState.MetaUpgradeState
 
+	for name, value in pairs( GameState.ShrineUpgrades ) do
+		ShrineUpgradeExtractValues( name )
+	end
 	GetCurrentMetaUpgradeCost()
 	GameState.SpentShrinePointsCache = GetTotalSpentShrinePoints()
 

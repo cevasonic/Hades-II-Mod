@@ -3,7 +3,7 @@ UnitSetData.WaterUnit =
 	
 	WaterUnit =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseGEnemy", "BaseVulnerableEnemy" },
 		--IntroEncounterName = "WaterUnitIntro", -- Miniboss is the intro
 
 		GameStateRequirements =
@@ -38,6 +38,8 @@ UnitSetData.WaterUnit =
 		AttachedAnimationName = "WaterUnitGlow",
 
 		ActivateAnimation = "OceanusEnemyBubbles",
+		
+		StopAnimationsOnDeath = { "MedusaShadow", },
 
 		DeathAnimation = "Enemy_WaterUnit_Death",
 		DeathFx = "EnemyDeathFxFishSmall",

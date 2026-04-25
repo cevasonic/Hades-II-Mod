@@ -44,6 +44,42 @@ UnitSetData.NPC_Echo =
 					},
 				},
 			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					ForceTextLines = "EchoDreamRun",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/EchoDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		FlavorTextIds =
@@ -87,6 +123,36 @@ UnitSetData.NPC_Echo =
 							"EchoAboutEcho01",
 						},
 					},
+				},
+			},
+		},
+
+		UpgradeMenuOpenVoiceLines =
+		{
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "TextLinesRecord", "EchoGrantsNewTrait01" }
+					},
+					{
+						PathFalse = { "GameState", "TraitsSeen", "EchoRepeatKeepsakeBoon" },
+					},
+				},
+				{
+					PreLineWait = 0.85,
+					UsePlayerSource = true,
+					SkipAnim = true,
+					AllowTalkOverTextLines = true,
+
+					{ Cue = "/VO/MelinoeField_4650", Text = "Hey, this is new...!" },
+				},
+				{
+					SkipAnim = true,
+					AllowTalkOverTextLines = true,
+					ObjectType = "NPC_Echo_01",
+
+					{ Cue = "/VO/Echo_0137", Text = "This is new... {#Echo1}this is new... {#Prev}{#Echo2}this is new...!", BreakIfPlayed = true },
 				},
 			},
 		},
@@ -853,6 +919,7 @@ UnitSetData.NPC_Echo =
 				UseableOffSource = true,
 				InitialGiftableOffSource = true,
 				PreBlockSpecialInteract = true,
+				SkipQuestStatusCheck = true,
 				GameStateRequirements =
 				{
 					{
@@ -880,9 +947,9 @@ UnitSetData.NPC_Echo =
 				{ Cue = "/VO/Echo_0094",
 					Portrait = "Portrait_Echo_Smiling_01", Speaker = "NPC_Echo_02",
 
-					-- heart unlock
-					PostLineThreadedFunctionName = "RelationshipAdvancedPresentation",
-					PostLineThreadedFunctionArgs = { Delay = 0.25 },
+					-- heart unlock + major quest complete
+					PostLineThreadedFunctionName = "MajorQuestCompletedPresentation",
+					PostLineThreadedFunctionArgs = { Delay = 0.25, AltString = "MajorQuestCompletedAlt", QuestName = "MajorQuestCompleted_NarcissusAndEcho", ShowHeartUnlock = true, SkipQuestStatusCheck = true },
 
 					Text = "All right to remain here... {#Echo1}all right to remain here... {#Prev}{#Echo2}all right to remain..." },
 
@@ -1056,6 +1123,70 @@ UnitSetData.NPC_Echo =
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
 			},
 
+			EchoGrantsNewTrait01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary" },
+						HasNone = { "AthenaEncounterKeepsake", "HadesAndPersephoneKeepsake", "EscalatingKeepsake", "FountainRarityKeepsake" },
+					},
+				},
+				{ Cue = "/VO/Echo_0135",
+					Text = "Tough out there... {#Echo1}tough out there... {#Prev}{#Echo2}tough out there..." },
+
+				{ Cue = "/VO/MelinoeField_4649", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "That it is. No matter how many times I pass through these Fields, I have to fight back a sense of despair. At least till I get here, since you always have something good." },
+
+				{ Cue = "/VO/Echo_0136",
+					Text = "Have something good... {#Echo1}something good... {#Prev}{#Echo2}something good..." },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+
+			EchoAboutHoundFamiliar01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EquippedFamiliar" },
+						IsAny = { "HoundFamiliar" },
+					},
+				},
+				{ Cue = "/VO/Echo_0130",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "Remember this place... {#Echo1}remember this place... {#Prev}{#Echo2}remember this place..." },
+
+				{ Cue = "/VO/MelinoeField_4644", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Portrait = "Portrait_Mel_Vulnerable_01",
+					Text = "How could I ever forget it? And I think Hecuba here remembers, too. She seems to recognize you." },
+
+				{ Cue = "/VO/Echo_0131",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "Recognize you... {#Echo1}recognize you... {#Prev}{#Echo2}recognize you..." },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+
 			EchoPostTrueEnding01 =
 			{
 				PlayOnce = true,
@@ -1112,10 +1243,13 @@ UnitSetData.NPC_Echo =
 				GameStateRequirements =
 				{
 					NamedRequirements = { "NarcissusInFields" },
+					-- back-compat
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusWithEcho03" },
+					},
 				},
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				GiftableOffSource = true,
 				InteractDistance = 450,
@@ -1138,7 +1272,7 @@ UnitSetData.NPC_Echo =
 				{ Cue = "/VO/Echo_0056",
 					Portrait = "Portrait_Echo_Smiling_01",
 					Speaker = "NPC_Echo_02",
-					Text = "Everything's OK? {#Echo1}Everything's OK! {#Prev}{#Echo2} Everything's OK." },
+					Text = "Everything's OK? {#Echo1}Everything's OK! {#Prev}{#Echo2}Everything's OK." },
 				PrePortraitExitFunctionName = "EchoChoice",
 				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
@@ -1158,10 +1292,13 @@ UnitSetData.NPC_Echo =
 						PathFalse = { "CurrentRun", "TextLinesRecord", "NarcissusAboutWaters04" }
 					},
 					NamedRequirements = { "NarcissusInFields" },
+					-- back-compat
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusWithEcho03" },
+					},
 				},
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				InteractDistance = 450,
 
@@ -1214,7 +1351,6 @@ UnitSetData.NPC_Echo =
 				},
 				UseText = "UseListenNPC",
 				BlockDistanceTriggers = true,
-				IgnoreSourceEndTextLinesThreadedFunctionName = true,
 				UseableOffSource = true,
 				InteractDistance = 450,
 
@@ -1223,7 +1359,7 @@ UnitSetData.NPC_Echo =
 
 				{ Cue = "/VO/Echo_0158", Speaker = "NPC_Echo_01",
 					Portrait = "Portrait_Echo_Smiling_01",
-					Text = "Rustle of the wheat... {#Echo1}rustle of the wheat... {#Prev}{#Echo2}rustle of the wheat... " },
+					Text = "Rustle of the wheat... {#Echo1}rustle of the wheat... {#Prev}{#Echo2}rustle of the wheat..." },
 
 				{ Cue = "/VO/Narcissus_0286", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
 					Text = "{#Emph}Yeah{#Prev}, kind of like back when we were up top! The trees, the flowers, and all that. You ever miss those times?" },
@@ -1278,6 +1414,13 @@ UnitSetData.NPC_Echo =
 				UseableOffSource = true,
 				InitialGiftableOffSource = true,
 				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" }
+					},
+				},
+
 				-- OnQueuedThreadedFunctionName = "AmbientChatting",
 				-- OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
 
@@ -1435,6 +1578,13 @@ UnitSetData.NPC_Echo =
 				UseableOffSource = true,
 				InitialGiftableOffSource = true,
 				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoGift07" }
+					},
+				},
+
 				-- OnQueuedThreadedFunctionName = "AmbientChatting",
 				-- OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
 
@@ -1502,14 +1652,15 @@ UnitSetData.NPC_Echo =
 			},
 			EchoChat18 =
 			{
+				PlayFirst = true,
 				UseableOffSource = true,
 				InitialGiftableOffSource = true,
 				PreBlockSpecialInteract = true,
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "PrevRun", "Cleared" }
-					}
+						PathFalse = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" }
+					},
 				},
 				-- OnQueuedThreadedFunctionName = "AmbientChatting",
 				-- OnQueuedFunctionArgs = PresetEventArgs.NarcissusMutteringRepeatable,
@@ -1536,7 +1687,6 @@ UnitSetData.NPC_Echo =
 			},
 			EchoChat20 =
 			{
-				PlayFirst = true,
 				UseableOffSource = true,
 				InitialGiftableOffSource = true,
 				PreBlockSpecialInteract = true,
@@ -1591,7 +1741,344 @@ UnitSetData.NPC_Echo =
 				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
 				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
 			},
+			EchoChat23 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoGift06" }
+					},
+				},
 
+				{ Cue = "/VO/Echo_0138",
+					Text = "You're not alone... {#Echo1}not alone... {#Prev}{#Echo2}not alone..." },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			EchoChat24 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoGift06" }
+					},
+				},
+
+				{ Cue = "/VO/Echo_0143",
+					Text = "Let's keep going... {#Echo1}keep going... {#Prev}{#Echo2}keep going..." },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			EchoChat25 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" }
+					},
+				},
+
+				{ Cue = "/VO/Echo_0144",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "A friendly face... {#Echo1}a friendly face... {#Prev}{#Echo2}a friendly face..." },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			EchoChat26 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" }
+					},
+				},
+
+				{ Cue = "/VO/Echo_0146",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "What's new... {#Echo1}what's new... {#Prev}{#Echo2}what's new...?" },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			EchoChat27 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoGift05" }
+					},
+				},
+
+				{ Cue = "/VO/Echo_0147",
+					Text = "Hello again... {#Echo1}hello again... {#Prev}{#Echo2}hello again...!" },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			EchoChat28 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				InitialGiftableOffSource = true,
+				PreBlockSpecialInteract = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "EchoAboutOlympus01" }
+					},
+					{
+						PathTrue = { "PrevRun", "BiomesReached", "P" },
+					},
+				},
+
+				{ Cue = "/VO/Echo_0148",
+					Text = "From Olympus... {#Echo1}from Olympus... {#Prev}{#Echo2}from Olympus...!" },
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+
+			NarcissusWithEchoChat01 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0288", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "What's going on? Just catching up with Echo over here!" },
+
+				{ Cue = "/VO/Echo_0161", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "Echo over here... {#Echo1}Echo over here... {#Prev}{#Echo2}Echo over here...!" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat02 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0289", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "It sure is nice around here in these Fields don't you think?" },
+
+				{ Cue = "/VO/Echo_0162", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "Don't you think? {#Echo1}Don't you think? {#Prev}{#Echo2}Don't you think?" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat03 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0290", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "I can't see {#Emph}me {#Prev}right now though I {#Emph}do {#Prev}get to see the both of {#Emph}you!" },
+
+				{ Cue = "/VO/Echo_0163", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "The both of you! {#Echo1}The both of you! {#Prev}{#Echo2}The both of you!" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat04 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0291", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "I'm looking good, you're looking good, we're all looking good." },
+
+				{ Cue = "/VO/Echo_0164", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "All looking good... {#Echo1}all looking good... {#Prev}{#Echo2}all looking good..." },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat05 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0292", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "No gifts on me right now but I think Echo got you something!" },
+
+				{ Cue = "/VO/Echo_0165", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "Got you something! {#Echo1}Got you something! {#Prev}{#Echo2}Got you something!" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat06 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0293", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "I know {#Emph}I'm {#Prev}looking positively great. I'm saying so are {#Emph}you!" },
+
+				{ Cue = "/VO/Echo_0166", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "So are you! {#Echo1}So are you! {#Prev}{#Echo2}So are you!" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat07 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0294", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Text = "...Hey, can't we both be the best? We're both the best!" },
+
+				{ Cue = "/VO/Echo_0167", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "Both the best! {#Echo1}Both the best! {#Prev}{#Echo2}Both the best!" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+			NarcissusWithEchoChat08 =
+			{
+				-- PlayOnce = true,
+				Partner = "NPC_Narcissus_Field_01",
+				StatusAnimation = false,
+				GameStateRequirements =
+				{
+					NamedRequirements = { "NarcissusEchoChatEligible" },
+				},
+				UseText = "UseListenNPC",
+				BlockDistanceTriggers = true,
+				UseableOffSource = true,
+				InteractDistance = 450,
+
+				{ Cue = "/VO/Narcissus_0295", Portrait = "Portrait_Narcissus_Default_01", Speaker = "NPC_Narcissus_01",
+					Emote = "PortraitEmoteSurprise",
+					Text = "Hey, we were just talking about you! Echo, it's our friend!" },
+
+				{ Cue = "/VO/Echo_0168", Speaker = "NPC_Echo_01",
+					Portrait = "Portrait_Echo_Smiling_01",
+					Text = "It's our friend! {#Echo1}It's our friend! {#Prev}{#Echo2}It's our friend!" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
+
+			EchoDreamRun =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+
+				{ SkipDialogue = true, PostLineWait = 0, InputDelay = 0, BoxAnimation = "BlankObstacle", BoxExitAnimation = "Blank" },
+
+				PrePortraitExitFunctionName = "EchoChoice",
+				PrePortraitExitFunctionArgs = PresetEventArgs.EchoBenefitChoices,
+				EndGlobalVoiceLines = "MiscEndVoiceLines_Echo",
+			},
 
 		},
 
@@ -1990,8 +2477,7 @@ GlobalVoiceLines.EchoKeepsakeLines =
 	Source = { LineHistoryName = "NPC_Echo_01", SubtitleColor = Color.EchoVoice },
 	TriggerCooldowns = { "MelinoeAnyQuipSpeech", },
 
-	{ Cue = "/VO/Echo_0005_B", Text = "Have this... {#Echo1}have this... {#Prev}{#Echo2}have this..."
-	},
+	{ Cue = "/VO/Echo_0005_B", Text = "Have this... {#Echo1}have this... {#Prev}{#Echo2}have this..." },
 	{ Cue = "/VO/Echo_0012_B", Text = "Echo... {#Echo1}Echo... {#Prev}{#Echo2}Echo...",
 		GameStateRequirements =
 		{
@@ -2170,7 +2656,37 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 			ObjectType = "NPC_Echo_01",
 
 			{ Cue = "/VO/Echo_0006", Text = "Thanks... {#Echo1}thanks... {#Prev}{#Echo2}thanks...", BreakIfPlayed = true },
-		}
+		},
+	},
+	{
+		PlayOnce = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "GameState", "UseRecord", "NPC_Echo_01" },
+				Comparison = ">=",
+				Value = 4,
+			},
+			{
+				PathFalse = { "GameState", "TextLinesRecord", "EchoGift01" },
+			},
+			{
+				Path = { "GameState", "Resources", "GiftPoints" },
+				Comparison = ">=",
+				Value = 3,
+			},
+		},
+		{
+			PreLineWait = 0.4,
+			UsePlayerSource = true,
+
+			{ Cue = "/VO/MelinoeField_5351", Text = "Hey would you like some Nectar?" },
+		},
+		{
+			ObjectType = "NPC_Echo_01",
+
+			{ Cue = "/VO/Echo_0169", Text = "Some Nectar? {#Echo1}Some Nectar? {#Prev}{#Echo2}Some Nectar?", BreakIfPlayed = true },
+		},
 	},
 	{
 		RandomRemaining = true,
@@ -2178,16 +2694,22 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord" },
-				HasNone = { "NarcissusWithEcho01", "NarcissusWithEcho02", "NarcissusWithEcho03" },
+				HasNone = {
+					"NarcissusWithEcho01",
+					"NarcissusWithEcho02",
+					"NarcissusWithEcho03",
+					"NarcissusWithEchoChat01",
+					"NarcissusWithEchoChat02",
+					"NarcissusWithEchoChat03",
+					"NarcissusWithEchoChat04",
+					"NarcissusWithEchoChat05",
+					"NarcissusWithEchoChat06",
+					"NarcissusWithEchoChat07",
+					"NarcissusWithEchoChat08",
+				},
 			},
 		},
 		{
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "GameState", "SpeechRecord", "MelinoeField_0741" }
-				},
-			},
 			{
 				PreLineWait = 0.4,
 				UsePlayerSource = true,
@@ -2197,7 +2719,7 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 			{
 				ObjectType = "NPC_Echo_01",
 
-				{ Cue = "/VO/Echo_0005", Text = "Have this... {#Echo1}have this... {#Prev}{#Echo2}have this..." },
+				{ Cue = "/VO/Echo_0005", Text = "Have this... {#Echo1}have this... {#Prev}{#Echo2}have this...", BreakIfPlayed = true },
 			},
 		},
 		{
@@ -2214,6 +2736,12 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 			}
 		},
 		{
+			GameStateRequirements =
+			{
+				{
+					PathFalse = { "GameState", "TextLinesRecord", "EchoGift07" },
+				},
+			},
 			{
 				PreLineWait = 0.3,
 				UsePlayerSource = true,
@@ -2294,7 +2822,7 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 			GameStateRequirements =
 			{
 				{
-					PathTrue = { "GameState", "TextLinesRecord", "EchoGift01" },
+					PathTrue = { "GameState", "TextLinesRecord", "EchoGift03" },
 				},
 			},
 			{
@@ -2373,6 +2901,9 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 					PathTrue = { "GameState", "TextLinesRecord", "EchoGift01" },
 				},
 				{
+					PathFalse = { "GameState", "TextLinesRecord", "EchoGift08" },
+				},
+				{
 					Path = { "GameState", "UseRecord", "NPC_Echo_01", },
 					Comparison = ">=",
 					Value = 3,
@@ -2394,12 +2925,7 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 			GameStateRequirements =
 			{
 				{
-					PathTrue = { "GameState", "TextLinesRecord", "EchoGift01" },
-				},
-				{
-					Path = { "GameState", "UseRecord", "NPC_Echo_01", },
-					Comparison = ">=",
-					Value = 3,
+					PathTrue = { "GameState", "TextLinesRecord", "EchoGift04" },
 				},
 			},
 			{
@@ -2428,6 +2954,128 @@ GlobalVoiceLines.MiscEndVoiceLines_Echo =
 			}
 		},
 
+		{
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4663", Text = "Thank you." },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0150", Text = "Thank you... {#Echo1}thank you... {#Prev}{#Echo2}thank you...", BreakIfPlayed = true },
+			},
+		},
+		{
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4664", Text = "Goodbye for now!" },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0151", Text = "For now... {#Echo1}for now... {#Prev}{#Echo2}for now...!", BreakIfPlayed = true },
+			},
+		},
+		{
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" },
+				},
+			},
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4665", Text = "Be well." },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0152", Text = "Be well... {#Echo1}be well... {#Prev}{#Echo2}be well...", BreakIfPlayed = true },
+			},
+		},
+		{
+			GameStateRequirements =
+			{
+				{
+					FunctionName = "RequiredHealthFraction",
+					FunctionArgs = { Comparison = "<=", Value = 0.8, },
+				},
+			},
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4666", Text = "I needed that..." },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0153", Text = "Needed that... {#Echo1}needed that... {#Prev}{#Echo2}needed that...", BreakIfPlayed = true },
+			},
+		},
+		{
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "EchoGift08" },
+				},
+			},
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4667", Text = "You're the best!" },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0154", Text = "You're the best... {#Echo1}you're the best... {#Prev}{#Echo2}you're the best...!", BreakIfPlayed = true },
+			},
+		},
+		{
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" },
+				},
+			},
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4653", Text = "Take care, OK?" },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0140", Text = "Take care, OK... {#Echo1}care, OK... {#Prev}{#Echo2}care, OK...?", BreakIfPlayed = true },
+			},
+		},
+		{
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "EchoGift04" },
+				},
+			},
+			{
+				PreLineWait = 0.3,
+				UsePlayerSource = true,
+
+				{ Cue = "/VO/MelinoeField_4655", Text = "Thank you for your help." },
+			},
+			{
+				ObjectType = "NPC_Echo_01",
+
+				{ Cue = "/VO/Echo_0142", Text = "Thank you for your help... {#Echo1}for your help... {#Prev}{#Echo2}for your help...", BreakIfPlayed = true },
+			},
+		},
 	},
 	-- [3] = { GlobalVoiceLines = "ThankingCharacterVoiceLines" },
 }

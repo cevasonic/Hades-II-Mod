@@ -974,6 +974,9 @@
 		CompleteObjectivesOnFire = { "SpellLaserPrompt" },
 		OnFiredFunctionNames = { "LaserSpellFire" },
 		OnClipEmptyFunctionName = "LaserSpellReload", 
+		
+		IgnoreHitInvulnerableExpire = true,
+
 		MaxDuration = 2,
 		ManaSpendCost = 30,
 

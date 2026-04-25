@@ -5,15 +5,17 @@
 end
 
 function WeaponFailedNoManaPresentation( weaponData, args )
-	thread( PlayVoiceLines, GlobalVoiceLines.OutOfManaVoiceLines, true )
-	PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo", Id = CurrentRun.Hero.ObjectId })
-	CreateAnimation({ Name = "ManaBarLowPulseA", DestinationId = HUDScreen.Components.ManaMeterFill.Id, GroupName = "Combat_UI_Additive" })
+	if CheckCooldown( "WeaponFailedNoManaPresentation", 0.2 ) then
+		thread( PlayVoiceLines, GlobalVoiceLines.OutOfManaVoiceLines, true )
+		PlaySound({ Name = "/Leftovers/SFX/OutOfAmmo", Id = CurrentRun.Hero.ObjectId })
+		CreateAnimation({ Name = "ManaBarLowPulseA", DestinationId = HUDScreen.Components.ManaMeterFill.Id })
+	end
 end
 
 function ManaChargeCompletePresentationThread( weaponData, duration )
 	waitUnmodified( duration, "ManaChargeComplete" )
 	
-	if TableLength( GetWeaponChargeStages( weaponData ) ) <= 1 or GetWeaponProperty({ WeaponName = weaponData.Name, Id = CurrentRun.Hero.ObjectId, Property = "MaxChargeStageCache", DataValue = false}) then
+	if TableLength( GetWeaponChargeStages( weaponData ) ) <= 1 or GetWeaponProperty({ WeaponName = weaponData.Name, Id = CurrentRun.Hero.ObjectId, Property = "MaxChargeStageCache" }) then
 		ManaChargeCompletePresentation( weaponData, true )
 	end
 end
@@ -149,7 +151,7 @@ function SetManaIndicatorAllowed( weaponName, args )
 		SetHSV({ Id = MapState.ManaChargeIndicatorIds.BackingId, HSV = targetHSV, ValueChangeType = "Absolute" })
 		SetColor({ Id = MapState.ManaChargeIndicatorIds.BackingId, Color = targetColor, Duration = 0.1  })
 		SetRGB({ Id = MapState.ManaChargeIndicatorIds.BadgeId, Color = targetColor, Duration = 0.1  })
-		ModifyTextBox({ Id = MapState.ManaChargeIndicatorIds.BackingId, FadeTarget = 1, FadeDuration = duration, ColorTarget = targetColor, Duration = 0.1 })
+		ModifyTextBox({ Id = MapState.ManaChargeIndicatorIds.BackingId, FadeTarget = 1, FadeDuration = duration, ColorTarget = targetColor })
 		StopFlashing({ Id =  MapState.ManaChargeIndicatorIds.BackingId })
 		RunWeaponMethod({ Id = CurrentRun.Hero.ObjectId, Weapon = weaponName, Method = "SetAimlineAlpha", Parameters = { 1 }  })
 	end	

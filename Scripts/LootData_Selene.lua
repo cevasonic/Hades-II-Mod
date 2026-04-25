@@ -43,6 +43,19 @@ LootSetData.Selene =
 			{
 				FunctionName = "PregenerateSpells",
 			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				Args =
+				{
+					PreserveUseText = true,
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 		ConfirmSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
 		
@@ -102,6 +115,37 @@ LootSetData.Selene =
 			{ Cue = "/VO/MelinoeField_1935", Text = "{#Emph}I call upon the Moon, and draw you down!" },
 			{ Cue = "/VO/MelinoeField_1937", Text = "{#Emph}Let us together shine this night, O Moon!" },
 			{ Cue = "/VO/MelinoeField_1938", Text = "{#Emph}I bid you shine for me again tonight!" },
+			{ Cue = "/VO/MelinoeField_5664", Text = "Can moonlight guide me even in my dreams?",
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{ Cue = "/VO/MelinoeField_5665", Text = "{#Emph}Selene, let me manifest your light!",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "SpeechRecord", "/VO/MelinoeField_5664" },
+					},
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{ Cue = "/VO/MelinoeField_5666", Text = "{#Emph}It's all a dream, Selene, so here goes!",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "SpeechRecord", "/VO/MelinoeField_5664" },
+					},
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		FirstSpawnVoiceLines =
@@ -1486,6 +1530,9 @@ LootSetData.Selene =
 						Comparison = ">=",
 						Value = 2,
 					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "SeleneAboutNemesis02" },
+					},
 				},
 				PreEventFunctionName = "SpellDropInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0 },
 				{ Cue = "/VO/Selene_0100",
@@ -1667,7 +1714,7 @@ LootSetData.Selene =
 						SumPrevRuns = 2,
 						Path = { "EncountersOccurredCache" },
 						TableValuesToCount = {
-							"HeraclesCombatIntro", "HeraclesCombatN", "HeraclesCombatN2", "HeraclesCombatP", "HeraclesCombatP2" },
+							"HeraclesCombatIntro", "HeraclesCombatN", "HeraclesCombatN2", "HeraclesCombatO", "HeraclesCombatO2", "HeraclesCombatP", "HeraclesCombatP2" },
 						Comparison = ">=",
 						Value = 1,
 					},
@@ -1919,7 +1966,7 @@ LootSetData.Selene =
 						FunctionArgs = { TextLines = { "ArtemisFirstMeeting" }, Max = 4 },
 					},
 					{
-						PathTrue = { "GameState", "ReachedTrueEnding" },
+						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
 				},
 				PreEventFunctionName = "SpellDropInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0 },
@@ -2014,7 +2061,7 @@ LootSetData.Selene =
 						Value = 3,
 					},
 					{
-						Path = { "GameState", "WeaponsFiredRecord", "SpellPolymorphTrait" },
+						Path = { "GameState", "WeaponsFiredRecord", "WeaponSpellPolymorph" },
 						Comparison = ">=",
 						Value = 2,
 					},
@@ -3080,17 +3127,13 @@ LootSetData.Selene =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 1,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutAltFight01" }
 					},
 					{
 						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
 						IsAny = { "F", },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				PreEventFunctionName = "SpellDropInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0 },
@@ -3288,7 +3331,7 @@ LootSetData.Selene =
 					},
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "HecateBathHouseEpilogue01", "SeleneGift10" },
+						HasAll = { "HecateBathHouseEpilogue01", "SeleneGift09" },
 					},
 				},
 
@@ -3651,7 +3694,7 @@ LootSetData.Selene =
 						PathFalse = { "CurrentRun", "UseRecord", "SpellDrop" },
 					},
 					{
-						PathTrue = { "GameState", "TextLinesRecord", "SeleneGift10", },
+						PathTrue = { "GameState", "TextLinesRecord", "SeleneGift09", },
 					},
 				},
 				PreEventFunctionName = "SpellDropInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0 },

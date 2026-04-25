@@ -47,7 +47,7 @@ function FamiliarRecruitBannerPresentation( source, args )
 		TextOffsetY = 0,
 		Color = {0, 255, 168, 255},
 		TextColor = Color.White,
-		SubTextColor = {23, 255, 187, 255},
+		SubTextColor = {255, 255, 255, 255},
 		Icon = args.Icon,
 		IconOffsetY = 6,
 		IconScale = 0.635,
@@ -62,7 +62,7 @@ function FamiliarRecruitBannerPresentation( source, args )
 		IconBackingAnimationName = "LocationBackingIrisSmallSubtitleIn",
 		IconBackingAnimationOutName = "LocationBackingIrisSmallSubtitleOut",
 		IconBackingColor = Color.Lavender,
-		IconBackingHSV = { 0.3, -0.1, 0.1},
+		IconBackingHSV = { 0, 0, 0},
 	} )
 
 	CheckCodexUnlock( "Familiars", source.Name )
@@ -88,7 +88,7 @@ function FamiliarRecruitPresentation( usee, args )
 		FocusCamera({ Fraction = 1.05, Duration = recruitSequenceDuration, ZoomType = "Ease" })
 	end
 
-	SetAnimation({ Name = args.HeroAnimation or "Melinoe_Kneel", DestinationId = CurrentRun.Hero.ObjectId })
+	SetAnimation({ Name = args.HeroAnimation or "Melinoe_Kneel_Start", DestinationId = CurrentRun.Hero.ObjectId })
 
 	wait( recruitSequenceDuration * 0.15 )
 
@@ -99,7 +99,7 @@ function FamiliarRecruitPresentation( usee, args )
 
 	wait( recruitSequenceDuration * 0.85 )
 
-	SetAnimation({ Name = args.HeroExitAnimation or "MelinoeIdleWeaponless", DestinationId = CurrentRun.Hero.ObjectId })
+	SetAnimation({ Name = args.HeroExitAnimation or "MelTalkExplaining01ReturnToIdle", DestinationId = CurrentRun.Hero.ObjectId })
 
 	thread( FamiliarRecruitBannerPresentation, usee, args )
 
@@ -142,8 +142,8 @@ function FamiliarRecruitPresentation( usee, args )
 
 	CheckAchievement( familiar, { Name = "AchAllFamiliars" } )
 
-	usee.OnUsedFunctionName = nil
-	usee.AlwaysShowDefaultUseText = false
+	Destroy({ Id = familiar.ObjectId })
+	ActiveEnemies[familiar.ObjectId] = nil
 	
 end
 
@@ -184,9 +184,7 @@ function PetFamiliarFrog( usee, args )
 
 	wait( 4.0, RoomThreadName )
 
-	if not usee.UseableToggleBlocked then
-		UseableOn({ Id = usee.ObjectId })
-	end
+	UseableOn({ Id = usee.ObjectId })
 
 end
 
@@ -654,14 +652,12 @@ function UseCrossroadsPet01( usee, args )
 	SetAnimation({ Name = "Familiar_Polecat_Greet", DestinationId = polecatId })
 	AngleTowardTarget({ Id = polecatId, DestinationId = CurrentRun.Hero.ObjectId })
 	wait( 4.3 )
-	SetAnimation({ Name = "Familiar_Hound_HubHangout_1_Greet", DestinationId = houndId })
+	SetAnimation({ Name = "Familiar_Hound_Greet_Hub", DestinationId = houndId })
 
 	RemoveInputBlock({ Name = "PetFamiliarHound" })
 	wait( 30.75, RoomThreadName )
 
-	if not usee.UseableToggleBlocked then
-		UseableOn({ Id = usee.ObjectId })
-	end
+	UseableOn({ Id = usee.ObjectId })
 
 end
 
@@ -747,7 +743,7 @@ function HoundFamiliarSpecialInteractUnlockedInHub( usee, args )
 	SetAnimation({ Name = "Melinoe_PetHound", DestinationId = CurrentRun.Hero.ObjectId })	
 	thread( PlayVoiceLines, usee.InteractVoiceLines )
 	wait( 4.5 )
-	SetAnimation({ Name = "Familiar_Hound_HubHangout_1_Greet", DestinationId = usee.ObjectId })
+	SetAnimation({ Name = "Familiar_Hound_Greet_Hub", DestinationId = usee.ObjectId })
 
 	--PlaySound({ Name = "/SFX/Familiars/FrogRibbit", Id = usee.ObjectId })
 	RemoveInputBlock({ Name = "PetFamiliarHound" })
@@ -1024,7 +1020,9 @@ function FamiliarFledPresentation( usee, args )
 	PlaySound({ Name = usee.UseSound or "/EmptyCue", Id = usee.ObjectId })
 
 	wait( 0.35 )
+
 	Destroy({ Id = usee.ObjectId })
+	ActiveEnemies[usee.ObjectId] = nil
 
 	thread( PlayVoiceLines, GlobalVoiceLines.FamiliarFledVoiceLines )
 

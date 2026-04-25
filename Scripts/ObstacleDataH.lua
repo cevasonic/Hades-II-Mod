@@ -22,6 +22,25 @@ OverwriteTableKeys( ObstacleData, {
 
 		CannotBeBlockedByEnemies = true,
 
+		SetupEvents =
+		{
+			Append = true,
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "H_Intro" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CannotUseText = "nil",
+				},
+			},
+		},
+
 		DistanceTrigger =
 		{
 			PreTriggerWait = 0.1,
@@ -131,9 +150,8 @@ OverwriteTableKeys( ObstacleData, {
 					},
 
 					{ Cue = "/VO/MelinoeField_0856", Text = "Not letting me past." },
-					{ Cue = "/VO/MelinoeField_0857", Text = "Have to find some way to draw them out." },
 					{ Cue = "/VO/MelinoeField_0858", Text = "They're blocking my path..." },
-					{ Cue = "/VO/MelinoeField_0859", Text = "Can't get out yet...!" },
+					{ Cue = "/VO/MelinoeField_0859", Text = "Can't get out yet...!", PlayFirst = true },
 				},
 			},
 		},
@@ -179,6 +197,35 @@ OverwriteTableKeys( ObstacleData, {
 				{ Cue = "/VO/MelinoeField_1248", Text = "Nice seeing you again!" },
 				{ Cue = "/VO/MelinoeField_1249", Text = "Hello, Gigantic Severed Head." },
 				{ Cue = "/VO/MelinoeField_1250", Text = "See anything good lately?" },
+				{ Cue = "/VO/MelinoeField_5365", Text = "See anything good lately?" },
+				{ Cue = "/VO/MelinoeField_5366", Text = "Intense eye-contact there..." },
+				{ Cue = "/VO/MelinoeField_5369", Text = "Just wanted to see you." },
+				{ Cue = "/VO/MelinoeField_5370", Text = "You have a beautiful eye..." },
+				{ Cue = "/VO/MelinoeField_5372", Text = "Always on watch, aren't you." },
+				{ Cue = "/VO/MelinoeField_5371", Text = "You look at peace.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "ReachedTrueEnding" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5367", Text = "Did you miss me, Gigantic Severed Head?",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "TextLinesRecord", "ZagreusPastMeeting05" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5368", Text = "See you again, Gigantic Severed Head.",
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_5367" },
+						},
+					},
+				},
 			}
 		},
 	},

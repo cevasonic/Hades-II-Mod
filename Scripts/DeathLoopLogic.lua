@@ -32,6 +32,9 @@ function KillHero( victim, triggerArgs )
 	CurrentRun.CurrentRoom.SummonEnemyName = nil
 
 	local killedByName = killer.Name or triggerArgs.SourceWeapon
+	if SessionMapState.CauseOfDeathOverride then
+		killedByName = SessionMapState.CauseOfDeathOverride.KilledByName
+	end
 	CurrentRun.KilledByName = killedByName
 	GameState.LastKilledByName = killedByName or GameState.LastKilledByName
 
@@ -40,9 +43,6 @@ function KillHero( victim, triggerArgs )
 	end
 
 	AddTimerBlock( CurrentRun, "HandleDeath" )
-	if ActiveScreens.TraitTrayScreen ~= nil then
-		TraitTrayScreenClose( ActiveScreens.TraitTrayScreen, nil, { IgnoreHUDShow = true } )
-	end
 	ClearHealthShroud()
 	if SessionMapState.SpellWorldReadyFx then
 		SessionMapState.SpellWorldReadyFx = nil
@@ -52,6 +52,9 @@ function KillHero( victim, triggerArgs )
 	CurrentRun.Hero.IsDead = true
 	CurrentRun.ActiveBiomeTimer = false
 	CurrentRun.SaveFirstKeepsakeSwapped = false
+	if ActiveScreens.TraitTrayScreen ~= nil then
+		TraitTrayScreenClose( ActiveScreens.TraitTrayScreen, nil, { IgnoreHUDShow = true } )
+	end
 
 	if ShouldIncrementEasyMode() and not EasyModeIsAtCap() then
 		GameState.EasyModeLevel = GameState.EasyModeLevel + 1
@@ -77,7 +80,10 @@ function KillHero( victim, triggerArgs )
 			end
 		end
 		if not CurrentRun.Cleared  then
-			if CurrentRun.CurrentRoom.BackupCauseOfDeath ~= nil then
+			if SessionMapState.CauseOfDeathOverride then
+				GameState.CauseOfDeath = SessionMapState.CauseOfDeathOverride.CauseOfDeath
+				GameState.CauseOfDeathDisplay = SessionMapState.CauseOfDeathOverride.CauseOfDeathDisplay
+			elseif CurrentRun.CurrentRoom.BackupCauseOfDeath ~= nil then
 				GameState.CauseOfDeath = CurrentRun.CurrentRoom.BackupCauseOfDeath
 				GameState.CauseOfDeathDisplay = CurrentRun.CurrentRoom.BackupCauseOfDeath
 				if CurrentRun.CurrentRoom.CauseOfDeathDisplayData and IsGameStateEligible(CurrentRun.CurrentRoom, CurrentRun.CurrentRoom.CauseOfDeathDisplayData.GameStateRequirements ) then
@@ -90,9 +96,13 @@ function KillHero( victim, triggerArgs )
 					GameState.CauseOfDeathDisplay = killer.CauseOfDeathDisplayData.Name
 				end
 			end
+			if CurrentRun.IsDreamRun then
+				GameState.LastDreamRunCleared = false
+			end
 		end
 	end
-
+	
+	SessionMapState.CauseOfDeathOverride = nil
 	if not CurrentRun.PlayedTrueEnding then -- @ ending
 		DeathPresentation( CurrentRun, killer, triggerArgs )
 	end
@@ -176,6 +186,58 @@ function KillHero( victim, triggerArgs )
 	if CurrentRun.Hero.PreDeathTraits == nil then
 		-- used for save analysis
 		CurrentRun.Hero.PreDeathTraits = CurrentRun.Hero.Traits
+	end
+	if not CurrentRun.ActiveBounty and not CurrentRun.IsDreamRun then
+		local resourcesGained = DeepCopyTable( CurrentRun.ResourcesGained )
+		local roomsEntered = DeepCopyTable( CurrentRun.RoomsEntered )
+		if CurrentRun.BiomesReached.F then
+			GameState.LastUnderworldRunRecord =
+			{
+				ResourcesGained = resourcesGained,
+				RoomsEntered = roomsEntered,
+			}
+		else
+			GameState.LastSurfaceRunRecord =
+			{
+				ResourcesGained = resourcesGained,
+				RoomsEntered = roomsEntered,
+			}
+		end
+	end
+	if CurrentRun.IsDreamRun then
+		-- Strip everything non-essential from the run so that it won't count for misc narrative checks.
+		local recordsToStrip =
+		{
+			"BiomesReached",
+			"BossHealthBarRecord",
+			"EncounterClearStats",
+			"EncountersCompletedCache",
+			"EncountersOccurredCache",
+			"EnemyKills",
+			"ResourcesSpent",
+			"RoomCountCache",
+			"RoomsEntered",
+			"SpawnRecord",
+			"UseRecord",
+		}
+		for i, recordName in ipairs( recordsToStrip ) do
+			local record = CurrentRun[recordName]
+			for k,v in pairs( record ) do
+				record[k] = nil
+			end
+		end
+
+		CurrentRun.Cleared = nil -- check DreamCleared instead
+
+		-- Preserve the room and encounter names, then overwrite them
+		CurrentRun.CurrentRoom.OriginalName = CurrentRun.CurrentRoom.Name
+		CurrentRun.CurrentRoom.OriginalRoomSetName = CurrentRun.CurrentRoom.RoomSetName
+		CurrentRun.CurrentRoom.Name = "NameErasedForDreamRun"
+		CurrentRun.CurrentRoom.RoomSetName = "RoomSetNameErasedForDreamRun"
+		if CurrentRun.CurrentRoom.Encounter ~= nil then
+			CurrentRun.CurrentRoom.Encounter.OriginalName = CurrentRun.CurrentRoom.Encounter.Name
+			CurrentRun.CurrentRoom.Encounter.Name = "NameErasedForDreamRun"
+		end
 	end
 	RequestSave({ StartNextMap = deathMap, DevSaveName = CreateDevSaveName( CurrentRun, { StartNextMap = deathMap, PostDeath = true, } ), SendSave = true })
 	ClearUpgrades()
@@ -340,6 +402,7 @@ function HubPostBountyLoad( source, args )
 	CurrentHubRoom = source
 	SetConfigOption({ Name = "BlockGameplayTimer", Value = true })
 	RestorePackagedBountyGameState()
+	SessionMapState.HubBountyLoadPresentation = true
 
 	UpdateTraitSummary()
 
@@ -374,6 +437,64 @@ function HubPostBountyLoad( source, args )
 	HubPostBountyStartPresentation( CurrentHubRoom )
 
 	RemoveInputBlock({ Name = "DeathAreaTransition" })
+	SessionMapState.HubBountyLoadPresentation = nil
+	RecreateLifePips()
+
+	if CurrentHubRoom.CheckObjectives ~= nil then
+		for k, objectiveName in pairs( CurrentHubRoom.CheckObjectives ) do
+			CheckObjectiveSet( objectiveName )
+		end
+	end
+
+	CheckAutoObjectiveSets( CurrentRun, "RoomStart" )
+end
+
+function HubPostDreamLoad( source, args )
+
+	args = args or {}
+	AddInputBlock({ Name = "DeathAreaTransition" })
+	PreviousDeathAreaRoom = CurrentHubRoom
+	CurrentHubRoom = source
+	SetConfigOption({ Name = "BlockGameplayTimer", Value = true })
+	GameState.ActiveShrineBounty = GameState.StoredActiveShrineBounty
+	GameState.StoredActiveShrineBounty = nil
+	SessionMapState.HubDreamLoadPresentation = true
+
+	UpdateTraitSummary()
+
+	SetupHeroObject( CurrentHubRoom )
+
+	if CurrentHubRoom.RichPresence ~= nil then
+		SetRichPresence({ Key = "status", Value = CurrentHubRoom.RichPresence })
+		SetRichPresence({ Key = "steam_display", Value = CurrentHubRoom.RichPresence })
+	end
+
+	FadeOut({ Color = Color.Black, Duration = 0 })
+	SetupCamera( CurrentHubRoom )
+	SwitchActiveUnit({ Id = CurrentRun.Hero.ObjectId })
+
+	LoadVoiceBanks( CurrentHubRoom.SpeakerName )
+
+	ResetObjectives()
+	local familiarSpawnPoint = 589725
+	CurrentRun.FamiliarSpawnNearId = familiarSpawnPoint
+	RunEventsGeneric( CurrentHubRoom.StartUnthreadedEvents, CurrentHubRoom )
+
+	StartRoomPreLoadBinks({
+		Run = CurrentRun,
+		Room = CurrentHubRoom
+	})
+
+	RunEvents( CurrentHubRoom )
+	AssignObstacles( CurrentHubRoom )
+	CheckInspectPoints( CurrentRun, CurrentHubRoom )
+	StartTriggers( CurrentHubRoom, CurrentHubRoom.DistanceTriggers )
+
+	HubPostDreamStartPresentation( CurrentHubRoom )
+
+	RemoveInputBlock({ Name = "DeathAreaTransition" })
+	SessionMapState.HubDreamLoadPresentation = nil
+	RecreateLifePips()
 
 	if CurrentHubRoom.CheckObjectives ~= nil then
 		for k, objectiveName in pairs( CurrentHubRoom.CheckObjectives ) do
@@ -401,15 +522,26 @@ end
 
 function UseEscapeDoor( usee, args )
 	AddInputBlock({ Name = "UseEscapeDoor" })
-
-	
-
 	if args.MarkObjectiveComplete ~= nil then
 		MarkObjectiveComplete( args.MarkObjectiveComplete )
 	end
 	StartNewRunPresentation( usee, args )
 	StartOver( args )
 	RemoveInputBlock({ Name = "UseEscapeDoor" })
+end
+
+function UseDreamRunDoor( usee, args )
+	AddInputBlock({ Name = "UseDreamRunDoor" })
+
+	GameState.StoredActiveShrineBounty = GameState.ActiveShrineBounty
+	GameState.ActiveShrineBounty = nil
+
+	DreamRunPreRunStartPresentation( usee )
+	WaitForSpeechFinished()
+
+	StartOver( args )
+
+	RemoveInputBlock({ Name = "UseDreamRunDoor" })
 end
 
 function StartOver( args )
@@ -451,6 +583,7 @@ function StartOver( args )
 			ActiveBounty = args.ActiveBounty,
 			RunOverrides = args.RunOverrides,
 			StartingRoomOverrides = args.StartingRoomOverrides,
+			RoomName = args.StartingRoomName,
 		})
 	GameState.LocationName = currentRun.CurrentRoom.SaveProfileLocationText
 	StopMusicianMusic( { Duration = 1.0 } )

@@ -511,8 +511,11 @@ function NPCRewardDrop( source, args )
 					end
 					ApplyUpwardForce({ Id = consumableId, Speed = args.UpwardForce or 700 })
 					local forceAngle = consumableData.Angle or GetAngleBetween({ Id = spawnId, DestinationId = CurrentRun.Hero.ObjectId })
-					if consumableData.AngleMin ~= nil then
-						forceAngle = RandomFloat( consumableData.AngleMin, consumableData.AngleMax )
+					if consumableData.AngleMin ~= nil and consumableData.AngleMax ~= nil then
+						-- if the hero is outside the range, just throw in a random acceptable direction
+						if forceAngle < consumableData.AngleMin or forceAngle > consumableData.AngleMax then
+							forceAngle = RandomFloat( consumableData.AngleMin, consumableData.AngleMax )
+						end
 					end
 					ApplyForce({ Id = consumableId, Speed = args.Force or 100, Angle = forceAngle, SelfApplied = true })
 				end
@@ -528,6 +531,11 @@ function NPCRewardDrop( source, args )
 	end
 end
 
+function NPCRewardDropPostIntermission( source, args )
+	NPCRewardDrop( source, args )
+	InCombatTextEvent( source, GameData.PostIntermissionArgs )
+end
+
 function ArachneArmorApply( screen, args )
 	ArachneCostumeStartPresentation( screen, args )
 	SetupCostume()
@@ -541,6 +549,8 @@ function HandleNemesisEncounterReward( eventSource, args )
 	if nemesis == nil then -- Most likely if the player died during reward sequence
 		return
 	end
+
+	SessionMapState.BlockFieldsEnemiesSpottedVoiceLines = nil
 
 	thread( PlayVoiceLines, nemesis.EncounterEndVoiceLines, nil, nemesis )
 
@@ -588,8 +598,10 @@ function HandleNemesisEncounterReward( eventSource, args )
 		PlayVoiceLines( nemesis.EncounterTiedVoiceLines, nil, nemesis )
 	end
 
-	ProcessTextLines( nemesis, nemesis.InteractTextLineSets )
-	CheckAvailableTextLines( nemesis )
+	if not CurrentRun.IsDreamRun then
+		ProcessTextLines( nemesis, nemesis.InteractTextLineSets )
+		CheckAvailableTextLines( nemesis )
+	end
 	if nemesis.NextInteractLines ~= nil then
 		UseableOn({ Id = nemesis.ObjectId })
 	else
@@ -719,11 +731,9 @@ function HandleLootPickup( currentRun, loot, args )
 	RemoveTimerBlock( currentRun, "HandleLootPickup" )
 	
 	OpenUpgradeChoiceMenu( loot, args )
-
 	if loot.PostPickupFunctionName ~= nil then
 		CallFunctionName( loot.PostPickupFunctionName, loot, loot.PostPickupFunctionArgs )
 	end
-	CheckAndAddOlympianDuo( loot )
 	SetPlayerVulnerable( "HandleLootPickup" )
 
 end
@@ -853,7 +863,9 @@ function CreateConsumableItemFromData( consumableId, consumableItem, costOverrid
 	consumableItem.ObjectId = consumableId
 	AttachLua({ Id = consumableId, Table = consumableItem })
 	MapState.ActiveObstacles[consumableItem.ObjectId] = consumableItem
-	AddToGroup({ Id = consumableId, Name = "ConsumableItems" })
+	if not consumableItem.ExcludeFromConsumableItemsGroup then
+		AddToGroup({ Id = consumableId, Name = "ConsumableItems" })
+	end
 	if consumableItem.RunProgress ~= nil and args.RunProgressUpgradeEligible and IsGameStateEligible( consumableItem, consumableItem.RunProgress.GameStateRequirements ) then
 		OverwriteSelf( consumableItem, consumableItem.RunProgress.PropertyChanges )
 	end
@@ -1079,20 +1091,14 @@ function UseConsumableItem( consumableItem, args, user )
 		end
 	end
 
-	if consumableItem.AddStackTraits ~= nil then
-		thread(AddStackToTraits, consumableItem, { NumTraits = consumableItem.AddStackTraits, NumStacks = 1, Thread = consumableItem.AddStackTraitsThread, Delay = consumableItem.AddStackTraitsDelay } )
-	end
-
-	if consumableItem.GiveObjectiveSet ~= nil then
-		CheckObjectiveSet( consumableItem.GiveObjectiveSet )
-	end
-
 	if consumableItem.CompleteObjective ~= nil then
 		thread(MarkObjectiveComplete, consumableItem.CompleteObjective )
 	end
 
+	local willDuplicate = consumableItem.CanDuplicate and RandomChance( GetTotalHeroTraitValue( "DoubleRewardChance" ) * GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true } ) )
+
 	if consumableItem.UseFunctionName ~= nil then
-		CallFunctionName( consumableItem.UseFunctionName, consumableItem.UseFunctionArgs, consumableItem )
+		CallFunctionName( consumableItem.UseFunctionName, consumableItem.UseFunctionArgs, consumableItem, { WillDuplicate = willDuplicate } )
 	end
 
 	if consumableItem.ApplyEffect ~= nil then
@@ -1109,15 +1115,10 @@ function UseConsumableItem( consumableItem, args, user )
 		end
 	end
 
-	if consumableItem.UseThreadedFunctionNames ~= nil then
-		for i, functionName in ipairs( consumableItem.UseThreadedFunctionNames ) do
-			thread( CallFunctionName, functionName, consumableItem, consumableItem.UseThreadedFunctionArgs[i] )
-		end
-	end
-	if (consumableItem.CanDuplicate and RandomChance( GetTotalHeroTraitValue("DoubleRewardChance") * GetTotalHeroTraitValue( "LuckMultiplier", { IsMultiplier = true }))) or consumableItem.RespawnAfterUse then
+	if willDuplicate or consumableItem.RespawnAfterUse then
 		UseableOn({ Id = consumableItem.ObjectId })
 		SetAlpha({ Id = consumableItem.ObjectId, Fraction = 1, Duration = 0 })
-		thread( DoubleRewardPresentation, consumableItem.ObjectId )
+		thread( DoubleRewardPresentation, { ObjectId = consumableItem.ObjectId, RewardName = consumableItem.Name } )
 		consumableItem.CanDuplicate = false	
 	else
 		MapState.RoomRequiredObjects[consumableItem.ObjectId] = nil
@@ -1236,6 +1237,10 @@ function GetRampedConsumableData( consumableData, args )
 			rampedData.DropMoney = round(rampedData.PayoutPerHealthPoint * rampedData.HealthCost)
 		end
 	end
+	if rampedData.AddResourceIncreasePerBiomeCleared ~= nil then
+		local resource = GetFirstKey( rampedData.AddResources )
+		rampedData.AddResources[resource] = rampedData.AddResources[resource] + rampedData.AddResourceIncreasePerBiomeCleared * (CurrentRun.EnteredBiomes - 1)
+	end
 
 	if rampedData.UseFunctionArgs ~= nil then
 		if rampedData.UseFunctionName ~= nil then
@@ -1273,7 +1278,9 @@ function SacrificeHealth( args )
 		return randomDamageValue
 	end
 	if args.DeductHealth then
-		CurrentRun.TotalDamageTaken = CurrentRun.TotalDamageTaken + randomDamageValue
+		if not args.NotDamageTaken then
+			CurrentRun.TotalDamageTaken = CurrentRun.TotalDamageTaken + randomDamageValue
+		end
 		CurrentRun.Hero.Health = CurrentRun.Hero.Health - randomDamageValue
 		if CurrentRun.Hero.Health < args.MinHealth then
 			CurrentRun.Hero.Health = args.MinHealth

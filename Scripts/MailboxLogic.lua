@@ -395,11 +395,11 @@ function MailboxTimeTick( args )
 					if args.UpdatePresentation then
 						local source = MapState.ActiveObstacles[mailboxId]
 						SetupMailboxStatus( source, args )
+						CheckSetupFunction( source, "PlayStatusAnimation" )
 					end
 				end
 			end
 		end
-		wait( args.TickInterval )
 	end
 	RemoveInputBlock({ Name = "MailboxTimeTick" })
 end
@@ -442,8 +442,10 @@ function UseMailboxDeliveryReady( source, args )
 end
 
 function ShouldShowMailboxWantsToTalkIndicator( source, args )
-	if not IsEmpty( GameState.MailboxStatus ) then
-		return false
+	local mailboxStatus = GameState.MailboxStatus[583652]
+	if mailboxStatus ~= nil then
+		-- if a delivery is pending, only show the indicator if it's ready for pickup
+		return mailboxStatus.TimeRemaining <= 0
 	end
 
 	if CurrentRun.UseRecord.Mailbox then

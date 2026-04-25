@@ -1,28 +1,14 @@
 function GameStatsScreenOpenPresentation( screen )
-	PlaySound({ Name = "/SFX/Menu Sounds/DialoguePanelIn" })
 	thread( PlayVoiceLines, GlobalVoiceLines.OpenedGameStatsScreenVoiceLines, true )
 end
 
 function GameStatsScreenShowCategoryPresentation( screen )
 	PlaySound({ Name = "/SFX/Menu Sounds/GodBoonMenuToggle" })
-
-	if not GameState.ScreensViewed.WeaponUpgradeScreen or not GameState.ScreensViewed.KeepsakeRack then
-		thread( PlayVoiceLines, GlobalVoiceLines.RunHistoryScreenEmptyVoiceLines, true )
-	end
-
-	if screen.CurrentFilter == "GameStats_Weapons" then
-		thread( PlayVoiceLines, GlobalVoiceLines.RunHistoryScreenWeaponVoiceLines, true )
-	elseif screen.CurrentFilter == "GameStats_Boons" then
-		thread( PlayVoiceLines, GlobalVoiceLines.RunHistoryScreenBoonVoiceLines, true )
-	elseif screen.CurrentFilter == "GameStats_WeaponUpgrades" then
-		thread( PlayVoiceLines, GlobalVoiceLines.RunHistoryScreenHammerVoiceLines, true )
-	elseif screen.CurrentFilter == "GameStats_Keepsakes" then
-		thread( PlayVoiceLines, GlobalVoiceLines.RunHistoryScreenKeepsakeVoiceLines, true )
-	end
 end
 
 function GameStatScreenClosePresentation( screen, button )
 	PlaySound({ Name = "/SFX/Menu Sounds/GeneralWhooshMENU" })
+	SetAnimation({ DestinationId = screen.Components.BackgroundFront.Id, Name = "GameStatsOut" })
 	thread( PlayVoiceLines, GlobalVoiceLines.ClosedRunHistoryScreenVoiceLines, true )
 end
 

@@ -215,63 +215,63 @@ function HeroDamagePresentationThread( args, sourceSimData )
 
 		if args.MajorDamage then
 
-			CreateAnimation({ Name = "HitShroudTopHeavy", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudTopHeavy", UseScreenLocation = true,
 				OffsetX = ScreenCenterX * 0.5, 
 				OffsetY = 0,
 				ScaleX = ScreenScaleX * 2, 
 				ScaleY = ScreenScaleY,
 			})		
-			CreateAnimation({ Name = "HitShroudBottomHeavy", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudBottomHeavy", UseScreenLocation = true,
 				OffsetX = ScreenCenterX * 0.5, 
 				OffsetY = ScreenCenterY,
 				ScaleX = ScreenScaleX * 2, 
 				ScaleY = ScreenScaleY,
 			})		
-			CreateAnimation({ Name = "HitShroudLeftHeavy", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudLeftHeavy", UseScreenLocation = true,
 				OffsetX = 0,
 				OffsetY = ScreenCenterY * 0.5,
 				ScaleX = ScreenScaleX*1.5, 
 				ScaleY = ScreenScaleY,
 			})		
-			CreateAnimation({ Name = "HitShroudRightHeavy", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudRightHeavy", UseScreenLocation = true,
 				OffsetX = ScreenCenterX,
 				OffsetY = ScreenCenterY * 0.5,
 				ScaleX = ScreenScaleX*1.5, 
 				ScaleY = ScreenScaleY,
 			})
-			CreateAnimation({ Name = "HitShroudVignetteHeavy", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudVignetteHeavy", UseScreenLocation = true,
 				OffsetX = ScreenCenterX, OffsetY = ScreenCenterY,
 				ScaleX = ScreenScaleX, ScaleY = ScreenScaleY,
 			})
 
 		else 
 
-			CreateAnimation({ Name = "HitShroudTop", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudTop", UseScreenLocation = true,
 				OffsetX = ScreenCenterX * 0.5, 
 				OffsetY = 0,
 				ScaleX = ScreenScaleX * 2, 
 				ScaleY = ScreenScaleY,
 			})		
-			CreateAnimation({ Name = "HitShroudBottom", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudBottom", UseScreenLocation = true,
 				OffsetX = ScreenCenterX * 0.5, 
 				OffsetY = ScreenCenterY,
 				ScaleX = ScreenScaleX * 2, 
 				ScaleY = ScreenScaleY,
 			})		
-			CreateAnimation({ Name = "HitShroudLeft", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudLeft", UseScreenLocation = true,
 				OffsetX = 0,
 				OffsetY = ScreenCenterY * 0.5,
 				ScaleX = ScreenScaleX*1.5, 
 				ScaleY = ScreenScaleY,
 			})		
-			CreateAnimation({ Name = "HitShroudRight", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudRight", UseScreenLocation = true,
 				OffsetX = ScreenCenterX,
 				OffsetY = ScreenCenterY * 0.5,
 				ScaleX = ScreenScaleX*1.5, 
 				ScaleY = ScreenScaleY,
 			})
 
-			CreateAnimation({ Name = "HitShroudVignette", GroupName = "Vignette", UseScreenLocation = true,
+			CreateAnimation({ Name = "HitShroudVignette", UseScreenLocation = true,
 				OffsetX = ScreenCenterX, OffsetY = ScreenCenterY,
 				ScaleX = ScreenScaleX, ScaleY = ScreenScaleY,
 			})
@@ -466,13 +466,13 @@ function HeroLowHealthBarPulseThread()
 	local firstPulse = false
 	while not IsHealthHidden() and SessionMapState.LowHealthPresentation and not CurrentRun.Hero.IsDead do
 		if ShowingCombatUI and (ConfigOptionCache.LowHealthPulse or not firstPulse) then
-			CreateAnimation({ Name = "HealthBarLowPulseA", DestinationId = healthBackId, GroupName = "Combat_UI_Additive" })
+			CreateAnimation({ Name = "HealthBarLowPulseA", DestinationId = healthBackId })
 			ModifyTextBox({ Id = healthBackId, ColorTarget = Color.Red, ColorDuration = 0.5 })
 			PulseText({ Id = healthBackId, ScaleTarget = 1.25, ScaleDuration = 0.1, HoldDuration = 0.0, PulseBias = 0.02 })
 		end
 		wait( 0.15, RoomThreadName )
 		if ShowingCombatUI and (ConfigOptionCache.LowHealthPulse or not firstPulse) then
-			CreateAnimation({ Name = "HealthBarLowPulseB", DestinationId = healthBackId, GroupName = "Combat_Menu_Overlay" })
+			CreateAnimation({ Name = "HealthBarLowPulseB", DestinationId = healthBackId })
 			PulseText({ Id = healthBackId, ScaleTarget = 1.15, ScaleDuration = 0.15, HoldDuration = 0.05, PulseBias = 0.3 })
 		end
 		firstPulse = true
@@ -566,12 +566,25 @@ function ChillClearPresentation( victim, victimId )
 end
 
 function RootApplyPresentation( victim, victimId )
+	
+	local id = victimId or victim.ObjectId
 	if victim then
 		victim.RootActive = true
 	end
+	if victim.NeverDeferRootPresentation then
+		DoRootApplyPresentation({ id })
+		if victim ~= nil then
+			if victim.TetherIds ~= nil then
+				for k, tetherId in ipairs( victim.TetherIds ) do
+					DoRootApplyPresentation( nil, tetherId )
+				end
+			end
+		end
+		return
+	end
+
 	FrameState.DeferredPresentation = FrameState.DeferredPresentation or {}
 	FrameState.DeferredPresentation.DoRootApplyPresentation = FrameState.DeferredPresentation.DoRootApplyPresentation or {}
-	local id = victimId or victim.ObjectId
 	table.insert( FrameState.DeferredPresentation.DoRootApplyPresentation, id )
 	if victim ~= nil then
 		if victim.TetherIds ~= nil then
@@ -924,9 +937,9 @@ function PreRerollPanelPresentation( screen, button )
 	PlaySound({ Name = "/Leftovers/Menu Sounds/AscensionConfirm" })
 	AudioState.RerollSoundId = PlaySound({ Name = "/Leftovers/Menu Sounds/StoryRecapTextAppear" })
 	thread( FullScreenFadeOutAnimation, "RerollTransitionIn", "Ascension"  )
+	thread( PlayVoiceLines, HeroVoiceLines.UsedRerollPanelVoiceLines, true )
 	wait( 0.51 )
 	SetVolume({ Id = rerollSoundId, Value = 0.3 })
-	thread( PlayVoiceLines, HeroVoiceLines.UsedRerollPanelVoiceLines, true )
 end
 
 function PostRerollPanelPresentation( screen, button )
@@ -1296,19 +1309,6 @@ function GodLootPickupPresentation( loot, args )
 	end
 end
 
-function dumpA(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. dumpA(v) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
-end
-
 function LootPickupPresentation( loot, args )
 
 	args = args or {}
@@ -1324,34 +1324,36 @@ function LootPickupPresentation( loot, args )
 	end
 
 	local textLines = nil
-	if loot.NextInteractLines ~= nil then
-		textLines = loot.NextInteractLines
-		loot.NextInteractLines = nil
-	elseif loot.HasDuoBoon and loot.DuoPickupTextLines ~= nil and ( loot.DuoPickupTextLinesRequirements == nil or IsGameStateEligible( loot, loot.DuoPickupTextLinesRequirements ) ) then
-		textLines = GetRandomEligibleTextLines( loot, loot.DuoPickupTextLines, {} )
-		if textLines ~= nil then
-			CurrentRun.HadDuoConversation = true
-			local speakerNames = {}
-			for _, line in ipairs( textLines ) do
-				table.insert( speakerNames, string.match(line.Cue, "/VO/(%a+)_") )
-			end
-			LoadVoiceBank({ Names = speakerNames, IgnoreAssert = true })
-			LoadPackages({ Names = speakerNames, IgnoreAssert = true })
-		end
-	elseif loot.BoughtFromShop and loot.BoughtTextLines ~= nil then
-		if loot.BoughtTextLinesRequirements == nil or IsGameStateEligible( loot, loot.BoughtTextLinesRequirements ) then
-			textLines = GetRandomEligibleTextLines( loot, loot.BoughtTextLines, GetNarrativeDataValue( loot, "BoughtTextLinePriorities" ) )
+	if not loot.BlockTextLines then
+		if loot.NextInteractLines ~= nil then
+			textLines = loot.NextInteractLines
+			loot.NextInteractLines = nil
+		elseif loot.HasDuoBoon and loot.DuoPickupTextLines ~= nil and ( loot.DuoPickupTextLinesRequirements == nil or IsGameStateEligible( loot, loot.DuoPickupTextLinesRequirements ) ) then
+			textLines = GetRandomEligibleTextLines( loot, loot.DuoPickupTextLines, {} )
 			if textLines ~= nil then
-				CurrentRun.HadBoughtLootConversation = true
+				CurrentRun.HadDuoConversation = true
+				local speakerNames = {}
+				for _, line in ipairs( textLines ) do
+					table.insert( speakerNames, string.match(line.Cue, "/VO/(%a+)_") )
+				end
+				LoadVoiceBank({ Names = speakerNames, IgnoreAssert = true })
+				LoadPackages({ Names = speakerNames, IgnoreAssert = true })
 			end
+		elseif loot.BoughtFromShop and loot.BoughtTextLines ~= nil then
+			if loot.BoughtTextLinesRequirements == nil or IsGameStateEligible( loot, loot.BoughtTextLinesRequirements ) then
+				textLines = GetRandomEligibleTextLines( loot, loot.BoughtTextLines, GetNarrativeDataValue( loot, "BoughtTextLinePriorities" ) )
+				if textLines ~= nil then
+					CurrentRun.HadBoughtLootConversation = true
+				end
+			end
+		elseif MapState.RejectedLoot ~= nil and MapState.RejectedLoot.Name == loot.Name and loot.MakeUpTextLines ~= nil then
+			textLines = GetRandomEligibleTextLines( loot, loot.MakeUpTextLines, {} )
+		else
+			textLines = GetRandomEligibleTextLines( loot, loot.InteractTextLineSets, GetNarrativeDataValue( loot, "InteractTextLinePriorities" ) )
 		end
-	elseif MapState.RejectedLoot ~= nil and MapState.RejectedLoot.Name == loot.Name and loot.MakeUpTextLines ~= nil then
-		textLines = GetRandomEligibleTextLines( loot, loot.MakeUpTextLines, {} )
-	else
-		textLines = GetRandomEligibleTextLines( loot, loot.InteractTextLineSets, GetNarrativeDataValue( loot, "InteractTextLinePriorities" ) )
 	end
 	
-	if textLines ~= nil and not loot.BlockTextLines then
+	if textLines ~= nil then
 		if textLines.ForcedUpgradeOptions ~= nil then
 			loot.UpgradeOptions = textLines.ForcedUpgradeOptions
 		end
@@ -1364,7 +1366,7 @@ function LootPickupPresentation( loot, args )
 			end
 		end
 		PlayTextLines( loot, textLines, args )
-	else
+	elseif not args.SkipBoonInteractPresentation then
 		AddInputBlock({ Name = "LootPickupFunction" })
 		local globalVoiceLines = GlobalVoiceLines[loot.PickupGlobalVoiceLines or "BoonUsedVoiceLines"]
 		if globalVoiceLines ~= nil then
@@ -1375,17 +1377,14 @@ function LootPickupPresentation( loot, args )
 			CallFunctionName( pickupFunctionName, loot, { PickupWait = 1.15 } )
 		end
 		RemoveInputBlock({ Name = "LootPickupFunction" })
+	else
+		StopStatusAnimation( loot )
 	end
 	SessionMapState.BlockInfoBanners = false
 
 end
 
 function StartedTextLinesPresentation( source, textLines )
-	CallFunctionName( source.StartedTextLinesFunctionName, source, source.StartedTextLinesFunctionArgs )
-
-	if textLines ~= nil and source.TextLinesPauseSingingFx then
-		StopAnimation({ DestinationId = source.ObjectId, Name = source.SingingFx })
-	end
 	if CurrentHubRoom ~= nil and AudioState.AmbientMusicId ~= nil and not SessionState.AmbientMusicPaused then
 		if textLines.PauseMusicPlayerMusic then
 			PauseMusicianMusic()
@@ -1394,16 +1393,6 @@ function StartedTextLinesPresentation( source, textLines )
 			SetSoundCueValue({ Name = "Vocals", Id = AudioState.AmbientMusicId, Value = 0.7, Duration = 0.33 })
 			SetAudioEffectState({ Name = "VOCompression", Value = 0, Duration = 0.8 })
 		end
-	end
-
-	if source ~= nil and source.StartTextLinesAnimation and not textLines.IgnoreSourceStartEndAnimations then
-		SetAnimation({ DestinationId = source.ObjectId, Name = source.StartTextLinesAnimation })
-	end
-	if source ~= nil and textLines.StartPartnerTextLinesAnimation and source.PartnerObjectId then
-		SetAnimation({ DestinationId = source.PartnerObjectId, Name = textLines.StartPartnerTextLinesAnimation })
-	end
-	if source.StartTextLinesAngleTowardHero ~= nil and not textLines.IgnoreStartTextLinesAngleTowardHero then
-		AngleTowardTarget({ Id = source.ObjectId, DestinationId = CurrentRun.Hero.ObjectId })
 	end
 
 	if source ~= nil and not source.TextLinesUseWeaponIdle and not textLines.SkipPreNarrativeUnequip then
@@ -1417,10 +1406,6 @@ function CreateDialogueBackground( )
 end
 
 function FinishedTextLinesPresentation( source, textLines )
-	CallFunctionName( source.FinishedTextLinesFunctionName, source, source.FinishedTextLinesFunctionArgs )
-	if textLines ~= nil and source.TextLinesPauseSingingFx and AudioState.AmbientMusicId ~= nil then
-		CreateAnimation({ Name = source.SingingFx, DestinationId = source.ObjectId, OffsetX = source.SingingAnimOffsetX or source.AnimOffsetX, OffsetZ = source.AnimOffsetZ, Group = "Combat_UI_World" })
-	end	
 	if CurrentHubRoom ~= nil and AudioState.AmbientMusicId ~= nil then
 		if textLines.PauseMusicPlayerMusic then
 			ResumeMusicianMusic()
@@ -1430,20 +1415,8 @@ function FinishedTextLinesPresentation( source, textLines )
 			SetSoundCueValue({ Name = "Vocals", Id = AudioState.AmbientMusicId, Value = CurrentHubRoom.AmbientMusicParams.Vocals, Duration = 0.33 })
 		end
 	end
-	if source ~= nil and source.EndTextLinesAnimation and not textLines.IgnoreSourceStartEndAnimations then
-		SetAnimation({ DestinationId = source.ObjectId, Name = source.EndTextLinesAnimation })
-	end
-	if source ~= nil and textLines.EndPartnerTextLinesAnimation and source.PartnerObjectId then
-		SetAnimation({ DestinationId = source.PartnerObjectId, Name = textLines.EndPartnerTextLinesAnimation })
-	end	
-	if source ~= nil and source.EndTextLinesVfx and not textLines.IgnoreSourceStartEndAnimations then
-		CreateAnimation({ Name = source.EndTextLinesVfx, DestinationId = source.ObjectId, OffsetX = source.AnimOffsetX, OffsetZ = source.AnimOffsetZ, Group = "Combat_UI_World" })
-	end
 	if source ~= nil and source.EndTextLinesThreadedFunctionName and not textLines.IgnoreSourceEndTextLinesThreadedFunctionName then
-		local threadedFunction = _G[source.EndTextLinesThreadedFunctionName]
-		if threadedFunction ~= nil then
-			thread( threadedFunction, source, source.EndTextLinesFunctionArgs, textLines )
-		end
+		thread( CallFunctionName, source.EndTextLinesThreadedFunctionName, source, source.EndTextLinesThreadedFunctionArgs, textLines )
 	end
 	SetAnimation({ DestinationId = ScreenAnchors.DialogueBackgroundId, Name = "DialogueBackgroundOut" })
 
@@ -1476,7 +1449,7 @@ function SurpriseNPCPresentation( source, args )
 
 	if args.TextLineSet ~= nil then
 		ProcessTextLines( source, args.TextLineSet )
-		PlayRandomRemainingTextLines( source, args.TextLineSet )
+		PlayFirstEligibleTextLines( source, args.TextLineSet )
 	end
 
 	if not args.SkipCameraLock then
@@ -1733,17 +1706,12 @@ end
 function HammerKeepsakeLostPresentation( traitName )
 	thread( InCombatTextArgs, { TargetId= CurrentRun.Hero.ObjectId, Text = "HammerKeepsake_Lost", SkipRise = false, SkipFlash = false, Duration = 1.5, ShadowScaleX = 1.2, LuaKey = "TempTextData", 
 	LuaValue = { Name = traitName }})
-
-	if HeroHasTrait("TempHammerKeepsake") then
-		local sourceKeepsake = GetHeroTrait("TempHammerKeepsake")
-		sourceKeepsake.CustomTrayText = sourceKeepsake.ZeroBonusTrayText
-		ReduceTraitUses( sourceKeepsake, {Force=  true })
-	end
 end
 
 function HadesKeepsakeAcquiredPresentation( newTraitName )
 	thread( InCombatTextArgs, { TargetId= CurrentRun.Hero.ObjectId, Text = "HadesKeepsake_Acquire", SkipRise = false, SkipFlash = false, Duration = 1.5, ShadowScaleX = 1.2, LuaKey = "TempTextData", 
 	LuaValue = { NewName = newTraitName }})
+	thread( PlayVoiceLines, GlobalVoiceLines.HadesAndPersephoneKeepsakeVoiceLines, true )
 end
 
 function RunStartHadesKeepsakeAcquiredPresentation()
@@ -1956,7 +1924,7 @@ function GiftPointRefundPresentation()
 	wait(1.1)
 
 	PlaySound({ Name = "/SFX/GiftAmbrosiaBottlePickup", Id = CurrentRun.Hero.ObjectId })
-	AddResource( "GiftPoints", 1, "Item" )
+	AddResource( "GiftPoints", 1, "Item", { SkipVoiceLines = true } )
 
 end
 function GiftPointRareRefundPresentation()
@@ -1964,7 +1932,7 @@ function GiftPointRareRefundPresentation()
 	wait(1.1)
 
 	PlaySound({ Name = "/Leftovers/Menu Sounds/TalismanPowderUpLEGENDARY", Id = CurrentRun.Hero.ObjectId })
-	AddResource( "GiftPointsRare", 1, "Item" )
+	AddResource( "GiftPointsRare", 1, "Item", { SkipVoiceLines = true } )
 
 end
 function GiftPointEpicRefundPresentation()
@@ -1972,7 +1940,7 @@ function GiftPointEpicRefundPresentation()
 	wait(1.1)
 
 	PlaySound({ Name = "/Leftovers/Menu Sounds/TalismanRockUpLEGENDARY", Id = CurrentRun.Hero.ObjectId })
-	AddResource( "GiftPointsEpic", 1, "Item" )
+	AddResource( "GiftPointsEpic", 1, "Item", { SkipVoiceLines = true } )
 
 end
 function SuperGiftPointRefundPresentation()
@@ -1980,7 +1948,7 @@ function SuperGiftPointRefundPresentation()
 	wait(1.1)
 
 	PlaySound({ Name = "/SFX/GiftAmbrosiaBottlePickup", Id = CurrentRun.Hero.ObjectId })
-	AddResource( "SuperGiftPoints", 1, "Item" )
+	AddResource( "SuperGiftPoints", 1, "Item", { SkipVoiceLines = true } )
 
 end
 function HypnosPointRefundPresentation()
@@ -1995,7 +1963,7 @@ function ResourceGiftedPresentation( args )
 	wait( args.WaitTime or 1.1 )
 
 	PlaySound({ Name = args.SoundName or "/Leftovers/World Sounds/Caravan Interior/SteamAcidForage", Id = CurrentRun.Hero.ObjectId })
-	AddResource( args.ResourceName or "GiftPointsRare", args.ResourceAmount or 1, "Item", { SkipVoiceLines = not args.AllowOnAddVoiceLines } )
+	AddResource( args.ResourceName or "GiftPointsRare", args.ResourceAmount or 1, "Item", { SkipVoiceLines = true } )
 	if args.CheckSeedStatus then
 		CheckSeedStatus()
 	end
@@ -2007,7 +1975,7 @@ function ResourceGiftedInEventPresentation( source, args )
 	wait(args.GiftWaitTime or 1.1)
 
 	PlaySound({ Name = args.SoundName or "/Leftovers/World Sounds/Caravan Interior/SteamAcidForage", Id = CurrentRun.Hero.ObjectId })
-	AddResource( args.ResourceName or "GiftPointsRare", args.ResourceAmount or 1, "Item", { SkipVoiceLines = not args.AllowOnAddVoiceLines } )
+	AddResource( args.ResourceName or "GiftPointsRare", args.ResourceAmount or 1, "Item", { SkipVoiceLines = true } )
 
 end
 
@@ -2311,12 +2279,6 @@ function AmbientFrogsReaction( args )
 	PlaySound({ Name = "/SFX/Familiars/FrogCroakAngry2", Id = 738668, Delay = 2 })
 end
 
-function EagleReaction ( args )
-	local eagleId = GetClosestUnitOfType({ Id = CurrentRun.Hero.ObjectId, DestinationName = "Eagle" })
-	local eagleSound = GetRandomValue({ "/SFX/Enemy Sounds/EagleCall", "/SFX/Enemy Sounds/EagleAlerted", "/SFX/Enemy Sounds/EagleAttackScream" })
-	PlaySound({ Name = eagleSound, Id = eagleId })
-end
-
 function FamiliarCosmeticReaction( args )
 
 	args = args or {}
@@ -2568,14 +2530,6 @@ function GenericPresentation( source, args )
 		thread( PlayVoiceLines, source[args.SourceThreadedVoiceLines], true )
 	end
 
-	if args.ApplyEffectOnHero ~= nil then
-		if args.ApplyEffectOnHeroProperties ~= nil then
-			ApplyEffect({ DestinationId = CurrentRun.Hero.ObjectId, Id = source.ObjectId, EffectName = args.ApplyEffectOnHero, DataProperties = args.ApplyEffectOnHeroProperties })
-		else
-			ApplyEffect({ DestinationId = CurrentRun.Hero.ObjectId, Id = source.ObjectId, EffectName = args.ApplyEffectOnHero })
-		end
-	end
-
 	if args.KillTaggedThread ~= nil then
 		killTaggedThreads( args.KillTaggedThread )
 	end
@@ -2765,7 +2719,7 @@ function StartBlinkTrailPresentation()
 		if distance > 0 then
 			local targetId = SpawnObstacle({ Name = "BlankObstacle", DestinationId = CurrentRun.Hero.ObjectId, Group = "Standing" })
 			table.insert( blinkIds, targetId )
-			CreateAnimationsBetween({ Animation = "BlinkTrailFxIn", DestinationId = blinkIds [#blinkIds], Id = blinkIds [#blinkIds - 1], Stretch = true, UseZLocation = false, Group = "Standing", SetAnimation = true, MatchOwnerToAnimation = true})
+			CreateAnimationsBetween({ Animation = "BlinkTrailFxIn", DestinationId = blinkIds [#blinkIds], Id = blinkIds [#blinkIds - 1], Stretch = true, UseZLocation = false, Group = "Standing", SetAnimation = true })
 			if TableLength(blinkIds) > maxTrailLength then
 				local lastItemId = table.remove( blinkIds, 1 )
 				SetAnimation({ Name = "BlinkTrailFxOut", DestinationId = lastItemId, CopyFromPrev = true })
@@ -2792,7 +2746,7 @@ function StartBlinkTrailPresentation()
 	local finalAnchor = SpawnObstacle({ Name = "BlankObstacle", DestinationId = CurrentRun.Hero.ObjectId, Group = "Standing" })
 	Attach({ Id = finalAnchor, DestinationId = CurrentRun.Hero.ObjectId })
 	if GetDistance({ Id = finalAnchor, DestinationId = CurrentRun.Hero.ObjectId }) > 0 then
-		CreateAnimationsBetween({ Animation = "BlinkTrailFxIn", DestinationId = blinkIds [#blinkIds - 1], Id = finalAnchor, Stretch = true, UseZLocation = false, Group = "Standing", SetAnimation = true, MatchOwnerToAnimation = true})
+		CreateAnimationsBetween({ Animation = "BlinkTrailFxIn", DestinationId = blinkIds [#blinkIds - 1], Id = finalAnchor, Stretch = true, UseZLocation = false, Group = "Standing", SetAnimation = true })
 	end
 	while not IsEmpty( blinkIds ) do
 		while skipCounter < skipInterval do
@@ -2821,7 +2775,7 @@ end
 function UpgradeBoonRarityPresentation( button )
 	CreateAnimation({ Name = "BoonEntranceDuo", Scale = 1.21, OffsetX = 40, DestinationId = button.Id })
 
-	if CurrentLootData.RarityUpgradeVoiceLines ~= nil then
+	if CurrentLootData ~= nil and CurrentLootData.RarityUpgradeVoiceLines ~= nil then
 		thread( PlayVoiceLines, CurrentLootData.RarityUpgradeVoiceLines, true )
 	end
 end
@@ -2905,13 +2859,18 @@ end
 
 function DaggerBlockActivePresentation( traitData, reloadTime )
 	wait(reloadTime, "DaggerBlockShield" )
-	if not CurrentRun.Hero.IsDead then
-		PlaySound({ Name = "/SFX/Menu Sounds/KeepsakeArtemisArrow", Id = CurrentRun.Hero.ObjectId })
-		PlaySound({ Name = "/SFX/Menu Sounds/MenuMagicFlashLong", Id = CurrentRun.Hero.ObjectId })
-		thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "RiposteCooldown", Duration = 1.0, ShadowScaleX = 0.7 } )
-		if ScreenAnchors.DaggerUI then
-			SetAnimation({ Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = ScreenAnchors.DaggerUI })
-		end
+	
+	if CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.BossKillPresentation then
+		return
+	end
+	if CurrentRun.Hero.IsDead then
+		return
+	end
+	PlaySound({ Name = "/SFX/Menu Sounds/KeepsakeArtemisArrow", Id = CurrentRun.Hero.ObjectId })
+	PlaySound({ Name = "/SFX/Menu Sounds/MenuMagicFlashLong", Id = CurrentRun.Hero.ObjectId })
+	thread( InCombatTextArgs, { TargetId = CurrentRun.Hero.ObjectId, Text = "RiposteCooldown", Duration = 1.0, ShadowScaleX = 0.7 } )
+	if ScreenAnchors.DaggerUI then
+		SetAnimation({ Name = "StaffReloadTimerReady", SuppressSounds = true, DestinationId = ScreenAnchors.DaggerUI })
 	end
 end
 
@@ -2925,6 +2884,9 @@ end
 
 function AddReadiedMassiveAttackPresentation( traitName )
 	local traitData = TraitData[traitName]
+	if not CurrentRun or not CurrentRun.CurrentRoom then
+		return
+	end
 	if traitData.BlastReadyVfx and traitData.BlastReadyDarkVfx and SessionMapState.ReadiedMassiveAttacks[traitName] == nil and not MapState.HostilePolymorph then
 		CreateAnimation({ Name = traitData.BlastReadyVfx, DestinationId = CurrentRun.Hero.ObjectId })
 		CreateAnimation({ Name = traitData.BlastReadyDarkVfx, DestinationId = CurrentRun.Hero.ObjectId })
@@ -3014,13 +2976,13 @@ function BonusHealthAndManaPresentation( bonusHealth, bonusMana, delay)
 	end
 	CreateAnimation({ Name = "HealthSparkleShower", DestinationId = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/Leftovers/SFX/PlayerProjectileDeflect", Id = CurrentRun.Hero.ObjectId })
-	thread( InCombatText, CurrentRun.Hero.ObjectId, "MaxHealthAndManaIncrease", 0.9, { ShadowScaleX = 0.6, LuaKey = "TooltipData", LuaValue = {TooltipHealth = bonusHealth, TooltipMana = bonusMana }} )
+	thread( InCombatText, CurrentRun.Hero.ObjectId, "MaxHealthAndManaIncrease", 0.9, { ShadowScaleX = 0.6, UseProgressiveStack = true, LuaKey = "TooltipData", LuaValue = {TooltipHealth = bonusHealth, TooltipMana = bonusMana }} )
 end
 
 function BonusManaPresentation( bonusMana )
 	CreateAnimation({ Name = "HealthSparkleShower", DestinationId = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/Leftovers/SFX/PlayerProjectileDeflect", Id = CurrentRun.Hero.ObjectId })
-	thread( InCombatText, CurrentRun.Hero.ObjectId, "PostEncounterMaxManaIncrease", 0.9, { ShadowScaleX = 0.6, LuaKey = "TooltipData", LuaValue = { TooltipMana = bonusMana }} )
+	thread( InCombatText, CurrentRun.Hero.ObjectId, "PostEncounterMaxManaIncrease", 0.9, { ShadowScaleX = 0.6, UseProgressiveStack = true, LuaKey = "TooltipData", LuaValue = { TooltipMana = bonusMana }} )
 end
 
 function PotionClearCastPresentation( duration )
@@ -3232,12 +3194,15 @@ function PoseidonPotionPresentation( consumable, args)
 	CreateAnimation({ Name = "PoseidonElementalKnockupFxAlt", DestinationId = consumable.ObjectId })
 end
 
-function DoubleRewardPresentation( objectId )
+function DoubleRewardPresentation( args )
+	CurrentRun.PoseidonDoubleRewardCount = CurrentRun.PoseidonDoubleRewardCount + 1
+
+	local objectId = args.ObjectId
 	CreateAnimation({ Name = "PoseidonElementalKnockupFxAlt", DestinationId = objectId })
 	ApplyUpwardForce({ Id = objectId, Speed = RandomFloat( 500, 700 ) })
 	ApplyForce({ Id = objectId, Speed = RandomFloat( 75, 260 ), Angle = RandomFloat( 0, 360 ) })
 	wait( 0.75 )
-	thread( PlayVoiceLines, GlobalVoiceLines.PoseidonDoubleRewardReactionLines )
+	thread( PlayVoiceLines, GlobalVoiceLines.PoseidonDoubleRewardReactionLines, nil, nil, args )
 
 	PlaySound({ Name = "/SFX/Menu Sounds/PortraitEmoteSparklySFX" })
 	local toastAnchor = SpawnObstacle({ Name = "BlankObstacle", DestinationId = CurrentRun.Hero.ObjectId, Group = "Combat_Menu_Additive" })
@@ -3264,7 +3229,11 @@ function SkipEncounterPresentation( )
 	local chain = SpawnObstacle({ Name = "OlympusCeilingChain01", DestinationId = CurrentRun.Hero.ObjectId, OffsetY = 1200, Group = "DiscoBall" })
 	SetScale({ Id = chain, Fraction = 0.51 })
 	Attach({ Id = chain, DestinationId = ball, OffsetY = -97 })
-	Attach({ Id = ball, DestinationId = CurrentRun.Hero.ObjectId, OffsetY = -650 })
+	local ballOffset = -650
+	if ConfigOptionCache.UseZoomFractionAlt then
+		ballOffset = -525
+	end
+	Attach({ Id = ball, DestinationId = CurrentRun.Hero.ObjectId, OffsetY = ballOffset })
 	SetAlpha({ Ids = {ball, chain}, Fraction = 0 })
 	
 	SessionMapState.SkipEncounterIds = { ball, chain }
@@ -3564,7 +3533,7 @@ function SpawnHermesInPerson( source, args )
 		SessionMapState.HasSurfaceShopDelivery = true
 	end
 
-	if not args.SkipCheckTextLines then
+	if not CurrentRun.IsDreamRun then
 		CheckAvailableTextLines( unit, args )
 	end
 	thread( PlayVoiceLines, GlobalVoiceLines.HermesFirstSpawnVoiceLines )
@@ -3882,42 +3851,10 @@ function PostEpiloguePresentation( source, args )
 	wait( 1.5 )
 	FadeIn({ Color = Color.Black, Duration = 2.0 })
 
-	local gameOutroData = DeepCopyTable( GameOutroData.Outro_Epilogue01 )
-	GameState.PlayedRunOutros[gameOutroData.Name] = true
-	gameOutroData.Header = gameOutroData.Header or gameOutroData.Name
-
 	PlaySound({ Name = "/Leftovers/Menu Sounds/EmoteThoughtful" })
-	RunInterstitialPresentation( gameOutroData,
-		{
-			SkipFadeIn = true,
-			SkipSound = true,
-			Animations =
-			{
-				{
-					AnimationName = "ElysiumPetalSpawner",
-					GroupName = "Combat_Menu_Overlay",
-					X = ScreenCenterNativeOffsetX,
-					Y = ScreenCenterNativeOffsetY,
-				},
-				{
-					AnimationName = "PalaceSunFlare_Epilogue",
-					GroupName = "Combat_Menu_Overlay_Additive",
-					X = ScreenCenterNativeOffsetX + 1000,
-					Y = ScreenCenterNativeOffsetY - 300,
-				},
-				{
-					AnimationName = "EpilogueOutro",
-
-					Alpha = 0.0,
-					AlphaTarget = 1.0,
-					AlphaTargetDuration = 1.0,
-
-					Scale = 1,
-					ScaleEaseIn = 0.0,
-					ScaleEaseOut = 1.0,
-				},
-			},
-		} )
+	local interstitialData = QuestData.QuestRescueFatesTrue.InterstitialData
+	GameState.PlayedQuestInterstitials.QuestRescueFatesTrue = true
+	RunInterstitialPresentation( interstitialData )
 
 	FadeIn({ Duration = 0.5 })
 	StopSecretMusic()
@@ -3959,10 +3896,6 @@ function ZagreusDeathDefiancePresentation( boss, currentRun, aiStage )
 	wait( 0.25, boss.AIThreadName )
 	AddSimSpeedChange( "LastStand", { Fraction = 0.005, LerpTime = 0.0001, Priority = true } )
 
-	local textLines = GetRandomEligibleTextLines( boss, boss.BossPhaseChangeTextLineSets, GetNarrativeDataValue( boss, "BossPhaseChangeTextLinePriorities" ) )
-	boss.TextLinesUseWeaponIdle = true
-	PlayTextLines( boss, textLines )
-
 	PlaySound({ Name = "/SFX/DeathDefianceActivate", Id = CurrentRun.Hero.ObjectId })
 	PlaySound({ Name = "/VO/ZagreusEmotes/EmoteCharging", Id = CurrentRun.Hero.ObjectId })
 	thread( PlayVoiceLines, boss.NextPhaseVoiceLines, nil, boss )
@@ -3970,6 +3903,12 @@ function ZagreusDeathDefiancePresentation( boss, currentRun, aiStage )
 	thread( InCombatText, boss.ObjectId, "Hint_ExtraChance_Zagreus", 0.9, { ShadowScale = 0.66, OffsetY = 75 } )
 
 	boss.MaxHealth = aiStage.NewMaxHealth or boss.MaxHealth
+	if currentRun.IsDreamRun and boss.DreamBiomeData ~= nil then
+		local dreamBiomeData = boss.DreamBiomeData[currentRun.EnteredBiomes]
+		if dreamBiomeData ~= nil and dreamBiomeData.DataOverrides ~= nil and dreamBiomeData.DataOverrides.HealthMultiplier ~= nil then
+			boss.MaxHealth = boss.MaxHealth * dreamBiomeData.DataOverrides.HealthMultiplier
+		end
+	end
 	boss.Health = boss.MaxHealth
 	if aiStage.SetHealthPercent ~= nil then
 		boss.Health = boss.Health * aiStage.SetHealthPercent
@@ -3999,7 +3938,7 @@ function ZagreusDeathDefiancePresentation( boss, currentRun, aiStage )
 	AddToGroup({ Id = boss.ObjectId, Name = "Standing", DrawGroup = true })
 	
 	SetUnitVulnerable( boss )
-	wait(0.5, boss.AIThreadName)
+	wait(1.0, boss.AIThreadName)
 
 	RemoveTimerBlock( CurrentRun, "ZagreusDeathDefiancePresentation")
 end

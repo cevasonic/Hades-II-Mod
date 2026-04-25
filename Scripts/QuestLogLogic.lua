@@ -73,12 +73,21 @@ function OpenQuestLogScreen( args )
 		SetInteractProperty({ DestinationId = button.Id, Property = "FreeFormSelectInputMultiplierX", Value = 0.0 })
 
 		local newButtonKey = "NewIcon"..screen.NumItems
-		if not GameState.QuestsViewed[questData.Name] then
+		if not GameState.QuestsViewed[questData.Name] or GameState.QuestsUpdated[questData.Name] then
 			-- New icon
 			screen.AnyNew = true
 			components[newButtonKey] = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup })
 			SetAnimation({ DestinationId = components[newButtonKey].Id , Name = "QuestLogNewQuest" })
 			Attach({ Id = components[newButtonKey].Id, DestinationId = components[questButtonKey].Id, OffsetX = screen.NewIconOffsetX, OffsetY = 0 })
+		end
+
+		if questData.InterstitialData ~= nil then
+			local specialIcon = CreateScreenComponent({ Name = "BlankInteractableObstacle", Group = screen.ComponentData.DefaultGroup, Animation = screen.MarkerIconGraphic, Scale = screen.MarkerIconScale, Alpha = 0.0 })
+			components["SpecialIcon"..screen.NumItems] = specialIcon
+			button.SpecialIcon = specialIcon
+			specialIcon.Button = button
+			Attach({ Id = specialIcon.Id, DestinationId = button.Id, OffsetX = screen.MarkerIconOffsetX, OffsetY = 0 })
+			SetInteractProperty({ DestinationId = specialIcon.Id, Property = "FreeFormSelectable", Value = false })
 		end
 
 		local strikethroughKey = "Strikethrough"..screen.NumItems
@@ -118,12 +127,19 @@ function OpenQuestLogScreen( args )
 		SetInteractProperty({ DestinationId = button.Id, Property = "FreeFormSelectInputMultiplierX", Value = 0.0 })
 
 		local newButtonKey = "NewIcon"..screen.NumItems
-		if not GameState.QuestsViewed[questData.Name] then
+		if not GameState.QuestsViewed[questData.Name] or GameState.QuestsUpdated[questData.Name] then
 			-- New icon
 			screen.AnyNew = true
 			components[newButtonKey] = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup })
 			SetAnimation({ DestinationId = components[newButtonKey].Id , Name = "QuestLogNewQuest" })
 			Attach({ Id = components[newButtonKey].Id, DestinationId = components[questButtonKey].Id, OffsetX = screen.NewIconOffsetX, OffsetY = 0 })
+		end
+
+		if questData.InterstitialData ~= nil then
+			local specialIcon = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, Animation = screen.MarkerIconGraphic, Scale = screen.MarkerIconScale, Alpha = 0.0 })
+			components["SpecialIcon"..screen.NumItems] = specialIcon
+			button.SpecialIcon = specialIcon
+			Attach({ Id = specialIcon.Id, DestinationId = button.Id, OffsetX = screen.MarkerIconOffsetX, OffsetY = 0 })
 		end
 
 		local incomleteFormat = screen.IncompleteFormat
@@ -147,6 +163,9 @@ function OpenQuestLogScreen( args )
 		components[questButtonKey].OnMouseOffFunctionName = "MouseOffQuest"
 		components[questButtonKey].Data = questData
 		components[questButtonKey].Index = screen.NumItems
+		if questData.InterstitialData ~= nil then
+			components[questButtonKey].OnPressedFunctionName = "QuestLogPlayInterstitial"
+		end
 		button.Screen = screen
 		AttachLua({ Id = components[questButtonKey].Id, Table = components[questButtonKey] })
 		SetInteractProperty({ DestinationId = button.Id, Property = "FreeFormSelectOffsetX", Value = screen.FreeFormSelectOffsetX })
@@ -155,6 +174,17 @@ function OpenQuestLogScreen( args )
 		local strikethroughKey = "Strikethrough"..screen.NumItems
 		components[strikethroughKey] = CreateScreenComponent({ Name = "BlankObstacle", Group = "Combat_Menu_Overlay", Animation = "QuestLogScreenStrikethrough", Alpha = 0.0 })
 		Attach({ Id = components[strikethroughKey].Id, DestinationId = components[questButtonKey].Id })
+
+		if questData.InterstitialData ~= nil then
+			local specialIcon = CreateScreenComponent({ Name = "BlankInteractableObstacle", Group = screen.ComponentData.DefaultGroup, Animation = screen.PlayIconGraphic, Scale = screen.PlayIconScale, Alpha = 0.0 })
+			components["SpecialIcon"..screen.NumItems] = specialIcon
+			button.SpecialIcon = specialIcon
+			specialIcon.Button = button
+			specialIcon.OnMouseOverFunctionName = "QuestLogMouseOverPlayIcon"
+			specialIcon.OnPressedFunctionName = "QuestLogPressedPlayIcon"
+			Attach({ Id = specialIcon.Id, DestinationId = button.Id, OffsetX = screen.PlayIconOffsetX, OffsetY = 0 })
+			SetInteractProperty({ DestinationId = specialIcon.Id, Property = "FreeFormSelectable", Value = false })
+		end
 
 		local cashedOutFormat = screen.CashedOutFormat
 		cashedOutFormat.Id = components[questButtonKey].Id
@@ -182,9 +212,10 @@ function CashOutQuest( screen, button )
 
 	local questData = button.Data
 	if questData.CompleteGameStateRequirements ~= nil and not IsGameStateEligible( questData, questData.CompleteGameStateRequirements ) then
-		QuestIncompletePresentation( button )
 		return
 	end
+
+	button.OnPressedFunctionName = nil
 
 	if GameState.QuestStatus[button.Data.Name] ~= "CashedOut" then
 		AddResource( button.Data.RewardResourceName, button.Data.RewardResourceAmount, "Quest", { SkipVoiceLines = true } )
@@ -199,12 +230,19 @@ function CashOutQuest( screen, button )
 	ModifyTextBox( justCashedOutFormat )
 
 	SetAlpha({ Id = screen.Components.RewardText.Id, Fraction = 0.0, Duration = 0.2 })
+
+	local animationName = screen.Components.RewardClaimedIcon.AnimationName
+	if questData.InterstitialData ~= nil then
+		animationName = screen.Components.RewardClaimedIcon.SpecialAnimationName
+	end
+	SetAnimation({ DestinationId = screen.Components.RewardClaimedIcon.Id, Name = animationName })
 	SetAlpha({ Id = screen.Components.RewardClaimedIcon.Id, Fraction = 1.0, Duration = 0.2 })
 
 end
 
 function CloseQuestLogScreen( screen, button )
 	killTaggedThreads( "QuestLogPulse" )
+	killTaggedThreads( "QuestInterstitialPulse" )
 	AltAspectRatioFramesHide()
 	OnScreenCloseStarted( screen )
 	QuestLogScreenClosePresentation( screen, button )
@@ -602,12 +640,17 @@ function CheckQuestStatus( args )
 
 	if not args.Silent then
 		if questCompleted then
-			QuestCompletedPresentation( nil, threadName )
+			QuestCompletedPresentation( threadName )
 			wait( 0.2, threadName )
 			thread( CheckProgressAchievements )
 		end
+		if SessionMapState.QueuedQuestUpdate then
+			SessionMapState.QueuedQuestUpdate = nil
+			QuestUpdatedPresentation( threadName )
+			wait( 0.2, threadName )
+		end
 		if questAdded then
-			QuestAddedPresentation( nil, threadName )
+			QuestAddedPresentation( threadName )
 			wait( 0.2, threadName )
 		end
 	end
@@ -649,6 +692,7 @@ function QuestLogUpdateVisibility( screen, args )
 		local questButtonKey = (screen.ButtonName or "QuestButton")..index
 		local newButtonKey = "NewIcon"..index
 		local strikethroughKey = "Strikethrough"..index
+		local specialIconKey = "SpecialIcon"..index
 
 		local visibleIndex = index - screen.ScrollOffset
 
@@ -661,6 +705,10 @@ function QuestLogUpdateVisibility( screen, args )
 			end
 			if components[strikethroughKey] ~= nil and GameState.QuestStatus[components[questButtonKey].Data.Name] == "CashedOut" then
 				SetAlpha({ Id = components[strikethroughKey].Id, Fraction = 1 })
+			end
+			if components[specialIconKey] ~= nil then
+				SetAlpha({ Id = components[specialIconKey].Id, Fraction = 1 })
+				UseableOn({ Id = components[specialIconKey].Id })
 			end
 			UseableOn({ Id = components[questButtonKey].Id })
 			if visibleIndex == 1 and args.ScrolledDown then
@@ -677,10 +725,30 @@ function QuestLogUpdateVisibility( screen, args )
 			if components[strikethroughKey] ~= nil then
 				SetAlpha({ Id = components[strikethroughKey].Id, Fraction = 0 })
 			end
-			UseableOff({ Id = components[questButtonKey].Id, ForceHighlightOff = true  })
+			if components[specialIconKey] ~= nil then
+				SetAlpha({ Id = components[specialIconKey].Id, Fraction = 0 })
+				UseableOff({ Id = components[specialIconKey].Id, ForceHighlightOff = true })
+			end
+			UseableOff({ Id = components[questButtonKey].Id, ForceHighlightOff = true })
 		end
 	end
 
+end
+
+function QueueQuestProgressUpdate( source, args )
+	args = args or {}
+
+	if args.GameStateRequirements ~= nil and not IsGameStateEligible( source, args.GameStateRequirements ) then
+		return
+	end
+
+	if GameState.QuestsCompleted[args.QuestName] then
+		-- back-compat; don't show "progress" for already-completed quests
+		return
+	end
+
+	GameState.QuestsUpdated[args.QuestName] = true
+	SessionMapState.QueuedQuestUpdate = true
 end
 
 function ValidateQuestData()

@@ -778,7 +778,6 @@ OverwriteTableKeys( TraitData, {
 		AddOutgoingDamageModifiers = 
 		{
 			ValidWeapons = {"WeaponStaffBall"},
-			ProjectileName = "ProjectileStaffBall",
 			JumpMultiplier = { BaseValue = 0.1 },
 			ReportValues = { JumpDamageBonus = "JumpMultiplier" }
 		},

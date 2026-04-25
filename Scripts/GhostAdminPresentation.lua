@@ -534,9 +534,7 @@ function UseCauldronCookActivePresentation( usee, args )
 	wait( 1.85 )
 	RemoveInputBlock({ Name = "MelUsedLockedCauldron" })
 	wait( 1.35, RoomThreadName )
-	if not usee.UseableToggleBlocked then
-		UseableOn({ Id = usee.ObjectId })
-	end
+	UseableOn({ Id = usee.ObjectId })
 
 end
 

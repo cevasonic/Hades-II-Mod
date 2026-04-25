@@ -78,7 +78,7 @@
 		PreRevealVoiceLines =
 		{
 			{ GlobalVoiceLines = "FamiliarFrogCostumeUnlocked" },
-			{ GlobalVoiceLines = "FamiliarCuteCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarHotCostumeUnlocked" },
 			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" }
 		},
 		SwitchCostumeVoiceLines =
@@ -138,6 +138,31 @@
 		PreRevealVoiceLines =
 		{
 			{ GlobalVoiceLines = "FamiliarDarkCostumeUnlocked" },
+		},
+		SwitchCostumeVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarFrogSwitchCostumeVoiceLines" },
+			{ GlobalVoiceLines = "FamiliarMiscSwitchCostumeVoiceLines" },
+		},
+	},
+
+	FamiliarCostume_FrogHell =
+	{
+		Icon = "Costume_Frog06",
+		InheritFrom = { "DefaultFamiliarCostume" },
+		GrannyModel = "FrogFamiliar_Hell_Mesh",
+
+		Cost =
+		{
+			CosmeticsPoints = 1200,
+			DreamPoints = 8,
+		},
+
+		PreRevealVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarFrogCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarToughCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" },
 		},
 		SwitchCostumeVoiceLines =
 		{
@@ -269,6 +294,31 @@
 		},
 	},
 
+	FamiliarCostume_CatChaos =
+	{
+		Icon = "Costume_Cat06",
+		InheritFrom = { "DefaultFamiliarCostume" },
+		GrannyModel = "CatFamiliar_Chaos_Mesh",
+
+		Cost =
+		{
+			CosmeticsPoints = 1100,
+			DreamPoints = 12,
+		},
+
+		PreRevealVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarCatCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarDreamCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" }
+		},
+		SwitchCostumeVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarCatSwitchCostumeVoiceLines" },
+			{ GlobalVoiceLines = "FamiliarMiscSwitchCostumeVoiceLines" },
+		},
+	},
+
 	-- RavenFamiliar / Raki
 	FamiliarCostume_RavenDefault =
 	{
@@ -392,6 +442,31 @@
 		},
 	},
 
+	FamiliarCostume_RavenHell =
+	{
+		Icon = "Costume_Raven06",
+		InheritFrom = { "DefaultFamiliarCostume" },
+		GrannyModel = "RavenFamiliar_Hell_Mesh",
+
+		Cost =
+		{
+			CosmeticsPoints = 900,
+			DreamPoints = 10,
+		},
+
+		PreRevealVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarRavenCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarHotCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" },
+		},
+		SwitchCostumeVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarRavenSwitchCostumeVoiceLines" },
+			{ GlobalVoiceLines = "FamiliarMiscSwitchCostumeVoiceLines" },
+		},
+	},
+
 	-- HoundFamiliar / Hecuba
 	FamiliarCostume_HoundDefault =
 	{
@@ -472,7 +547,7 @@
 		PreRevealVoiceLines =
 		{
 			{ GlobalVoiceLines = "FamiliarHoundCostumeUnlocked" },
-			{ GlobalVoiceLines = "FamiliarChillCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarToughCostumeUnlocked" },
 			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" }
 		},
 		SwitchCostumeVoiceLines =
@@ -507,6 +582,31 @@
 		PreRevealVoiceLines =
 		{
 			{ GlobalVoiceLines = "FamiliarDarkCostumeUnlocked" },
+		},
+		SwitchCostumeVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarHoundSwitchCostumeVoiceLines" },
+			{ GlobalVoiceLines = "FamiliarMiscSwitchCostumeVoiceLines" },
+		},
+	},
+
+	FamiliarCostume_HoundCute =
+	{
+		Icon = "Costume_Hound06",
+		InheritFrom = { "DefaultFamiliarCostume" },
+		GrannyModel = "HoundFamiliar_Cute_Mesh",
+
+		Cost =
+		{
+			CosmeticsPoints = 1300,
+			DreamPoints = 10,
+		},
+
+		PreRevealVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarHoundCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarChillCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" }
 		},
 		SwitchCostumeVoiceLines =
 		{
@@ -638,6 +738,31 @@
 		},
 	},
 
+	FamiliarCostume_PolecatMoon =
+	{
+		Icon = "Costume_Polecat06",
+		InheritFrom = { "DefaultFamiliarCostume" },
+		GrannyModel = "PolecatFamiliar_Moon_Mesh",
+
+		Cost =
+		{
+			CosmeticsPoints = 1200,
+			DreamPoints = 6,
+		},
+
+		PreRevealVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarPolecatCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarDreamCostumeUnlocked" },
+			{ GlobalVoiceLines = "FamiliarMiscCostumeUnlocked" }
+		},
+		SwitchCostumeVoiceLines =
+		{
+			{ GlobalVoiceLines = "FamiliarPolecatSwitchCostumeVoiceLines" },
+			{ GlobalVoiceLines = "FamiliarMiscSwitchCostumeVoiceLines" },
+		},
+	},
+
 })
 
 ScreenData.FamiliarCostumeShop =
@@ -652,6 +777,7 @@ ScreenData.FamiliarCostumeShop =
 			"FamiliarCostume_FrogChthonic",
 			"FamiliarCostume_FrogCute",
 			"FamiliarCostume_FrogMoon",
+			"FamiliarCostume_FrogHell",
 			"FamiliarCostume_FrogNightmare",
 		},
 
@@ -661,9 +787,9 @@ ScreenData.FamiliarCostumeShop =
 			"FamiliarCostume_CatChthonic",
 			"FamiliarCostume_CatHell",
 			"FamiliarCostume_CatMoon",
+			"FamiliarCostume_CatChaos",
 			"FamiliarCostume_CatNightmare",
 		},
-
 
 		RavenFamiliar =
 		{
@@ -671,6 +797,7 @@ ScreenData.FamiliarCostumeShop =
 			"FamiliarCostume_RavenChthonic",
 			"FamiliarCostume_RavenCute",
 			"FamiliarCostume_RavenMoon",
+			"FamiliarCostume_RavenHell",
 			"FamiliarCostume_RavenNightmare",
 		},
 
@@ -680,6 +807,7 @@ ScreenData.FamiliarCostumeShop =
 			"FamiliarCostume_HoundChaos",
 			"FamiliarCostume_HoundHell",
 			"FamiliarCostume_HoundMoon",
+			"FamiliarCostume_HoundCute",
 			"FamiliarCostume_HoundNightmare",
 		},
 
@@ -689,6 +817,7 @@ ScreenData.FamiliarCostumeShop =
 			"FamiliarCostume_PolecatChthonic",
 			"FamiliarCostume_PolecatCute",
 			"FamiliarCostume_PolecatHell",
+			"FamiliarCostume_PolecatMoon",
 			"FamiliarCostume_PolecatNightmare",
 		},
 	},
@@ -713,7 +842,7 @@ ScreenData.FamiliarCostumeShop =
 	CategoryIconOffsetY = 1,
 
 	ItemStartX = 515,
-	ItemStartY = 230,
+	ItemStartY = 120,
 	ItemSpacingY = 110,
 	IconOffsetX = -388,
 	IconOffsetY = -1,
@@ -817,6 +946,7 @@ ScreenData.FamiliarCostumeShop =
 		{
 			"BackgroundDim",
 			"FamiliarShopBacking",
+			"FamiliarShopLeft",
 			"FamiliarShopAnimalBacking",
 			"InfoBoxBacking",
 			"ActionBarBackground",
@@ -851,6 +981,14 @@ ScreenData.FamiliarCostumeShop =
 			AnimationName = "FamiliarShopBackdrop",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
+		},
+
+		FamiliarShopLeft =
+		{
+			
+			AnimationName = "FamiliarScreenLeftIn",
+			X = 276,
+			Y = 461,
 			Alpha = 0.0,
 			AlphaTarget = 1.0,
 			AlphaTargetDuration = 0.2,
@@ -858,11 +996,8 @@ ScreenData.FamiliarCostumeShop =
 
 		FamiliarShopAnimalBacking =
 		{
-			X = ScreenCenterX + 540,
+			X = ScreenCenterX,
 			Y = ScreenCenterY,
-			Alpha = 0.0,
-			AlphaTarget = 1.0,
-			AlphaTargetDuration = 0.2,
 		},
 
 		InfoBoxBacking = 
@@ -969,8 +1104,6 @@ ScreenData.FamiliarCostumeShop =
 	-- OpenPlayerAnimation = "MelTalkBrooding01",
 	-- handled in GhostAdminScreenClosedPresentation()
 	-- ClosePlayerAnimation = "MelTalkBrooding01ReturnToIdle",
-	OpenSound = "/SFX/Menu Sounds/RunHistoryOpen",
-	CloseSound = "/Leftovers/World Sounds/Caravan Interior/SteamAcidForage",
 
 	OpenEndVoiceLines =
 	{

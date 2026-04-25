@@ -9,6 +9,7 @@ UnitSetData.NPC_Athena =
 		{
 			SkipInteractAnim = true,
 			SkipSound = true,
+			SkipBoonInteractPresentation = true,
 			PackageName = "NPC_Athena_01",
 			PreserveContextArt = true,
 		},
@@ -53,6 +54,51 @@ UnitSetData.NPC_Athena =
 					},
 				},
 			},
+			{
+				FunctionName = "SilenceForDreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 25,
+						G = 200,
+						B = 160,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "AthenaDream_Mesh",
+					SetAnimation = "Athena_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		InvincibubbleScale = 1.2,
@@ -63,7 +109,7 @@ UnitSetData.NPC_Athena =
 		BoxAnimation = "DialogueSpeechBubbleLight",
 		BoxExitAnimation = "DialogueSpeechBubbleLightOut",
 		NarrativeTextColor = Color.DialogueTextLight,
-		-- NarrativeContextArt = "DialogueBackground_Olympus",
+		UseNarrativeContextArt = true,
 		NameplateSpeakerNameColor = Color.DialogueSpeakerNameOlympian,
 		NameplateDescriptionColor = {145, 45, 90, 255},
 		NarrativeContextArtFlippable = false,
@@ -73,6 +119,7 @@ UnitSetData.NPC_Athena =
 		UpgradeScreenOpenSound = "/SFX/AthenaWrathHolyShield",
 		UpgradeSelectedSound = "/SFX/AthenaBoonChoice",
 		Icon = "BoonSymbolAthena",
+		ScreenEdgeIcon = "AthenaRewardFinderIcon",
 
 		Traits =
 		{ 
@@ -140,7 +187,11 @@ UnitSetData.NPC_Athena =
 						HasNone = { "AthenaFirstMeeting", "AthenaAboutArachne03" },
 					},
 				},
-			
+				Cooldowns =
+				{
+					{ Name = "AthenaOfferSpeech", Time = 8 },
+				},
+
 				{ Cue = "/VO/Athena_0077", Text = "Behold my power." },
 				{ Cue = "/VO/Athena_0078", Text = "Behold." },
 				{ Cue = "/VO/Athena_0079", Text = "My Aegis is yours." },
@@ -539,6 +590,7 @@ UnitSetData.NPC_Athena =
 					{
 						Path = { "PrevRun", "TextLinesRecord" },
 						HasNone = {
+							"ZeusPalaceFirstMeetingAlt",
 							"ZeusPalaceFirstMeeting",
 							"ZeusPalaceMeeting02",
 							"ZeusPalaceMeeting03",
@@ -679,6 +731,34 @@ UnitSetData.NPC_Athena =
 					Text = "Be careful with that line of thought, Cousin. Compromising to achieve consensus is one thing; but compromising on beliefs or principles... on {#Emph}ideals? {#Prev}Such reasoning is how wars often {#Emph}start{#Prev}, not merely end." },
 			},
 
+			AthenaAboutNobody01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "P" },
+					},
+				},
+
+				{ Cue = "/VO/Athena_0307",
+					Text = "You have been very well prepared... outfitted with excellent equipment, knowledgeable of the twists and turns through our mountain, not to mention even getting there. Whoever plotted your course is good at it." },
+
+				{ Cue = "/VO/MelinoeField_4453", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Thank you, Lady Athena. We had to know what we were getting ourselves into given the precarity of the situation, so we planned as best we could." },
+
+				{ Cue = "/VO/Athena_0308",
+					PreLineAnim = "Athena_Proud_Start",
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Indeed. Though I find such strategic insight is less likely to come from a collective {#Emph}we {#Prev}than from a single, sound mind. Nobody's business but your own, of course." },
+			},
+
 			AthenaAboutHeracles01 =
 			{
 				PlayOnce = true,
@@ -702,6 +782,40 @@ UnitSetData.NPC_Athena =
 					Text = "I have encountered him, and seen him lay to waste droves of our foes, though he's not been keen on conversation. Which sorts of suspicious actions do you mean?" },
 				{ Cue = "/VO/Athena_0232",
 					Text = "Consorting with our foes, defying our will, anything of that sort. I have no real reason not to trust him, yet... I've come to trust you more." },
+			},
+			AthenaAboutHeracles02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						SumPrevRuns = 2,
+						Path = { "EncountersOccurredCache" },
+						TableValuesToCount = {
+							"HeraclesCombatN", "HeraclesCombatN2", "HeraclesCombatO", "HeraclesCombatO2", "HeraclesCombatP", "HeraclesCombatP2" },
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "AthenaAboutHeracles01" }
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAny = { "PrometheusAboutAltFight01", "PrometheusAboutAltFight01_B" },
+					},
+				},
+
+				{ Cue = "/VO/Athena_0305",
+					Text = "The mighty Heracles has remained silently obedient in all of this, expressing very little, which in turn tells me a lot. What's your assessment of him presently?" },
+				{ Cue = "/VO/MelinoeField_4452", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "{#Emph}Oh{#Prev}, I... well, he's exceptionally strong, true to his reputation, but besides that he... does not seem on the best of terms with the King and Queen." },
+				{ Cue = "/VO/Athena_0306",
+					PreLineAnim = "Athena_Brooding",
+					Text = "{#Emph}Hm. {#Prev}He must feel that he has more to lose by violating their will than bending to it, but... a warrior such as that... we would be wiser to ensure he's treated well." },
 			},
 
 			AthenaAboutSelene01 =
@@ -918,10 +1032,13 @@ UnitSetData.NPC_Athena =
 				{
 					{
 						Path = { "GameState", "TextLinesRecord" },
-						HasAll = { "AthenaAboutArachne02", "ArachneAboutCurse05", "AthenaGift04" },
+						HasAll = { "AthenaAboutArachne02", "HecateWithArachne01_FollowUp", "AthenaGift04" },
 					},
 					NamedRequirementsFalse = { "NearTrueEnding" },
 				},
+
+				PreEventFunctionName = "QueueQuestProgressUpdate",
+				PreEventFunctionArgs = { QuestName = "QuestHelpArachne" },
 
 				{ Cue = "/VO/Athena_0247",
 					Text = "Your thoughts about Arachne are causing you distraction, which in turn is causing {#Emph}me {#Prev}distraction now. I would propose a means by which we could put this matter with her to rest." },
@@ -1268,7 +1385,10 @@ UnitSetData.NPC_Athena =
 				GameStateRequirements =
 				{
 					{
-						PathTrue = { "CurrentRun", "RoomsEntered", "P_MiniBoss01" },
+						SumPrevRuns = 2,
+						Path = { "RoomsEntered", "P_MiniBoss01" },
+						Comparison = ">=",
+						Value = 1,
 					},
 				},
 
@@ -1342,6 +1462,37 @@ UnitSetData.NPC_Athena =
 					PreLineAnim = "Athena_Proud_Start",
 					PostLineAnim = "Athena_Proud_End",
 					Text = "Of course, and it wasn't my intent to suggest otherwise. I'm merely reflecting on the change of circumstance. Well then, one Boon deserves another." },
+			},
+			AthenaAboutZagreus02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "RoomsEntered", "C_Boss01" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "AthenaGift06" },
+					},
+				},
+
+				{ Cue = "/VO/Athena_0312",
+					Text = "You didn't remind me of Zagreus at first but I do see some of it now. I've not had occasion to resume Boon messages to him, or for that matter you. I trust he's well?" },
+
+				{ Cue = "/VO/MelinoeField_4456", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "He seems to be in good spirits, yes. Even though we met just recently, I feel as though I've known him for a while. How did the two of you first come into contact anyhow?" },
+
+				{ Cue = "/VO/Athena_0313",
+					PreLineAnim = "Athena_Proud_Start",
+					PostLineAnim = "Athena_Proud_End",
+					Text = "The goddess Nyx is how. A long tale for another time but I thought she was his mother at first. Each of us was raised without a mother, come to think! Regards to all your kin." },
 			},
 
 			AthenaAboutPersephone01 =
@@ -1465,7 +1616,6 @@ UnitSetData.NPC_Athena =
 						FunctionArgs = { TextLines = GameData.AthenaKeepsakeEvents, Min = 3 },
 					},
 				},
-
 				{ Cue = "/VO/Athena_0203",
 					Text = "You bear the Amulet I gave to you. May it protect you and strike fear into the hearts of your enemies, whenever I am not around to do the same." },
 				{ Cue = "/VO/MelinoeField_2434", UsePlayerSource = true,
@@ -1477,6 +1627,38 @@ UnitSetData.NPC_Athena =
 					PostLineAnim = "Athena_Proud_End",
 					Text = "Oh, not exactly, no. More of a cautionary reminder about what happens when we gods are openly defied. Don't lose your head out there, Cousin." },
 			},
+			AthenaAboutKeepsake02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "G", "H", "O" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "AthenaEncounterKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+					{
+						FunctionName = "RequireRunsSinceTextLines",
+						FunctionArgs = { TextLines = GameData.AthenaKeepsakeEvents, Min = 3 },
+					},
+				},
+				{ Cue = "/VO/Athena_0270",
+					Text = "You take me to the strangest places with that Gorgon Amulet, Cousin. I'm pleased you've gained such use from it." },
+
+				{ Cue = "/VO/MelinoeField_4435", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelTalkPensive01ReturnToIdle", PostLineAnimTarget = "Hero",
+					Text = "I'm certain you're aware that your blessings are extraordinarily valuable, Lady Athena. As long as my repeated summons haven't been too inconvenient." },
+
+				{ Cue = "/VO/Athena_0271",
+					PreLineAnim = "Athena_Proud_Start",
+					PostLineAnim = "Athena_Proud_End",
+					Text = "When it is inconvenient, I do not show up. Then let us keep charting this strange path together, not alone!" },
+			},
+
 			AthenaAboutErebus01 =
 			{
 				PlayOnce = true,
@@ -1871,7 +2053,7 @@ UnitSetData.NPC_Athena =
 					},
 					{
 						IgnoreCurrentRun = true,
-						SumPrevRuns = 4,
+						SumPrevRuns = 5,
 						Path = { "SpawnRecord", "NPC_Athena_01" },
 						Comparison = "<=",
 						Value = 0,
@@ -1890,6 +2072,45 @@ UnitSetData.NPC_Athena =
 					PreLineAnim = "Athena_Proud_Start",
 					PostLineAnim = "Athena_Proud_End",
 					Text = "The mountain stands, as you can see, and that is what matters. Perhaps your presence and a corresponding shift in strategy shall lead us to the breakthrough that we need." },
+			},
+			AthenaAboutTimePassing02 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "P" },
+					},
+					{
+						IgnoreCurrentRun = true,
+						SumPrevRuns = 5,
+						Path = { "SpawnRecord", "NPC_Athena_01" },
+						Comparison = "<=",
+						Value = 0,
+					},
+					{
+						SumPrevRuns = 5,
+						IgnoreCurrentRun = true,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 4,
+					},
+				},
+
+				{ Cue = "/VO/Athena_0309",
+					Text = "It has been longer than I'd like, Cousin! Our enemies abound, and lately I've dealt with more than my share." },
+
+				{ Cue = "/VO/MelinoeField_4454", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Apologies, Lady Athena. Matters drew my attention from Olympus, though I was confident you and the others would hold fast while I was away." },
+
+				{ Cue = "/VO/Athena_0310",
+					PreLineAnim = "Athena_Proud_Start",
+					PostLineAnim = "Athena_Proud_End",
+					Text = "And hold fast we did. But when you're here, I find we can go beyond merely defending, and properly fight back." },
 			},
 
 			AthenaAboutHobbies01 =
@@ -2063,6 +2284,32 @@ UnitSetData.NPC_Athena =
 					PreLineAnim = "Athena_Proud_End",
 					Text = "There ought to be very few such outcomes then. For we do not fail; merely take the necessary time to succeed." },
 			},
+			AthenaPostTrueEnding03 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "AthenaPostTrueEnding01" },
+					},
+				},
+
+				{ Cue = "/VO/Athena_0299",
+					Text = "I'm pleased to know your family in the Underworld is safe, as well as Nyx and those who served the House of Hades. For all our troubles here, at least we were not divided... more than usual." },
+
+				{ Cue = "/VO/MelinoeField_4450", UsePlayerSource = true,
+					PreLineAnim = "MelTalkPensive01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "Chronos took his wrath out on my father, but my mother and the rest were imprisoned in an instant... frozen in time. They awakened with no knowledge of this whole ordeal." },
+
+				{ Cue = "/VO/Athena_0300",
+					PreLineAnim = "Athena_Proud_Start",
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Perhaps they are the most fortunate ones in all this. Though we shall have to be patient with their many questions." },
+			},
+
 			AthenaAboutPalace01 =
 			{
 				PlayOnce = true,
@@ -2150,6 +2397,33 @@ UnitSetData.NPC_Athena =
 					PreLineAnim = "Athena_Proud_Start",
 					PostLineAnim = "Athena_Proud_End",
 					Text = "A proper strategy requires taking every reasonable precaution, but can also be adapted should the need arise. Let us account for as many possibilities as we see fit, but never to the detriment of other matters of concern." },
+			},
+
+			AthenaAboutSayingLittle01 =
+			{
+				PlayOnce = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "AthenaAboutArachneQuestComplete01", "AthenaGift07" }
+					},
+					NamedRequirements = { "ReachedEpilogue" },
+				},
+
+				{ Cue = "/VO/MelinoeField_4455", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Proud_01",
+					PreLineAnim = "MelTalkExplaining01", PreLineAnimTarget = "Hero",
+					PostLineAnim = "MelinoeIdleWeaponless", PostLineAnimTarget = "Hero",
+					Text = "It's always good to see you, Lady Athena. You truly are relentless in this continued effort." },
+
+				{ Cue = "/VO/Athena_0311",
+					PreLineAnim = "Athena_Brooding",
+					Text = "Hardly an effort at this point, but good to see you likewise, Cousin. These meetings provide a welcome change from having to dispose of our enemies with extreme prejudice." },
 			},
 
 			-- Repeatable
@@ -2531,7 +2805,267 @@ UnitSetData.NPC_Athena =
 					PostLineAnim = "Athena_Proud_End",
 					Text = "May the Boon I now bestow provide a difference in the battles yet to come." },
 			},
-
+			AthenaChat31 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Athena_0318",
+					-- PreLineThreadedFunctionName = "PlayCharacterAnim",
+					-- PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					-- PostLineAnim = "Athena_Proud_End",
+					Text = "Choose swiftly, Cousin, as there's another pack of uninvited guests I'd better intercept." },
+			},
+			AthenaChat32 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsNone = { "O", "P" },
+					},
+				},				
+				{ Cue = "/VO/Athena_0319",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Well this is certainly a change of scenery from Mount Olympus, isn't it?" },
+			},
+			AthenaChat33 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsNone = { "O", "P" },
+					},
+				},				
+				{ Cue = "/VO/Athena_0320",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Brooding", WaitTime = 1.0 },
+					Text = "If ever I grow weary of Olympus, one look at {#Emph}this {#Prev}place shall make me long for it again." },
+			},
+			AthenaChat34 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+				},				
+				{ Cue = "/VO/Athena_0321",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Your victory last night predicts another soon to come, especially now that I'm here." },
+			},
+			AthenaChat35 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},				
+				{ Cue = "/VO/Athena_0322",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Our enemies ought to have learned they stand no chance against us anymore." },
+			},
+			AthenaChat36 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 26,
+					},
+				},				
+				{ Cue = "/VO/Athena_0323",
+					Text = "The air hangs heavy, and our enemies are coursing with new strength. Let us beware." },
+			},
+			AthenaChat37 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "P" },
+					},
+				},
+				{ Cue = "/VO/Athena_0258",
+					Text = "Let no trace remain of the Father of All Monsters, for all the harm that he has wrought." },
+			},
+			AthenaChat38 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				{ Cue = "/VO/Athena_0259",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "If this is how we shall assert our dominance for ages hence, then so be it." },
+			},
+			AthenaChat39 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Athena_0260",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Brooding", WaitTime = 1.0 },
+					Text = "Would that I could be in several places all at once, but I chose a good one here." },
+			},
+			AthenaChat40 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "AthenaGift07" },
+					},
+				},
+				{ Cue = "/VO/Athena_0261",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Our family is as close to perfect as can be, but let us strive to become greater still." },
+			},
+			AthenaChat41 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "AthenaGift07" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "P", "Q" },
+					},
+				},
+				{ Cue = "/VO/Athena_0262",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Salute", WaitTime = 1.0 },
+					Text = "Pleased to see a friendly face. Fending off the Titan's legions can be solitary work." },
+			},
+			AthenaChat42 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Athena_0263",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "Each such battle is nothing; yet we must pace ourselves for a protracted fight." },
+			},
+			AthenaChat43 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsNone = { "G", "Q" },
+					},
+				},
+				{ Cue = "/VO/Athena_0264",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "You surely could have handled all those wretches well enough on your own." },
+			},
+			AthenaChat44 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				{ Cue = "/VO/Athena_0265",
+					Text = "No need to trade extensive pleasantries. Let's each of us remain on task." },
+			},
+			AthenaChat45 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "PrevRun", "Cleared" },
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+				{ Cue = "/VO/Athena_0266",
+					Text = "I had anticipated that you'd soon return. I trust the Underworld work proceeded well." },
+			},
+			AthenaChat46 =
+			{
+				PlayFirst = true,
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "AthenaEncounterKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsNone = { "F", "G", "H", "I" },
+					},
+				},
+				{ Cue = "/VO/Athena_0267",
+					Text = "I cannot reach your Underworld easily or for long, but know you'll keep it well under control." },
+			},
+			AthenaChat47 =
+			{
+				UseableOffSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "Hero", "TraitDictionary", "AthenaEncounterKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+						IsAny = { "P" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "TraitCache", "AthenaEncounterKeepsake" },
+						-- CountPathTrue = true,
+						Comparison = "<=",
+						Value = 0,
+					},
+				},
+				{ Cue = "/VO/Athena_0268",
+					Text = "Do not forget about my Amulet should you have need of me elsewhere, Cousin." },
+			},
+			AthenaChat48 =
+			{
+				UseableOffSource = true,
+				{ Cue = "/VO/Athena_0269",
+					PreLineThreadedFunctionName = "PlayCharacterAnim",
+					PreLineThreadedFunctionArgs = { Name = "Athena_Proud_Start", WaitTime = 1.0 },
+					PostLineAnim = "Athena_Proud_End",
+					Text = "May all those who threaten our divine rule suffer tenfold for their arrogance." },
+			},
 		},
 
 		GiftTextLineSets =
@@ -2863,5 +3397,113 @@ UnitSetData.NPC_Athena =
 	},
 
 }
+
+GlobalVoiceLines.AthenaExorcismReactionVoiceLines =
+{
+	{
+		RandomRemaining = true,
+		BreakIfPlayed = true,
+		PreLineWait = 0.65,
+		SuccessiveChanceToPlayAll = 0.5,
+		ObjectTypes = { "NPC_Athena_01" },
+		SkipCooldownCheckIfNonePlayed = true,
+		Cooldowns =
+		{
+			{ Name = "AthenaSpokeRecently", Time = 6 },
+		},
+
+		{ Cue = "/VO/Athena_0314", Text = "So that is how you gather strength.", PlayFirst = true, PlayOnce = true },
+		{ Cue = "/VO/Athena_0315", Text = "Your gift for dealing with the dead..." },
+		{ Cue = "/VO/Athena_0316", Text = "Off to your father's realm." },
+		{ Cue = "/VO/Athena_0317", Text = "The dead obey." },
+	},
+}
+
+GlobalVoiceLines.AthenaReRollReactionVoiceLines =
+{
+	BreakIfPlayed = true,
+	RandomRemaining = true,
+	PreLineWait = 0.65,
+	ObjectType = "NPC_Athena_01",
+	GameStateRequirements =
+	{
+		{
+			Path = { "CurrentLootData", "Name" },
+			IsAny = { "NPC_Athena_01" },
+		},
+	},
+	Cooldowns =
+	{
+		{ Name = "AthenaOfferSpeech", Time = 8 },
+	},
+
+	{ Cue = "/VO/Athena_0078", Text = "Behold.",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Athena_0078",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Athena_0080", Text = "Now choose.",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Athena_0080",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Athena_0081", Text = "Your choice?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Athena_0081",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Athena_0082", Text = "What suits your strategy?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Athena_0082",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Athena_0084", Text = "What shall it be?",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Athena_0084",
+				},
+			},
+		},
+	},
+	{ Cue = "/VO/Athena_0085", Text = "Consider this.",
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "SpeechRecord" },
+				HasNone = {
+					"/VO/Athena_0085",
+				},
+			},
+		},
+	},
+}
+
 
 OverwriteTableKeys( EnemyData, UnitSetData.NPC_Athena )

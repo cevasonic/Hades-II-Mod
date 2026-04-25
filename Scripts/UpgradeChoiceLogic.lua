@@ -577,6 +577,9 @@ function CreateUpgradeChoiceButton( screen, lootData, itemIndex, itemData, args 
 	if traitData.CustomStatLinesWithShrineUpgrade ~= nil and GetNumShrineUpgrades( traitData.CustomStatLinesWithShrineUpgrade.ShrineUpgradeName ) > 0 then
 		statLines = traitData.CustomStatLinesWithShrineUpgrade.StatLines
 	end
+	if traitData.DreamRunStatLines ~= nil and CurrentRun and CurrentRun.IsDreamRun then
+		statLines = traitData.DreamRunStatLines
+	end
 	if statLines ~= nil then
 		local appendToId = descriptionText.Id
 		for lineNum, statLine in ipairs( statLines ) do
@@ -1039,6 +1042,7 @@ function HandleUpgradeChoiceSelection( screen, button, args )
 	end
 
 	CloseUpgradeChoiceScreen( screen, button )
+
 	IncrementTableValue( GameState.LootPickups, button.UpgradeName )
 	CheckCodexUnlock( "OlympianGods", button.UpgradeName )
 	CheckCodexUnlock( "ChthonicGods", button.UpgradeName )
@@ -1046,11 +1050,13 @@ function HandleUpgradeChoiceSelection( screen, button, args )
 	if not screen.SkipUpgradePresentationAndExitUnlock then
 		UpgradeAcquiredPresentation( screen, button.LootData )
 	end
+	CurrentLootData = nil
+	CheckAndAddOlympianDuo( source )
 	CheckNewTraitManaReserveShrineUpgrade( newTrait, { IsGodLoot = ( button.LootData.GodLoot or button.LootData.TreatAsGodLootByShops ) } )
 	if duplicateOnClose and spawnTarget then
 		local newLoot = CreateLoot({ Name = name, SpawnPoint = spawnTarget })
 		newLoot.CanDuplicate = false
-		thread( DoubleRewardPresentation, newLoot.ObjectId )
+		thread( DoubleRewardPresentation, { ObjectId = newLoot.ObjectId, RewardName = name } )
 		Destroy({ Id = spawnTarget })
 	end
 	if not screen.SkipUpgradePresentationAndExitUnlock then
@@ -1142,7 +1148,8 @@ function CloseUpgradeChoiceScreen( screen, button )
 					RandomSynchronize()
 					item.RarityChances = GetRarityChances( item )
 				end
-				item.UpgradeOptions = nil
+				item.UpgradeOptions = nil		
+				SetTraitsOnLoot( item )
 			end
 		end
 	end
@@ -1480,7 +1487,11 @@ function UpgradeChoiceScreenCloseTraitTray( screen, args )
 	end
 	if upgradeChoiceScreenComponents.RerollButton then
 		local cost = upgradeChoiceScreenComponents.RerollButton.Cost
-		if upgradeChoiceScreenComponents.RerollButton.OnPressedFunctionName ~= nil 
+		if args.Screen.Name == "SellTraits" then
+			UpdateStoreReroll( args.Screen, CurrentRun.CurrentRoom.SellOptions, "SellTraitScreenReroll" )
+		elseif args.Screen.Name == "WellShop" then
+			UpdateStoreReroll( args.Screen )
+		elseif upgradeChoiceScreenComponents.RerollButton.OnPressedFunctionName ~= nil 
 			and cost and CurrentRun.NumRerolls >= cost and cost >= 0 then
 			SetAlpha({ Id = upgradeChoiceScreenComponents.RerollButton.Id, Fraction = 1.0, Duration = 0.2 })
 		end

@@ -16,6 +16,7 @@ OverwriteTableKeys( WeaponData,
 		NoBountyAvailableText = "ShrineScreen_NoBountyAvailable_Staff",
 		DummyTraitName = "DummyWeaponStaff",
 		Using = { GrannyModel = "WeaponBlurWheel_Mesh" },
+		SprintDisableEffectName = "Special1DisableMoveHold",
 
 		CompleteObjectivesOnFire = { },
 		

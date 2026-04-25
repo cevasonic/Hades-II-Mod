@@ -2,8 +2,8 @@ ScreenData.MusicPlayer =
 {
 	BlockPause = true,
 
-	OpenSound = "/SFX/Menu Sounds/GeneralWhooshMENULoud",
-	CloseSound = "/SFX/Menu Sounds/GeneralWhooshMENULoudLow",
+	OpenSound = "/SFX/Menu Sounds/MusicPlayerMenuOpen",
+	CloseSound = "/SFX/Menu Sounds/MusicPlayerMenuClose",
 	OpenEndVoiceLines =
 	{
 		{
@@ -58,6 +58,8 @@ ScreenData.MusicPlayer =
 	FreeFormSelectOffsetX = -470,
 	ScrollbarSliderTopY = 210,
 	ScrollbarSliderBottomY = 690,
+
+	CloseDestroyWait = 0.25,
 
 	ItemAvailableAffordableNameFormat =
 	{
@@ -244,12 +246,10 @@ ScreenData.MusicPlayer =
 
 		ShopBackground = 
 		{
-			Animation = "MusicPlayerBackground",
+			Animation = "MusicPlayerIn",
 			X = ScreenCenterX,
 			Y = ScreenCenterY,
-			Alpha = 0.0,
-			AlphaTarget = 1.0,
-			AlphaTargetDuration = 0.1,
+			
 		},
 
 		ResourceCostBacking =
@@ -1031,7 +1031,7 @@ OverwriteTableKeys( WorldUpgradeData,
 		{
 			{
 				Path = { "GameState", "TextLinesRecord" },
-				HasAny = { "HadesFirstMeeting", "HadesFirstMeeting_B", "HadesFirstMeeting_C " },
+				HasAny = { "HadesFirstMeeting", "HadesFirstMeeting_B", "HadesFirstMeeting_C" },
 			},
 			{
 				Path = { "GameState", "TextLinesRecord" },

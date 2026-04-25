@@ -129,6 +129,10 @@ OverwriteTableKeys( ProjectileData, {
 	{
 		InheritFrom = { "AresColorProjectile", },
 	},
+	ProjectileAresSwordGenerated =
+	{
+		InheritFrom = { "AresColorProjectile", },
+	},
 	AresProjectile =
 	{
 		InheritFrom = { "AresColorProjectile" },

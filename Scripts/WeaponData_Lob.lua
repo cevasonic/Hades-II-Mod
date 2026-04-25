@@ -19,7 +19,7 @@ OverwriteTableKeys( WeaponData,
 		--DashWeapon = "WeaponDaggerDash",
 		--ExpireDashWeaponOnDash = true,
 		DummyTraitName = "DummyWeaponLob",
-		
+		SprintDisableEffectName = "Lob1DisableMovement",
 		NoAmmoText = "Hint_OutOfLobAmmo",
 		NoAmmoVoiceLines = HeroVoiceLines.WeaponLobOutOfAmmoVoiceLines,
 
@@ -230,7 +230,7 @@ OverwriteTableKeys( WeaponData,
 
 		MagnetismMultiplier = 3.8,
 		CauseImpactReaction = true,
-		ImpactReactionHitsOverride = 1,
+		ImpactReactionHitsOverride = 2,
 		MinSimSpeedAdjustValue = 0.25,
 		ShowManaIndicator = true,
 		IgnoreOOMAimlineAlpha = true,

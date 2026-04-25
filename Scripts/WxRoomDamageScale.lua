@@ -1,6 +1,6 @@
 function UpdateRoomDamagePercentGrowth( hero )
-    -- 1. Kiểm tra hero có OutgoingDamageModifiers không
-    if hero.OutgoingDamageModifiers == nil then return end
+    -- 1. Đảm bảo hero có OutgoingDamageModifiers
+    hero.OutgoingDamageModifiers = hero.OutgoingDamageModifiers or {}
 
     -- 2. Tìm CustomDamageBoost modifier
     local damageModifier = nil
@@ -10,10 +10,15 @@ function UpdateRoomDamagePercentGrowth( hero )
             break
         end
     end
-    if not damageModifier then return end
 
-    -- 3. Tăng hệ số damage thêm 3% (0.03)
-    damageModifier.GlobalMultiplier = damageModifier.GlobalMultiplier + 0.03
+    -- 3. Nếu chưa có thì khởi tạo mới
+    if not damageModifier then
+        damageModifier = { Name = "CustomDamageBoost", GlobalMultiplier = 1.0 }
+        table.insert( hero.OutgoingDamageModifiers, damageModifier )
+    end
+
+    -- 3. Tăng hệ số damage thêm 6% (0.06)
+    damageModifier.GlobalMultiplier = damageModifier.GlobalMultiplier + 0.06
 
     -- 4. Hiển thị thông báo nhỏ trên đầu nhân vật
 

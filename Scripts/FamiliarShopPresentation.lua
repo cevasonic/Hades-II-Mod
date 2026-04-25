@@ -18,6 +18,9 @@ end
 
 function FamiliarShopScreenCloseStartPresentation( screen )
 	PlaySound({ Name = "/SFX/Menu Sounds/RunHistoryClose" })
+	SetAnimation({ DestinationId = screen.Components.FamiliarShopLeft.Id, Name = "FamiliarScreenLeftOut" })
+	SetAnimation({ DestinationId = screen.Components.FamiliarShopBacking.Id, Name = "FamiliarShopBackdropOut" })
+	SetAnimation({ DestinationId = screen.Components.FamiliarShopAnimalBacking.Id, Name = screen.OpenedFrom.FamiliarScreenAnimationOutName })
 end
 
 function FamiliarShopScreenCloseFinishedPresentation( screen )

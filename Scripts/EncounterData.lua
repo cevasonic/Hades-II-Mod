@@ -11,7 +11,9 @@ WaveDifficultyPatterns =
 
 TimerBlockCombatExcludes = 
 {
-	"ThanatosEncounter", "SurvivalEncounter", "ArtemisEncounter", "IcarusEncounter",
+	"ArtemisEncounter",
+	"HeraclesEncounter",
+	"IcarusEncounter",
 }
 
 BaseWaveOverrideValues =
@@ -197,6 +199,49 @@ EncounterData =
 		BaseDifficulty = 55,
 		DepthDifficultyRamp = 15,
 		MaxEliteTypes = 1,
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					MoneyDropCapMin = 10,
+					MoneyDropCapMax = 15,
+					MoneyDropCapDepthRamp = 0,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapDepthRamp = 0.5,
+					MoneyDropCapMin = 10,
+					MoneyDropCapMax = 20,
+					MoneyDropCapDepthRamp = 0,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapDepthRamp = 0.65,
+					MoneyDropCapMin = 20,
+					MoneyDropCapMax = 25,
+					MoneyDropCapDepthRamp = 0,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					ActiveEnemyCapDepthRamp = 0.9,
+					MoneyDropCapMin = 25,
+					MoneyDropCapMax = 40,
+					MoneyDropCapDepthRamp = 0,
+				},
+			},
+		},
 
 		HardEncounterOverrideValues =
 		{
@@ -392,31 +437,28 @@ EncounterData =
 		InheritFrom = { "NonCombat" },
 		AlwaysForce = true,
 
-		OnSpawnFunctionName = "ArachneCombatDrumCheck",
-		OnKillFunctionName = "ArachneCombatDrumCheck",
-
 		GameStateRequirements =
 		{
+			OrRequirements =
 			{
-				PathFalse = { "GameState", "UseRecord", "ApolloUpgrade" },
+				{
+					{
+						PathFalse = { "GameState", "UseRecord", "ApolloUpgrade" },
+					},
+				},
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 			},
 		},
 
-		StartRoomUnthreadedEvents =
+		TimerBlock = "IntroRoom",
+		TimerBlockRequirements =
 		{
 			{
-				FunctionName = "CheckPriorityConversations",
-				GameStateRequirements =
-				{
-					-- None
-				},
-				Args =
-				{
-					Conversations =
-					{
-						"NemesisFieldFirstMeeting",
-					},
-				},
+				PathTrue = { "CurrentRun", "IsDreamRun" },
 			},
 		},
 
@@ -448,6 +490,8 @@ EncounterData =
 		ActiveEnemyCapBase = 10,
 		ActiveEnemyCapMax = 10,
 		DelayedStart = true,
+
+		DreamBiomeData = "nil",
 
 		PreSpawnEnemies = false,
 		
@@ -687,6 +731,8 @@ EncounterData =
 		SkipIntroEncounterCheck = true,
 		NoFirstWaveStartDelay = false,
 
+		DreamBiomeData = "nil",
+
 		ManualWaveTemplates =
 		{
 			-- Wave 1
@@ -776,6 +822,8 @@ EncounterData =
 		BlockHighlightEncounter = true,
 		SkipIntroEncounterCheck = true,
 		NoFirstWaveStartDelay = false,
+		
+		DreamBiomeData = "nil",
 
 		ManualWaveTemplates =
 		{

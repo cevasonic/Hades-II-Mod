@@ -101,6 +101,7 @@ OnKeyPressed{ "Control L", Name = "LocTestDialogLineBreak",
 					"Scylla_0002",
 					"Eris_0251",		-- {#Emph} « + space near end of line
 					"Hecate_0627",
+					"Dionysus_0235",	-- de l'ambroisie   at end of line
 				},
 				["ja"] = {
 					"Hestia_0069",		-- Hard-coded '2' in line assert
@@ -516,10 +517,14 @@ OnKeyPressed{ "Shift C", Name = "Spawn Consumable",
 	end
 }
 
+function DebugAddRerollsAndTalentPoints()
+	AddRerolls( nil, { Amount = 99 } )
+	CurrentRun.NumTalentPoints = CurrentRun.NumTalentPoints + 9
+end
+
 OnKeyPressed{ "Alt R", Name = "Add Rerolls & TalentPoints", Safe = true,
 	function(triggerArgs)
-		AddRerolls( nil, { Amount = 99 } )
-		CurrentRun.NumTalentPoints = CurrentRun.NumTalentPoints + 9
+		DebugAddRerollsAndTalentPoints()
 	end
 }
 
@@ -531,9 +536,13 @@ function DebugUnlockMetaUpgrades( source, args )
 	EquipMetaUpgrades( CurrentRun.Hero, { SkipNewTraitHighlight = true } )
 end
 
+function DebugSpawnMoney()
+	thread( GushMoney, { Amount = 50, LocationId = CurrentRun.Hero.ObjectId, Radius = 100, Source = "DebugSpawnMoney" } )
+end
+
 OnKeyPressed{ "Alt M", Name = "Spawn Money", Safe = true,
-	function(triggerArgs)
-		thread( GushMoney, { Amount = 50, LocationId = CurrentRun.Hero.ObjectId, Radius = 100, Source = "DebugSpawnMoney" } )
+	function( triggerArgs )
+		DebugSpawnMoney()
 	end
 }
 
@@ -1441,9 +1450,9 @@ OnKeyPressed{ "Alt P", Name = "HubTimeTick",
 		if not CurrentRun.Hero.IsDead then
 			return
 		end
-		thread( GardenTimeTick, { Ticks = 5, UpdatePlotPresentation = true, PanDuration = 0.0, SkipCameraPan = true, SkipSound = true, TickInterval = 0.1 } )
-		thread( CookTimeTick, { Ticks = 8, UpdatePresentation = true, TickInterval = 0.2, } )
-		thread( MailboxTimeTick, { Ticks = 21, UpdatePresentation = true, TickInterval = 0.03, } )
+		thread( GardenTimeTick, { Ticks = 5, UpdatePlotPresentation = true } )
+		thread( CookTimeTick, { Ticks = 8, UpdatePresentation = true } )
+		thread( MailboxTimeTick, { Ticks = 21, UpdatePresentation = true } )
 	end
 }
 
@@ -1460,6 +1469,8 @@ function CreateDevSaveName( currentRun, args )
 			-- @ ending
 			elseif currentRun.PlayedTrueEnding then
 				name = name.." (PostCredits)"
+			elseif currentRun.IsDreamRun then
+				name = name.." (DreamRevive)"
 			else
 				name = name.." (TentRevive)"
 			end

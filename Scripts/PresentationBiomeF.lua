@@ -10,8 +10,8 @@ function HecateBattleStart( hecate, args )
 
 	-- wait(0.3)
 
-	local pactLevel = GetNumShrineUpgrades( hecate.ShrineUpgradeName )
-	if pactLevel >= 1 and hecate.Name == "Hecate" then
+	local bossDifficultyActive = IsBossDifficultyShrineUpgradeActive()
+	if bossDifficultyActive and hecate.Name == "Hecate" then
 		local clones = GetIdsByType({ Name = "HecateCopyEM" })
 		for k, id in pairs(clones) do
 			thread(HecateBattleStart, ActiveEnemies[id], args)
@@ -31,7 +31,15 @@ function HecateBattleStart( hecate, args )
 	SetThingProperty({ Property = "Graphic", Value = "HecateTorchIdle", DestinationId = hecate.ObjectId })
 	SetAnimation({ DestinationId = hecate.ObjectId, Name = "HecateBattleOutfitBattleIntro" })
 
-	if pactLevel < 1 then
+	if CurrentRun.IsDreamRun then
+		RemoveOutline({ Id = hecate.ObjectId })
+		AddOutline({ Id = hecate.ObjectId, R = 230, G = 23, B = 0, Opacity = 0.8, Thickness = 3, Threshold = 0.6, })
+	end
+
+	if not bossDifficultyActive then
+		if CurrentRun.IsDreamRun then
+			SetThingProperty({ Property = "GrannyTexture", Value ="GR2/HecateBattleDream_Color", DestinationId = hecate.ObjectId })
+		end
 		hecate.WeaponName = "HecateBattleIntro"
 		local aiData = ShallowCopyTable(hecate.DefaultAIData) or hecate
 		if WeaponData[hecate.WeaponName] ~= nil and WeaponData[hecate.WeaponName].AIData ~= nil then
@@ -41,7 +49,11 @@ function HecateBattleStart( hecate, args )
 		table.insert(hecate.WeaponHistory, hecate.WeaponName)
 		DoAttack( hecate, aiData )
 	else
-		SetThingProperty({ Property = "GrannyTexture", Value ="GR2/HecateEM_Color", DestinationId = hecate.ObjectId })
+		if CurrentRun.IsDreamRun then
+			SetThingProperty({ Property = "GrannyTexture", Value ="GR2/HecateEMDream_Color", DestinationId = hecate.ObjectId })
+		else
+			SetThingProperty({ Property = "GrannyTexture", Value ="GR2/HecateEM_Color", DestinationId = hecate.ObjectId })
+		end
 		CreateAnimation({ Name = "HecateTorchFlameLeft", DestinationId = hecate.ObjectId })
 		CreateAnimation({ Name = "HecateTorchFlameRight", DestinationId = hecate.ObjectId })
 	end
@@ -80,8 +92,7 @@ function HecateKillPresentation( unit, args )
 	end
 	SetUnitInvulnerable( unit, "HecateKillPresentation" )
 
-	local pactLevel = GetNumShrineUpgrades( unit.ShrineUpgradeName )
-	if pactLevel >= 1 then
+	if IsBossDifficultyShrineUpgradeActive() then
 		SetThingProperty({ Property = "GrannyTexture", Value = "", DestinationId = unit.ObjectId })
 	end
 
@@ -205,12 +216,20 @@ function HecateKillPresentation( unit, args )
 	-- wait( 1.5 )
 
 	local textMessage = deathPanSettings.Message
-	if deathPanSettings.BossDifficultyMessage and GetNumShrineUpgrades( "BossDifficultyShrineUpgrade" ) > 0 then
-		textMessage = deathPanSettings.BossDifficultyMessage
+	if unit.AltDeathMessageTextIds ~= nil then
+		local eligibleTextIds = {}
+		for k, altTextIdData in pairs( unit.AltDeathMessageTextIds ) do
+			if altTextIdData.GameStateRequirements == nil or IsGameStateEligible( altTextIdData, altTextIdData.GameStateRequirements ) then
+				table.insert( eligibleTextIds, altTextIdData.TextId )
+			end
+		end
+		if not IsEmpty( eligibleTextIds ) then
+			textMessage = GetRandomValue( eligibleTextIds )
+		end
 	end
 
 	thread( DisplayInfoBanner, nil, { 
-		Text = "HecateMessage", 
+		Text = textMessage or "BiomeClearedMessage",
 		Delay = 0.75, 
 		TextColor = Color.White, 
 		TextFadeColor = {64,230,255,255},
@@ -220,15 +239,18 @@ function HecateKillPresentation( unit, args )
 		AnimationOutName = "InfoBannerBossKillOut",
 		Duration = 3.75 } )
 
-	if deathPanSettings.BatsAfterDeath then
-		thread( SendCritters, { MinCount = 80, MaxCount = 90, StartX = 0, StartY = 300, MinAngle = 75, MaxAngle = 115, MinSpeed = 400, MaxSpeed = 2000, MinInterval = 0.03, MaxInterval = 0.1, GroupName = "CrazyDeathBats" } )
-	end
-
 	local notifyName = "HecateBattleEndAnimation"
 	NotifyOnAnimationTimeRemaining({ Id = unit.ObjectId, Animation = "HecateBattleOutfitBattleOutro", Remaining = 0.01, Notify = notifyName, Timeout = 9.0 })
 	waitUntil( notifyName )
 
-	SetThingProperty({ Property = "GrannyModel", Value = "HecateHub_Mesh", DestinationId = unit.ObjectId })
+	if CurrentRun.IsDreamRun then
+		RemoveOutline({ Id = unit.ObjectId })
+		AddOutline({ Id = unit.ObjectId, R = 25, G = 200, B = 160, Opacity = 0.8, Thickness = 3, Threshold = 0.6, })
+		SetThingProperty({ Property = "GrannyModel", Value = "HecateHubDream_Mesh", DestinationId = unit.ObjectId })
+		SetThingProperty({ Property = "GrannyTexture", Value = "", DestinationId = unit.ObjectId })
+	else
+		SetThingProperty({ Property = "GrannyModel", Value = "HecateHub_Mesh", DestinationId = unit.ObjectId })
+	end
 	SetThingProperty({ Property = "Graphic", Value = "HecateHubTorchBattleIdle", DestinationId = unit.ObjectId })
 
 	SetAnimation({ DestinationId = unit.ObjectId, Name = "HecateHubOutfitBattleOutro" })
@@ -290,8 +312,10 @@ function HecateKillPresentation( unit, args )
 	--	wait( 2.0, RoomThreadName )
 	end
 
-	local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
-	PlayTextLines( unit, textLines )
+	if not CurrentRun.IsDreamRun then
+		local textLines = GetRandomEligibleTextLines( unit, unit.BossOutroTextLineSets, GetNarrativeDataValue( unit, "BossOutroTextLinePriorities" ) )
+		PlayTextLines( unit, textLines )
+	end
 
 	wait( 0.2, RoomThreadName )
 
@@ -314,7 +338,9 @@ function HecateKillPresentation( unit, args )
 	SetAlpha({ Id = unit.ObjectId, Fraction = 0.0, Duration = 0.2 })
 
 	-- ---- ---- ---- --
-	SetAnimation({ DestinationId = killerId, Name = "MelinoeEquip" })
+	if not CurrentRun.IsDreamRun then
+		SetAnimation({ DestinationId = killerId, Name = "MelinoeEquip" })
+	end
 	RemoveInputBlock({ Name = "HecateKillPresentation" })
 	RemoveTimerBlock( CurrentRun, "HecateKillPresentation" )
 	SetConfigOption({ Name = "UseOcclusion", Value = true })
@@ -326,6 +352,10 @@ function HecateKillPresentation( unit, args )
 	CurrentRun.CurrentRoom.Encounter.BossKillPresentation = false
 	ToggleCombatControl( CombatControlsDefaults, true, "BossKill" )
 	SetThingProperty({ Property = "AllowAnyFire", Value = true, DestinationId = CurrentRun.Hero.ObjectId, DataValue = false })
+
+	if CurrentRun.IsDreamRun and CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount then
+		OpenRunClearScreen()
+	end
 end
 
 function HecateCloneHitPresentation( blocker, args )
@@ -554,7 +584,7 @@ function UnSummonAthena( source, args )
 
 end
 
-function SetupHecateBossIntroTextLines( source, args )
-	source.QueuedBossIntroTextLines = GetRandomEligibleTextLines( source, source.BossIntroTextLineSets, GetNarrativeDataValue( source, "BossIntroTextLinePriorities" ) )
-	SessionMapState.QueuedBossIntroTextLines = source.QueuedBossIntroTextLines
+function HecateBossDreamRunIntro( source, args )
+	thread( PlayHecateTauntAnim, source )
+	wait( 0.8 )
 end

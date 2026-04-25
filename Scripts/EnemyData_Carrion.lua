@@ -3,7 +3,7 @@ UnitSetData.Carrion =
 
 	Carrion =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 
 		Groups = { "FlyingEnemies" },
 
@@ -119,6 +119,7 @@ UnitSetData.Carrion =
 	Carrion_Passive =
 	{
 		InheritFrom = { "Carrion" },
+		GenusName = "Carrion",
 
 		AIOptions = { "IdleAI" },
 		CanBeAggroed = true,

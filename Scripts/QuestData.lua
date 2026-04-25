@@ -1,8 +1,14 @@
-QuestData = QuestData or {}
+﻿QuestData = QuestData or {}
 QuestOrderData =
 {
 	-- key / mission-critical
 	"QuestRescueFatesTrue",
+	"QuestHelpOdysseus",
+	"QuestHelpDora",
+	"QuestHelpArachne",
+	"QuestHelpNarcissusAndEcho",
+	"QuestWakeHypnos",
+
 	"QuestFirstSurfaceClear",
 	"QuestFirstUnderworldClear",
 
@@ -15,12 +21,12 @@ QuestOrderData =
 	"QuestMeetShrineAltBosses",
 	"QuestClearedWithAllAspects",
 	"QuestClearedWithAllFamiliars",
+	"QuestCollectDreamPoints",
+	"QuestDreamClearedWithAllWeapons",
+	"QuestDreamClearedWithShrinePoints",
 	"QuestMeetOlympians",
 	"QuestUnlockBountyBoard",
-	"QuestHelpOdysseus",
-	"QuestHelpDora",
-	"QuestHelpArachne",
-	"QuestHelpNarcissusAndEcho",
+
 	"QuestHelpMedea",
 	"QuestHelpCirce",
 	"QuestDeliverAnubisAspect",
@@ -32,7 +38,6 @@ QuestOrderData =
 	"QuestMeetCyclopsWithOdysseusKeepsake",
 	"QuestChaosKeepsakeFullRun",
 	"QuestRandomBountyClearStreak",
-	"QuestWakeHypnos",
 
 	-- self-improvement & stockpiling
 	"QuestGiftNectar",
@@ -141,6 +146,11 @@ OverwriteTableKeys( QuestData, {
 		DebugOnly = true,
 		Decal = "QuestLogScreenDecal_Bond",
 	},
+	DefaultBondSpecialQuest =
+	{
+		DebugOnly = true,
+		Decal = "QuestLogScreenDecal_BondSpecial",
+	},
 	DefaultNoDecalQuest =
 	{
 		DebugOnly = true,
@@ -201,7 +211,8 @@ OverwriteTableKeys( QuestData, {
 	},
 	QuestWakeHypnos =
 	{
-		InheritFrom = { "DefaultQuestItem", "DefaultChaosQuest" },
+		InheritFrom = { "DefaultQuestItem", "DefaultBondSpecialQuest" },
+		CompletedDecal = "QuestLogScreenDecal_Hypnos",
 		RewardResourceName = "WeaponPointsRare",
 		RewardResourceAmount = 2,
 		UnlockGameStateRequirements =
@@ -242,7 +253,7 @@ OverwriteTableKeys( QuestData, {
 				{ Cue = "/VO/Melinoe_4725", Text = "Well, thank the Fates..." },
 			},
 			{
-				PreLineWait = 0.4,
+				PreLineWait = 0.25,
 				GameStateRequirements =
 				{
 					{
@@ -256,13 +267,72 @@ OverwriteTableKeys( QuestData, {
 				RequiredSourceValueFalse = "InPartnerConversation",
 				ObjectType = "NPC_Moros_01",
 
-				{ Cue = "/VO/Moros_0590", Text = "My brother Sleep was bound to wake eventually..." },
+				{ Cue = "/VO/Moros_0569", Text = "{#Emph}<Chuckle>" },
+			},
+		},
+
+		InterstitialData =
+		{
+			SecretMusicName = "/Music/MusicExploration1_MC",
+			SkipFadeIn = true,
+			SkipFadeOut = true,
+			SkipPromptSound = true,
+			EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+			TextDelay = 8.5,
+			FadeOutWait = 55.0,
+			TextColor1 = Color.White,
+			BackgroundAlpha = 0.8,
+			BackgroundAlphaFadeDuration = 0.8,
+
+			Animations =
+			{
+				{
+					AnimationName = "QuestLogEndCapHypnos",
+
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration = 1.0,
+
+					Scale = 1,
+					ScaleEaseIn = 0.0,
+					ScaleEaseOut = 1.0,
+				},
+			},
+
+			VoiceLines =
+			{
+				{ Cue = "/VO/Storyteller_0558", Text = "{#Emph}Troubled dreams were all the Princess of the Underworld Melinoë had ever known whilst growing stronger in the Crossroads between realms.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0559", Text = "{#Emph}At times, nightmares would shake her to the core. Yet the mere sight of the beatific, ever-dozing Hypnos, Sleep Incarnate, always steadied her resolve.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0560", Text = "{#Emph}She longed to understand the mysteries of the subconscious, to rouse this servant of the House of Hades from his never-ending slumber.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0561", Text = "{#Emph}And if not for that devotion, then Melinoë might not have met her brother Zagreus deep in the mists of memory, and gone on to achieve her fateful task.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0562", Text = "{#Emph}Who else but Hypnos could have been so useful in his sleep? Melinoë did wake him at long last, but he departed in considerable haste, so eager was he to get back to work.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0563", Text = "{#Emph}Yet he would often think of this Princess who haunted his dreams, and in so doing eased her own. And he promised to himself that he would visit her again.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+
+				{ Cue = "/VO/Melinoe_5913", Text = "He better...", UsePlayerSource = true,
+					PreLineWait = 1.5,
+					GameStateRequirements =
+					{
+						{
+							PathFalse = { "GameState", "RoomsEntered", "Dream_Intro" },
+						},
+					},
+				},
+				{ Cue = "/VO/Melinoe_5914", Text = "In my dreams, at least.", UsePlayerSource = true,
+					PreLineWait = 1.5,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "GameState", "RoomsEntered", "Dream_Intro" },
+						},
+					},
+				},
 			},
 		},
 	},
 	QuestHelpOdysseus =
 	{
-		InheritFrom = { "DefaultQuestItem", "DefaultFatesQuest" },
+		InheritFrom = { "DefaultQuestItem", "DefaultBondSpecialQuest" },
+		CompletedDecal = "QuestLogScreenDecal_Odysseus",
 		RewardResourceName = "SuperGiftPoints",
 		RewardResourceAmount = 3,
 		UnlockGameStateRequirements =
@@ -271,7 +341,7 @@ OverwriteTableKeys( QuestData, {
 				PathTrue = { "GameState", "ReachedTrueEnding" },
 			},
 			{
-				PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest02" },
+				PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest01" },
 			},
 		},
 		CompleteGameStateRequirements =
@@ -280,11 +350,120 @@ OverwriteTableKeys( QuestData, {
 				Path = { "GameState", "TextLinesRecord", },
 				HasAll = 
 				{
-					"ScyllaAboutOdysseusQuest01",
-					"PolyphemusAboutOdysseusQuest01",
-					"CirceAboutOdysseusQuest01",
-					"OdysseusLooseEndsQuestComplete01",
+					"OdysseusAboutReturn01",
 				},
+			},
+		},
+
+		SetupEvents =
+		{
+			-- start
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest02" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"OdysseusLooseEndsQuest02",
+							},
+						},
+					},
+				},
+			},
+			-- before he departs
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest02" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuestComplete01" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"ScyllaAboutOdysseusQuest01",
+								"PolyphemusAboutOdysseusQuest01",
+								"CirceAboutOdysseusQuest01",
+								"OdysseusLooseEndsQuestComplete01",
+							},
+						},
+					},
+				},
+			},
+		},
+		OnViewedVoiceLines =
+		{
+			Queue = "Interrupt",
+			SkipAnim = true,
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+			-- early
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest01" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest02" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_5947", Text = "What are you hiding from yourself, Odysseus...?" },
+			},
+			-- later / memory spell
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuest02" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuestComplete01" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_5948", Text = "You've navigated worse, Odysseus..." },
+			},
+			-- final
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "QuestStatus", "QuestHelpOdysseus" },
+						IsNone = { "CashedOut" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "OdysseusLooseEndsQuestComplete01" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "OdysseusAboutReturn01" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_5949", Text = "I need no List to know Odysseus is going to return." },
 			},
 		},
 
@@ -306,6 +485,48 @@ OverwriteTableKeys( QuestData, {
 				ObjectType = "NPC_Moros_01",
 
 				{ Cue = "/VO/Moros_0587", Text = "The Great Tactician laid the hauntings of his past to rest." },
+			},
+		},
+
+		InterstitialData =
+		{
+			SecretMusicName = "/Music/MusicExploration1_MC",
+			SkipFadeIn = true,
+			SkipFadeOut = true,
+			SkipPromptSound = true,
+			EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+			TextDelay = 8.5,
+			FadeOutWait = 51.0,
+			TextColor1 = Color.White,
+			BackgroundAlpha = 0.8,
+			BackgroundAlphaFadeDuration = 0.8,
+
+			Animations =
+			{
+				{
+					AnimationName = "QuestLogEndCapOdysseus",
+
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration = 1.0,
+
+					Scale = 1,
+					ScaleEaseIn = 0.0,
+					ScaleEaseOut = 1.0,
+				},
+			},
+
+			VoiceLines =
+			{
+
+				{ Cue = "/VO/Storyteller_0534", Text = "{#Emph}So storied was the past of ever-resourceful Odysseus that it weighed heavily on him, not only in life but in death.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0535", Text = "{#Emph}His secret charge was to anticipate the dangers that the Princess of the Underworld would face during her fateful task; but he never expected she would do so much for him.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0536", Text = "{#Emph}Through her companionship and craft, the Princess paved the way for turmoiled Odysseus to finally bury his past, making peace where possible whilst leaving the rest behind.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0537", Text = "{#Emph}Old feelings of love and hate may fade with time, but never disappear entirely. They are restless spirits, as are we all.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0538", Text = "{#Emph}Now the Great Tactician's easygoing demeanor is less of a mask, and those he loves know where to find him.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0539", Text = "{#Emph}And though his whereabouts may be unknown to all else, tales of his grand adventures shall be famed the world over.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+
+				{ Cue = "/VO/Melinoe_5868", Text = "You're a hero to us all, Odysseus.", PreLineWait = 1.5, UsePlayerSource = true, },
 			},
 		},
 	},
@@ -355,13 +576,14 @@ OverwriteTableKeys( QuestData, {
 	},
 	QuestHelpArachne =
 	{
-		InheritFrom = { "DefaultQuestItem", "DefaultBondQuest" },
+		InheritFrom = { "DefaultQuestItem", "DefaultBondSpecialQuest" },
+		CompletedDecal = "QuestLogScreenDecal_Arachne",
 		RewardResourceName = "SuperGiftPoints",
 		RewardResourceAmount = 3,
 		UnlockGameStateRequirements =
 		{
 			{
-				PathTrue = { "GameState", "TextLinesRecord", "ArachneCurseQuest01" },
+				PathTrue = { "GameState", "TextLinesRecord", "HecateBossAboutArachne01" },
 			},
 		},
 		CompleteGameStateRequirements =
@@ -370,8 +592,151 @@ OverwriteTableKeys( QuestData, {
 				Path = { "GameState", "TextLinesRecord", },
 				HasAll = 
 				{
-					"ArachneCurseQuestComplete01",
+					"ArachneAboutCurseQuest01",
 				},
+			},
+		},
+
+		SetupEvents =
+		{
+			-- start
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "HecateWithArachne01_FollowUp" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"ArachneWithHecateInHub02",
+								"HecateWithArachne01_FollowUp",
+							},
+						},
+					},
+				},
+			},
+			-- after arachne's discovery
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateWithArachne01_FollowUp" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "AthenaAboutArachne03" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"AthenaAboutArachne03",
+							},
+						},
+					},
+				},
+			},
+			-- before arachne meets athena
+			{
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "TextLinesRecord", },
+						HasAll = 
+						{
+							"AthenaAboutArachne03",
+						},
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArachneCurseQuestComplete01" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"ArachneCurseQuestComplete01",
+							},
+						},
+					},
+				},
+			},
+		},
+		OnViewedVoiceLines =
+		{
+			Queue = "Interrupt",
+			SkipAnim = true,
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+			-- early
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HecateWithArachne01_FollowUp" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "AthenaAboutArachne03" },
+					},
+				},
+
+				{ Cue = "/VO/Melinoe_5937", Text = "We can do this, Arachne..." },
+			},
+			-- later
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "AthenaAboutArachne03" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArachneCurseQuestComplete01" },
+					},
+				},
+
+				{ Cue = "/VO/Melinoe_5938", Text = "Please be merciful, Lady Athena..." },
+			},
+			-- final
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "QuestStatus", "QuestHelpArachne" },
+						IsNone = { "CashedOut" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ArachneCurseQuestComplete01" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "ArachneAboutCurseQuest01" },
+					},
+				},
+
+				{ Cue = "/VO/Melinoe_5939", Text = "Arachne, are you going to be all right...?" },
 			},
 		},
 
@@ -395,16 +760,59 @@ OverwriteTableKeys( QuestData, {
 				{ Cue = "/VO/Moros_0588", Text = "The weaver called Arachne chose her Fate herself." },
 			},
 		},
+
+		InterstitialData =
+		{
+			SecretMusicName = "/Music/MusicExploration1_MC",
+			SkipFadeIn = true,
+			SkipFadeOut = true,
+			SkipPromptSound = true,
+			EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+			TextDelay = 8.5,
+			FadeOutWait = 56.5,
+			TextColor1 = Color.White,
+			BackgroundAlpha = 0.8,
+			BackgroundAlphaFadeDuration = 0.8,
+
+			Animations =
+			{
+				{
+					AnimationName = "QuestLogEndCapArachne",
+
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration = 1.0,
+
+					Scale = 1,
+					ScaleEaseIn = 0.0,
+					ScaleEaseOut = 1.0,
+				},
+			},
+
+			VoiceLines =
+			{
+
+				{ Cue = "/VO/Storyteller_0540", Text = "{#Emph}When mortals aspire to godhood, the gods often take it upon themselves to cut those mortals down to size. The diminutive Arachne is but one such example.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0541", Text = "{#Emph}Long was she wretched in the form of a spider, until the Princess of the Underworld Melinoë saw fit to intervene, and potentially undo Arachne's curse.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0542", Text = "{#Emph}The weaver never did change back; she instead chose to keep her dignity and pride. Yet the kindness Melinoë showed her was transformative nevertheless.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0543", Text = "{#Emph}For Arachne's righteous spirit now burns brighter than ever. And her curse of self-loathing and regret, which would have followed her no matter her form, is lifted.", TextLimit = 300, PreLineWait = 0.6, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0544", Text = "{#Emph}She and all of us now know that gods and mortals can be very much alike; both for better, and for worse. And they can grow as close as any souls.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0545", Text = "{#Emph}Thus, if the gods made of Arachne an example, she is also a reminder: Good things come in small packages; and the world needs spiders.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+
+				{ Cue = "/VO/Melinoe_5869", Text = "I'm happy you're you, Arachne...", PreLineWait = 1.6, UsePlayerSource = true, },
+			},
+		},
 	},
 	QuestHelpDora =
 	{
-		InheritFrom = { "DefaultQuestItem", "DefaultFatesQuest" },
+		InheritFrom = { "DefaultQuestItem", "DefaultBondSpecialQuest" },
+		CompletedDecal = "QuestLogScreenDecal_Dora",
 		RewardResourceName = "SuperGiftPoints",
 		RewardResourceAmount = 2,
 		UnlockGameStateRequirements =
 		{
 			{
-				PathTrue = { "GameState", "TextLinesRecord", "DoraAboutPrometheus04" },
+				PathTrue = { "GameState", "TextLinesRecord", "DoraAboutPrometheus02" },
 			},
 		},
 		CompleteGameStateRequirements =
@@ -413,8 +821,156 @@ OverwriteTableKeys( QuestData, {
 				Path = { "GameState", "TextLinesRecord", },
 				HasAll = 
 				{
-					"DoraAboutMemories01",
+					"DoraAboutMemories04",
+					"PrometheusAboutDora03",
+					"DoraAboutMemories05",
 				},
+			},
+		},
+		SetupEvents =
+		{
+			-- start
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraAboutPrometheus03" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"PrometheusAboutDora01",
+								"DoraAboutPrometheus03",
+							},
+						},
+					},
+				},
+			},
+			-- after initial conversations
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutPrometheus03" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord", },
+						NotHasAll = 
+						{
+							"PrometheusAboutDora02",
+							"DoraAboutPrometheus04",
+						},
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll =
+							{
+								"PrometheusAboutDora02",
+								"DoraAboutPrometheus04",
+							},
+						},
+					},
+				},
+			},
+			-- lost memories spell available
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutPrometheus04" }
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraAboutMemories01" }
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"DoraAboutMemories01",
+							},
+						},
+					},
+				},
+			},
+		},
+		OnViewedVoiceLines =
+		{
+			Queue = "Interrupt",
+			SkipAnim = true,
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+			-- early
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutPrometheus03" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						NotHasAll = 
+						{
+							"PrometheusAboutDora02",
+							"DoraAboutPrometheus04",
+						},
+					},
+				},
+				{ Cue = "/VO/Melinoe_5944", Text = "What does that Titan know about my friend...?" },
+			},
+			-- later / memory spell
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutPrometheus04" }
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraAboutMemories01" }
+					},
+				},
+				{ Cue = "/VO/Melinoe_5945", Text = "Dora wishes to remember... I can do something to help." },
+			},
+			-- final
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "QuestStatus", "QuestHelpDora" },
+						IsNone = { "CashedOut" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "DoraAboutMemories01" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "DoraAboutMemories05" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_5946", Text = "We'll get through this, Dora..." },
 			},
 		},
 
@@ -436,6 +992,47 @@ OverwriteTableKeys( QuestData, {
 				ObjectType = "NPC_Moros_01",
 
 				{ Cue = "/VO/Moros_0586", Text = "The Shade we know as Dora is undaunted by her past." },
+			},
+		},
+
+		InterstitialData =
+		{
+			SecretMusicName = "/Music/MusicExploration1_MC",
+			SkipFadeIn = true,
+			SkipFadeOut = true,
+			SkipPromptSound = true,
+			EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+			TextDelay = 8.5,
+			FadeOutWait = 50.5,
+			TextColor1 = Color.White,
+			BackgroundAlpha = 0.8,
+			BackgroundAlphaFadeDuration = 0.8,
+
+			Animations =
+			{
+				{
+					AnimationName = "QuestLogEndCapDora",
+
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration = 1.0,
+
+					Scale = 1,
+					ScaleEaseIn = 0.0,
+					ScaleEaseOut = 1.0,
+				},
+			},
+
+			VoiceLines =
+			{
+				{ Cue = "/VO/Storyteller_0546", Text = "{#Emph}Who unleashed the evils of this world upon us all? Was it the callous gods, or was it we ourselves, fools that we are?", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0547", Text = "{#Emph}The Shade called Dora did not seem to care. Yet her companionship with our Princess of the Dead Melinoë revealed in her a truth refusing to be bottled up:", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0548", Text = "{#Emph}The past haunts us eternally. We cannot flee from it forever. We cannot forget it forever.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0549", Text = "{#Emph}We may try to ignore it, as Dora did; or, we may try to accept it, as Dora has, with thanks to the encouraging Princess.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0550", Text = "{#Emph}The tale of how we mortals lost our innocence is widely known, and in it, Dora played a vital part. But hers is not merely a tale of woe.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0551", Text = "{#Emph}It is a tale of finding hope in the unlikeliest of places. It is the tale of how we came to be the way we are. And Dora, at least, is exactly how she wants to be.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+
+				{ Cue = "/VO/Melinoe_5870", Text = "She's perfect.", PreLineWait = 1.5, UsePlayerSource = true, },
 			},
 		},
 	},
@@ -497,11 +1094,9 @@ OverwriteTableKeys( QuestData, {
 		RewardResourceAmount = 9,
 		UnlockGameStateRequirements =
 		{
+			NamedRequirements = { "SeleneDuosUnlocked" },
 			{
 				PathTrue = { "GameState", "TextLinesRecord", "SeleneGrantsOlympianDuos01" },
-			},
-			{
-				PathTrue = { "GameState", "UseRecord", "AresUpgrade" }
 			},
 		},
 		CompleteGameStateRequirements =
@@ -1684,7 +2279,7 @@ OverwriteTableKeys( QuestData, {
 					"ChaosManaCostBlessing",
 					"ChaosDoorHealBlessing",
 					"ChaosHarvestBlessing",
-					"ChaosOmegaDamageBlessing",
+					-- "ChaosOmegaDamageBlessing",
 					-- "ChaosLastStandBlessing",
 				},
 			},
@@ -2200,6 +2795,140 @@ OverwriteTableKeys( QuestData, {
 		},
 	},
 
+	QuestCollectDreamPoints =
+	{
+		InheritFrom = { "DefaultQuestItem", "DefaultKillQuest" },
+		RewardResourceName = "WeaponPointsRare",
+		RewardResourceAmount = 3,
+		UnlockGameStateRequirements =
+		{
+			{
+				Path = { "GameState", "CompletedDreamRunsCache" },
+				Comparison = ">=",
+				Value = 1,
+			},
+		},
+		CompleteGameStateRequirements =
+		{
+			{
+				Path = { "GameState", "LifetimeResourcesSpent", "DreamPoints" },
+				Comparison = ">=",
+				Value = 30,
+			},
+		},
+		CashedOutVoiceLines =
+		{
+			{
+				PreLineWait = 0.4,
+				GameStateRequirements =
+				{
+					{
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "MorosProphecyFulfilledSpeech", Time = 3 },
+				},
+				SkipAnim = true,
+				RequiredSourceValueFalse = "InPartnerConversation",
+				ObjectType = "NPC_Moros_01",
+
+				{ Cue = "/VO/Moros_0590", Text = "My brother Sleep was bound to wake eventually..." },
+			},
+		},
+	},
+
+	QuestDreamClearedWithAllWeapons =
+	{
+		InheritFrom = { "DefaultQuestItem", "DefaultKillQuest" },
+		RewardResourceName = "SuperGiftPoints",
+		RewardResourceAmount = 3,
+		UnlockGameStateRequirements =
+		{
+			{
+				Path = { "GameState", "QuestsCompleted" },
+				HasAll = { "QuestCollectDreamPoints" },
+			},
+		},
+		CompleteGameStateRequirements =
+		{
+			{
+				Path = { "GameState", "DreamRunClearedWithWeapons" },
+				HasAll = 
+				{
+					"WeaponStaffSwing",
+					"WeaponDagger",
+					"WeaponTorch",
+					"WeaponAxe",
+					"WeaponLob",
+					"WeaponSuit",
+				},
+			},
+		},
+		CashedOutVoiceLines =
+		{
+			{
+				PreLineWait = 0.4,
+				GameStateRequirements =
+				{
+					{
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "MorosProphecyFulfilledSpeech", Time = 3 },
+				},
+				SkipAnim = true,
+				RequiredSourceValueFalse = "InPartnerConversation",
+				ObjectType = "NPC_Moros_01",
+
+				{ Cue = "/VO/Moros_0622", Text = "Your conquests with the Arms of Night shall not be few." },
+			},
+		},
+	},
+
+	QuestDreamClearedWithShrinePoints =
+	{
+		InheritFrom = { "DefaultQuestItem", "DefaultKillQuest" },
+		RewardResourceName = "GemPoints",
+		RewardResourceAmount = 800,
+		UnlockGameStateRequirements =
+		{
+			{
+				Path = { "GameState", "QuestsCompleted" },
+				HasAll = { "QuestDreamClearedWithAllWeapons" },
+			},
+		},
+		CompleteGameStateRequirements =
+		{
+			{
+				Path = { "GameState", "HighestShrinePointClearDreamCache" },
+				Comparison = ">=",
+				Value = 24,
+			},
+		},
+		CashedOutVoiceLines =
+		{
+			{
+				PreLineWait = 0.4,
+				GameStateRequirements =
+				{
+					{
+					},
+				},
+				Cooldowns =
+				{
+					{ Name = "MorosProphecyFulfilledSpeech", Time = 3 },
+				},
+				SkipAnim = true,
+				RequiredSourceValueFalse = "InPartnerConversation",
+				ObjectType = "NPC_Moros_01",
+
+				{ Cue = "/VO/Moros_0630", Text = "You shall relinquish much of your control yet still prevail." },
+			},
+		},
+	},
+
 	QuestDeliverAnubisAspect =
 	{
 		InheritFrom = { "DefaultQuestItem", "DefaultFatesQuest" },
@@ -2449,13 +3178,14 @@ OverwriteTableKeys( QuestData, {
 
 	QuestHelpNarcissusAndEcho =
 	{
-		InheritFrom = { "DefaultQuestItem", "DefaultBondQuest" },
+		InheritFrom = { "DefaultQuestItem", "DefaultBondSpecialQuest" },
+		CompletedDecal = "QuestLogScreenDecal_NarcissusEcho",
 		RewardResourceName = "SuperGiftPoints",
 		RewardResourceAmount = 4,
 		UnlockGameStateRequirements =
 		{
 			{
-				PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters02" },
+				PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus01" },
 			},
 		},
 		CompleteGameStateRequirements =
@@ -2465,7 +3195,169 @@ OverwriteTableKeys( QuestData, {
 				HasAll = 
 				{
 					"NarcissusAboutWaters05",
+					"EchoAboutNarcissus07",
 				},
+			},
+		},
+
+		SetupEvents =
+		{
+			-- before dirty water
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusAboutWaters01" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"NarcissusAboutWaters01",
+							},
+						},
+					},
+				},
+			},
+			-- narcissus dirty water start
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters01" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusAboutWaters02" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"NarcissusAboutWaters02",
+							},
+						},
+					},
+				},
+			},
+			-- narcissus & echo having to confront each other
+			{
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters02" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusAboutWaters04_2" },
+					},
+				},
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					CompleteGameStateRequirements =
+					{
+						{
+							Path = { "GameState", "TextLinesRecord", },
+							HasAll = 
+							{
+								"NarcissusAboutWaters04_2",
+							},
+						},
+					},
+				},
+			},
+		},
+		OnViewedVoiceLines =
+		{
+			Queue = "Interrupt",
+			SkipAnim = true,
+			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+			-- early
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters01" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusAboutWaters02" },
+					},
+				},
+
+				{ Cue = "/VO/Melinoe_5940", Text = "What are we going to do with you, Narcissus...?" },
+			},
+			-- later
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "QuestStatus", "QuestHelpNarcissusAndEcho" },
+						IsNone = { "CashedOut" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters02" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusAboutWaters04_2" },
+					},
+				},
+
+				{ Cue = "/VO/Melinoe_5941", Text = "Narcissus and Echo have some matters to work out..." },
+			},
+			-- near-final
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "QuestStatus", "QuestHelpNarcissusAndEcho" },
+						IsNone = { "CashedOut" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters04_2" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "NarcissusAboutWaters05" },
+					},
+				},
+
+				{ Cue = "/VO/Melinoe_5942", Text = "You'll be all right, Narcissus..." },
+			},
+			-- final
+			{
+				PlayOnce = true,
+				PreLineWait = 0.85,
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "QuestStatus", "QuestHelpNarcissusAndEcho" },
+						IsNone = { "CashedOut" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "NarcissusAboutWaters05" },
+					},
+					{
+						PathFalse = { "GameState", "TextLinesRecord", "EchoAboutNarcissus07" },
+					},
+				},
+				{ Cue = "/VO/Melinoe_5943", Text = "Echo's broken heart can heal, in time..." },
 			},
 		},
 
@@ -2487,6 +3379,47 @@ OverwriteTableKeys( QuestData, {
 				ObjectType = "NPC_Moros_01",
 
 				{ Cue = "/VO/Moros_0278", Text = "Two Souls once intertwined, finally untangled." },
+			},
+		},
+
+		InterstitialData =
+		{
+			SecretMusicName = "/Music/MusicExploration1_MC",
+			SkipFadeIn = true,
+			SkipFadeOut = true,
+			SkipPromptSound = true,
+			EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+			TextDelay = 8.5,
+			FadeOutWait = 50.0,
+			TextColor1 = Color.White,
+			BackgroundAlpha = 0.8,
+			BackgroundAlphaFadeDuration = 0.8,
+
+			Animations =
+			{
+				{
+					AnimationName = "QuestLogEndCapEchoNarc",
+
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration = 1.0,
+
+					Scale = 1,
+					ScaleEaseIn = 0.0,
+					ScaleEaseOut = 1.0,
+				},
+			},
+
+			VoiceLines =
+			{
+				{ Cue = "/VO/Storyteller_0552", Text = "{#Emph}Two things alone are capable of swaying gods and mortals both: the weavings of the Fates, and the yearnings of our hearts.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0553", Text = "{#Emph}For self-absorbed Narcissus, his heart yearned for none other. But for lovelorn Echo, her heart yearned for him. Each was powerless against their feelings.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0554", Text = "{#Emph}That is until they met the Princess of the Dead Melinoë, who helped them understand the pain that bound their lives.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0555", Text = "{#Emph}Fortunately, hearts tend to be strong, and even broken hearts can heal... even at times becoming stronger than before, despite their scars.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0556", Text = "{#Emph}So it is with Narcissus and Echo. If ever they were victims of their passions, they are wiser for it now, and grateful to the Princess, each in turn.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0557", Text = "{#Emph}From their example may the rest of us reflect on all that we have, and all that we lost; two sides of us that form a whole.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+
+				{ Cue = "/VO/Melinoe_5871", Text = "What we lost makes us who we are...", PreLineWait = 1.6, UsePlayerSource = true, },
 			},
 		},
 	},
@@ -2626,6 +3559,7 @@ OverwriteTableKeys( QuestData, {
 		InheritFrom = { "DefaultQuestItem", "DefaultFatesQuest" },
 		RewardResourceName = "WeaponPointsRare",
 		RewardResourceAmount = 3,
+		NumChambersRequired = 3, -- used only for text
 		UnlockGameStateRequirements =
 		{
 			NamedRequirements = { "FatesQuestUnlocked" },
@@ -2676,10 +3610,6 @@ OverwriteTableKeys( QuestData, {
 					{
 						{
 							PathTrue = { "GameState", "TextLinesRecord", "MorosPostTrueEnding02" },
-						},
-						{
-							Path = { "CurrentRun", "TextLinesRecord" },
-							HasNone = { "MorosPostTrueEnding02" }
 						},
 					},
 				},
@@ -2815,6 +3745,58 @@ OverwriteTableKeys( QuestData, {
 				ObjectType = "NPC_Moros_01",
 
 				{ Cue = "/VO/Moros_0613", Text = "You somehow found my sisters at long last..." },
+			},
+		},
+
+		InterstitialData =
+		{
+			SecretMusicName = "/Music/MusicExploration1_MC",
+			SkipFadeIn = true,
+			FadeOutForQuestLog = true,
+			SkipPromptSound = true,
+			EndSound = "/Leftovers/Menu Sounds/EmoteThoughtful",
+			TextDelay = 8.5,
+			FadeOutWait = 46.0,
+			TextColor1 = Color.White,
+
+			Animations =
+			{
+				{
+					AnimationName = "ElysiumPetalSpawner",
+					GroupName = "Combat_Menu_Overlay",
+					X = 0,
+					Y = 0,
+				},
+				{
+					AnimationName = "EpilogueOutro",
+
+					Alpha = 0.0,
+					AlphaTarget = 1.0,
+					AlphaTargetDuration = 1.0,
+
+					Scale = 1,
+					ScaleEaseIn = 0.0,
+					ScaleEaseOut = 1.0,
+				},
+			},
+
+			VoiceLines =
+			{
+				{ Cue = "/VO/Storyteller_0475", Text = "{#Emph}Thus did the Three reclusive and feared Fates, whose often-unpredictable weavings determine all that is to come, even for gods, declare the dawning of another age...", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0476", Text = "{#Emph}...an age in which both mortals and immortals shall be free to choose their path, so long as they believe the choice exists...", TextLimit = 300, PreLineWait = 0.6, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0477", Text = "{#Emph}...a golden age, during which mortalkind shall not be ruled entirely by divine right, but by itself.", TextLimit = 310, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0478", Text = "{#Emph}Word quickly spreads, from the heights of Olympus to the depths of the Underworld, foretelling of this perhaps very, very distant future filled with possibility and the unknown.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0479", Text = "{#Emph}Many rejoice; but others know that gods do not go quietly, and history repeats.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+				{ Cue = "/VO/Storyteller_0480", Text = "{#Emph}For now, we can but use the Time we have; both to prepare, and, to the best of our ability, to live.", TextLimit = 300, PreLineWait = 0.8, NoTarget = true },
+
+				{ Cue = "/VO/Melinoe_5988", Text = "I'll have to keep working on that. On both counts.", PreLineWait = 1.5, UsePlayerSource = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentHubRoom" },
+						},
+					},
+				},
 			},
 		},
 	},
@@ -3900,7 +4882,6 @@ OverwriteTableKeys( QuestData, {
 				RequiredSourceValueFalse = "InPartnerConversation",
 				ObjectType = "NPC_Moros_01",
 
-				-- { Cue = "/VO/Moros_0275", Text = "Your father rules the Underworld by right." },
 				{ Cue = "/VO/Moros_0239", Text = "You have inherited your father's strength." },
 			},
 		},
@@ -5011,6 +5992,15 @@ ScreenData.QuestLog =
 	ScrollbarSliderBottomY = 806,
 
 	NewIconOffsetX = 200,
+
+	PlayIconGraphic = "QuestLogPlay",
+	PlayIconOffsetX = -230,
+	PlayIconScale = 0.35,
+
+	MarkerIconGraphic = "QuestLogBondMarker",
+	MarkerIconOffsetX = -230,
+	MarkerIconScale = 0.5,
+
 	RewardAvailableColor = Color.White,
 	RewardCashedOutColor = Color.Gray,
 
@@ -5127,10 +6117,17 @@ ScreenData.QuestLog =
 	CompleteRequirementsOffsetY = 
 	{
 		{ Code = "en", Value = 0 },
+		
 		{ Code = "ja", Value = 5 },
 		{ Code = "ko", Value = 5 },
-		{ Code = "zh-CN", Value = 5 },
 		{ Code = "zh-TW", Value = 5 },
+
+		{ Code = "el", Value = 8 },
+		{ Code = "de", Value = 8 },
+		{ Code = "pl", Value = 8 },
+		{ Code = "ru", Value = 8 },
+
+		{ Code = "zh-CN", Value = 20 },
 	},
 	RequirementEntriesPerColumn = 9,
 	RequirementEntriesMaxColumns = 2,
@@ -5237,7 +6234,7 @@ ScreenData.QuestLog =
 		{
 			AnimationName = "PageScrollbar_QuestLog",
 			GroupName = "Combat_Menu_Overlay",
-			X = 120,
+			X = 110,
 			Y = 545,
 			Alpha = 0.0,
 		},
@@ -5246,7 +6243,7 @@ ScreenData.QuestLog =
 		{
 			AnimationName = "PageScrollbarSlider",
 			GroupName = "Combat_Menu_Overlay",
-			X = 120,
+			X = 110,
 			Y = 280,
 			Alpha = 0.0,
 		},
@@ -5256,7 +6253,7 @@ ScreenData.QuestLog =
 			Graphic = "BlankInteractableObstacle",
 			AnimationName = "CodexButton_Up",
 			GroupName = "Combat_Menu_Overlay",
-			X = 120,
+			X = 110,
 			Y = 280,
 			Alpha = 0.0,
 			Scale = 0.85,
@@ -5279,7 +6276,7 @@ ScreenData.QuestLog =
 			Graphic = "BlankInteractableObstacle",
 			AnimationName = "CodexButton_Down",
 			GroupName = "Combat_Menu_Overlay",
-			X = 120,
+			X = 110,
 			Y = 806,
 			Alpha = 0.0,
 			Scale = 0.85,
@@ -5323,6 +6320,18 @@ ScreenData.QuestLog =
 				FontSize = 20,
 				Color = {255,255,255,255},
 				Width = 850,
+				LangWidth = {
+					{ Code = "de", Value = 925 },
+					{ Code = "el", Value = 925 },
+					{ Code = "es", Value = 925 },
+					{ Code = "ko", Value = 900 },
+					{ Code = "pl", Value = 925 },
+					{ Code = "pt-BR", Value = 925 },
+					{ Code = "ru", Value = 950 },
+					{ Code = "uk", Value = 950 },
+					{ Code = "zh-CN", Value = 925 },
+					{ Code = "zh-TW", Value = 925 },
+				},
 				Height = 1200,
 				Font = "QuestLogLatoItalic",
 				LangFont = {
@@ -5372,6 +6381,7 @@ ScreenData.QuestLog =
 			Y = 810,
 			Alpha = 0.0,
 			AnimationName = "Screens\\QuestLogScreen\\questComplete",
+			SpecialAnimationName = "Screens\\QuestLogScreen\\questComplete_special",
 		},
 
 		ActionBarBackground =
@@ -5442,6 +6452,7 @@ ScreenData.QuestLog =
 						-- Dummy button
 					},
 					Text = "Menu_QuestLog",
+					AltText = "Menu_QuestLogWatch",
 					TextArgs = UIData.ContextualButtonFormatRight,
 				},
 

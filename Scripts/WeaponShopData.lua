@@ -1884,7 +1884,7 @@ WeaponShopItemData =
 					GameStateRequirements =
 					{
 						{
-							PathFalse = { "GameState", "UseRecord", "NPC_Moros_01" },
+							PathFalse = { "GameState", "TextLinesRecord", "MorosGift02" },
 						},
 					},
 				},
@@ -4110,14 +4110,14 @@ ScreenData.WeaponShop =
 -- Silver Pool
 GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 {
-	Cooldowns =
-	{
-		{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
-	},
 	{
 		PlayOnce = true,
 		PreLineWait = 0.65,
 		UsePlayerSource = true,
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
 
 		{ Cue = "/VO/Melinoe_1611", Text = "The Arms of Night are now at my disposal..." },
 		{ Cue = "/VO/Melinoe_1898", Text = "...or shall be, soon enough.",
@@ -4141,6 +4141,11 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 				PathTrue = { "GameState", "TextLinesRecord", "CirceGrantsHiddenAspect01" },
 			},
 		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
+
 		{ Cue = "/VO/Melinoe_2464", Text = "A hidden Aspect... what sort of being is this Anubis?", BreakIfPlayed = true },
 	},
 	{
@@ -4152,6 +4157,10 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 			{
 				PathTrue = { "GameState", "TextLinesRecord", "ArtemisGrantsHiddenAspect01" },
 			},
+		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
 		},
 
 		{ Cue = "/VO/Melinoe_3994", Text = "The hidden Aspect of the Morrigan...", BreakIfPlayed = true },
@@ -4166,6 +4175,10 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 				PathTrue = { "GameState", "TextLinesRecord", "MorosGrantsHiddenAspect01" },
 			},
 		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
 
 		{ Cue = "/VO/Melinoe_4374", Text = "The hidden Aspect of Supay...", BreakIfPlayed = true },
 	},
@@ -4179,6 +4192,11 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 				PathTrue = { "GameState", "TextLinesRecord", "CharonGrantsHiddenAspect01" },
 			},
 		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
+
 		{ Cue = "/VO/Melinoe_4380", Text = "The hidden Aspect of Nergal...", BreakIfPlayed = true },
 	},
 	{
@@ -4191,6 +4209,11 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 				PathTrue = { "GameState", "TextLinesRecord", "MedeaGrantsHiddenAspect01" },
 			},
 		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
+
 		{ Cue = "/VO/Melinoe_4386", Text = "The hidden Aspect of Hel...", BreakIfPlayed = true },
 	},
 	{
@@ -4203,6 +4226,11 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 				PathTrue = { "GameState", "TextLinesRecord", "SeleneGrantsHiddenAspect01" },
 			},
 		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
+
 		{ Cue = "/VO/Melinoe_4392", Text = "The hidden Aspect of Shiva...", BreakIfPlayed = true },
 	},
 	{
@@ -4214,6 +4242,10 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 			{
 				PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeWeaponUpgradeSystem" },
 			},
+		},
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
 		},
 
 		{ Cue = "/VO/Melinoe_3392", Text = "So much to choose from now..." },
@@ -4234,6 +4266,10 @@ GlobalVoiceLines.WeaponShopOpenedVoiceLines =
 		PlayOnceFromTableThisRun = true,
 		SuccessiveChanceToPlayAll = 0.1,
 		UsePlayerSource = true,
+		Cooldowns =
+		{
+			{ Name = "MelWeaponShopInteractSpeech", Time = 30 },
+		},
 
 		{ Cue = "/VO/Melinoe_0570", Text = "The Silver Pool...", PlayFirst = true },
 		{ Cue = "/VO/Melinoe_3395", Text = "The Arms of Night..." },
@@ -4313,33 +4349,6 @@ GlobalVoiceLines.WeaponShopExpandedVoiceLines =
 		{ Cue = "/VO/Melinoe_0575", Text = "{#Emph}Hm!" },
 	},
 }
-GlobalVoiceLines.WeaponUnlockGlobalVoiceLines =
-{
-	{
-		RandomRemaining = true,
-		PreLineWait = 0.35,
-		-- SuccessiveChanceToPlay = 0.33,
-		UsePlayerSource = true,
-
-		{ Cue = "/VO/Melinoe_0572", Text = "Awaken, Arms of Night, and join with me!", PlayFirst = true },
-		-- { Cue = "/VO/Melinoe_0242", Text = "Let me see..." },
-		{ Cue = "/VO/Melinoe_0178", Text = "Now..." },
-		{ Cue = "/VO/Melinoe_0214", Text = "This one." },
-		{ Cue = "/VO/Melinoe_0215", Text = "How about..." },
-		-- { Cue = "/VO/Melinoe_0216", Text = "Should work." },
-		{ Cue = "/VO/Melinoe_0217", Text = "You." },
-		{ Cue = "/VO/Melinoe_0218", Text = "Why not." },
-		{ Cue = "/VO/Melinoe_0219", Text = "{#Emph}Hm." },
-		{ Cue = "/VO/Melinoe_0220", Text = "{#Emph}Heh." },
-		-- { Cue = "/VO/Melinoe_0234", Text = "Open." },
-		{ Cue = "/VO/Melinoe_0236", Text = "This one." },
-		-- { Cue = "/VO/Melinoe_0237", Text = "You're mine." },
-		{ Cue = "/VO/Melinoe_0238", Text = "Sure." },
-		{ Cue = "/VO/Melinoe_0239", Text = "Join with me." },
-		-- { Cue = "/VO/Melinoe_0240", Text = "You are mine now." },
-	},
-	{ GlobalVoiceLines = "SkellyWeaponUnlockReactionVoiceLines" },
-}
 
 GlobalVoiceLines.AnyAspectUpgradedVoiceLines =
 {
@@ -4361,6 +4370,8 @@ GlobalVoiceLines.AnyAspectUpgradedVoiceLines =
 	{ Cue = "/VO/Melinoe_2554", Text = "Show me your true strength." },
 	{ Cue = "/VO/Melinoe_2555", Text = "You are bound to me, and I am your bearer." },
 	{ Cue = "/VO/Melinoe_2556", Text = "Draw greater power from the Silver Pool." },
+	{ Cue = "/VO/Melinoe_2561", Text = "May you shine like the Moon." },
+	{ Cue = "/VO/Melinoe_2562", Text = "Bathe now in the light of the Moon." },
 }
 
 GlobalVoiceLines.StaffAspectUpgradedVoiceLines =
@@ -4482,40 +4493,6 @@ GlobalVoiceLines.SuitAspectUpgradedVoiceLines =
 	{ GlobalVoiceLines = "SkellyWeaponUpgradeReactionVoiceLines" },
 }
 
-GlobalVoiceLines.ToolUnlockGlobalVoiceLines =
-{
-	{
-		RandomRemaining = true,
-		PreLineWait = 0.35,
-		-- SuccessiveChanceToPlay = 0.33,
-		UsePlayerSource = true,
-		Cooldowns =
-		{
-			{ Name = "MelinoeMiscToolEquipSpeech", Time = 40 },
-		},
-
-		{ Cue = "/VO/Melinoe_0235", Text = "Open up." },
-		{ Cue = "/VO/Melinoe_0216", Text = "Should work." },
-		{ Cue = "/VO/Melinoe_0237", Text = "You're mine." },
-		{ Cue = "/VO/Melinoe_0240", Text = "You are mine now." },
-	},
-	{ GlobalVoiceLines = "SkellyToolUnlockReactionVoiceLines" },
-}
-GlobalVoiceLines.AnyToolUpgradedVoiceLines =
-{
-	RandomRemaining = true,
-	PreLineWait = 0.2,
-	-- SuccessiveChanceToPlay = 0.33,
-	UsePlayerSource = true,
-	Cooldowns =
-	{
-		{ Name = "MelinoeMiscToolEquipSpeech", Time = 10 },
-	},
-	TriggerCooldowns = { "MelWeaponShopInteractSpeech" },
-
-	{ Cue = "/VO/Melinoe_2561", Text = "May you shine like the Moon." },
-	{ Cue = "/VO/Melinoe_2562", Text = "Bathe now in the light of the Moon." },
-}
 GlobalVoiceLines.ToolPickaxeUpgradedVoiceLines =
 {
 	{
@@ -4530,7 +4507,6 @@ GlobalVoiceLines.ToolPickaxeUpgradedVoiceLines =
 
 		{ Cue = "/VO/Melinoe_2557", Text = "The Crescent Pick achieves a greater form..." },
 	},
-	{ GlobalVoiceLines = "AnyToolUpgradedVoiceLines" },
 	{ GlobalVoiceLines = "SkellyToolUnlockReactionVoiceLines" },
 }
 GlobalVoiceLines.ToolExorcismBookUpgradedVoiceLines =
@@ -4547,7 +4523,6 @@ GlobalVoiceLines.ToolExorcismBookUpgradedVoiceLines =
 
 		{ Cue = "/VO/Melinoe_2559", Text = "New life for the Tablet of Peace." },
 	},
-	{ GlobalVoiceLines = "AnyToolUpgradedVoiceLines" },
 	{ GlobalVoiceLines = "SkellyToolUnlockReactionVoiceLines" },
 }
 GlobalVoiceLines.ToolShovelUpgradedVoiceLines =
@@ -4564,7 +4539,6 @@ GlobalVoiceLines.ToolShovelUpgradedVoiceLines =
 
 		{ Cue = "/VO/Melinoe_2558", Text = "The Silver Spade shines even brighter now." },
 	},
-	{ GlobalVoiceLines = "AnyToolUpgradedVoiceLines" },
 	{ GlobalVoiceLines = "SkellyToolUnlockReactionVoiceLines" },
 }
 GlobalVoiceLines.ToolFishingRodUpgradedVoiceLines =
@@ -4581,6 +4555,5 @@ GlobalVoiceLines.ToolFishingRodUpgradedVoiceLines =
 
 		{ Cue = "/VO/Melinoe_2560", Text = "The Rod of Fishing should be stronger now." },
 	},
-	{ GlobalVoiceLines = "AnyToolUpgradedVoiceLines" },
 	{ GlobalVoiceLines = "SkellyToolUnlockReactionVoiceLines" },
 }

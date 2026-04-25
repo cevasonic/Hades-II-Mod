@@ -190,6 +190,8 @@ OverwriteTableKeys( EncounterData,
 
 		BaseDifficulty = 200,
 		DepthDifficultyRamp = 20,
+		
+		DreamBiomeData = "nil",
 	},
 
 	ArtemisCombatN2 =

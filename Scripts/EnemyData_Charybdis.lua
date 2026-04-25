@@ -2,7 +2,7 @@ UnitSetData.Charybdis =
 {
 	Charybdis =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy", },
+		InheritFrom = { "BaseBossEnemy", "BaseOEnemy", "BaseVulnerableEnemy", },
 		IsBoss = false,
 		BlockRaiseDead = true,
 		SkipDisableAllyUnitsOnDeath = true,
@@ -17,6 +17,20 @@ UnitSetData.Charybdis =
 		DeathSound = "/SFX/StabSplatterEndSequence",
 		UseActivatePresentation = false,
 
+		-- AltHealthBarTextIds in encounter data
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
 		SetupEvents =
 		{
 			{
@@ -24,6 +38,29 @@ UnitSetData.Charybdis =
 				Args =
 				{
 					SetUntargetable = true,
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CharybdisDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},
@@ -94,8 +131,90 @@ UnitSetData.Charybdis =
 
 		GroupHealthBarOwner = false,
 
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.63,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.0,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.125,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 2.475,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.9,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 4.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.75,
+				},
+			},
+		},
+
 		DestroyIdsOnDeath = { 793885, 793899, 793884, 793274, 793900, 793886, 793889, 793906, 793895, 793902, 793905, 793892, 793907, 793888, 793901, 793904, 793891, 794081, 793266, 793275, 793268, 794083, 793882, 793272, 793269, 793271, 794084, 794082, 793267, 793273, 792351, 792350, },
 		GrannyTexture = "GR2/CharybdisEM_Color",
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetUntargetable = true,
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CharybdisEMDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		WakeUpDelay = 0.0,
 
@@ -109,7 +228,7 @@ UnitSetData.Charybdis =
 
 	CharybdisTentacle =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseOEnemy", "BaseVulnerableEnemy"},
 		GenusName = "Charybdis",
 		RunHistoryKilledByName = "Charybdis",
 		IsBoss = false,
@@ -117,6 +236,7 @@ UnitSetData.Charybdis =
 		BlockRespawnShrineUpgrade = true,
 		BlockCharm = true,
 		MaxHealth = 2800,
+		ImmuneToPolymorph = true,
 
 		ManualDeathAnimation = false,
 		DeathAnimation = "Enemy_CharybdisTentacle_Death",
@@ -131,6 +251,33 @@ UnitSetData.Charybdis =
 		WeaponOptions =
 		{
 			"CharybdisTentacleSlap"
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CharybdisTentacleDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		SkipTransitionInvulnerability = true,
@@ -221,7 +368,7 @@ UnitSetData.Charybdis =
 
 	CharybdisTentacle2 =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseGEnemy", "BaseVulnerableEnemy"},
 		GenusName = "Charybdis",
 		RunHistoryKilledByName = "Charybdis",
 		MaxHealth = 2100,
@@ -229,6 +376,7 @@ UnitSetData.Charybdis =
 		UniqueRaise = true,
 		ImmobileRaise = true,
 		SkipDisableAllyUnitsOnDeath = true,
+		ImmuneToPolymorph = true,
 
 		RequiredSpawnPoint = "EnemyPointRanged",
 
@@ -267,6 +415,81 @@ UnitSetData.Charybdis =
 		{
 			"CharybdisTentacleSpike2", "CharybdisTentacleWhip2",
 			"CharybdisTentacleWait",
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/CharybdisTentaclesEMDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.49,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.0,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.88,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.25,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.93,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.9,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 3.5,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2.75,
+				},
+			},
 		},
 
 		SpellSummonDataOverrides =

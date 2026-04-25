@@ -6,6 +6,7 @@
 		RichPresence = "#RichPresence_I",
 		Icon = "GUI\\Screens\\BountyBoard\\Biome_Tartarus",
 		ResultText = "RunHistoryScreenResult_ClockworkTartarus",
+		DreamResultText = "RunHistoryScreenResult_ClockworkTartarus_Dream",
 		
 		HarvestPointBase = "DrownedChambersHarvestPointBase01",
 		
@@ -332,8 +333,10 @@
 		PerfectClearEncounterOptions = { "PerfectClearChallengeI" },
 		EliteChallengeEncounterOptions = { "EliteChallengeI" },
 
-		-- LocationText = "BiomeI",
+		LocationText = "Location_BiomeI",
+		DreamLocationText = "Location_BiomeI_Dream",
 		SaveProfileLocationText = "Location_BiomeI",
+		DreamSaveProfileLocationText = "Location_BiomeI_Dream",
 
 		NarrativeContextArt = "DialogueBackground_CWTartarus",
 		NarrativeContextArtFlippable = false,
@@ -388,7 +391,14 @@
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
-
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeI_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -398,6 +408,14 @@
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
+				},
+			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeI_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
 				},
 			},
 		},
@@ -426,7 +444,6 @@
 
 		IntroSequenceDuration = 0.7,
 		Starting = true,
-		NoReward = true,
 		NoReroll = true,
 		SkipLastKillPresentation = true,
 		HideRewardPreview = true,
@@ -441,6 +458,22 @@
 		ForceAtBiomeDepthMin = 0,
 		ForceAtBiomeDepthMax = 1,
 		MaxAppearancesThisBiome = 1,
+
+		ForcedRewardStore = "RunProgress",
+		IneligibleRewards = RewardSets.OpeningRoomBans,
+		SpawnRewardOnId = 798069,
+		DisableRewardMagnetisim = true,
+		RewardGameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				Path = { "CurrentRun", "EnteredBiomes" },
+				Comparison = "==",
+				Value = 0,
+			},
+		},
 
 		HarvestPointChances = { 0.02, },
 		ShovelPointChance = 0.02,
@@ -558,10 +591,11 @@
 		{
 			Threaded = true,
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeI",
+					DreamText = "Location_BiomeI_Dream",
 					AnimationName = "InfoBannerTartarusIn",
 					AnimationOutName = "InfoBannerTartarusOut",
 					Delay = 2.0,
@@ -612,7 +646,7 @@
 				UnlockedUseText = "UseChamberMover",
 				UnlockedUseTextReroll = "UseChamberMover",
 				UnlockedUseTextCannotReroll = "UseChamberMover",
-				Using = { "NightmareEdgeFxSpawner" }
+				Using = { "NightmareEdgeFxSpawner" },
 			},
 		},
 
@@ -765,6 +799,8 @@
 
 		BackupCauseOfDeath = "Chronos",
 
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
+
 		GameStateRequirements =
 		{
 			{
@@ -772,8 +808,18 @@
 				Comparison = "<=",
 				Value = 0,
 			},
+			OrRequirements =
 			{
-				PathFalse = { "GameState", "ReachedTrueEnding" },
+				{
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 			},
 		},
 		MaxCreationsPerRoom = 1,
@@ -793,16 +839,10 @@
 		ShovelPointForceRequirements =
 		{
 			NamedRequirements = { "NoFamiliarShovelPointFoundThisBiome" },
-			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
-			},
 		},
 		PickaxePointForceRequirements =
 		{
 			NamedRequirements = { "NoFamiliarPickaxePointFoundThisBiome" },
-			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
-			},
 		},
 
 		SkipLastKillPresentation = true,
@@ -836,6 +876,7 @@
 		DisableRewardMagnetisim = true,
 
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.89,
 		--IntroSequenceDuration = 1.8,
 		CameraZoomWeights =
 		{
@@ -1040,6 +1081,9 @@
 			{
 				PathTrue = { "GameState", "ReachedTrueEnding" },
 			},
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun", },
+			},
 		},
 
 		Ambience = "/Leftovers/Ambience/Ambience1",
@@ -1149,6 +1193,7 @@
 		{
 			-- played via ChronosLaunchVoiceLines in this context
 		},
+		ZoomFractionAlt = 0.89,
 	},
 
 	I_Boss01 =
@@ -1159,10 +1204,55 @@
 		ExitPreviewAnim = "ExitDownPreview",
 		FlipHorizontal = false,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "I_Boss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantIShaderot" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantIShaderot" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "I_Boss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantIPoppySeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantIPoppySeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "I_Boss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "OreIMarble" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreIMarble" },
+			},
+		},
+
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
 		LegalEncounters = { "BossChronos01", "BossChronos02" },
 		ForcedReward = "MixerIBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		-- NarrativeContextArt = "nil",
 
 		RequiresLinked = true,
@@ -1176,6 +1266,9 @@
 					{
 						PathFalse = { "GameState", "ReachedTrueEnding" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},
@@ -1184,6 +1277,7 @@
 		EntranceFunctionArgs = { LandingTarget = 704921, AngleTowardsIdOnEnd = 609246 },
 		BlockCameraReattach = true,
 		ZoomFraction = 0.70,
+		ZoomFractionAlt = 0.76,
 
 		IgnoreFishingCameraClamps = true,
 
@@ -1196,6 +1290,9 @@
 				{
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 				Args =
@@ -1215,6 +1312,7 @@
 					ResetRoomZoom = true,
 					UnlockDelay = 4.4,
 					DelayedStart = true,
+					DreamRunIntroFunctionName = "StartFinalBossChronos",
 				},
 			},
 			{
@@ -1227,13 +1325,12 @@
 						Value = 0,
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
 						PathFalse = { "GameState", "WorldUpgradesAdded", "WorldUpgradePauseChronosFight" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				Args = RoomEventData.PauseMenuTakeOverAutoUnpause,			
 			},
@@ -1247,6 +1344,9 @@
 						Comparison = ">",
 						Value = 0,
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					OrRequirements =
 					{
 						{
@@ -1255,11 +1355,7 @@
 							},
 						},
 						{
-							{
-								Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-								Comparison = "<=",
-								Value = 3,
-							},
+							NamedRequirementsFalse = { "BossDifficultyActive" },
 						},
 					}
 				},
@@ -1278,6 +1374,9 @@
 				{
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 				Args =
@@ -1364,12 +1463,7 @@
 				UseText = "UseExamineMisc",
 				SetupGameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					NamedRequirements = { "NoRecentInspectPointUsed" },
+					NamedRequirements = { "NoRecentInspectPointUsed", "BossDifficultyActive" },
 					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				InteractTextLineSets =
@@ -1398,12 +1492,7 @@
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "Inspect_I_Boss01_03" },
 					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					NamedRequirements = { "NoRecentInspectPointUsed" },
+					NamedRequirements = { "NoRecentInspectPointUsed", "BossDifficultyActive" },
 					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				InteractTextLineSets =
@@ -1481,8 +1570,6 @@
 					},
 				},
 			},
-
-
 		},
 
 		EnterVoiceLines =
@@ -1491,6 +1578,12 @@
 				BreakIfPlayed = true,
 				PreLineWait = 0.25,
 				PreLineFunctionName = "UnmuteSpeakerPermanent",
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 
 				-- Hidden Aspect Quests
 				{ Cue = "/VO/MelinoeField_3553", Text = "{#Emph}Great Anubis, grant me and Descura now abyssal strength.",
@@ -1572,6 +1665,7 @@
 					},
 				},
 			},
+			{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
 			{
 				PreLineWait = 0.25,
 				GameStateRequirements =
@@ -1649,6 +1743,33 @@
 				},
 			},
 			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunChronosIntroVO",
+				-- BreakIfPlayed = true,
+				RandomRemaining = true,
+				PreLineWait = 1.15,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5574", Text = "You haunted my dreams for far too long...", PlayFirst = true, },
+				{ Cue = "/VO/MelinoeField_5575", Text = "I'll suffer no more nightmares thanks to you..." },
+				{ Cue = "/VO/MelinoeField_5576", Text = "My greatest adversary even in my dreams...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = "==",
+							Value = 4,
+						},
+					}
+				},
+			},
+			{
 				BreakIfPlayed = true,
 				PreLineWait = 2.0,
 				ObjectType = "Chronos",
@@ -1656,9 +1777,11 @@
 				GameStateRequirements =
 				{
 					{
-						PathFromArgs = true,
-						Path = { "Chronos", "QueuedBossIntroTextLines", "Name" },
-						IsAny = { "ChronosBossAboutHecateKidnapped01" },
+						FunctionName = "RequiredQueuedTextLine",
+						FunctionArgs =
+						{
+							IsAny = { "ChronosBossAboutHecateKidnapped01" },
+						},
 					},
 				},
 				{ Cue = "/VO/Chronos_1517", Text = "{#Emph}She {#Prev}is now my guest." },
@@ -1673,9 +1796,11 @@
 				GameStateRequirements =
 				{
 					{
-						PathFromArgs = true,
-						Path = { "Chronos", "QueuedBossIntroTextLines", "Name" },
-						IsAny = { "ChronosBossAboutHecateKidnapped01" },
+						FunctionName = "RequiredQueuedTextLine",
+						FunctionArgs =
+						{
+							IsAny = { "ChronosBossAboutHecateKidnapped01" },
+						},
 					},
 					NamedRequirements = { "HecateMissing" },
 				},
@@ -1729,6 +1854,9 @@
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				{ Cue = "/VO/Chronos_1048", Text = "You again..." },
 			},
@@ -1741,6 +1869,9 @@
 				PreLineAnim = "Enemy_Chronos_SittingGreeting",
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalaceAboutTyphonDeath01" },
 					},
@@ -1755,9 +1886,11 @@
 				GameStateRequirements =
 				{
 					{
-						PathFromArgs = true,
-						Path = { "Chronos", "QueuedBossIntroTextLines", "Name" },
-						IsAny = { "ChronosBossAboutFamily01" },
+						FunctionName = "RequiredQueuedTextLine",
+						FunctionArgs =
+						{
+							IsAny = { "ChronosBossAboutFamily01" },
+						},
 					},
 				},
 				{ Cue = "/VO/Chronos_0982", Text = "You {#Emph}dare {#Prev}return?" },
@@ -1770,6 +1903,7 @@
 				SuccessiveChanceToPlayAll = 0.75,
 				ObjectType = "Chronos",
 				PreLineAnim = "Enemy_Chronos_SittingGreeting",
+				IgnorePreLineAnimInDreamRuns = true,
 
 				{ Cue = "/VO/Chronos_0163", Text = "{#Emph}Ahh. {#Prev}Welcome, my girl.", PlayFirst = true },
 				{ Cue = "/VO/Chronos_0187", Text = "Hello again, my girl." },
@@ -1879,7 +2013,7 @@
 						{
 							Path = { "CurrentRun", "BiomeTime" },
 							Comparison = "<=",
-							Value = 25,
+							Value = 40,
 						},
 					},
 				},
@@ -1895,7 +2029,7 @@
 						{
 							Path = { "CurrentRun", "BiomeTime" },
 							Comparison = "<=",
-							Value = 25,
+							Value = 40,
 						},
 					},
 				},
@@ -1911,7 +2045,7 @@
 						{
 							Path = { "CurrentRun", "BiomeTime" },
 							Comparison = "<=",
-							Value = 25,
+							Value = 40,
 						},
 					},
 				},
@@ -1927,7 +2061,7 @@
 						{
 							Path = { "CurrentRun", "BiomeTime" },
 							Comparison = "<=",
-							Value = 30,
+							Value = 40,
 						},
 					},
 				},
@@ -1940,6 +2074,9 @@
 						},
 						{
 							PathTrue = { "PrevRun", "RoomsEntered", "P_Boss01" },
+						},
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
 						},
 					},
 				},
@@ -2119,6 +2256,51 @@
 			},
 		},
 
+		ObstacleData =
+		{
+			-- Exit
+			[713431] =
+			{
+				Name = "BedroomExit01",
+				DistanceTriggers =
+				{
+					{
+						Repeat = true,
+						WithinDistance = 700,
+						GameStateRequirements =
+						{
+							{
+								PathEmpty = { "RequiredKillEnemies" },
+							},
+							{
+								PathTrue = { "GameState", "ReachedTrueEnding" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun", },
+							},
+							NamedRequirements = { "ReachedEpilogue" },
+						},
+						VoiceLines =
+						{
+							PlayOnce = true,
+							PlayOnceContext = "PostTrueEndingExitApproachVO",
+							PlayOnceFromTableThisRun = true,
+							UsePlayerSource = true,
+							Cooldowns =
+							{
+								{ Name = "MelinoeAnyQuipSpeech", Time = 3 },
+							},
+							SkipCooldownCheckIfNonePlayed = true,
+
+							{ Cue = "/VO/MelinoeField_5380", Text = "Time to head home..." },
+							{ Cue = "/VO/MelinoeField_5379", Text = "Fond memories of the real House..." },
+						},
+					},
+				},
+			},
+
+		},
+
 		Using = { "ChronosRemainsBroken", "ChronosBattleOutroDeathParticleEmitter", "ChronosGigarosKillFx", "ChronosBattleOutroDeathParticleEmitterGigarosKill", },
 	},
 
@@ -2162,6 +2344,7 @@
 		},
 
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.90,
 
 		SpawnRewardGlobalVoiceLines = "FoundShopVoiceLines",
 	},
@@ -2173,6 +2356,7 @@
 		-- SuppressRewardSpawnSounds = true,
 
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.87,
 		EntranceDirection = "LeftRight",
 		
 		MaxCreationsThisRun = 1,
@@ -2325,6 +2509,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_Combat02 =
@@ -2335,6 +2520,7 @@
 		EntranceDirection = "Left",
 
 		LegalEncounters = EncounterSets.IEncountersSmaller,
+		ZoomFractionAlt = 0.93,
 	},
 
 	I_Combat03 =
@@ -2354,6 +2540,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.95,
 	},
 
 	I_Combat04 =
@@ -2373,6 +2560,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.88,
 	},
 
 	I_Combat05 =
@@ -2381,6 +2569,7 @@
 		HasFishingPoint = false,
 
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.97,
 
 		EntranceDirection = "LeftRight",
 
@@ -2394,6 +2583,7 @@
 		EntranceDirection = "Left",
 
 		RushMaxRangeOverride = 475,
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_Combat07 =
@@ -2401,6 +2591,7 @@
 		InheritFrom = { "BaseI", "I_BaseCombat" },
 
 		EntranceDirection = "Left",
+		ZoomFractionAlt = 0.95,
 	},
 
 	I_Combat08 =
@@ -2409,6 +2600,7 @@
 		HasFishingPoint = false,
 
 		EntranceDirection = "Left",
+		ZoomFractionAlt = 0.94,
 	},
 
 	I_Combat09 =
@@ -2426,6 +2618,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	I_Combat10 =
@@ -2441,6 +2634,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.93,
 	},
 
 	I_Combat11 =
@@ -2456,6 +2650,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.95,
 	},
 
 	I_Combat12 =
@@ -2471,12 +2666,14 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.90,
 	},
 
 	I_Combat13 =
 	{
 		InheritFrom = { "BaseI", "I_BaseCombat" },
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.93,
 		EntranceDirection = "LeftRight",
 	},
 
@@ -2484,6 +2681,7 @@
 	{
 		InheritFrom = { "BaseI", "I_BaseCombat" },
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.95,
 		EntranceDirection = "Right",
 	},
 
@@ -2494,6 +2692,7 @@
 		HasFishingPoint = false,
 
 		EntranceDirection = "Left",
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_Combat16 =
@@ -2505,6 +2704,7 @@
 		EntranceDirection = "Left",
 
 		RushMaxRangeOverride = 475,
+		ZoomFractionAlt = 0.93,
 	},
 
 	I_Combat17 =
@@ -2512,6 +2712,7 @@
 		InheritFrom = { "BaseI", "I_BaseCombat" },
 
 		EntranceDirection = "Right",
+		ZoomFractionAlt = 0.91,
 	},
 
 	I_Combat18 =
@@ -2529,6 +2730,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_Combat19 =
@@ -2536,6 +2738,7 @@
 		InheritFrom = { "BaseI", "I_BaseCombat" },
 
 		EntranceDirection = "LeftRight",
+		ZoomFractionAlt = 0.90,
 	},
 
 	I_Combat20 =
@@ -2546,6 +2749,7 @@
 		EntranceDirection = "Left",
 
 		LegalEncounters = EncounterSets.IEncountersSmaller,
+		ZoomFractionAlt = 0.93,
 	},
 
 	I_Combat21 =
@@ -2563,6 +2767,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_Combat22 =
@@ -2582,13 +2787,17 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.91,
 	},
 
 	I_Combat23 =
 	{
 		InheritFrom = { "BaseI", "I_BaseCombat" },
 
+		LegalEncounters = EncounterSets.IEncountersSmaller,
+
 		EntranceDirection = "LeftRight",
+		ZoomFractionAlt = 0.91,
 	},
 
 	I_Combat24 =
@@ -2609,6 +2818,7 @@
 				Value = 6,
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_MiniBoss01 =
@@ -2623,6 +2833,7 @@
 		ReverbValue = 1.0,
 
 		ZoomFraction = 0.775,
+		ZoomFractionAlt = 0.91,
 
 		GameStateRequirements =
 		{
@@ -2796,6 +3007,7 @@
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.92,
 	},
 
 	I_MiniBoss03 =
@@ -2806,6 +3018,7 @@
 		HasFishingPoint = false,
 
 		EntranceDirection = "Right",
+		ZoomFractionAlt = 0.95,
 	},
 
 	-- NPC room layout 1
@@ -2913,19 +3126,55 @@
 				Path = { "CurrentRun", "CurrentRoom", "RoomCreations" },
 				HasNone = { "I_Shop01", "I_Story01", "I_Reprieve01", "I_MiniBoss01", "I_MiniBoss02" },
 			},
+			OrRequirements =
 			{
-				FunctionName = "RequiredOfferedDoorWitRoomSetName",
-				FunctionArgs =
 				{
-					RoomSetName = "I",
+					{
+						FunctionName = "RequiredOfferedDoorWitRoomSetName",
+						FunctionArgs =
+						{
+							RoomSetName = "I",
+						},
+					}
+				},
+				{
+					{
+						PathTrue = { "GameState", "EncountersCompletedCache", "BossChronos01" },
+					},
+					{
+						PathFalse = { "GameState", "RoomsEntered", "I_Story01" },
+					},
+					{
+						Path = { "MapState", "OfferedExitDoors" },
+						UseLength = true,
+						Comparison = "==",
+						Value = 1,
+					},
 				},
 			},
 			NamedRequirementsFalse = { "StandardPackageBountyActive", "HecateMissing", "AfterTrueEndingBeforeFinalBoss" },
 		},
 
+		AlwaysForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "EncountersCompletedCache", "BossChronos01" },
+			},
+			{
+				PathFalse = { "GameState", "RoomsEntered", "I_Story01" },
+			},
+			{
+				Path = { "MapState", "OfferedExitDoors" },
+				UseLength = true,
+				Comparison = "==",
+				Value = 1,
+			},
+		},
+
 		SecretMusic = "/Music/EndThemeAcoustic",
 		TrueEndingSecretMusic = "/Music/EndThemeORCHESTRAL",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.98,
 		TimerBlock = "StoryRoom",
 
 		FlipHorizontalChance = 0.0,
@@ -3018,6 +3267,9 @@
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
 					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+					{
 						FunctionName = "RequiredAlive",
 						FunctionArgs = { Units = { "NPC_Persephone_01", }, Alive = true },
 					},
@@ -3073,8 +3325,21 @@
 					{
 						PathTrue = { "GameState", "UseRecord", "NPC_Hades_Field_01" },
 					},
+					OrRequirements =
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "CurrentRun", "IsDreamRun" },
+							},
+							{
+								PathTrue = { "GameState", "SpeechRecord", "/VO/MelinoeField_5648" },
+							},
+						},
 					},
 				},
 				Cooldowns =
@@ -3104,6 +3369,7 @@
 					},
 				},
 			},
+			{ GlobalVoiceLines = "HadesDreamRunGreetingVoiceLines" },
 		},
 
 		-- moved to ThankingHadesVoiceLines
@@ -3125,6 +3391,9 @@
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding", },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun", },
+					},
 				},
 				Args =
 				{
@@ -3138,6 +3407,9 @@
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding", },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun", },
+					},
 				},
 				Args =
 				{
@@ -3149,8 +3421,18 @@
 				FunctionName = "ActivatePrePlacedObstacles",
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding", },
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "CurrentRun", "IsDreamRun" },
+							},
+						},
 					},
 				},
 				Args =
@@ -3194,6 +3476,7 @@
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 0.97,
 
 		FlipHorizontalChance = 0.0,
 		IntroSequenceDuration = 0.9,
@@ -3607,6 +3890,7 @@
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.05,
 		IgnoreClamps = true, -- these are set via script
 
 		FlipHorizontalChance = 0.0,
@@ -3694,8 +3978,6 @@
 							PlayOnce = true,
 							PlayOnceContext = "ChronosFlashbackVO",
 							UsePlayerSource = true,
-							BreakIfPlayed = true,
-							SkipCooldownCheckIfNonePlayed = true,
 
 							{ Cue = "/VO/Chronos_1416", Text = "Broker.",
 								PostLineFunctionName = "WretchedBrokerReaction" },
@@ -3792,6 +4074,8 @@
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.85,
+		
 
 		FlipHorizontalChance = 0.0,
 		IntroSequenceDuration = 0.9,

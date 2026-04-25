@@ -154,8 +154,12 @@ function ShowRunHistory( screen, button )
 	else
 		local roomData = RoomData[run.EndingRoomName]
 		if roomData ~= nil then
-			DebugAssert({ Condition = roomData.ResultText ~= nil, Text = "ResultText for "..roomData.Name.." is nil", Owner = "Caleb" })
-			resultString = roomData.ResultText
+			if WasDreamRun( run ) and roomData.DreamResultText ~= nil then
+				resultString = roomData.DreamResultText
+			else
+				DebugAssert({ Condition = roomData.ResultText ~= nil, Text = "ResultText for "..roomData.Name.." is nil", Owner = "Caleb" })
+				resultString = roomData.ResultText
+			end
 		else
 			resultString = "RunHistoryScreenResult_UnknownFail"
 		end
@@ -167,19 +171,34 @@ function ShowRunHistory( screen, button )
 		SetAlpha({ Id = components.ResultRibbonSuccess.Id, Fraction = 0.0, Duration = 0.2 })
 	end
 
-	local subtitle = run.ActiveBounty or run.VictoryMessage
+	local subtitle = nil
+	local tooltipData = nil
+	local wasDreamRun = nil
+	if WasDreamRun( run ) and run.BiomeVisitOrder ~= nil then
+		subtitle = "RunHistoryScreen_DreamBiomeVisitOrder"
+		tooltipData = GetVisitedBiomeIcons( run )
+		wasDreamRun = true
+	elseif run.ActiveBounty ~= nil then
+		subtitle = "RunHistoryScreen_PackagedBounty"
+		tooltipData = { BountyName = run.ActiveBounty }
+	else
+		subtitle = run.VictoryMessage
+	end
 	if subtitle ~= nil then
 		ModifyTextBox({ Id = components.SupertitleResultText.Id, Text = resultString, FadeTarget = 1.0, FadeDuration = 0.2 })
-		if run.ActiveBounty ~= nil then
-			ModifyTextBox({ Id = components.SubtitleResultText.Id, Text = "RunHistoryScreen_PackagedBounty", FadeTarget = 1.0, FadeDuration = 0.2, LuaKey = "TooltipData", LuaValue = { BountyName = subtitle } })
-		else
-			ModifyTextBox({ Id = components.SubtitleResultText.Id, Text = subtitle, FadeTarget = 1.0, FadeDuration = 0.2 })
-		end
 		ModifyTextBox({ Id = components.ResultText.Id, FadeTarget = 0.0, FadeDuration = 0.1 })
+		if wasDreamRun then
+			ModifyTextBox({ Id = components.DreamRunSubtitleResultText.Id, Text = subtitle, FadeTarget = 1.0, FadeDuration = 0.2, LuaKey = "TooltipData", LuaValue = tooltipData })
+			ModifyTextBox({ Id = components.SubtitleResultText.Id, FadeTarget = 0.0, FadeDuration = 0.1 })
+		else
+			ModifyTextBox({ Id = components.SubtitleResultText.Id, Text = subtitle, FadeTarget = 1.0, FadeDuration = 0.2, LuaKey = "TooltipData", LuaValue = tooltipData })
+			ModifyTextBox({ Id = components.DreamRunSubtitleResultText.Id, FadeTarget = 0.0, FadeDuration = 0.1 })
+		end
 	else
 		ModifyTextBox({ Id = components.ResultText.Id, Text = resultString, FadeTarget = 1.0, FadeDuration = 0.2 })
 		ModifyTextBox({ Id = components.SupertitleResultText.Id, FadeTarget = 0.0, FadeDuration = 0.1 })
 		ModifyTextBox({ Id = components.SubtitleResultText.Id, FadeTarget = 0.0, FadeDuration = 0.1 })
+		ModifyTextBox({ Id = components.DreamRunSubtitleResultText.Id, FadeTarget = 0.0, FadeDuration = 0.1 })
 	end
 
 	-- Biome Card
@@ -187,8 +206,9 @@ function ShowRunHistory( screen, button )
 		SetAlpha({ Id = components.BiomeCard.Id, Fraction = 0.0, Duration = 0.2 })
 	else
 		local biomeImage = "RunHistorySplash_FailureUnknown"
-		if run.EndingRoomName ~= nil and RoomData[run.EndingRoomName].RoomSetName ~= nil then
-			local roomSetName = RoomData[run.EndingRoomName].RoomSetName
+		local endingRoomData = RoomData[run.EndingRoomName]
+		if endingRoomData ~= nil and endingRoomData.RoomSetName ~= nil then
+			local roomSetName = endingRoomData.RoomSetName
 			if roomSetName == "N_SubRooms" then
 				roomSetName = "N"
 			elseif roomSetName == "Anomaly" then
@@ -482,7 +502,10 @@ function RunHistoryUpdateVisibility( screen )
 		SetInteractProperty({ DestinationId = button.Id, Property = "FreeFormSelectOffsetX", Value = screen.FreeFormSelectOffsetX })
 
 		local routeName = "MysteryResource"
-		if WasBountyRun( run ) then
+		if WasDreamRun( run ) then
+			routeName = "RunHistoryScreen_RouteDream"
+			button.AnimationIndex = 7
+		elseif WasBountyRun( run ) then
 			routeName = "RunHistoryScreen_RouteBounty"
 			button.AnimationIndex = 5
 		elseif WasSurfaceRun( run ) then
@@ -935,4 +958,13 @@ function RunHistoryTraitSort( itemA, itemB )
 	-- Sort by Boon Info order
 	return itemA.TraitSortOrder < itemB.TraitSortOrder
 
+end
+
+function GetVisitedBiomeIcons( run )
+	local tooltipData = {}
+	for i=1,4 do
+		local icon = RoomSetIcons[run.BiomeVisitOrder[i]] or "BiomeMysteryIcon"
+		tooltipData[i] = IconData[icon].TexturePath
+	end
+	return tooltipData
 end

@@ -2,7 +2,7 @@ UnitSetData.Eyeball =
 {
 	Eyeball =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseQEnemy", "BaseVulnerableEnemy" },
 		GenusName = "TyphonEye",
 		RunHistoryPortrait = "Codex_Portrait_TyphonEye",
 		MaxHealth = 3000,
@@ -25,6 +25,98 @@ UnitSetData.Eyeball =
 		BlockRaiseDead = true,
 		BlockRespawnShrineUpgrade = true,
 
+        Outline =
+        {
+            R = 198,
+            G = 0,
+            B = 76,
+            Opacity = 0.8,
+            Thickness = 3,
+            Threshold = 0.6,
+        },
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.2,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.275,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.62,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.87,
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonEyeBallDream_Color",
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "SetupUnitOutline",
+			},
+		},
+
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
+
 		SkipUnitHitFlash = true,
 
 		AttachedAnimationName = "TyphonEyeballHighlight",
@@ -32,6 +124,7 @@ UnitSetData.Eyeball =
 		HealthBarOffsetY = -400,
 
 		--DeathAnimation = "Enemy_DespairElemental_Death",
+		IgnoreChillKillDeathAnimation = true,
 		DeathFx = "EnemyDeathFxIris",
 
 		PreferredSpawnPoint = "EnemyPointMelee",

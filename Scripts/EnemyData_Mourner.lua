@@ -2,7 +2,7 @@ UnitSetData.Mourner =
 {
 	Mourner =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseHEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 855,
 		HealthBarType = "MediumLarge",

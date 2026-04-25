@@ -322,6 +322,7 @@
 		InheritFrom = {"SpellTalentTrait", "LegendaryTalent" },
 		Icon = "Boon_Selene_89",
 		-- Driven via HeroHasTrait
+		HealRetaliateCount = 3,
 		OnSelfDamagedFunction = 
 		{
 			Name = "RecordLastDamaged",
@@ -342,6 +343,11 @@
 				ExtractAs = "ManaAddition",
 				SkipAutoExtract = true,
 				IncludeSigns = true,
+			},
+			{
+				Key = "HealRetaliateCount",
+				ExtractAs = "ReportedRepeatCount",
+				SkipAutoExtract = true,
 			},
 		},
 	},
@@ -522,11 +528,9 @@
 	
 	PotionPoseidonTalent = 
 	{
-		InheritFrom = {"LegendaryTalent", "SpellTalentTrait"},
+		InheritFrom = {"LegendaryTalent", "SpellTalentTrait", "ForceDuoAppearanceTrait" },
 		Icon = "Boon_Selene_130",
-		
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "PoseidonUpgrade",
 		SpeakerNames = { "Poseidon", },
 
@@ -914,11 +918,10 @@
 
 	TimeSlowDemeterTalent = 
 	{
-		InheritFrom = {"LegendaryTalent", "SpellTalentTrait"},
+		InheritFrom = {"LegendaryTalent", "SpellTalentTrait", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_127",
 	
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "DemeterUpgrade",
 		SpeakerNames = { "Demeter", },
 		
@@ -1261,10 +1264,9 @@
 	--
 	LaserApolloTalent = 
 	{
-		InheritFrom = {"SpellTalentTrait", "LegendaryTalent"},
+		InheritFrom = {"SpellTalentTrait", "LegendaryTalent", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_123",
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "ApolloUpgrade",
 		SpeakerNames = { "Apollo", },
 
@@ -1406,14 +1408,18 @@
 	{
 		InheritFrom = {"SpellTalentTrait", "LegendaryTalent" },
 		Icon = "Boon_Selene_68",
-		PolymorphHealthMultiplier = 0.95,
+		
+		AddOutgoingDamageModifiers =
+		{
+			ValidBaseDamageAddition = 120,
+			ValidProjectiles = { "MorphDamageProjectile" },
+			ReportValues = { ReportedPolymorphDamageBoost = "ValidBaseDamageAddition"},
+		},
 		ExtractValues =
 		{
 			{
-				Key = "PolymorphHealthMultiplier",
-				ExtractAs = "Multiplier",
-				Format = "NegativePercentDelta",
-				HideSigns = true
+				Key = "ReportedPolymorphDamageBoost",
+				ExtractAs = "TooltipPolymorphDamageBoost",
 			},
 			{
 				External = true,
@@ -1421,6 +1427,7 @@
 				BaseName = "PolymorphTag",
 				BaseProperty = "Duration",
 				ExtractAs = "PolymorphDuration",
+				SkipAutoExtract = true,
 			},
 			{
 				External = true,
@@ -1798,10 +1805,9 @@
 	},
 	PolymorphZeusTalent = 
 	{
-		InheritFrom = {"LegendaryTalent", "SpellTalentTrait"},
+		InheritFrom = {"LegendaryTalent", "SpellTalentTrait", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_124",
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "ZeusUpgrade",
 		SpeakerNames = { "Zeus", },
 
@@ -2075,10 +2081,9 @@
 	
 	SummonHeraTalent = 
 	{
-		InheritFrom = {"LegendaryTalent", "SpellTalentTrait"},
+		InheritFrom = {"LegendaryTalent", "SpellTalentTrait", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_125",
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "HeraUpgrade",
 		SpeakerNames = { "Hera", },
 
@@ -2415,10 +2420,9 @@
 	},
 	MeteorHestiaTalent = 
 	{
-		InheritFrom = {"SpellTalentTrait", "LegendaryTalent"},
+		InheritFrom = {"SpellTalentTrait", "LegendaryTalent", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_126",
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "HestiaUpgrade",
 		SpeakerNames = { "Hestia", },
 
@@ -2686,10 +2690,9 @@
 	},
 	LeapHephaestusTalent = 
 	{
-		InheritFrom = {"SpellTalentTrait", "LegendaryTalent"},
+		InheritFrom = {"SpellTalentTrait", "LegendaryTalent", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_129",
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "HephaestusUpgrade",
 		SpeakerNames = { "Hephaestus", },
 		
@@ -2806,7 +2809,7 @@
 	},
 	TransformSpecialCritTalent = 
 	{
-		InheritFrom = {"SpellTalentTrait"},
+		InheritFrom = {"SpellTalentTrait", "LegendaryTalent"},
 		Icon = "Boon_Selene_106",
 		
 		AddOutgoingCritModifiers =
@@ -2928,7 +2931,7 @@
 	},
 	TransformSpecialTalent = 
 	{
-		InheritFrom = {"SpellTalentTrait", "LegendaryTalent"},
+		InheritFrom = {"SpellTalentTrait"},
 		Icon = "Boon_Selene_109",
 		AddWeaponsToTraits = 
 		{
@@ -2993,10 +2996,9 @@
 	},
 	TransformAphroditeTalent = 
 	{
-		InheritFrom = {"LegendaryTalent", "SpellTalentTrait"},
+		InheritFrom = {"LegendaryTalent", "SpellTalentTrait", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_128",
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "AphroditeUpgrade",
 		SpeakerNames = { "Aphrodite", },
 
@@ -3230,7 +3232,7 @@
 		
 		OnWeaponFiredFunctions =
 		{
-			ValidWeapons = WeaponSets.HeroAllWeapons,
+			WeaponNames = ConcatTableValues(WeaponSets.HeroAllWeapons, {"WeaponCastProjectileHades", "WeaponAnywhereCast", "WeaponCastProjectile", "WeaponCastLob" }),	
 			FunctionName = "CheckAutoMoonBeam",
 		},
 		ManaSpendCostModifiers = 
@@ -3254,11 +3256,9 @@
 	},
 	MoonBeamAresTalent = 
 	{
-		InheritFrom = {"SpellTalentTrait", "MoonBeamTalentTrait", "LegendaryTalent"},
+		InheritFrom = {"SpellTalentTrait", "MoonBeamTalentTrait", "LegendaryTalent", "ForceDuoAppearanceTrait"},
 		Icon = "Boon_Selene_131",
-
 		IsDuoBoon = true,
-		Frame = "Duo",
 		LinkedGod = "AresUpgrade",
 		SpeakerNames = { "Ares", },
 

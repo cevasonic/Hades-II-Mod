@@ -97,6 +97,8 @@ GlobalVoiceLines.WaitingForMailboxItemVoiceLines =
 		
 		{ Cue = "/VO/Melinoe_2329", Text = "This'll take a little while..." },
 		{ Cue = "/VO/Melinoe_2330", Text = "It'll be worth the wait." },
+		{ Cue = "/VO/Melinoe_5927", Text = "Awaiting delivery.", PlayFirst = true },
+		{ Cue = "/VO/Melinoe_5928", Text = "Should be on its way.", PlayFirst = true },
 	},
 }
 

@@ -528,6 +528,38 @@ LootSetData.Hermes =
 					
 					Text = "Had enough surface air for now, I get it, M. The more familiar path is often best! Either way, take this at your own pace. Don't anybody rush you! Except me." },
 			},
+			HermesUnderworldStreak01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "F" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 4,
+					},
+					{
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradeSurfacePenaltyCure" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ZagreusPastFirstMeeting" },
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0250",
+					Text = "Message from Olympus, M! It says {#Emph}How come you're toiling about the Underworld? We sure could use you way up here, it's just we're way too proud to ask! {#Prev}But {#Emph}I {#Prev}am not too proud." },
+			},
 
 			HermesRunStartSurface01 =
 			{
@@ -635,6 +667,31 @@ LootSetData.Hermes =
 					
 					Text = "I know you can't breathe in our surface air forever, M, so it's a good thing I got a hold of you right as you're starting off! We'll get you to this mountaintop in practically no time." },
 			},
+			HermesRunSurfaceStreak01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 4,
+						Path = { "BiomesReached", "N" },
+						CountPathTrue = true,
+						Comparison = ">=",
+						Value = 4,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0251",
+					
+					Text = "Message from Olympus, M! It says {#Emph}Cheers for all the backup lately, since we know you could be down in Tartarus fighting with Gramps instead. {#Prev}Athena's words, not mine!" },
+			},
 
 			-- story events
 			HermesAboutReachingSurface01 =
@@ -705,6 +762,55 @@ LootSetData.Hermes =
 				{ Cue = "/VO/Hermes_0064",
 					Text = "You made it pretty far down there before! Impressive work, I knew you had it in you, M! But Gramps still isn't backing down, is he? Maybe he's having second thoughts at least!" },
 			},
+			HermesUnderworldRunCleared02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Boss01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0276",
+					Portrait = "Portrait_Hermes_Serious_01",
+					Text = "That wasn't Gramps himself you dealt with last night, but some sort of fluke of possibility that happened all because of how you dealt with him in the first place? I've seen a lot of things, M, but this is a first!" },
+			},
+			HermesUnderworldRunCleared03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						PathTrue = { "PrevRun", "RoomsEntered", "I_Boss01" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0277",
+					Text = "Last night marks one more mean old Chronos down I guess! Sounds like we've got a lot of them to go through, though I'm sure we'll start taking care of them faster and faster!" },
+			},
+
 			HermesSurfaceRunCleared01 =
 			{
 				PlayOnce = true,
@@ -751,6 +857,61 @@ LootSetData.Hermes =
 				{ Cue = "/VO/Hermes_0214",
 					Emote = "PortraitEmoteFiredUp",
 					Text = "We really got him, M! Typhon, that is! I saw him tumble down the dark side of the mountain to the bottom and go {#Emph}boom! {#Prev}Then later saw him slowly get back up, and roar more angrily than ever, but hey!" },
+			},
+			HermesSurfaceRunCleared03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HermesFieldAboutTyphonDeath01" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						Path = { "PrevRun", "RoomsEntered" },
+						HasAny = { "Q_Boss01", "Q_Boss02" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0279",
+					Text = "I wouldn't have believed you're going after the remains of Typhon had I not seen the whole thing for myself! Time works in strange ways! And looks like you can put a stop to it after all. Some of it!" },
+			},
+			HermesSurfaceRunCleared04 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HermesFieldAboutTyphonDeath01" },
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						Path = { "PrevRun", "RoomsEntered" },
+						HasAny = { "Q_Boss01", "Q_Boss02" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0280",
+					Text = "Another night, another Typhon down, but there are plenty more where he came from, is that your understanding, M? Glad those Typhons haven't been a problem for us here!" },
 			},
 
 			HermesAboutOlympusSiege01 =
@@ -888,6 +1049,33 @@ LootSetData.Hermes =
 					Text = "No way you could have already stopped Gramps by now, but going after him right when you did, you're buying us some time to put a little wrinkle in his plan. So {#Emph}cheers!" },
 			},
 
+			HermesAboutPolyphemus01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathFalse = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "RoomsEntered" },
+						HasAny = { "N_Boss01", "N_Boss02" }
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+					{
+						PathFalse = { "CurrentRun", "BiomesReached", "O" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0289",
+					Portrait = "Portrait_Hermes_Serious_01",
+					Text = "That Cyclops waiting as you're heading out of town? Been there a while, thought eventually he would move on, but he did not! Gramps must have put him up to this..." },
+			},
 			HermesAboutEris01 =
 			{
 				PlayOnce = true,
@@ -1183,6 +1371,57 @@ LootSetData.Hermes =
 					
 					Text = "All this reminds of the time I backed your brother when he was searching for your mum! Had a vested interest in the outcome, sure. But before I knew it, I really started to care! We'll find a way to help them, won't we, M?" },
 			},
+			HermesAboutZagreus02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "C_Boss01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0281",
+					
+					Text = "Saw your brother's back and doing well, that's great! Always was a tough sort, I figured he'd pull through. Who knows, maybe some evening he'll get {#Emph}you {#Prev}out of a bind!" },
+			},
+			HermesAboutZagreus03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						SumPrevRuns = 3,
+						Path = { "RoomsEntered", "C_Boss01" },
+						Comparison = ">=",
+						Value = 1,
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HermesGift07", "ZagreusBossGrantsBondForged01" }
+					}
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0282",
+					
+					Text = "One of these nights, maybe you could teach your brother how you breathe up here so he could pay us all a visit too? Eventually, I mean, after we're finished cleaning up for Gramps. The family always wanted Zag to stop on by." },
+			},
+
 			HermesAboutArtemis01 =
 			{
 				PlayOnce = true,
@@ -1224,6 +1463,27 @@ LootSetData.Hermes =
 				{ Cue = "/VO/Hermes_0100",
 					
 					Text = "You already caught up with Artemis, good good! She and I don't always chat, running around a lot, being discreet and all. But we exchange a knowing look from time to time!" },
+			},
+			HermesAboutArtemis03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "NPC_Artemis_Field_01" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HermesGift07", "ArtemisGift07" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0298",
+					
+					Text = "Been good to see you and Artemis out and about a little more! She's got a mean bow but she can always use somebody out there drawing all the attention so she can line up her shots!" },
 			},
 
 			HermesAboutCharon01 =
@@ -1620,12 +1880,9 @@ LootSetData.Hermes =
 					{
 						PathTrue = { "CurrentRun", "UseRecord", "DemeterUpgrade" }
 					},
-					--[[
 					{
-						Path = { "CurrentRun", "TextLinesRecord" },
-						HasNone = GameData.GodAboutGodEvents,
+						PathFalse = { "GameState", "TextLinesRecord", "DemeterPalaceFirstMeeting" },
 					},
-					]]--
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 				{ Cue = "/VO/Hermes_0099",
@@ -1908,6 +2165,62 @@ LootSetData.Hermes =
 					Portrait = "Portrait_Hermes_Serious_01",
 					Text = "This is a proper spooky night, you had something to do with it, right M? My heart's racing nonstop! Whatever you've been up to in your Crossroads there, hope it works!" },
 			},
+			HermesAboutShrine02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HermesAboutShrine01" }
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = ">=",
+						Value = 14,
+					},
+					--[[
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.AboutShrineEvents,
+					},
+					]]--
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0270",
+					Portrait = "Portrait_Hermes_Serious_01",
+					Text = "Hec says you spoke the Oath of the Unseen, so then I guess we're in for it, right M? The others might not know what's going on, it's just another eerie night, but you do what you have to do. Night's will be done and all." },
+			},
+			HermesAboutShrine03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HermesAboutShrine02" }
+					},
+					{
+						Path = { "GameState", "SpentShrinePointsCache" },
+						Comparison = "==",
+						Value = 0,
+					},
+					--[[
+					{
+						Path = { "CurrentRun", "TextLinesRecord" },
+						HasNone = GameData.AboutShrineEvents,
+					},
+					]]--
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+				{ Cue = "/VO/Hermes_0271",
+					Text = "You've never been one to back down from anything, huh, M. Well then that Oath of the Unseen is {#Emph}everything {#Prev}you ever wanted probably! Why go easy, when you could go hard?" },
+			},
+
 			HermesAboutGameplayTimer01 =
 			{
 				PlayOnce = true,
@@ -1919,9 +2232,7 @@ LootSetData.Hermes =
 					{
 						PathTrue = { "ConfigOptionCache", "ShowGameplayTimer" }
 					},
-					{
-						PathFalse = { "CurrentRun", "ActiveBounty" },
-					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
@@ -1942,14 +2253,54 @@ LootSetData.Hermes =
 					{
 						PathFalse = { "ConfigOptionCache", "ShowGameplayTimer" }
 					},
-					{
-						PathFalse = { "CurrentRun", "ActiveBounty" },
-					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
 				{ Cue = "/VO/Hermes_0219",
 					Text = "Notice you're not timing yourself anymore, and M? It breaks my heart. Not really, mind. Just find your speed, but still! Want to know how fast you are, there's only one way to find out." },
+			},
+
+			HermesAboutNewRecord01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "PrevRun", "NewRecordClearTime" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0287",
+					Emote = "PortraitEmoteFiredUp",
+					Text = "Hey, you made it to the finish line faster than ever last time! I may be keeping tabs, it's what I do, and maybe you won't {#Emph}always {#Prev}beat your best, but when it happens, it has {#Emph}got {#Prev}to feel good!" },
+			},
+			HermesAboutNewRecord02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "PrevRun", "NewRecordClearTime" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0288",
+					Text = "Guess what, last night, you made it to the end in record time, {#Emph}again! {#Prev}Keep getting faster like that and you'll soon be giving {#Emph}me {#Prev}a run for it, though I won't stand for that, you hear me, M?" },
 			},
 
 			HermesAboutPackageBounty01 =
@@ -1974,6 +2325,28 @@ LootSetData.Hermes =
 
 				{ Cue = "/VO/Hermes_0090",
 					Text = "Had a feeling that I'd find you here one of these nights, you know? Like something's in the air. I'm all keyed up, just want to get things done as {#Emph}mega{#Prev}-fast as possible!" },
+			},
+			HermesAboutPackageBounty02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "ActiveBounty" },
+					},
+					{
+						PathTrue = { "PrevRun", "ActiveBounty" },
+					},
+				},
+
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0273",
+					Portrait = "Portrait_Hermes_Serious_01",
+					Text = "Something's odd about tonight though can't exactly put my finger on it, M. Though Hec says that lately you've been messing with the Pitch-Black Stone of yours, which always made me feel a bit like {#Emph}this!" },
 			},
 
 			HermesAboutKeepsake01 =
@@ -2013,6 +2386,27 @@ LootSetData.Hermes =
 
 				{ Cue = "/VO/Hermes_0228",
 					Text = "What a coincidence, it's you, and you're {#Emph}already {#Prev}quick! But you can always be a little quicker! Not me, though." },
+			},
+			HermesAboutKeepsake03 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "TimedBuffKeepsake" },
+					},
+					{
+						Path = { "CurrentRun", "Hero", "TraitDictionary", "TimedBuffKeepsake", 1, "Rarity" },
+						IsAny = { "Epic", "Heroic" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0272",
+					Text = "Well you are moving awful quick, and sure enough, you've got that Droplet from me there! You must be real used to it, and it'll keep delivering night after night, you've got my guarantee!" },
 			},
 			HermesAboutApolloKeepsake01 =
 			{
@@ -2273,6 +2667,26 @@ LootSetData.Hermes =
 					Portrait = "Portrait_Hermes_Serious_01",
 					Text = "Something that scares me, M, is the idea that Time may be even quicker than {#Emph}I {#Prev}am. Remember back when you were real small! Well {#Emph}bam! {#Prev}You're {#Emph}old {#Prev}now, just like {#Emph}that!" },
 			},
+			HermesAboutTime02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0296",
+					Text = "Time sure is strange, don't you think, M? No surprise not even Gramps entirely understands it himself. I just don't like it when Time drags on for too long, so {#Emph}let's move!" },
+			},
 			HermesAboutClients01 =
 			{
 				PlayOnce = true,
@@ -2289,6 +2703,54 @@ LootSetData.Hermes =
 
 				{ Cue = "/VO/Hermes_0297",
 					Text = "I've got a lot of regulars, but just between us, {#Emph}this {#Prev}one is my favorite, M. You Underworld types tend not to be too fussy, and you're clear with what you want. I like that about you!" },
+			},
+			HermesAboutAmbrosia01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "TextLinesRecord" },
+						HasAll = { "HermesGift08", "CharonGift08" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0390",
+					Text = "Cheers again for the Ambrosia, M. Not been much time for it though my professional associate and I managed to share a bottle recently. Short break, mind, but just what I needed!" },
+			},
+			HermesAboutCharonPoints01 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						Path = { "GameState", "LifetimeResourcesSpent", "CharonPoints" },
+						Comparison = ">=",
+						Value = 30,
+					},
+					{
+						Path = { "PrevRun", "ResourcesSpent", "CharonPoints" },
+						Comparison = ">=",
+						Value = 3,
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0391",
+					Text = "You sure are a good customer to my professional associate, or so I'm hearing, M! I'm mostly hearing {#Emph}hrrrrnggh{#Prev}, mind, but I've seen how many of his Gold Rewards you're racking up, and it {#Emph}is {#Prev}quite a lot!" },
 			},
 			HermesAboutLittleToSay01 =
 			{
@@ -2745,13 +3207,15 @@ LootSetData.Hermes =
 						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
 					},
 					{
-						Path = { "CurrentRun", "UseRecord" },
-						HasNone = { "SpellDrop", "TalentDrop" }
+						PathFalse = { "CurrentRun", "UseRecord", "NPC_Artemis_Field_01" }
+					},
+					{
+						PathFalse = { "PrevRun", "UseRecord", "NPC_Artemis_01" }
 					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
 
-				{ Cue = "/VO/Hermes_0032",
+				{ Cue = "/VO/Hermes_0410",
 					
 					Text = "Hey hey, M! One of those heys is from Artemis." },
 			},
@@ -2763,10 +3227,8 @@ LootSetData.Hermes =
 						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
 					},
 					{
-						PathFalse = { "CurrentRun", "UseRecord", "NPC_Artemis_Field_01" }
-					},
-					{
-						PathFalse = { "PrevRun", "UseRecord", "NPC_Artemis_01" }
+						Path = { "CurrentRun", "UseRecord" },
+						HasNone = { "SpellDrop", "TalentDrop" }
 					},
 				},
 				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
@@ -2774,6 +3236,279 @@ LootSetData.Hermes =
 				{ Cue = "/VO/Hermes_0033",
 					
 					Text = "Hey hey, M! One of those heys is from Selene." },
+			},
+
+			HermesChat32 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0392",
+					
+					Text = "Let's keep the pace up and get rid of every last bad possibility!" },
+			},
+			HermesChat33 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0393",
+					
+					Text = "It's been a busy night though I will always make the stop for you!" },
+			},
+			HermesChat34 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "PrevRun", "Cleared" }
+					},
+					{
+						Path = { "PrevRun", "RoomsEntered" },
+						HasAny = { "Q_Boss01", "Q_Boss02" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0394",
+					
+					Text = "Think you can take out Typhon just like last time, M?" },
+			},
+			HermesChat35 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "N" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0395",
+					
+					Text = "However many Typhon possibilities are left, let's make one less!" },
+			},
+			HermesChat36 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "HermesUnderworldRunCleared02" },
+					},
+					NamedRequirementsFalse = { "StandardPackageBountyActive" },
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0396",
+					
+					Text = "Got another mean old Chronos to take care of so don't let me keep you, M!" },
+			},
+			HermesChat37 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0397",
+					Emote = "PortraitEmoteFiredUp",
+					Text = "Choose quickly M, {#Emph}or else! {#Prev}Or else I'll wait. But I would rather not!" },
+			},
+			HermesChat38 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0398",
+					Text = "Don't just want to be quick, {#Emph}be {#Prev}quick! Including when you choose!" },
+			},
+			HermesChat39 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0399",
+					Text = "Got something I think you can use, and a couple others just in case!" },
+			},
+			HermesChat40 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0400",
+					Text = "Now take a moment to decide here M, but don't take more than that!" },
+			},
+			HermesChat41 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0401",
+					Text = "The busier we are, the more we do, and the faster the time goes by!" },
+			},
+			HermesChat42 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						Path = { "GameState", "GamePhase", },
+						Comparison = "==",
+						Value = 5,
+					},
+					{
+						Path = { "CurrentRun", "UseRecord" },
+						HasNone = { "SpellDrop", "TalentDrop" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0402",
+					Text = "New moon, which means Selene gets a break, but you know who does not?" },
+			},
+			HermesChat43 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0403",
+					Text = "The sooner we get this done, the sooner we get to the next, and on, and on!" },
+			},
+			HermesChat44 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0404",
+					Text = "Don't keep me waiting, M, unless you want to kill me, in which case we can't be friends!" },
+			},
+			HermesChat45 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "CurrentRun", "BiomesReached", "F" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0405",
+					Text = "Used to always want you on the surface although lately I don't mind it either way!" },
+			},
+			HermesChat46 =
+			{
+				PlayFirst = true,
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						Path = { "CurrentRun", "CurrentRoom", "Name" },
+						IsAny = { "F_Opening01", "F_Opening02", "F_Opening03", "N_Opening01" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0406",
+					Text = "Found you quick so you have got the whole rest of the night to hurry up!" },
+			},
+			HermesChat47 =
+			{
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "UseRecord", "HermesUpgrade" }
+					},
+					{
+						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+				},
+				PreEventFunctionName = "BoonInteractPresentation", PreEventFunctionArgs = { PickupWait = 1.0, },
+
+				{ Cue = "/VO/Hermes_0407",
+					Text = "Sure, the worst of our problems are over for now, but why slow down?" },
 			},
 		},
 
@@ -3200,22 +3935,6 @@ LootSetData.Hermes =
 			PlayFromTarget = true,
 
 			{ Cue = "/VO/MelinoeField_0643", Text = "Nothing like a quick exchange of gifts!" },
-		},
-
-		SwapUpgradePickedVoiceLines =
-		{
-			BreakIfPlayed = true,
-			RandomRemaining = true,
-			PreLineWait = 1.05,
-			SuccessiveChanceToPlay = 0.33,
-			UsePlayerSource = true,
-			GameStateRequirements =
-			{
-				{
-					PathTrue = { "CurrentRun", "CurrentRoom", "ReplacedTraitSource", },
-				},
-			},
-
 		},
 
 	},

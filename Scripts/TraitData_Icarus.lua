@@ -2,18 +2,57 @@ OverwriteTableKeys( TraitData, {
 	-- Icarus
 	BaseIcarus = 
 	{
+		InheritFrom = { "ForceCommonAppearanceTrait" },
 		PackageName = "NPC_Icarus_01",
 		DebugOnly = true,
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 1
+			},
+		}
 	},
 	
 	FocusAttackDamageTrait = 
 	{
 		InheritFrom = {"BaseIcarus"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 5/3
+			},
+		},
 		Icon = "Boon_Icarus_04",
 		AcquireFunctionName = "IcarusUpgradeBoon",
 		AcquireFunctionArgs = 
 		{
-			Count = 3,
+			Count = { BaseValue = 3 },
 			Slot = "Melee",
 			ReportValues = { ReportedCount = "Count"}
 		},
@@ -24,7 +63,7 @@ OverwriteTableKeys( TraitData, {
 			Args =
 			{
 				Name = "FocusAttackDamage",
-				ManaReservationCost = { BaseValue = 35 },
+				ManaReservationCost = 35,
 				ReportValues = 
 				{ 
 					ReportedCost = "ManaReservationCost"
@@ -51,11 +90,30 @@ OverwriteTableKeys( TraitData, {
 	FocusSpecialDamageTrait = 
 	{
 		InheritFrom = {"BaseIcarus"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 5/3
+			},
+		},
 		Icon = "Boon_Icarus_05",
 		AcquireFunctionName = "IcarusUpgradeBoon",
 		AcquireFunctionArgs = 
 		{
-			Count = 3,
+			Count = { BaseValue = 3 },
 			Slot = "Secondary",
 			ReportValues = { ReportedCount = "Count"}
 		},
@@ -66,7 +124,7 @@ OverwriteTableKeys( TraitData, {
 			Args =
 			{
 				Name = "FocusSpecialDamage",
-				ManaReservationCost = { BaseValue = 35 },
+				ManaReservationCost = 35,
 				ReportValues = 
 				{ 
 					ReportedCost = "ManaReservationCost"
@@ -95,6 +153,25 @@ OverwriteTableKeys( TraitData, {
 	{
 		Icon = "Boon_Icarus_06",
 		InheritFrom = {"BaseIcarus"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 70/50
+			},
+		},
 
 		ManaCostModifiers = 
 		{
@@ -112,7 +189,7 @@ OverwriteTableKeys( TraitData, {
 			FunctionName = "CheckIcarusExplosion",
 			Args = 
 			{
-				DamageMultiplier = 1,
+				DamageMultiplier = { BaseValue = 1 },
 				ProjectileName = "IcarusExplosion",
 				ExcludeLinked = true,
 				MultihitWeaponWhitelist = 
@@ -174,6 +251,25 @@ OverwriteTableKeys( TraitData, {
 	{
 		Icon = "Boon_Icarus_03",
 		InheritFrom = {"BaseIcarus"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 7/5
+			},
+		},
 
 		OnWeaponFiredFunctions =
 		{
@@ -230,7 +326,25 @@ OverwriteTableKeys( TraitData, {
 	{
 		InheritFrom = { "BaseIcarus", "CostumeTrait" },
 		Icon = "Boon_Icarus_01",
-		Frame = "nil",
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 6/4
+			},
+		},
 		Uses = 1,
 		Invincible = true,
 		SetupFunctions =
@@ -241,7 +355,7 @@ OverwriteTableKeys( TraitData, {
 				{
 					Source = "Icarus",
 					Delay = 0.75,
-					BaseAmount = { BaseValue = 50 },
+					BaseAmount = 50,
 					ReportValues = 
 					{ 
 						ReportedArmor = "BaseAmount",
@@ -255,7 +369,7 @@ OverwriteTableKeys( TraitData, {
 			Args = 
 			{
 				ProjectileName = "IcarusArmorExplosion",
-				DamageMultiplier = 1,
+				DamageMultiplier = { BaseValue = 1 },
 				ReportValues = 
 				{
 					ReportedMultiplier = "DamageMultiplier",
@@ -281,8 +395,26 @@ OverwriteTableKeys( TraitData, {
 	BreakInvincibleArmorBoon = 
 	{
 		InheritFrom = { "BaseIcarus", "CostumeTrait" },
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 14/10
+			},
+		},
 		Icon = "Boon_Icarus_02",
-		Frame = "nil",
 		Uses = 1,
 		Invincible = true,
 		SetupFunctions =
@@ -331,6 +463,25 @@ OverwriteTableKeys( TraitData, {
 	{
 		Icon = "Boon_Icarus_07",
 		InheritFrom = {"BaseIcarus"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 3/7
+			},
+		},
 		CurrentRoom = 0,
 		RoomsPerUpgrade = 
 		{ 
@@ -388,6 +539,25 @@ OverwriteTableKeys( TraitData, {
 	UpgradeHammerBoon = 
 	{
 		InheritFrom = { "BaseIcarus"},
+		RarityLevels =
+		{
+			Common =
+			{
+				Multiplier = 1
+			},
+			Rare =
+			{
+				Multiplier = 1
+			},
+			Epic =
+			{
+				Multiplier = 1
+			},
+			Heroic =
+			{
+				Multiplier = 2
+			},
+		},
 		Icon = "Boon_Icarus_08",
 		CodexGameStateRequirements =
 		{
@@ -398,6 +568,31 @@ OverwriteTableKeys( TraitData, {
 		AcquireFunctionName = "UpgradeHammers",
 		AcquireFunctionArgs =
 		{ 
+			Count = { BaseValue = 1 },
+			ReportValues = 
+			{ 
+				ReportedAmount = "Count",
+			}
+		},
+		CustomNameWithRequirements = 
+		{
+			GameStateRequirements = 
+			{
+				{
+					PathFromSource = true,
+					Path = { "AcquireFunctionArgs", "Count" },
+					Comparison = ">",
+					Value = 1,
+				}
+			},
+			Name = "UpgradeHammerBoon_Plural"
+		},
+		ExtractValues =
+		{
+			{
+				Key = "ReportedAmount",
+				ExtractAs = "TooltipAmount",
+			},
 		},
 		FlavorText = "UpgradeHammerBoon_FlavorText",
 	},

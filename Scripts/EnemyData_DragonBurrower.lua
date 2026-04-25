@@ -184,6 +184,7 @@ WeaponSetData =
 		{
 			MinAttacksBetweenUse = 2,
 			MinRequiredKillEnemies = 2,
+			HasEffectFalse = "ChillEffect",
 		},
 
 		AIData =
@@ -196,6 +197,9 @@ WeaponSetData =
 			FireDuration = 0.34,
 			PostAttackAlpha = 0,
 			PostAttackDuration = 0.0,
+
+			ClearAllEffects = true,
+			PreTeleportClearAllEffects = true,
 
 			PreAttackStopAnimations = { "DragonBurrowerBurrowFxPersistent"},
 			PreAttackFx = "DragonBurrowerBurrowFxOut",

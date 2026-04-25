@@ -6,6 +6,7 @@ RoomSetData.H =
 		RichPresence = "#RichPresence_H",
 		Icon = "GUI\\Screens\\BountyBoard\\Biome_Fields",
 		ResultText = "RunHistoryScreenResult_Fields",
+		DreamResultText = "RunHistoryScreenResult_Fields_Dream",
 		
 		ValidateSecretData = true,
 		HasHarvestPoint = true,
@@ -332,8 +333,10 @@ RoomSetData.H =
 
 		MinDepthBeforeIntros = 0,
 
-		-- LocationText = "BiomeH",
+		LocationText = "Location_BiomeH",
+		DreamLocationText = "Location_BiomeH_Dream",
 		SaveProfileLocationText = "BiomeH_Short",
+		DreamSaveProfileLocationText = "BiomeH_Short_DreamRun",
 
 		NarrativeContextArt = "DialogueBackground_Fields",
 		NarrativeContextArtFlippable = false,
@@ -363,6 +366,14 @@ RoomSetData.H =
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeH_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -372,6 +383,14 @@ RoomSetData.H =
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
+				},
+			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeH_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
 				},
 			},
 		},
@@ -490,9 +509,9 @@ RoomSetData.H =
 
 		LegalEncounters = { "Empty" },
 		ZoomFraction = 0.71,
+		ZoomFractionAlt = 0.85,
 		IntroSequenceDuration = 0.7,
 		Starting = true,
-		NoReward = true,
 		NoReroll = true,
 		SkipLastKillPresentation = true,
 		HideRewardPreview = true,
@@ -505,6 +524,22 @@ RoomSetData.H =
 		ForceAtBiomeDepthMin = 0,
 		ForceAtBiomeDepthMax = 1,
 		MaxAppearancesThisBiome = 1,
+
+		ForcedRewardStore = "RunProgress",
+		IneligibleRewards = RewardSets.OpeningRoomBans,
+		SpawnRewardOnId = 621444,
+		DisableRewardMagnetisim = true,
+		RewardGameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				Path = { "CurrentRun", "EnteredBiomes" },
+				Comparison = "==",
+				Value = 0,
+			},
+		},
 
 		FamiliarsPreferSpawnPointMovement = true,
 		FrogFamiliarMaxLeapDistance = 900,
@@ -602,10 +637,11 @@ RoomSetData.H =
 		{
 			Threaded = true,
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeH",
+					DreamText = "Location_BiomeH_Dream",
 					AnimationName = "InfoBannerFieldsIn",
 					AnimationOutName = "InfoBannerFieldsOut",
 					Delay = 2.0,
@@ -914,6 +950,7 @@ RoomSetData.H =
 		},
 
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.88,
 
 		MusicMutedStems = { "Drums" },
 
@@ -940,7 +977,8 @@ RoomSetData.H =
 						Value = 2,
 					},
 					{
-						PathFalse = { "CurrentRun", "ActiveBounty" },
+						Path = { "CurrentRun" },
+						HasNone = { "ActiveBounty", "IsDreamRun" },
 					},
 					NamedRequirementsFalse = { "HecateFamiliarsInHub", "HecateMissing" },
 					ChanceToPlay = 0.8,
@@ -1067,6 +1105,7 @@ RoomSetData.H =
 		FlipHorizontalChance = 0.0,
 
 		ZoomFraction = 0.745,
+		ZoomFractionAlt = 0.89,
 
 		HarvestPointChances =
 		{
@@ -1163,6 +1202,7 @@ RoomSetData.H =
 		FlipHorizontalChance = 0.0,
 
 		ZoomFraction = 0.735,
+		ZoomFractionAlt = 0.85,
 		HarvestPointChances =
 		{
 			0.4,
@@ -1232,7 +1272,10 @@ RoomSetData.H =
 	
 		LinkedRooms = { "H_Boss01", "H_Boss02" },
 
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
+
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.87,
 
 		AlwaysForce = true,
 		GameStateRequirements =
@@ -1258,6 +1301,65 @@ RoomSetData.H =
 		
 		SecretSpawnChance = 0.0,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "H_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantHMyrtle" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantHMyrtle" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			OrRequirements =
+			{
+				{
+					NamedRequirements = { "NoFamiliarShovelPointFoundThisBiome" },
+				},
+				{
+					{
+						PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+					},
+					{
+						PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "H_PreBoss01" },
+					},
+					{
+						PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantHWheatSeed" },
+					},
+					{
+						PathFalse = { "CurrentRun", "ResourcesGained", "PlantHWheatSeed" },
+					},
+				},
+			}
+		},
+		PickaxePointForceRequirements =
+		{
+			OrRequirements =
+			{
+				{
+					NamedRequirements = { "NoFamiliarPickaxePointFoundThisBiome" },
+				},
+				{
+					{
+						PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+					},
+					{
+						PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "H_PreBoss01" },
+					},
+					{
+						PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "OreHGlassrock" },
+					},
+					{
+						PathFalse = { "CurrentRun", "ResourcesGained", "OreHGlassrock" },
+					},
+				},
+			},
+		},
+
 		SkipLastKillPresentation = true,
 		LegalEncounters = { "Shop" },
 		ForcedFirstReward = "Shop",
@@ -1275,6 +1377,12 @@ RoomSetData.H =
 
 		IgnoreStemMixer = true,
 		MusicMutedStems = { "Drums", "Bass", "Guitar", },
+		MusicMutedStemsRequirements =
+		{
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" }
+			},
+		},
 
 		HarvestPointChances = { 0.33 },
 		ShovelPointChance = 0.33,
@@ -1353,15 +1461,7 @@ RoomSetData.H =
 		InheritFrom = { "BaseH" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 3,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 
 		HasFishingPoint = false,
@@ -1381,12 +1481,15 @@ RoomSetData.H =
 		ResetBinksOnExit = true,
 		LegalEncounters = { "BossInfestedCerberus01", },
 		ForcedReward = "MixerHBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 
 		EntranceFunctionName = "RoomEntranceBossFields",
-		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 619155 },
+		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 619155, DreamEnterWait = 0.95 },
 		IntroSequenceDuration = 0.95,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.69,
+		ZoomFractionAlt = 0.74,
 		ThreadEnterVoiceLines = true,
 
 		UnthreadedEvents =
@@ -1399,6 +1502,7 @@ RoomSetData.H =
 					SetupBossIds = { 619155 },
 					UnlockDelay = 3.0,
 					DelayedStart = true,
+					SkipAngleTowardTarget = true,
 				},
 			},
 		},
@@ -1464,7 +1568,9 @@ RoomSetData.H =
 				},
 				GameStateRequirements =
 				{
-					-- None
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				}
 			},
 		},
@@ -1572,15 +1678,7 @@ RoomSetData.H =
 
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 3,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		HasFishingPoint = false,
@@ -1601,14 +1699,17 @@ RoomSetData.H =
 
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
-		LegalEncounters = { "BossInfestedCerberus02", },
+		LegalEncounters = { "BossInfestedCerberus02" },
 		ForcedReward = "MixerHBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 
 		EntranceFunctionName = "RoomEntranceBossFields",
-		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 738212 },
+		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 738212, DreamEnterWait = 0.95 },
 		IntroSequenceDuration = 0.95,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.69,
+		ZoomFractionAlt = 0.79,
 		ThreadEnterVoiceLines = true,
 
 		UnthreadedEvents =
@@ -1621,6 +1722,7 @@ RoomSetData.H =
 					SetupBossIds = { 738212 },
 					UnlockDelay = 3.0,
 					DelayedStart = true,
+					SkipAngleTowardTarget = true,
 				},
 			},
 		},
@@ -1673,7 +1775,9 @@ RoomSetData.H =
 				},
 				GameStateRequirements =
 				{
-					-- None
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				}
 			},
 		},
@@ -1770,6 +1874,7 @@ RoomSetData.H =
 		},
 
 		EntranceFunctionName = "RoomEntrancePortal",
+		EntranceFunctionArgs = { SkipLocationBanner = true },
 
 		RequiresLinked = true,
 		NextRoomSet = { "I", },
@@ -1781,6 +1886,7 @@ RoomSetData.H =
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.90,
 
 		FlipHorizontalChance = 0.0,
 		IntroSequenceDuration = 0.9,
@@ -2064,6 +2170,7 @@ RoomSetData.H =
 		--ForcedRewardStore = "FieldsCombatRewards",
 
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.81,
 
 		StartUnthreadedEvents =
 		{
@@ -2143,6 +2250,7 @@ RoomSetData.H =
 				Value = 4,
 			},
 		},
+		ZoomFractionAlt = 0.84,
 	},
 
 	H_Combat03 =
@@ -2272,6 +2380,7 @@ RoomSetData.H =
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.80,
 	},
 
 	H_Combat08 =
@@ -2298,6 +2407,7 @@ RoomSetData.H =
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.79,
 	},
 
 	H_Combat09 =
@@ -2324,6 +2434,7 @@ RoomSetData.H =
 				Value = 4,
 			},
 		},
+		ZoomFractionAlt = 0.78,
 	},
 
 	H_Combat10 =
@@ -2350,6 +2461,7 @@ RoomSetData.H =
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.77,
 	},
 
 	H_Combat11 =
@@ -2378,6 +2490,7 @@ RoomSetData.H =
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.80,
 	},
 
 	H_Combat12 =
@@ -2404,6 +2517,7 @@ RoomSetData.H =
 				GlobalVoiceLines = "ForkingPathVoiceLines",
 			},
 		},
+		ZoomFractionAlt = 0.80,
 	},
 
 	H_Combat13 =
@@ -2431,6 +2545,7 @@ RoomSetData.H =
 		},
 
 		HasFishingPoint = false,
+		ZoomFractionAlt = 0.85,
 	},
 
 	H_Combat14 =
@@ -2456,6 +2571,7 @@ RoomSetData.H =
 				Value = 4,
 			},
 		},
+		ZoomFractionAlt = 0.86,
 	},
 
 	H_Combat15 =

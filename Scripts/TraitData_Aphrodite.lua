@@ -400,6 +400,15 @@ OverwriteTableKeys( TraitData, {
 				ChangeType = "Absolute",
 				ExcludeLinked = true,
 			},
+			{
+				WeaponName = "WeaponAxeDash",
+				TraitName = "AxeDashAttackTrait",
+				FalseTraitName = "AxeRallyAspect",
+				ProjectileProperty = "DetonateFx",
+				ChangeValue = "AxeNova_AxeDashAttack_Aphrodite",
+				ChangeType = "Absolute",
+				ExcludeLinked = true,
+			},
 
 			-- Lob
 			{
@@ -1436,7 +1445,7 @@ OverwriteTableKeys( TraitData, {
 		{
 			ValidWeapons = { "WeaponBlink" },
 			ExcludeLinked = true,
-			FunctionName = "FireAphroditeSprintProjectile",
+			FunctionName = "FireAphroditeSprintProjectileAtStart",
 			FunctionArgs = 
 			{
 				ProjectileName = "AphroditeRushProjectile",
@@ -1457,11 +1466,11 @@ OverwriteTableKeys( TraitData, {
 		},
 		OnSprintEndAction = 
 		{
-			FunctionName = "FireAphroditeSprintProjectile",
+			FunctionName = "FireAphroditeSprintProjectileAtEnd",
 		},
 		OnBlinkEndAction = 
 		{
-			FunctionName = "FireAphroditeSprintProjectile",
+			FunctionName = "FireAphroditeSprintProjectileAtEnd",
 			FunctionArgs = { CheckSprint = true },
 		},
 		StatLines =
@@ -1747,6 +1756,7 @@ OverwriteTableKeys( TraitData, {
 				Key = "HealFraction",
 				ExtractAs = "TooltipHeal",
 				Format = "PercentHeal",
+				MaximumValue = 100,
 				SkipAutoExtract = true,
 			}
 		}
@@ -2116,7 +2126,7 @@ OverwriteTableKeys( TraitData, {
 						{
 							{
 								Path = { "GameState", "TextLinesRecord", },
-								HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", },
+								HasAny = { "HeraFirstPickUp", "HeraFirstPickUpAlt", "HeraFirstPickUpPostPalace", "HeraFirstPickUpPostPalaceAlt" },
 							},
 						},
 						CustomFunction = "ApplyDamageShare"

@@ -6,6 +6,7 @@
 		RichPresence = "#RichPresence_F",
 		Icon = "GUI\\Screens\\BountyBoard\\Biome_Erebus",
 		ResultText = "RunHistoryScreenResult_Erebus",
+		DreamResultText = "RunHistoryScreenResult_Erebus_Dream",
 
 		ValidateSecretData = true,
 		HasHarvestPoint = true,
@@ -291,7 +292,9 @@
 		StopSecretMusic = true,
 
 		LocationText = "Location_BiomeF",
+		DreamLocationText = "Location_BiomeF_Dream",
 		SaveProfileLocationText = "Location_BiomeF",
+		DreamSaveProfileLocationText = "Location_BiomeF_Dream",
 
 		BreakableValueOptions = { MaxHighValueBreakables = 3 },
 		
@@ -329,6 +332,14 @@
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeF_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -338,6 +349,14 @@
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
+				},
+			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeF_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
 				},
 			},
 		},
@@ -354,6 +373,7 @@
 
 		LegalEncounters = { "OpeningEmpty", "OpeningGeneratedF", "FCastTutorialFight" },
 		NextRoomSet = { "F", },
+		RemoveTimerBlock = "InterBiome",
 
 		ForcedRewardStore = "RunProgress",
 		IneligibleRewards = RewardSets.OpeningRoomBans,
@@ -372,16 +392,21 @@
 		EndSecretMusicOnCombatOver = true, -- for Hermes
 
 		--IntroSequenceDuration = 1.5,
-		ZoomFraction = .84,
+		ZoomFraction = 0.84,
+		ZoomFractionAlt = 0.91,
 
 		GameStateRequirements =
 		{
 			{
-				Path = { "CurrentRun", "EncountersOccurredCache", },
-				UseLength = true,
-				Comparison = "<=",
-				Value = 0,
+				Path = { "CurrentRun", "RoomsEntered" },
+				HasNone = { "F_Opening02", "F_Opening03" },
 			},
+		},
+
+		RunOverrides =
+		{
+			-- needed for biome music to progress correctly in Dream Runs
+			BiomeDepthCache = 0,
 		},
 
 		DistanceTriggersPostCombatReload = true,
@@ -423,6 +448,11 @@
 				Comparison = "<=",
 				Value = 1,
 			},
+			{
+				Path = { "GameState", "CompletedRunsCache" },
+				Comparison = ">=",
+				Value = 1,
+			},
 		},
 		ShovelPointChance = 0.02,
 		PickaxePointChance = 0.02,
@@ -440,9 +470,6 @@
 				Path = { "GameState", "LifetimeResourcesGained", "OreFSilver" },
 				Comparison = "<=",
 				Value = 5,
-			},
-			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
 			},
 		},
 		--ExorcismPointChance = 0.02,
@@ -688,12 +715,15 @@
 						PathTrue = { "CurrentRun", "Hero", "TraitDictionary", "ForceApolloBoonKeepsake" },
 					},
 					{
-						Path = { "GameState", "TraitUses", "ForceApolloKeepsake" },
+						Path = { "GameState", "TraitUses", "ForceApolloBoonKeepsake" },
 						Comparison = ">=",
 						Value = 4,
 					},
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "HermesAboutApolloKeepsake01" }
+					},
+					{
+						PathTrue = { "GameState", "UseRecord", "HermesUpgrade" },
 					},
 				},
 			},
@@ -720,16 +750,26 @@
 				Args = { TrackName = "/Music/MusicRunstart_MC", },
 				-- Args = { TrackName = "/Music/IrisMusicExploration2_MC", },
 			},
+			{
+				FunctionName = "EndBiomeRecords",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" }
+					},
+				},
+			},
 		},
 
 		ThreadedEvents =
 		{
 			Threaded = true,
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeF",
+					DreamText = "Location_BiomeF_Dream",
 					AnimationName = "InfoBannerErebusIn",
 					AnimationOutName = "InfoBannerErebusOut",
 					Delay = 2.0,
@@ -796,11 +836,6 @@
 			{ GlobalVoiceLines = "TaskBegunVoiceLines" },
 		},
 
-		ExitVoiceLines =
-		{
-			{ GlobalVoiceLines = "StorytellerRunStartVoiceLines" },
-		},
-
 		ExitsUnlockedDistanceTriggers =
 		{
 			{
@@ -856,10 +891,11 @@
 		InheritFrom = { "F_Opening01", "BaseF" },
 		Starting = true,
 
-		LegalEncounters = { "OpeningGeneratedF", "FCastTutorialFight" },
+		LegalEncounters = { "OpeningEmpty", "OpeningGeneratedF", "FCastTutorialFight" },
 
 		SpawnRewardOnId = 40055,
 		ForceIfUnseenForRuns = 6,
+		ZoomFractionAlt = 0.91,
 
 		EntranceFunctionName = "RoomEntranceMaterialize",
 		EntranceFunctionArgs = { HeroGoalAngle = 225, ZoomStartFraction = 0.55 },
@@ -867,10 +903,8 @@
 		GameStateRequirements =
 		{
 			{
-				Path = { "CurrentRun", "EncountersOccurredCache", },
-				UseLength = true,
-				Comparison = "<=",
-				Value = 0,
+				Path = { "CurrentRun", "RoomsEntered" },
+				HasNone = { "F_Opening01", "F_Opening03" },
 			},
 			{
 				Path = { "GameState", "RoomCountCache", "F_Opening01", },
@@ -928,10 +962,11 @@
 		InheritFrom = { "F_Opening01", "BaseF" },
 		Starting = true,
 
-		LegalEncounters = { "OpeningGeneratedF", "FCastTutorialFight" },
+		LegalEncounters = { "OpeningEmpty", "OpeningGeneratedF", "FCastTutorialFight" },
 
 		SpawnRewardOnId = 567223,
 		ForceIfUnseenForRuns = 6,
+		ZoomFractionAlt = 0.91,
 
 		EntranceFunctionName = "RoomEntranceMaterialize",
 		EntranceFunctionArgs = { HeroGoalAngle = 325, ZoomStartFraction = 0.60 },
@@ -939,10 +974,8 @@
 		GameStateRequirements =
 		{
 			{
-				Path = { "CurrentRun", "EncountersOccurredCache", },
-				UseLength = true,
-				Comparison = "<=",
-				Value = 0,
+				Path = { "CurrentRun", "RoomsEntered" },
+				HasNone = { "F_Opening01", "F_Opening02" },
 			},
 			{
 				Path = { "GameState", "RoomCountCache", "F_Opening01", },
@@ -1018,10 +1051,10 @@
 		LegalEncounters = { "MiniBossTreant", "MiniBossTreant_Shrine" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.86,
+		ZoomFractionAlt = 1.13,
 
 		ForcedRewardStore = "RunProgress",
 		EligibleRewards = { "Boon" },
-		-- BoonRaritiesOverride = { Legendary = 0.1, Epic = 0.25, Rare = 0.90 },
 		BoonRaritiesOverride = { Legendary = 0.05, Epic = 0.07, Rare = 0.90 },
 
 		MaxCreationsThisRun = 1,
@@ -1094,6 +1127,7 @@
 		LegalEncounters = { "MiniBossFogEmitter", "MiniBossFogEmitter_Shrine" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.82,
+		ZoomFractionAlt = 0.93,
 
 		ForcedRewardStore = "RunProgress",
 		EligibleRewards = { "Boon" },
@@ -1173,6 +1207,7 @@
 		LegalEncounters = { "MiniBossAssassin" },
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.03,
 		IntroSequenceDuration = 0.3,
 
 		ForcedRewardStore = "RunProgress",
@@ -1232,7 +1267,6 @@
 	{
 		InheritFrom = { "BaseF" },
 		DebugOnly = true,
-		AllowAnomalyReplacement = true,
 	},
 
 	F_Combat01 =
@@ -1265,6 +1299,7 @@
 		
 		FlipHorizontalChance = 0.0,
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 1.05,
 
 		DistanceTriggers =
 		{
@@ -1304,6 +1339,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Left",
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.1,
 		
 		HasFishingPoint = false,
 
@@ -1331,6 +1367,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 1.05,
 		
 		HasFishingPoint = false,
 
@@ -1358,6 +1395,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Right",
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.05,
 		
 		GameStateRequirements =
 		{
@@ -1416,6 +1454,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.1,
 
 		GameStateRequirements =
 		{
@@ -1441,6 +1480,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Left",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.05,
 
 		ExitsUnlockedDistanceTriggers =
 		{
@@ -1457,6 +1497,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Left",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.1,
 
 		ExitsUnlockedDistanceTriggers =
 		{
@@ -1473,6 +1514,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.05,
 		
 		GameStateRequirements =
 		{
@@ -1498,6 +1540,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.15,
 
 		HasFishingPoint = false,
 
@@ -1522,6 +1565,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Left",
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 1.1,
 
 		GameStateRequirements =
 		{
@@ -1540,6 +1584,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.0,
 
 		RushMaxRangeOverride = 525,
 
@@ -1597,6 +1642,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Right",
 		ZoomFraction = 0.83,
+		ZoomFractionAlt = 1.05,
 
 		GameStateRequirements =
 		{
@@ -1622,6 +1668,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.02,
 
 		ExitsUnlockedDistanceTriggers =
 		{
@@ -1679,6 +1726,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Left",
 		ZoomFraction = 0.80,
+		ZoomFractionAlt = 1.0,
 
 		GameStateRequirements =
 		{
@@ -1703,6 +1751,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Left",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.02,
 
 		GameStateRequirements =
 		{
@@ -1727,6 +1776,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Right",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 1.03,
 
 		GameStateRequirements =
 		{
@@ -1752,6 +1802,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
 		ZoomFraction = 0.79,
+		ZoomFractionAlt = 1.01,
 
 		GameStateRequirements =
 		{
@@ -1777,6 +1828,7 @@
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Right",
 		ZoomFraction = 0.85,
+		ZoomFractionAlt = 0.98,
 
 		GameStateRequirements =
 		{
@@ -1801,6 +1853,7 @@
 	{
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
+		ZoomFractionAlt = 1.0,
 
 		GameStateRequirements =
 		{
@@ -1816,6 +1869,7 @@
 	{
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "LeftRight",
+		ZoomFractionAlt = 1.05,
 		FishingPointRadii =
 		{
 			[571028] = 300,
@@ -1834,6 +1888,7 @@
 	{
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Right",
+		ZoomFractionAlt = 1.03,
 
 		GameStateRequirements =
 		{
@@ -1849,6 +1904,7 @@
 	{
 		InheritFrom = { "BaseF_Combat" },
 		EntranceDirection = "Right",
+		ZoomFractionAlt = 1.02,
 
 		HasFishingPoint = false,
 
@@ -1871,6 +1927,8 @@
 		ForceAtBiomeDepthMin = 10,
 		ForceAtBiomeDepthMax = 10,
 
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
+
 		GameStateRequirements =
 		{
 			-- None
@@ -1885,6 +1943,7 @@
 
 		WellShopSpawnChance = 0.0,
 		ChallengeSpawnChance = 0.0,
+		ZoomFractionAlt = 0.90,
 
 		SkipLastKillPresentation = true,
 
@@ -1912,6 +1971,12 @@
 
 		IgnoreStemMixer = true,
 		MusicMutedStems = { "Drums", "Bass", "Guitar", },
+		MusicMutedStemsRequirements =
+		{
+			{
+				PathFalse = { "CurrentRun", "IsDreamRun" }
+			},
+		},
 
 		InspectPoints =
 		{
@@ -1955,15 +2020,7 @@
 		InheritFrom = { "BaseF" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 1,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 
 		RequiresLinked = true,
@@ -1977,6 +2034,49 @@
 		ShovelPointChance = 0.4,
 		PickaxePointChance = 0.4,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "F_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantFMoly" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantFMoly" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "F_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantFNightshadeSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantFNightshadeSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "F_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "OreFSilver" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreFSilver" },
+			},
+		},
+
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
 		LegalEncounters =
@@ -1987,14 +2087,17 @@
 			"BossHecateMissing",
 		},
 		ForcedReward = "MixerFBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		IgnoreForRewardStoreCount = true,
 		NoReroll = true,
 
 		EntranceFunctionName = "RoomEntranceBoss",
-		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 510167 },
+		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 510167, DreamIntroSequenceDuration = 1.8, DreamEnterWait = 1.0 },
 		IntroSequenceDuration = 2.7,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.9,
 		FlipHorizontalChance = 0.0,
 
 		StartUnthreadedEvents =
@@ -2031,6 +2134,7 @@
 					SetupBossIds = { 510167 },
 					DelayedStart = true,
 					SkipAngleTowardTarget = true,
+					DreamRunIntroFunctionName = "HecateBossDreamRunIntro",
 				},
 				GameStateRequirements =
 				{
@@ -2168,15 +2272,7 @@
 		InheritFrom = { "BaseF" },
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 1,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		HecateStageTransitionPoint = 585238,
@@ -2192,6 +2288,49 @@
 		
 		--HasFishingPoint = false,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "F_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantFMoly" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantFMoly" },
+			},
+		},
+		ShovelPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "F_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "PlantFNightshadeSeed" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantFNightshadeSeed" },
+			},
+		},
+		PickaxePointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+			},
+			{
+				PathTrue = { "GameState", "LastUnderworldRunRecord", "RoomsEntered", "F_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastUnderworldRunRecord", "ResourcesGained", "OreFSilver" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "OreFSilver" },
+			},
+		},
+
 		ResetBinksOnEnter = true,
 		ResetBinksOnExit = true,
 		LegalEncounters =
@@ -2202,14 +2341,17 @@
 			"BossHecateMissing"
 		},
 		ForcedReward = "MixerFBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		IgnoreForRewardStoreCount = true,
 		NoReroll = true,
 
 		EntranceFunctionName = "RoomEntranceBoss",
-		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 571032 },
+		EntranceFunctionArgs = { AngleTowardsIdOnEnd = 571032, DreamIntroSequenceDuration = 1.8, DreamEnterWait = 1.0 },
 		IntroSequenceDuration = 2.7,
 		BlockCameraReattach = true,
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.9,
 		FlipHorizontalChance = 0.0,
 
 		StartUnthreadedEvents =
@@ -2247,6 +2389,7 @@
 					SetupUnitTypeAIs = { "HecateCopyEM" },
 					DelayedStart = true,
 					SkipAngleTowardTarget = true,
+					DreamRunIntroFunctionName = "HecateBossDreamRunIntro",
 				},
 				GameStateRequirements =
 				{
@@ -2404,6 +2547,7 @@
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.88,
 
 		FlipHorizontalChance = 0.0,
 		IntroSequenceDuration = 0.9,
@@ -2499,6 +2643,17 @@
 		{
 			{ FunctionName = "EndAllBiomeStates" },
 			{ FunctionName = "PostBossFirstFloorPresentation" },
+			{
+				FunctionName = "ActivatePrePlacedObstacles",
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "NeoChronosCanSpawnInErebus" },
+				},
+				Args =
+				{
+					Groups = { "ChronosLedgeGroup" },
+				},
+			},
 		},
 		ThreadedEvents =
 		{
@@ -2528,6 +2683,9 @@
 				SkipCooldownCheckIfNonePlayed = true,
 				GameStateRequirements =
 				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
 					},
@@ -2565,6 +2723,9 @@
 				{ Cue = "/VO/MelinoeField_4584", Text = "Retracing my past steps...",
 					GameStateRequirements =
 					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
 						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
@@ -2748,6 +2909,7 @@
 		DisableRewardMagnetisim = true,
 
 		ZoomFraction = 0.83,
+		ZoomFractionAlt = 0.95,
 		FlipHorizontalChance = 0.0,
 
 		ShovelPointChance = 0.4,
@@ -2805,6 +2967,7 @@
 		EntranceDirection = "LeftRight",
 		SecretMusic = "/Music/BlankMusicCue",
 		--ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.93,
 		FlipHorizontalChance = 0.0,
 		SpawnRewardOnId = 40055,
 		DisableRewardMagnetisim = true,
@@ -2830,7 +2993,8 @@
 				Value = 1,
 			},
 			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
+				Path = { "CurrentRun" },
+				HasNone = { "ActiveBounty", "IsDreamRun" },
 			},
 		},
 
@@ -2851,7 +3015,8 @@
 						Value = 1,
 					},
 					{
-						PathFalse = { "CurrentRun", "ActiveBounty" },
+						Path = { "CurrentRun" },
+						HasNone = { "ActiveBounty", "IsDreamRun" },
 					},
 				},
 				Args =
@@ -3081,9 +3246,11 @@
 		},
 
 		IgnoreHarvestBiomeSpawnLimit = true,
+		AlwaysAllowKillingEnemyVoiceLines = true,
 
 		SecretMusic = "/Music/IrisArachneTheme_MC",
 		ZoomFraction = 0.9,
+		ZoomFractionAlt = 0.99,
 		TimerBlock = "StoryRoom",
 
 		FlipHorizontalChance = 0.0,

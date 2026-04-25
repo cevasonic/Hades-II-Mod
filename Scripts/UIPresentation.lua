@@ -76,7 +76,6 @@ function DisplayInfoBanner( source, args )
 	titleText.Color = args.TitleTextColor or textColor
 	titleText.OffsetX = args.TitleTextOffsetX
 	titleText.OffsetY = textYOffset
-	titleText.GroupName = layer
 	CreateTextBox( titleText )
 
 	local iconBackingId = CreateScreenObstacle({ Name = "BlankObstacle", X = ScreenCenterX, Y = 240 + iconBackingOffsetY,
@@ -124,7 +123,6 @@ function DisplayInfoBanner( source, args )
 	subtitleText.Color = args.SubTextColor or subtitleText.Color
 	subtitleText.LuaKey = args.SubtitleData.LuaKey
 	subtitleText.LuaValue = args.SubtitleData.LuaValue
-	subtitleText.GroupName = layer
 
 	if subtitleText.Text ~= nil then
 		SetAnimation({ Name = "LocationBackingSubtitleTextShadowIn", DestinationId = subtitleShadowId, OffsetY = subtitleText.OffsetY })
@@ -142,7 +140,9 @@ function DisplayInfoBanner( source, args )
 
 	PlaySound({ Name = args.AppearSound or "/SFX/Menu Sounds/HadesLocationTextDisappear" })
 
-	wait( (args.Duration or 3.0) - (args.SubtitleData.UpdateDelay or 0), args.ThreadName or RoomThreadName )
+	if not SessionMapState.BlockInfoBanners then
+		wait( (args.Duration or 3.0) - (args.SubtitleData.UpdateDelay or 0), args.ThreadName or RoomThreadName )
+	end
 
 	SessionMapState.ShowingInfoBanner = false -- Ready for another one
 
@@ -155,8 +155,8 @@ function DisplayInfoBanner( source, args )
 	StopAnimation({ Name = "LocationBackingIconShadowIn", DestinationId = iconId })
 	SetAlpha({ Id = iconBackingId, Fraction = 0.0, Duration = 0.5, EaseIn = 0, EaseOut = 1 })
 	SetAlpha({ Id = subtitleShadowId, Fraction = 0.0, Duration = 0.5, EaseIn = 0, EaseOut = 1 })
-	ModifyTextBox({ Id = iconId, FadeTarget = 0.0, FadeDuration = 0.5, ColorTarget = backColor, ColorDuration = 0.5, EaseIn = 0, EaseOut = 1 })
-	ModifyTextBox({ Id = locationTextBG, FadeTarget = 0.0, ColorTarget = textFadeColor, FadeDuration = 0.5, EaseIn = 0, EaseOut = 1 })
+	ModifyTextBox({ Id = iconId, FadeTarget = 0.0, FadeDuration = 0.5, ColorTarget = backColor, ColorDuration = 0.5 })
+	ModifyTextBox({ Id = locationTextBG, FadeTarget = 0.0, ColorTarget = textFadeColor, FadeDuration = 0.5 })
 	wait( 0.5, args.ThreadName or RoomThreadName )
 	Destroy({ Id = iconBackingId })
 	Destroy({ Id = subtitleShadowId })
@@ -164,6 +164,22 @@ function DisplayInfoBanner( source, args )
 
 	Destroy({ Ids = { backingGradientId, locationTextBG, iconId } })
 
+end
+
+function DisplayBiomeLocationBanner( source, args )
+	local newArgs = args
+	if CurrentRun.IsDreamRun then
+		newArgs = ShallowCopyTable( args )
+		newArgs.Text = args.DreamText
+		newArgs.AnimationName = "InfoBannerDreamIn"
+		newArgs.AnimationOutName = "InfoBannerDreamOut"
+		if not args.SkipDreamSubtitle then
+			newArgs.SubtitleText = "Location_DreamBiomeOrder"
+			newArgs.SubtitleOffsetY = 0
+			newArgs.SubtitleDelay = 1
+		end
+	end
+	DisplayInfoBanner( source, newArgs )
 end
 
 function RunInterstitialPresentation( data, args )
@@ -174,27 +190,43 @@ function RunInterstitialPresentation( data, args )
 
 	args = args or {}
 
-	if data.Header ~= nil then
-		GameState.RunInterstitialRecord[data.Header] = true	
+	SessionMapState.PlayingInterstitial = true
+	ScreenAnchors.Interstitial = {}
+
+	if args.AllowSkip then
+		thread( InterstitialWaitForInput, data )
 	end
 
 	AddInputBlock({ Name = "ShowingInterstitial" })
 	ToggleCombatControl({"AdvancedTooltip"}, false, "Interstitial" )
 
 	HideCombatUI("ShowingInterstitial")
-	AltAspectRatioFramesShow()
+	if not args.IgnoreAltAspectRatioFrames then
+		AltAspectRatioFramesShow()
+	end
 	if data.PauseMusic then
 		PauseMusic()
 	end
 
-	local text = data.Header
-	local color = Color.White
+	local groupName = "Combat_Menu_Overlay"
 
-	local groupName = args.GroupName or "Combat_Menu_Overlay"
+	local startingAlpha = nil
+	if data.BackgroundAlpha ~= nil then
+		startingAlpha = 0
+	end
+	local blackScreenId = CreateScreenObstacle({
+		Name = "rectangle01",
+		X = ScreenCenterX,
+		Y = ScreenCenterY,
+		Group = groupName,
+		Scale = 10.0,
+		Color = Color.Black,
+		Alpha = startingAlpha,
+		AlphaTarget = data.BackgroundAlpha,
+		AlphaTargetDuration = data.BackgroundAlphaFadeDuration,
+	})
 
-	local blackScreenId = CreateScreenObstacle({ Name = "rectangle01", X = ScreenCenterX, Y = ScreenCenterY, Group = groupName, Scale = 10.0, Color = Color.Black })
-
-	wait(0.25)
+	wait( data.BackgroundAlphaFadeDuration or 0.25, "RunInterstitial" )
 
 	local source = {} -- Dummy source for disembodied voice
 	source.LineHistoryName = "Speaker_Anonymous"
@@ -202,36 +234,31 @@ function RunInterstitialPresentation( data, args )
 		source.LineHistoryName = "Speaker_Homer"
 	end
 	source.SubtitleColor = data.SubtitleColor or Color.NarratorVoice
-	thread( PlayVoiceLines, data.VoiceLines, false, source, { Queue = "Interrupt" } )
-	if not args.SkipFadeIn then
+	if SessionMapState.PlayingInterstitial then
+		thread( PlayVoiceLines, data.VoiceLines, false, source, { Queue = "Interrupt", ThreadName = "RunInterstitialVO" } )
+	end
+
+	if not data.SkipFadeIn then
 		FadeIn({ Duration = 0 })
 	end
 
-	if args.StartSound ~= nil then
-		PlaySound({ Name = args.StartSound })
-	end
-	local loopSoundId = nil
-	if args.LoopSound ~= nil then
-		loopSoundId = PlaySound({ Name = args.LoopSound })
-	end
-
-	if data.UseFadeIn ~= nil then
-		FadeOut({ Color = Color.Black, Duration = 0.0 })
-		FadeIn({ Duration = 0.5 })
-	end
-
-	local anims = args.Animations or data.Animations or
+	local anims = data.Animations or
 		{
 			{
-				AnimationName = "RemBGIntroStart",
+				AnimationName = "RemBGOutroStart",
 			},
 		}
 	if anims ~= nil then
-		ScreenAnchors.Epilogue = {}
 		for index, animationData in ipairs( anims ) do
+			local animationX = ScreenCenterX
+			local animationY = ScreenCenterY
+			if animationData.X ~= nil and animationData.Y ~= nil then
+				animationX = ScreenCenterNativeOffsetX + animationData.X
+				animationY = ScreenCenterNativeOffsetY + animationData.Y
+			end
 			animationData.Id = CreateScreenObstacle({ Name = "BlankObstacle",
-				X = animationData.X or ScreenCenterX,
-				Y = animationData.Y or ScreenCenterY,
+				X = animationX,
+				Y = animationY,
 				Group = animationData.Group or groupName,
 				Animation = animationData.AnimationName,
 				Scale = animationData.Scale,
@@ -242,14 +269,15 @@ function RunInterstitialPresentation( data, args )
 			if animationData.ScaleTarget ~= nil then
 				SetScale({ Id = animationData.Id, Fraction = animationData.ScaleTarget, Duration = animationData.ScaleTargetDuration, EaseIn = animationData.ScaleEaseIn, EaseOut = animationData.ScaleEaseOut })
 			end
-			table.insert( ScreenAnchors.Epilogue, animationData.Id )
+			table.insert( ScreenAnchors.Interstitial, animationData.Id )
 		end
 	end
 
-	wait( data.TextDelay or 2.2 )
-	if ambienceId ~= nil then
-		StopSound({ Id = ambienceId, Duration = 15.8 })
+	if SessionMapState.PlayingInterstitial then
+		wait( data.TextDelay or 2.2, "RunInterstitial" )
 	end
+
+	local text = data.Header or data.Name
 	local lang = GetLanguage({})
 	local fontSize = 86
 	if lang == "pl" then
@@ -271,36 +299,106 @@ function RunInterstitialPresentation( data, args )
 			})
 	ModifyTextBox({ Id = promptId, ScaleTarget = 1.2, ScaleDuration = 70 })
 
-	if not args.SkipSound then
+	if not data.SkipPromptSound then
 		PlaySound({ Name = "/Leftovers/World Sounds/MapText", Id = promptId })
 	end
 
-	wait(data.FadeOutWait or 5)
+	if SessionMapState.PlayingInterstitial then
+		wait( data.FadeOutWait or 5, "RunInterstitial" )
+	end
 
 	ModifyTextBox({ Id = promptId, FadeTarget = 0.0, FadeDuration = 1.0, ColorTarget = { 0.302 , 0.255 , 0.137 , 1 }, ColorDuration = 0.5 })
 
-	if not data.SkipFadeSound and not args.SkipSound then
+	if not data.SkipPromptSound then
 		local fadeSoundId = PlaySound({ Name = "/SFX/Menu Sounds/HadesTextDisappearFade", Id = promptId })
 		SetVolume({ Id = fadeSoundId, Value = 0.3 })
 	end
-	if loopSoundId ~= nil then
-		StopSound({ Id = loopSoundId, Duration = 0.2 })
+	if SessionMapState.PlayingInterstitial then
+		wait( 2.0, "RunInterstitial" )
 	end
-	wait(1.0)
-	wait(1.0)
-	FadeOut({ Color = Color.Black, Duration = 1.0 })
-	wait(2.2)
+	if data.EndSound ~= nil and SessionMapState.PlayingInterstitial then
+		PlaySound({ Name = data.EndSound })
+	end
+	if not data.SkipFadeOut then
+		FadeOut({ Color = Color.Black, Duration = 1.0 })
+	else
+		SetAlpha({ Id = blackScreenId, Fraction = 0, Duration = 1.0 })
+		SetAlpha({ Ids = ScreenAnchors.Interstitial, Fraction = 0, Duration = 1.0 })
+	end
+	if SessionMapState.PlayingInterstitial then
+		wait( 1.2, "RunInterstitial" )
+	end
+	wait( 1.0 )
 	DestroyTextBox({ Id = promptId })
 	Destroy({ Id = promptId })
 	Destroy({ Id = blackScreenId })
-	Destroy({ Ids = ScreenAnchors.Epilogue })
+	Destroy({ Ids = ScreenAnchors.Interstitial })
+	ScreenAnchors.Interstitial = nil
 
 	ResumeMusic()
 	
-	ToggleCombatControl({"AdvancedTooltip"}, true, "Interstitial" )
+	ToggleCombatControl( { "AdvancedTooltip" }, true, "Interstitial" )
 	RemoveInputBlock({ Name = "ShowingInterstitial" })
-	UnblockCombatUI("ShowingInterstitial")
-	AltAspectRatioFramesHide()
+	UnblockCombatUI( "ShowingInterstitial" )
+	if not args.IgnoreAltAspectRatioFrames then
+		AltAspectRatioFramesHide()
+	end
+
+	killWaitUntilThreads( "InterstitialWaitForInput" )
+	killTaggedThreads( "InterstitialWaitForInput" )
+	SessionMapState.PlayingInterstitial = nil
+end
+
+function InterstitialWaitForInput( interstitialData )
+
+	local skipPromptId = CreateScreenObstacle({
+		Name = "BlankObstacle",
+		X = UIData.InterstitialSkipPrompt.X + ScreenCenterNativeOffsetX,
+		Y = UIData.InterstitialSkipPrompt.Y + ScreenCenterNativeOffsetY,
+		Group = "Overlay",
+		Alpha = 0,
+	})
+	table.insert( ScreenAnchors.Interstitial, skipPromptId )
+
+	local skipPromptTextArgs = ShallowCopyTable( UIData.InterstitialSkipPrompt.TextArgs )
+	skipPromptTextArgs.Id = skipPromptId
+	CreateTextBox( skipPromptTextArgs )
+
+	wait( 1.5 ) -- minimum lockout duration
+
+	local notifyName = "InterstitialWaitForInput"
+	local allowedControls = { "Use", "Rush", "Shout", "Attack2", "Attack1", "Attack3", "AutoLock", "Cancel", "Confirm", "Select", "ItemPin", }
+	while true do
+		-- initial press fades in the prompt
+		NotifyOnControlPressed({ Names = allowedControls, Notify = notifyName })
+		waitUntil( notifyName )
+		SetAlpha({ Id = skipPromptId, Fraction = 1, Duration = 0.2 })
+
+		-- wait for a beat to mitigate the risk of accidentally spamming through
+		wait( 0.3, "InterstitialWaitForInput" )
+
+		-- wait for a second press to confirm
+		NotifyResultsTable[notifyName] = nil
+		NotifyOnControlPressed({ Names = allowedControls, Notify = notifyName, Timeout = 3.0 })
+		waitUntil( notifyName )
+		if NotifyResultsTable[notifyName] ~= nil then
+			break
+		else
+			-- timed out, let's reset
+			SetAlpha({ Id = skipPromptId, Fraction = 0, Duration = 0.2 })
+		end
+	end
+
+	SessionMapState.PlayingInterstitial = nil
+	SetThreadWait( "RunInterstitial", 0.01 )
+	killTaggedThreads( "RunInterstitialVO" )
+	StopSpeech({ Duration = 0.6 })
+	for i, voiceLine in ipairs( interstitialData.VoiceLines ) do
+		SessionMapState.PlayingCues[voiceLine.Cue] = nil
+		killWaitUntilThreads( voiceLine.Cue )
+	end
+	SetAlpha({ Id = skipPromptId, Fraction = 0, Duration = 0.2 })
+
 end
 
 function DisplayInfoToast( source, args )
@@ -397,7 +495,7 @@ function TraitTrayPinOffPresentation( screen, button )
 	PlaySound({ Name = "/SFX/Menu Sounds/VictoryScreenBoonUnpin", Id = button.Id })
 end
 
-function RunClearMessagePresentation( screen, message )
+function RunClearMessagePresentation( screen, message, tooltipData )
 
 	if message == nil then
 		return
@@ -407,7 +505,7 @@ function RunClearMessagePresentation( screen, message )
 
 	wait( 1.0 )
 
-	ModifyTextBox({ Id = components.RunClearMessageText.Id, Text = message, ScaleTarget = 1, ScaleDuration = 0.25, EaseIn = 0, EaseOut = 1 })
+	ModifyTextBox({ Id = components.RunClearMessageText.Id, Text = message, ScaleTarget = 1, ScaleDuration = 0.25, EaseIn = 0, EaseOut = 1, LuaKey = "TooltipData", LuaValue = tooltipData })
 	SetAlpha({ Id = components.RunClearMessageText.Id, Fraction = 0.0 })
 	SetAlpha({ Id = components.RunClearMessageText.Id, Fraction = 1.0, Duration = 1.0, EaseIn = 0, EaseOut = 1 })
 	PlaySound({ Name = "/SFX/Menu Sounds/BiomeMapRewardIcon" })
@@ -605,6 +703,10 @@ function PulseContextActionPresentation( button, args )
 end
 
 function ChronosHealthBarTextTransition(boss)
+
+	if CurrentRun.IsDreamRun then
+		return
+	end
 
 	ModifyTextBox({ Id = ScreenAnchors.BossHealthBack, FadeTarget = 0.0, FadeDuration = 0.66 })
 

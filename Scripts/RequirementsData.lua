@@ -8,13 +8,6 @@ NamedRequirementsData =
 		},
 	},
 
-	NotOpeningRoom =
-	{
-		{
-			Path = { "CurrentRun", "CurrentRoom", "Name", },
-			IsNone = { "F_Opening01", "F_Opening02", "F_Opening03", "N_Opening01", "G_Intro", "H_Intro", "I_Intro", "O_Intro", "P_Intro", "Q_Intro" },
-		},
-	},
 	OlympianOnSpawnVoiceLinesAllowed =
 	{
 		{
@@ -210,21 +203,17 @@ NamedRequirementsData =
 			PathTrue = { "GameState", "TextLinesRecord", "ScyllaAboutChlams01" },
 		},
 		{
-			PathFalse = { "GameState", "WorldUpgradesAdded", "ScyllaAboutChlams02" },
+			PathFalse = { "GameState", "TextLinesRecord", "ScyllaAboutChlams02" },
 		},
 	},
 
 	ScyllaEMActiveAndNotCleared =
 	{
 		{
-			Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-			Comparison = ">=",
-			Value = 2,
-		},
-		{
 			Path = { "GameState", "EncountersCompletedCache" },
 			HasNone = { "BossScylla02" },
 		},
+		NamedRequirements = { "BossDifficultyActive" },
 	},
 
 	Scylla2UnlockedAndUnplayed =
@@ -266,6 +255,28 @@ NamedRequirementsData =
 		{
 			PathFalse = { "GameState", "ScyllaDefeatMusicRecord", "/Music/IrisMusicScylla4_MC" }
 		},
+		{
+			PathFalse = { "CurrentRun", "IsDreamRun" },
+		},
+	},
+
+	ScyllaFanActive =
+	{
+		-- Force = true,
+		{
+			PathFalse = { "CurrentRun", "IsDreamRun" },
+		},
+		{
+			PathTrue = { "GameState", "TextLinesRecord", "ScyllaAboutOdysseusQuest01" },
+		},
+		{
+			SumPrevRuns = 3,
+			Path = { "TextLinesRecord" },
+			TableValuesToCount = { "ScyllaAboutOdysseusQuest01", "ScyllaAboutOdysseusQuest02" },
+			Comparison = "==",
+			Value = 0,
+		},
+		NamedRequirementsFalse = { "OdysseusWandering" },
 	},
 
 	-- @ needs to be on all his key events
@@ -304,6 +315,9 @@ NamedRequirementsData =
 	NarcissusDirtyWater =
 	{
 		{
+			PathFalse = { "CurrentRun", "IsDreamRun" },
+		},
+		{
 			PathTrue = { "GameState", "TextLinesRecord", "EchoAboutNarcissus04" },
 		},
 		--[[
@@ -321,16 +335,64 @@ NamedRequirementsData =
 		},
 	},
 
-	PastTartarusIntroFight =
+	NarcissusEchoChatEligible =
 	{
 		{
-			Path = { "CurrentRun", "CurrentRoom", "RoomSetName", },
-			IsAny = { "I" },
+			Path = { "GameState", "TextLinesRecord" },
+			HasAll = { "NarcissusWithEcho03", "EchoGift08", "NarcissusGift07" }
 		},
 		{
-			Path = { "CurrentRun", "BiomeDepthCache" },
-			Comparison = ">",
-			Value = 2,
+			SumPrevRuns = 9,
+			Path = { "TextLinesRecord" },
+			TableValuesToCount =
+			{
+				"NarcissusWithEchoChat01",
+				"NarcissusWithEchoChat02",
+				"NarcissusWithEchoChat03",
+				"NarcissusWithEchoChat04",
+				"NarcissusWithEchoChat05",
+				"NarcissusWithEchoChat06",
+				"NarcissusWithEchoChat07",
+				"NarcissusWithEchoChat08",
+			},
+			Comparison = "<=",
+			Value = 0,
+		},
+		NamedRequirements = { "NarcissusInFields" },
+		OrRequirements =
+		{
+			-- already queued
+			{
+				{
+					PathFromSource = true,
+					PathTrue = { "NextInteractLines" },
+				},
+			},
+			-- chance to queue
+			{
+				-- 8 chats * 10% chance per chat = 80% chance that one of these will play if eligible
+				ChanceToPlay = 0.1,
+			},
+		},
+	},
+
+	PastTartarusIntroFight =
+	{
+		OrRequirements =
+		{
+			{
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName", },
+					IsNone = { "I" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "BiomeDepthCache" },
+					Comparison = ">",
+					Value = 2,
+				},
+			},
 		},
 	},
 
@@ -515,6 +577,13 @@ NamedRequirementsData =
 		},
 		]]--
 	},
+	HasAllCauldronSpells =
+	{
+		{
+			Path = { "GameState", "WorldUpgrades" },
+			HasAll = ScreenData.GhostAdmin.ItemCategories[1],
+		},
+	},
 
 	MorosUnlockedInHub =
 	{
@@ -626,9 +695,6 @@ NamedRequirementsData =
 		{
 			Path = { "CurrentRun", "TextLinesRecord" },
 			HasNone = { "NarcissusAboutWaters03" },
-		},
-		{
-			PathFalse = { "GameState", "TextLinesRecord", "NarcissusWithEcho03" },
 		},
 	},
 
@@ -836,6 +902,18 @@ NamedRequirementsData =
 					Value = 1,
 				},
 			},
+		},
+	},
+
+	ShouldShowDreamInfoBanner =
+	{
+		{
+			PathTrue = { "CurrentRun", "IsDreamRun" },
+		},
+		{
+			Path = { "SessionState", "MapLoads" },
+			Comparison = "<=",
+			Value = 1,
 		},
 	},
 
@@ -1105,24 +1183,6 @@ NamedRequirementsData =
 			PathTrue = { "GameState", "TextLinesRecord", "DoraGrantsCosmeticsShop01" },
 		},
 	},
-	CosmeticsShopNotUnlocked =
-	{
-		{
-			PathFalse = { "GameState", "TextLinesRecord", "DoraGrantsCosmeticsShop01" },
-		},
-	},
-	CosmeticsShopHasNewItems =
-	{
-		{
-			FunctionName = "HasNewCosmeticsAvailable",
-		}
-	},
-	CosmeticsShopHasUnpurchasedItems =
-	{
-		{
-			FunctionName = "HasUnpurchasedCosmetics",
-		},
-	},
 	DoraMemoryQuestActive =
 	{
 		{
@@ -1222,7 +1282,7 @@ NamedRequirementsData =
 			FunctionArgs = { Name = "WeaponUpgradeDrop", },
 		},
 		{
-			Path = { "CurrentRun", "ClearedBiomes" },
+			Path = { "CurrentRun", "EnteredBiomes" },
 			Comparison = ">",
 			Value = 2,
 		},
@@ -1314,15 +1374,6 @@ NamedRequirementsData =
 		},
 	},
 
-	LastStandAvailable =
-	{
-		{
-			Path = { "CurrentRun", "Hero", "LastStands" },
-			UseLength = true,
-			Comparison = ">",
-			Value = 0,
-		},
-	},
 	MissingLastStand =
 	{
 		{
@@ -1435,7 +1486,7 @@ NamedRequirementsData =
 		{
 			SumPrevRooms = 5,
 			Path = { "EncountersOccurredCache", },
-			TableValuesToCount = { "ArachneCombatF", "ArachneCombatG", "ArachneCombatN", },
+			TableValuesToCount = { "ArachneCombatF", "ArachneCombatG" },
 			Comparison = "<=",
 			Value = 0,
 		},
@@ -1508,6 +1559,7 @@ NamedRequirementsData =
 			FunctionArgs = { TextLines =
 				{
 					"MorosBecomingCloser01",
+					"MorosBecomingCloser01_B",
 					"NemesisPostCombatBecomingCloser01",
 					"IcarusBecomingCloser01",
 					"ErisBecomingCloser01",
@@ -1518,6 +1570,98 @@ NamedRequirementsData =
 			FunctionName = "RequireRunsSinceTextLines",
 			FunctionArgs = { TextLines =
 				{
+					"MorosBecomingCloserChatFollowUp01",
+					"MorosBecomingCloserChatFollowUp02",
+					"MorosBecomingCloserChatFollowUp03",
+					"MorosBecomingCloserChatFollowUp04",
+					"MorosBecomingCloserChatFollowUp05",
+					"MorosBecomingCloserChatFollowUp06",
+
+					"NemesisBecomingCloserGetFreeItem01",
+					"NemesisBecomingCloserGetFreeItem02",
+					"NemesisBecomingCloserGetFreeItem03",
+					"NemesisBecomingCloserGetFreeItem04",
+					"NemesisBecomingCloserGetFreeItem05",
+					"NemesisBecomingCloserGetFreeItem06",
+
+					"ErisBecomingCloserChat01",
+					"ErisBecomingCloserChat02",
+					"ErisBecomingCloserChat03",
+					"ErisBecomingCloserChat04",
+					"ErisBecomingCloserChat05",
+					"ErisBecomingCloserChat06",
+
+					"IcarusBecomingCloserChat01",
+					"IcarusBecomingCloserChat02",
+					"IcarusBecomingCloserChat03",
+					"IcarusBecomingCloserChat04",
+					"IcarusBecomingCloserChat05",
+					"IcarusBecomingCloserChat06",
+				},
+			Min = 5 },
+		},
+	},
+	NoRecentMorosBecomingCloserEvent =
+	{
+		{
+			FunctionName = "RequireRunsSinceTextLines",
+			FunctionArgs = { TextLines =
+				{
+					"MorosBecomingCloser01",
+					"MorosBecomingCloser01_B",
+					"MorosBecomingCloserChatFollowUp01",
+					"MorosBecomingCloserChatFollowUp02",
+					"MorosBecomingCloserChatFollowUp03",
+					"MorosBecomingCloserChatFollowUp04",
+					"MorosBecomingCloserChatFollowUp05",
+					"MorosBecomingCloserChatFollowUp06",
+				},
+			Min = 9 },
+		},
+	},
+	NoRecentNemesisBecomingCloserEvent =
+	{
+		{
+			FunctionName = "RequireRunsSinceTextLines",
+			FunctionArgs = { TextLines =
+				{
+					"NemesisPostCombatBecomingCloser01",
+					"NemesisBecomingCloserGetFreeItem01",
+					"NemesisBecomingCloserGetFreeItem02",
+					"NemesisBecomingCloserGetFreeItem03",
+					"NemesisBecomingCloserGetFreeItem04",
+					"NemesisBecomingCloserGetFreeItem05",
+					"NemesisBecomingCloserGetFreeItem06",
+				},
+			Min = 9 },
+		},
+	},
+
+	NoRecentIcarusBecomingCloserEvent =
+	{
+		{
+			FunctionName = "RequireRunsSinceTextLines",
+			FunctionArgs = { TextLines =
+				{
+					"IcarusBecomingCloser01",
+					"IcarusBecomingCloserChat01",
+					"IcarusBecomingCloserChat02",
+					"IcarusBecomingCloserChat03",
+					"IcarusBecomingCloserChat04",
+					"IcarusBecomingCloserChat05",
+					"IcarusBecomingCloserChat06",
+				},
+			Min = 3 },
+		},
+	},
+
+	NoRecentErisBecomingCloserEvent =
+	{
+		{
+			FunctionName = "RequireRunsSinceTextLines",
+			FunctionArgs = { TextLines =
+				{
+					"ErisBecomingCloser01",
 					"ErisBecomingCloserChat01",
 					"ErisBecomingCloserChat02",
 					"ErisBecomingCloserChat03",
@@ -1526,6 +1670,50 @@ NamedRequirementsData =
 					"ErisBecomingCloserChat06",
 				},
 			Min = 9 },
+		},
+	},
+
+	ErisBecomingCloserEventQueued =
+	{
+		{
+			FunctionName = "RequiredQueuedTextLine",
+			FunctionArgs =
+			{
+				IsAny =
+				{
+					"ErisBecomingCloser01",
+					"ErisBecomingCloserChat01",
+					"ErisBecomingCloserChat02",
+					"ErisBecomingCloserChat03",
+					"ErisBecomingCloserChat04",
+					"ErisBecomingCloserChat05",
+					"ErisBecomingCloserChat06",
+				},
+			},
+		},
+	},
+
+	IcarusBecomingCloserEligible =
+	{
+		OrRequirements =
+		{
+			{
+				{
+					FunctionName = "RequiredQueuedTextLine",
+					FunctionArgs = { IsAny = { "IcarusBecomingCloser01" } },
+				},
+			},
+			{
+				{
+					Path = { "GameState", "GamePhase" },
+					Comparison = "==",
+					Value = 1,
+				},
+				{
+					Path = { "GameState", "TextLinesChoiceRecord", "IcarusBecomingCloser01" },
+					IsAny = { "Choice_IcarusAccept" },
+				},
+			},
 		},
 	},
 
@@ -1541,7 +1729,30 @@ NamedRequirementsData =
 			Path = { "GameState", "TextLinesRecord" },
 			HasAll = { "NemesisPostCombatAboutRelationship02" },
 		},
-		NamedRequirements = { "NoRecentBecomingCloserEvent" },
+		NamedRequirements = { "NoRecentBecomingCloserEvent", "NoRecentNemesisBecomingCloserEvent" },
+	},
+
+	AthenaPresentAndWaiting =
+	{
+		{
+			FunctionName = "RequiredAlive",
+			FunctionArgs = { Units = { "NPC_Athena_01" }, Alive = true },
+		},
+		{
+			PathFalse = { "CurrentRun", "CurrentRoom", "UseRecord", "NPC_Athena_01" },
+		},
+	},
+
+	NemesisBecomingCloserUsable =
+	{
+		{
+			PathEmpty = { "MapState", "AggroedUnits" },
+		},
+		{
+			FunctionName = "RequiredAlive",
+			FunctionArgs = { Units = { "DespairElemental", "DespairElemental_Elite" }, Alive = false },
+		},
+		NamedRequirementsFalse = { "AthenaPresentAndWaiting" },
 	},
 
 	ArtemisSingingBlockedByEvents =
@@ -1588,7 +1799,7 @@ NamedRequirementsData =
 			{
 				{
 					Path = { "CurrentRun", "TextLinesRecord" },
-					HasAny = { "ZagreusPastFirstMeeting", "ZeusPalaceFirstMeeting", "TrueEndingFinale01", "FatesEpilogue01" },
+					HasAny = { "ZagreusPastFirstMeeting", "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt", "TrueEndingFinale01", "FatesEpilogue01" },
 				},
 				{
 					FunctionName = "RequireRunsSinceTextLines",
@@ -2373,6 +2584,21 @@ NamedRequirementsData =
 		},
 	},
 
+	BossDifficultyActive =
+	{
+		{
+			FunctionName = "IsBossDifficultyShrineUpgradeActive",
+		},
+	},
+
+	BossDifficultyWasActiveBeforeDeath =
+	{
+		{
+			FunctionName = "IsBossDifficultyShrineUpgradeActive",
+			FunctionArgs = { UseShrineUpgradesCache = true },
+		},
+	},
+
 	-- @ ending below this line
 	-- used only for Moros DoomAppearance events
 	TrueEndingCriticalPathEventOccurred =
@@ -2388,6 +2614,7 @@ NamedRequirementsData =
 				-- "ZagreusPastMeeting05",
 				"ZagreusPastMeeting06",
 				"ZagreusPastMeeting06_B",
+				"ZeusPalaceFirstMeetingAlt",
 				"ZeusPalaceFirstMeeting",
 				-- "ZeusPalaceMeeting02",
 				-- "ZeusPalaceMeeting03",
@@ -2580,6 +2807,432 @@ NamedRequirementsData =
 		},
 	},
 
+	DreamRunsUnlocked =
+	{
+		OrRequirements =
+		{
+			-- keep Dream Runs available if you've ever done one (even after Story Reset)
+			{
+				{
+					PathTrue = { "GameState", "RoomsEntered", "Dream_Intro" },
+				},
+			},
+			-- for the first unlock
+			{
+				{
+					PathTrue = { "GameState", "TextLinesRecord", "HypnosFinalDreamMeeting01" },
+				},
+				{
+					FunctionName = "RequireRunsSinceTextLines",
+					FunctionArgs = { TextLines = { "HypnosFinalDreamMeeting01" }, Min = 3 },
+				},
+			},
+		},
+	},
+	DreamRunCorrectBiomeGuess =
+	{
+		OrRequirements =
+		{
+			{
+				-- correctly guessed erebus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5481" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "F" },
+				},
+			},
+			{
+				-- correctly guessed oceanus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5482" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "G" },
+				},
+			},
+			{
+				-- correctly guessed fields
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5483" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "H" },
+				},
+			},
+			{
+				-- correctly guessed tartarus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5484" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "I" },
+				},
+			},
+			{
+				-- correctly guessed ephyra
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5485" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "N" },
+				},
+			},
+			{
+				-- correctly guessed thessaly
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5486" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "O" },
+				},
+			},
+			{
+				-- correctly guessed olympus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5487" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "P", "Q" },
+				},
+			},
+			{
+				-- correctly guessed summit
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5488" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "Q" },
+				},
+			},
+		},
+	},
+	DreamRunIncorrectBiomeGuess =
+	{
+		OrRequirements =
+		{
+			{
+				-- correctly guessed erebus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5481" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "F" },
+				},
+			},
+			{
+				-- correctly guessed oceanus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5482" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "G" },
+				},
+			},
+			{
+				-- correctly guessed fields
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5483" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "H" },
+				},
+			},
+			{
+				-- correctly guessed tartarus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5484" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "I" },
+				},
+			},
+			{
+				-- correctly guessed ephyra
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5485" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "N" },
+				},
+			},
+			{
+				-- correctly guessed thessaly
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5486" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "O" },
+				},
+			},
+			{
+				-- correctly guessed olympus
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5487" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "P", "Q" },
+				},
+			},
+			{
+				-- correctly guessed summit
+				{
+					Path = { "LastLinePlayed" },
+					IsAny = { "/VO/MelinoeField_5488" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "Q" },
+				},
+			},
+		},
+	},
+	DreamRunFamiliarPath =
+	{
+		OrRequirements =
+		{
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "F" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "G" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "G" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "H" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "H" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "I" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "N" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "O" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "O" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "P" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "P" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "Q" },
+				},
+			},
+		},
+	},
+	DreamRunUnfamiliarPath =
+	{
+		OrRequirements =
+		{
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "F" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "G" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "G" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "H" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "H" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "I" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "N" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "O" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "O" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "P" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "P" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsNone = { "Q" },
+				},
+			},
+		},
+	},
+	DreamRunReversePath =
+	{
+		OrRequirements =
+		{
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "G" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "F" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "H" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "G" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "I" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "H" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "O" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "N" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "P" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "O" },
+				},
+			},
+			{
+				{
+					Path = { "CurrentRun", "PrevDreamBiome" },
+					IsAny = { "Q" },
+				},
+				{
+					Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+					IsAny = { "P" },
+				},
+			},
+		},
+	},
+
+	InRunFirstHalf = 
+	{
+		{
+			Path = { "CurrentRun", "EnteredBiomes" },
+			Comparison = "<=",
+			Value = 2,
+		}
+	},
+	InRunSecondHalf = 
+	{
+		{
+			Path = { "CurrentRun", "EnteredBiomes" },
+			Comparison = ">",
+			Value = 2,
+		}
+	},
+
 	FatesDiscovered =
 	{
 		NamedRequirements = { "TrueFatesQuestCanBeCompleted" },
@@ -2593,6 +3246,9 @@ NamedRequirementsData =
 			Path = { "UsedBlockDeath" },
 			Comparison = "==",
 			Value = 3,
+		},
+		{
+			PathFalse = { "CurrentRun", "IsDreamRun" },
 		},
 	},
 	FatesDiscoveredTooSoon =
@@ -2608,6 +3264,9 @@ NamedRequirementsData =
 			Path = { "UsedBlockDeath" },
 			Comparison = "==",
 			Value = 3,
+		},
+		{
+			PathFalse = { "CurrentRun", "IsDreamRun" },
 		},
 	},
 
@@ -2646,6 +3305,14 @@ NamedRequirementsData =
 		},
 		{
 			PathFalse = { "GameState", "ReachedTrueEnding" },
+		},
+	},
+
+	AllowOutroSkip =
+	{
+		{
+			Path = { "GameState", "PlayedRunOutros" },
+			HasAny = { "Outro_PostTrueEnding01", "Outro_PostTrueEnding01_B" },
 		},
 	},
 

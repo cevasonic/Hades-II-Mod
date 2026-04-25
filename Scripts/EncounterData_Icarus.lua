@@ -72,14 +72,9 @@ OverwriteTableKeys( EncounterData,
 				PathTrue = { "GameState", "EncountersCompletedCache", "IcarusCombatIntro" },
 			},
 			{
-				PathFalse = { "CurrentRun", "EncountersOccurredCache", "IcarusCombatIntro" },
-			},
-			{
-				PathFalse = { "CurrentRun", "EncountersOccurredCache", "IcarusCombatO" },
-			},
-			{
-				PathFalse = { "CurrentRun", "EncountersOccurredCache", "IcarusCombatO2" },
-			},
+				Path = { "CurrentRun", "EncountersOccurredCache" },
+				HasNone = { "IcarusCombatIntro", "IcarusCombatO", "IcarusCombatO2" }
+			}
 		},
 
 		UnthreadedEvents = EncounterSets.EncounterEventsIcarusShipsCombat,
@@ -97,7 +92,8 @@ OverwriteTableKeys( EncounterData,
 			Append = true,
 			{
 				SumPrevRuns = 4,
-				Path = { "SpawnRecord", "NPC_Icarus_01" },
+				Path = { "EncountersOccurredCache" },
+				TableValuesToCount = { "IcarusCombatIntro", "IcarusCombatO", "IcarusCombatO2", "IcarusCombatP", "IcarusCombatP2" },
 				Comparison = "<=",
 				Value = 0,
 			},
@@ -156,6 +152,9 @@ OverwriteTableKeys( EncounterData,
 
 		RequireRoomTag = "Outdoor",
 
+		ActiveEnemyCapBase = 6,
+		ActiveEnemyCapMax = 6, -- Give Icarus bone budget room.
+
 		GameStateRequirements =
 		{
 			Append = true,
@@ -187,7 +186,8 @@ OverwriteTableKeys( EncounterData,
 			Append = true,
 			{
 				SumPrevRuns = 4,
-				Path = { "SpawnRecord", "NPC_Icarus_01" },
+				Path = { "EncountersOccurredCache" },
+				TableValuesToCount = { "IcarusCombatIntro", "IcarusCombatO", "IcarusCombatO2", "IcarusCombatP", "IcarusCombatP2" },
 				Comparison = "<=",
 				Value = 0,
 			},

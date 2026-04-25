@@ -3,7 +3,7 @@ UnitSetData.FishSwarmer =
 
 	FishSwarmer =
 	{
-		InheritFrom = { "OceanusUnitData", "BaseVulnerableEnemy","LowPolyEnemy"  },
+		InheritFrom = { "OceanusUnitData", "BaseGEnemy", "BaseVulnerableEnemy", "LowPolyEnemy"  },
 		ActivateFx = "WaterUnitSurfaceSmall",
 		Groups = { "FlyingEnemies" },
 		Material = "Organic",
@@ -17,6 +17,9 @@ UnitSetData.FishSwarmer =
 
 		MaxHealth = 65,
 		HealthBarOffsetY = -100,
+		HealthBarType = "Small",
+
+		StopAnimationsOnDeath = { "MedusaShadow", },
 
 		IgnoreProjectileExpireOnDeath = true,
 

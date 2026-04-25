@@ -2,7 +2,7 @@ UnitSetData.TyphonEye =
 {
 	TyphonEye =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseBossEnemy", "BaseQEnemy", "BaseVulnerableEnemy" },
 		Material = "Organic",
 		IsBoss = false,
 		ImmuneToPolymorph = true,
@@ -13,6 +13,11 @@ UnitSetData.TyphonEye =
 		RunHistoryPortrait = "Codex_Portrait_TyphonEye",
 
 		SpawnAnimation = "Enemy_TyphonEye_Shut_FireLoop",
+		
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
 
 		DeathAnimation = "Enemy_TyphonEye_Death",
 		OnDeathFunctionName = "GenericBossKillPresentation",
@@ -21,7 +26,6 @@ UnitSetData.TyphonEye =
 			Message = "TyphonEyeDefeatedMessage",
 			CameraPanTime = 1.5,
 			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
-			BatsAfterDeath = false,
 			FlashRed = true,
 			DestroyGroup = "FightEndDestroy",
 			BlockMapSpawns = true,
@@ -40,6 +44,106 @@ UnitSetData.TyphonEye =
 		InvulnerableHitFlash = true,
 		InvulnerableBlockHint = true,
 		OnHitFunctionName = "CheckUnitInvulnerableHit",
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.15,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.2,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.275,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.55,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.62,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.87,
+				},
+			},
+		},
+
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "TyphonEye_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonEyeDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		SkipTransitionInvulnerability = true,
 		AIEndHealthThreshold = 0.0,
@@ -218,6 +322,82 @@ WeaponSetData =
 			SpawnSound = "/SFX/Enemy Sounds/TyphonEyeball/TyphonEyballOpen",
 
 			DamageSelfOnWeaponFire = 2500,
+
+			ConditionalData =
+			{
+				-- Biome 1
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = "==",
+							Value = 1,
+						},
+					},
+					Data =
+					{
+						DamageSelfOnWeaponFire = 310,
+					},
+				},
+				-- Biome 2
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = "==",
+							Value = 2,
+						},
+					},
+					Data =
+					{
+						DamageSelfOnWeaponFire = 625,
+					},
+				},
+				-- Biome 3
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = "==",
+							Value = 3,
+						},
+					},
+					Data =
+					{
+						DamageSelfOnWeaponFire = 1150,
+					},
+				},
+				-- Biome 4
+				{
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							Path = { "CurrentRun", "EnteredBiomes" },
+							Comparison = "==",
+							Value = 4,
+						},
+					},
+					Data =
+					{
+						DamageSelfOnWeaponFire = 2000,
+					},
+				},
+			},
 
 			UseTargetId = 779803,
 			PreAttackAngleTowardTarget = true,

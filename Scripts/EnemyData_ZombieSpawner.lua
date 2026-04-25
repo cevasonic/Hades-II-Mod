@@ -2,7 +2,7 @@ UnitSetData.ZombieSpawner =
 {
 	ZombieSpawner =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseNEnemy", "BaseVulnerableEnemy" },
 		IntroEncounterName = "ZombieSpawnerIntro",
 		PreferredSpawnPoint = "EnemyPointSupport",
 

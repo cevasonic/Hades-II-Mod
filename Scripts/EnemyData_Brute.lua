@@ -167,6 +167,33 @@ UnitSetData.Brute =
 			IgnoreEndMusic = true
 		},
 
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/TyphonBruteMinibossDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+
 		DefaultAIData =
 		{
 			DeepInheritance = true,
@@ -199,12 +226,37 @@ UnitSetData.Brute =
 
 		AltHealthBarTextIds =
 		{
-			{ TextId = "Brute_Miniboss_Alt",
+			{
+				TextId = "Brute_Miniboss_Alt",
 				GameStateRequirements =
 				{
 					{
 						PathFalse = { "GameState", "RoomsEntered", "Q_Boss01" },
-					}
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				TextId = "MiniBossBrute_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},

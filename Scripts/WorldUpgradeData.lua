@@ -384,20 +384,8 @@ WorldUpgradeData =
 			OrRequirements =
 			{
 				{
-					-- three paths to stop the storm
 					{
-						Path = { "GameState", "TextLinesRecord" },
-						HasAny =
-						{
-							-- returned from Typhon, after ZagreusPastMeeting02 & ZeusPalaceMeeting02; clear not required
-							"HecateAboutStormStop01",
-
-							-- significant wins against Chronos, some vs. Typhon, returned from Typhon; requires ZagreusPastMeeting05 via HecateAboutChronosBossW04_B
-							"HecateAboutStormStop01_B",
-
-							-- after ZagreusPastMeeting05, if you have ZeusPalaceMeeting02
-							"HecateAboutChronosBossW04"
-						},
+						PathTrue = { "GameState", "TextLinesRecord", "HecateAboutStormStop01" },
 					},
 				},
 				{
@@ -511,6 +499,11 @@ WorldUpgradeData =
 				PreLineWait = 0.3,
 				{ Cue = "/VO/Melinoe_2575", Text = "{#Emph}The wards for my protection I dispel, \n {#Emph}For I am ready now for heaven as for hell!" },
 			}
+		},
+
+		RevealReactionVoiceLines = 
+		{
+			{ GlobalVoiceLines = "CauldronReactionFollowUpVoiceLines" },
 		},
 	},
 	WorldUpgradeSurfacePenaltyCure =
@@ -1242,6 +1235,14 @@ WorldUpgradeData =
 				Value = 6,
 			},
 		},
+
+		IncantationVoiceLines =
+		{
+			{
+				PreLineWait = 0.3,
+				{ Cue = "/VO/Melinoe_0529", Text = "{#Emph}O essences of Chaos, heed my voice, \n {#Emph}In your potential I have made my choice." },
+			},
+		},
 		CameraFocusId = 424956,
 		PanDuration = 1.5,
 		PanHoldDuration = 1.0,
@@ -1441,8 +1442,8 @@ WorldUpgradeData =
 		IncantationVoiceLines =
 		{
 			{
-				PreLineWait = 0.3,
-				{ Cue = "/VO/Melinoe_0529", Text = "{#Emph}O essences of Chaos, heed my voice, \n {#Emph}In your potential I have made my choice." },
+				PreLineWait = 0.4,
+				{ Cue = "/VO/Melinoe_5566", Text = "{#Emph}The Fates would have us choose our path from here. \n {#Emph}Then this is mine; I walk it without fear!" },
 			},
 		},
 
@@ -1651,8 +1652,8 @@ WorldUpgradeData =
 		Icon = "GUI\\Screens\\CriticalItemShop\\Icons\\cauldron_selltrait",
 		Cost =
 		{
-			PlantIShaderot = 2,
-			OreOIron = 1,
+			MixerGBoss = 1,
+			CharonPoints = 2,
 		},
 		GameStateRequirements =
 		{
@@ -1918,7 +1919,7 @@ WorldUpgradeData =
 		Cost =
 		{
 			MixerIBoss = 3,
-			PlantFMoly = 3,
+			WeaponPointsRare = 1,
 		},
 
 		GameStateRequirements =
@@ -3166,7 +3167,7 @@ WorldUpgradeData =
 
 	WorldUpgradeBadgeSeller =
 	{
-		InheritFrom = { "DefaultHubItem", "DefaultCriticalItem" },
+		InheritFrom = { "DefaultMajorItem", "DefaultCriticalItem" },
 		Icon = "GUI\\Screens\\CriticalItemShop\\Icons\\cauldron_badge",
 		AlwaysRevealImmediately = true,
 		Cost =
@@ -3179,6 +3180,21 @@ WorldUpgradeData =
 			{
 				PathTrue = { "GameState", "TextLinesRecord", "HecateGrantsBadgeSeller01" },
 			},
+		},
+		IncantationVoiceLines =
+		{
+			{
+				PreLineWait = 0.3,
+				{ Cue = "/VO/Melinoe_5568", Text = "{#Emph}May frightful tales of our exploits spread, \n {#Emph}From hells to heavens, living to the dead!" },
+			},
+		},
+
+		PostRevealVoiceLines =
+		{
+			PreLineWait = 0.55,
+			UsePlayerSource = true,
+
+			{ Cue = "/VO/Melinoe_5337", Text = "To the restoration of the Underworld!", PostLineFunctionName = "BadgeSellerReaction" },
 		},
 
 		PanDuration = 1.5,
@@ -3510,6 +3526,7 @@ WorldUpgradeData =
 			},
 		},
 		OnActivateFunctionName = "RevealBathHousePresentation",
+		ActivateRoomObstacleIds = { 589481 },
 		CameraFocusId = 589478,
 		PanDuration = 1.5,
 		PanHoldDuration = 2.0,
@@ -3584,6 +3601,7 @@ WorldUpgradeData =
 		},
 		OnActivateFunctionName = "RevealTavernaPresentation",
 		PostActivationThreadedFunctionName = "PostRevealTavernaPresentation",
+		ActivateRoomObstacleIds = { 589542 },
 		CameraFocusId = 586614,
 		PanDuration = 1.0,
 		PanHoldDuration = 2.0,
@@ -3860,6 +3878,11 @@ WorldUpgradeData =
 			{
 				PathTrue = { "GameState", "TextLinesRecord", "IcarusGift09" }
 			},
+			{
+				Path = { "GameState", "LifetimeResourcesGained", "IcarusPoints" },
+				Comparison = "<=",
+				Value = 0,
+			},
 		},
 
 		OfferedVoiceLines =
@@ -3893,6 +3916,61 @@ WorldUpgradeData =
 		OnActivateFinishedFunctionName = "ResourceGiftedPresentation",
 		OnActivateFinishedFunctionArgs = { ResourceName = "IcarusPoints", ResourceAmount = 1, SoundName = "/SFX/GiftAmbrosiaBottlePickup" },
 	},
+
+	WorldUpgradeReviveIcarusRepeatable =
+	{
+		InheritFrom = { "DefaultInstantItem", "DefaultCriticalItem" },
+		Icon = "GUI\\Screens\\CriticalItemShop\\Icons\\cauldron_icarus",
+		AlwaysRevealImmediately = true,
+		Cost =
+		{
+			PlantIShaderot = 2,
+			MixerShadow = 1,
+		},
+		CookTime = 32,
+		Repeatable = true,
+		SkipUnlockText = true,
+		UnlockTextId = "RepeatableUnlock",
+		IgnoreAffordable = true,
+		GameStateRequirements =
+		{
+			{
+				SumPrevRuns = 3,
+				Path = { "TextLinesRecord", "IcarusAboutBecomingCloser01" },
+				CountPathTrue = true,
+				Comparison = "==",
+				Value = 0,
+			},
+			{
+				PathTrue = { "GameState", "TextLinesRecord", "IcarusAboutBecomingCloser01" }
+			},
+		},
+
+		OfferedVoiceLines =
+		{
+			BreakIfPlayed = true,
+			PreLineWait = 0.7,
+			PlayOnce = true,
+			TriggerCooldowns = { "MelCauldronSpellRevealedSpeech" },
+
+			{ Cue = "/VO/Melinoe_4823", Text = "This worked for Icarus last time..." },
+			{ Cue = "/VO/Melinoe_4568", Text = "I can give Icarus his feeling back... briefly at least." },
+		},
+
+		IncantationVoiceLines =
+		{
+			{
+				PlayOnce = true,
+				BreakIfPlayed = true,
+				-- PreLineWait = 0.3,
+				{ Cue = "/VO/Melinoe_4826", Text = "{#Emph}The body of a Shade is never gone!" },
+			},
+			{ GlobalVoiceLines = "AlchemyStartVoiceLines" },
+		},
+
+		OnActivateFinishedFunctionName = "ResourceGiftedPresentation",
+		OnActivateFinishedFunctionArgs = { ResourceName = "IcarusPoints", ResourceAmount = 1, SoundName = "/SFX/GiftAmbrosiaBottlePickup" },
+	},
 }
 
 GameData.WorldUpgradeAutomaticUnlocks =
@@ -3917,6 +3995,7 @@ GameData.WorldUpgradeAutomaticUnlocks =
 	"Cosmetic_TavernaCauldron01",
 	"Cosmetic_SkellyFloor01",
 	"Cosmetic_TrainingDummy01",
+	"Cosmetic_DoraBench01",
 	"FamiliarCostume_FrogDefault",
 	"FamiliarCostume_CatDefault",
 	"FamiliarCostume_RavenDefault",

@@ -5,9 +5,11 @@ RoomSetData.Q =
 		DebugOnly = true,
 		RichPresence = "#RichPresence_Q",
 		ResultText = "RunHistoryScreenResult_Q",
+		DreamResultText = "RunHistoryScreenResult_Q_Dream",
 
 		-- LocationText = "BiomeQ",
 		SaveProfileLocationText = "BiomeQ_Short",
+		DreamSaveProfileLocationText = "Location_BiomeQ_Dream",
 
 		NarrativeContextArt = "DialogueBackground_Typhon",
 		NarrativeContextArtFlippable = false,
@@ -351,6 +353,14 @@ RoomSetData.Q =
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
 				},
 			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeQ_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
+				},
+			},
 		},
 		PostCombatReloadThreadedEvents =
 		{
@@ -360,6 +370,14 @@ RoomSetData.Q =
 				GameStateRequirements =
 				{
 					NamedRequirements = { "ShouldShowBountyInfoBanner" },
+				},
+			},
+			{
+				FunctionName = "DisplayBiomeLocationBanner",
+				Args = { DreamText = "Location_BiomeQ_Dream", Delay = 0.45, Duration = 2.0 },
+				GameStateRequirements =
+				{
+					NamedRequirements = { "ShouldShowDreamInfoBanner" },
 				},
 			},
 		},
@@ -375,6 +393,7 @@ RoomSetData.Q =
 		GlobalEcho = 0.5,
 
 		ZoomFraction = 0.6,
+		ZoomFractionAlt = 0.73,
 		IntroSequenceDuration = 0.96,
 
 		ExitFunctionName = "FortressMainDoorOpenPresentation",
@@ -392,7 +411,6 @@ RoomSetData.Q =
 		Ambience = "/Ambience/TyphonOutdoorAmbience",
 
 		Starting = true,
-		NoReward = true,
 		NoReroll = true,
 		HideRewardPreview = true,
 		TimerBlock = "IntroRoom",
@@ -406,6 +424,22 @@ RoomSetData.Q =
 
 		ForceAtBiomeDepth = 1,
 		MaxAppearancesThisBiome = 1,
+
+		ForcedRewardStore = "RunProgress",
+		IneligibleRewards = RewardSets.OpeningRoomBans,
+		SpawnRewardOnId = 40055,
+		DisableRewardMagnetisim = true,
+		RewardGameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+			{
+				Path = { "CurrentRun", "EnteredBiomes" },
+				Comparison = "==",
+				Value = 0,
+			},
+		},
 
 		FootstepAnimationR = "WaterSplashFootstepR-Spawner",
 		FootstepAnimationL = "WaterSplashFootstepL-Spawner",
@@ -482,24 +516,35 @@ RoomSetData.Q =
 		{
 			Threaded = true,
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeQ",
+					DreamText = "Location_BiomeQ_Dream",
 					AnimationName = "InfoBannerTyphonIn",
 					AnimationOutName = "InfoBannerTyphonOut",
 					Delay = 2.0,
 				},
 				GameStateRequirements =
 				{
+					OrRequirements =
 					{
-						PathFalse = { "GameState", "ReachedTrueEnding" },
+						{
+							{
+								PathFalse = { "GameState", "ReachedTrueEnding" },
+							},
+						},
+						{
+							{
+								PathTrue = { "CurrentRun", "IsDreamRun" },
+							},
+						},
 					},
 					NamedRequirementsFalse = { "ShouldShowBountyInfoBanner" },
 				},
 			},
 			{
-				FunctionName = "DisplayInfoBanner",
+				FunctionName = "DisplayBiomeLocationBanner",
 				Args =
 				{
 					Text = "Location_BiomeQ_Alt",
@@ -511,6 +556,9 @@ RoomSetData.Q =
 				{
 					{
 						PathTrue = { "GameState", "ReachedTrueEnding" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 					NamedRequirementsFalse = { "ShouldShowBountyInfoBanner" },
 				},
@@ -866,6 +914,9 @@ RoomSetData.Q =
 		ForceAtBiomeDepth = 2,
 
 		RequireCompletedIntro = true,
+
+		CatFamiliarOnFailGoToNearestToGoal = true,
+		HoundFamiliarMovementRequiresLineOfSight = true,
 	},
 
 	Q_Combat04 =
@@ -900,6 +951,7 @@ RoomSetData.Q =
 		
 		RequireCompletedIntro = true,
 
+		CatFamiliarOnFailGoToNearestToGoal = true,
 		HoundFamiliarMovementRequiresLineOfSight = true,
 	},
 
@@ -1027,6 +1079,9 @@ RoomSetData.Q =
 		ZoomFraction = 0.85,
 
 		ForceAtBiomeDepth = 5,
+
+		CatFamiliarOnFailGoToNearestToGoal = true,
+		HoundFamiliarMovementRequiresLineOfSight = true,
 	},
 
 	Q_Combat13 =
@@ -1077,6 +1132,9 @@ RoomSetData.Q =
 		Ambience = "/Ambience/TyphonOutdoorAmbience",
 
 		ZoomFraction = 0.8,
+		ZoomFractionAlt = 0.83,
+
+		RewardPreviewIcon = "RoomRewardSubIcon_PreBoss",
 
 		ForceAtBiomeDepth = 7,
 
@@ -1095,18 +1153,62 @@ RoomSetData.Q =
 		
 		SecretSpawnChance = 0.0,
 
+		HarvestPointForceRequirements =
+		{
+			{
+				PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "Q_PreBoss01" },
+			},
+			{
+				PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantQFang" },
+			},
+			{
+				PathFalse = { "CurrentRun", "ResourcesGained", "PlantQFang" },
+			},
+		},
 		ShovelPointForceRequirements =
 		{
-			NamedRequirements = { "NoFamiliarShovelPointFoundThisBiome" },
+			OrRequirements =
 			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
-			},
+				{
+					NamedRequirements = { "NoFamiliarShovelPointFoundThisBiome" },
+				},
+				{
+					{
+						PathTrue = { "GameState", "WeaponsUnlocked", "ToolShovel" },
+					},
+					{
+						PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "Q_PreBoss01" },
+					},
+					{
+						PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "PlantQSnakereedSeed" },
+					},
+					{
+						PathFalse = { "CurrentRun", "ResourcesGained", "PlantQSnakereedSeed" },
+					},
+				},
+			}
 		},
 		PickaxePointForceRequirements =
 		{
-			NamedRequirements = { "NoFamiliarPickaxePointFoundThisBiome" },
+			OrRequirements =
 			{
-				PathFalse = { "CurrentRun", "ActiveBounty" },
+				{
+					NamedRequirements = { "NoFamiliarPickaxePointFoundThisBiome" },
+				},
+				{
+					{
+						PathTrue = { "GameState", "WeaponsUnlocked", "ToolPickaxe" },
+					},
+					{
+						PathTrue = { "GameState", "LastSurfaceRunRecord", "RoomsEntered", "Q_PreBoss01" },
+					},
+					{
+						PathFalse = { "GameState", "LastSurfaceRunRecord", "ResourcesGained", "OreQScales" },
+					},
+					{
+						PathFalse = { "CurrentRun", "ResourcesGained", "OreQScales" },
+					},
+				},
 			},
 		},
 
@@ -1120,6 +1222,7 @@ RoomSetData.Q =
 		DisableRewardMagnetisim = true,
 
 		StoreDataName = "Q_WorldShop",
+		StoreDuplicateItemId = 769407,
 		SkipShopSecretMusic = true,
 		SpeakerName = "Hermes",
 
@@ -1190,7 +1293,9 @@ RoomSetData.Q =
 				GameStateRequirements = 
 				{
 					{
-						--
+						Path = { "CurrentRun", "EnteredBiomes" },
+						Comparison = "==",
+						Value = 4,
 					},
 				},
 			},
@@ -1333,6 +1438,7 @@ RoomSetData.Q =
 			BossIntroSound = "/SFX/Enemy Sounds/TyphonBrute/BruteRoar",
 			BossIntroAnimation = "Enemy_Brute_Taunt",
 			BossIntroDelay = 0.6,
+			BossDreamIntroDelay = 1.2,
 		},
 		IntroSequenceDuration = 1.1,
 		BlockCameraReattach = true,
@@ -1430,6 +1536,7 @@ RoomSetData.Q =
 		Ambience = "/Ambience/TyphonOutdoorAmbience",
 		
 		ZoomFraction = 0.765,
+		ZoomFractionAlt = 0.81,
 		EntranceFunctionName = "RoomEntranceStandard",
 		IntroSequenceDuration = 0.4,
 		IntroPanEaseIn = 0.01,
@@ -1625,6 +1732,7 @@ RoomSetData.Q =
 		ThreadEnterVoiceLines = true,
 		
 		ZoomFraction = 0.7,
+		ZoomFractionAlt = 0.76,
 
 		GameStateRequirements =
 		{
@@ -1677,18 +1785,39 @@ RoomSetData.Q =
 		{
 			{
 				PlayOnce = true,
+				PlayOnceContext = "DreamRunMonsterEyeIntroVO",
 				BreakIfPlayed = true,
-				-- RandomRemaining = true,
 				PreLineWait = 1.0,
-				-- SuccessiveChanceToPlay = 0.5,
-				-- SuccessiveChanceToPlayAll = 0.25,
+				UsePlayerSource = true,
+				TriggerCooldowns = { "MelinoeAnyQuipSpeech", },
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5686", Text = "Such dreamy eyes you have, Typhon..." },
+			},
+			{
+				BreakIfPlayed = true,
+				RandomRemaining = true,
+				PreLineWait = 1.0,
+				SuccessiveChanceToPlayAll = 0.25,
 				UsePlayerSource = true,
 				Cooldowns =
 				{
 					{ Name = "MelinoeAnyQuipSpeech" },
 				},
+				GameStateRequirements =
+				{
+					{
+						FunctionName = "RequiredHealthFraction",
+						FunctionArgs = { Comparison = ">=", Value = 0.2, },
+					},
+				},
 
-				{ Cue = "/VO/MelinoeField_3685", Text = "Oh, what is {#Emph}this...", PlayFirst = true, PlayOnce = true },
+				{ Cue = "/VO/MelinoeField_3685", Text = "Oh, what is {#Emph}this...", PlayFirst = true, PlayOnce = true, PlayOnceContext = "TyphoneEyeFirstSightingVO" },
 				{ Cue = "/VO/MelinoeField_3686", Text = "That's not what eyes are meant to do!" },
 				{ Cue = "/VO/MelinoeField_3687", Text = "Take a good look, Typhon." },
 				{ Cue = "/VO/MelinoeField_3688", Text = "Watch this, Monster." },
@@ -1698,6 +1827,25 @@ RoomSetData.Q =
 					{
 						{
 							PathTrue = { "GameState", "EncountersCompletedCache", "BossTyphonEye01" }
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5686", Text = "Such dreamy eyes you have, Typhon...",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+						{
+							PathTrue = { "GameState", "RoomsEntered", "Q_Boss01" },
+						},
+						{
+							SumPrevRuns = 8,
+							Path = { "SpeechRecord", "/VO/MelinoeField_5686" },
+							CountPathTrue = true,
+							Comparison = "<=",
+							Value = 0,
 						},
 					},
 				},
@@ -1764,6 +1912,7 @@ RoomSetData.Q =
 			Name = "MiniBossStalker_Alt",
 		},
 		ZoomFraction = 0.77,
+		ZoomFractionAlt = 0.81,
 		EntranceFunctionName = "RoomEntranceBossTwins",
 		IntroSequenceDuration = 0.5,
 		IntroPanEaseIn = 0.01,
@@ -1842,15 +1991,7 @@ RoomSetData.Q =
 		RichPresence = "#RichPresence_Boss",
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = "<",
-					Value = 4,
-				},
-			},
+			NamedRequirementsFalse = { "BossDifficultyActive" },
 		},
 
 		BackupCauseOfDeath = "TyphonHead",
@@ -1860,6 +2001,8 @@ RoomSetData.Q =
 		ReverbValue = 1.0,
 
 		ForcedReward = "MixerQBossDrop",
+		SkipTimedDropResourceInDream = true,
+		CanSpawnDreamReward = true,
 		RewardPreviewIcon = "RoomRewardSubIcon_Boss",
 		NoReroll = true,
 
@@ -1893,6 +2036,9 @@ RoomSetData.Q =
 				{
 					{
 						PathFalse = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
@@ -1952,6 +2098,9 @@ RoomSetData.Q =
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				Args =
 				{
@@ -1969,46 +2118,6 @@ RoomSetData.Q =
 					DelayedStart = true,
 					LockCameraWithBoss = true,
 				},
-			},
-			{
-				FunctionName = "SetupPauseMenuTakeover",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "BossHealthBarRecord", "TyphonHead" },
-						Comparison = ">",
-						Value = 0,
-					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
-						PathFalse = { "GameState", "WorldUpgradesAdded", "WorldUpgradePauseChronosFight" },
-					},
-				},
-				Args = RoomEventData.PauseMenuTakeOverAutoUnpause,			
-			},
-			{
-				FunctionName = "SetupPauseMenuTakeover",
-				GameStateRequirements =
-				{
-					{
-						Path = { "CurrentRun", "BossHealthBarRecord", "TyphonHead" },
-						Comparison = ">",
-						Value = 0,
-					},
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
-						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradePauseChronosFight" },
-					},
-				},
-				Args = RoomEventData.PauseMenuTakeOverAllowPause,
 			},
 		},
 
@@ -2028,6 +2137,9 @@ RoomSetData.Q =
 				{
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
+					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 				Args =
@@ -2184,6 +2296,55 @@ RoomSetData.Q =
 				},
 			},
 		},
+
+		ObstacleData =
+		{
+			-- Exit
+			[779914] =
+			{
+				Name = "TyphonExit01",
+				DistanceTriggers =
+				{
+					{
+						Repeat = true,
+						WithinDistance = 800,
+						GameStateRequirements =
+						{
+							{
+								PathEmpty = { "RequiredKillEnemies" },
+							},
+							{
+								PathTrue = { "GameState", "ReachedTrueEnding" },
+							},
+							{
+								PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
+							},
+							{
+								PathFalse = { "CurrentRun", "IsDreamRun", },
+							},
+							NamedRequirements = { "ReachedEpilogue" },
+						},
+						VoiceLines =
+						{
+							PlayOnce = true,
+							PlayOnceContext = "PostTrueEndingExitApproachVO",
+							PlayOnceFromTableThisRun = true,
+							UsePlayerSource = true,
+							Cooldowns =
+							{
+								{ Name = "MelinoeAnyQuipSpeech", Time = 3 },
+							},
+							SkipCooldownCheckIfNonePlayed = true,
+
+							{ Cue = "/VO/MelinoeField_5381", Text = "The Palace is shut. Let's go home." },
+							{ Cue = "/VO/MelinoeField_5382", Text = "We're done here... let's go home." },
+						},
+					},
+				},
+			},
+			
+		},
+
 		Using = { SpawnUnit = "NPC_Zeus_01", Animation = "ZeusLightningIris", },
 	},
 
@@ -2193,15 +2354,7 @@ RoomSetData.Q =
 		RichPresence = "#RichPresence_Boss",
 		GameStateRequirements =
 		{
-			{
-				FunctionName = "RequiredShrineLevel",
-				FunctionArgs =
-				{
-					ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-					Comparison = ">=",
-					Value = 4,
-				},
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		SpeakerName = { "Selene" },
@@ -2232,6 +2385,9 @@ RoomSetData.Q =
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ZeusPalacePostTrueEnding01" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 				Args =
 				{
@@ -2260,15 +2416,13 @@ RoomSetData.Q =
 						Value = 0,
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
 						PathFalse = { "GameState", "WorldUpgradesAdded", "WorldUpgradePauseChronosFight" },
 					},
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
 				},
-				Args = RoomEventData.PauseMenuTakeOverAutoUnpause,			
+				Args = RoomEventData.PauseMenuTakeOverAutoUnpause,
 			},
 			{
 				FunctionName = "SetupPauseMenuTakeover",
@@ -2280,12 +2434,10 @@ RoomSetData.Q =
 						Value = 0,
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
+						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradePauseChronosFight" },
 					},
 					{
-						PathTrue = { "GameState", "WorldUpgradesAdded", "WorldUpgradePauseChronosFight" },
+						PathFalse = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 				Args = RoomEventData.PauseMenuTakeOverAllowPause,
@@ -2438,6 +2590,7 @@ RoomSetData.Q =
 		NoReward = true,
 		NoReroll = true,
 		ZoomFraction = 0.75,
+		ZoomFractionAlt = 0.81,
 
 		FlipHorizontalChance = 0.0,
 		IntroSequenceDuration = 0.45,
@@ -2508,7 +2661,8 @@ RoomSetData.Q =
 					ForceWalkRequirements =
 					{
 						{
-							PathFalse = { "GameState", "TextLinesRecord", "ZeusPalaceFirstMeeting" },
+							Path = { "GameState", "TextLinesRecord" },
+							HasNone = { "ZeusPalaceFirstMeeting", "ZeusPalaceFirstMeetingAlt" },
 						},
 					},
 					ApolloMusicArgs =
@@ -2756,6 +2910,11 @@ RoomSetData.Q =
 			[798372] = 1.120,
 			[798373] = 0.975,
 		},
+		CameraZoomWeightsAlt =
+		{
+			[798372] = 1.320,
+			[798373] = 1.200,
+		},
 
 		InspectPoints =
 		{
@@ -2995,6 +3154,7 @@ RoomSetData.Q =
 							Text = "...It sounds like I may not be visiting again anytime soon, so... thank you all, and please let the others know I wish them well. Let's keep in touch by Boon!" },
 						EndGlobalVoiceLines = "ZeusSendOffVoiceLines",
 					},
+					-- unused
 					PalaceBoonExit02 =
 					{
 						PlayOnce = true,

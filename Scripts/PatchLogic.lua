@@ -246,6 +246,10 @@ function DoPatches()
 			end
 		end
 
+		-- No longer used in save analysis and taking up a lot of save space
+		GameState.TextLinePanelCount = nil
+		GameState.TextLinePanelSkipCount = nil
+
 		if GameState.FamiliarStatus ~= nil then
 			for familiarName, familiarStatus in pairs( GameState.FamiliarStatus ) do
 				if familiarStatus.Unlocked then
@@ -579,7 +583,7 @@ function DoPatches()
 			GameState.TextLinesRecord.HecateAboutChronosBossW01 = nil
 			GameState.PatchedHecateAboutChronosBossW01 = true
 		end
-		if GameState.TextLinesRecord.HecateAboutTyphonFight03 and not GameState.TextLinesRecord.ZeusPalaceFirstMeeting then
+		if GameState.TextLinesRecord.HecateAboutTyphonFight03 and not GameState.TextLinesRecord.ZeusPalaceFirstMeeting and not GameState.TextLinesRecord.ZeusPalaceFirstMeetingAlt then
 			GameState.TextLinesRecord.HecateAboutTyphonFight03 = nil
 		end
 
@@ -595,6 +599,11 @@ function DoPatches()
 					GameState.TraitsTaken.RandomBaseDamageBoon = nil
 				end
 			end
+		end
+
+		-- Undoing bad mod
+		if GameState.LastAwardTrait == "" then
+			GameState.LastAwardTrait = nil
 		end
 
 		local cauldronCookStatus = GameState.CookStatus[558175]
@@ -646,6 +655,32 @@ function DoPatches()
 		if not GameState.ReachedTrueEnding and GameState.SpeechRecord["/VO/Chronos_1058"] then
 			GameState.SpeechRecord["/VO/Chronos_1058"] = nil
 		end
+
+		if not GameState.TextLinesRecord.ZagreusBossFirstMeeting and GameState.SpeechRecord["/VO/Zagreus_0115"] then
+			GameState.SpeechRecord["/VO/Zagreus_0115"] = nil
+		end
+
+		if GameState.PlayedRunOutros.Outro_Epilogue01 then
+			GameState.PlayedQuestInterstitials.QuestRescueFatesTrue = true
+		end
+
+		-- Some save editors set Rivals data to bogus values
+		if GameState.TextLinesRecord.HecateGrantsShrineUpgrade01 == 0 then
+			GameState.TextLinesRecord.HecateGrantsShrineUpgrade01 = nil
+		end
+		if GameState.WorldUpgradesAdded.WorldUpgradeBossDifficultyT2 == 0 then
+			GameState.WorldUpgradesAdded.WorldUpgradeBossDifficultyT2 = nil
+		end
+		if GameState.WorldUpgradesAdded.WorldUpgradeBossDifficultyT3 == 0 then
+			GameState.WorldUpgradesAdded.WorldUpgradeBossDifficultyT3 = nil
+		end
+		if GameState.WorldUpgradesAdded.WorldUpgradeBossDifficultyT4 == 0 then
+			GameState.WorldUpgradesAdded.WorldUpgradeBossDifficultyT4 = nil
+		end
+
+		-- make sure resources referenced by cauldron alchemy tooltips are initialized
+		GameState.Resources.MixerShadow = GameState.Resources.MixerShadow or 0
+		GameState.Resources.SuperGiftPoints = GameState.Resources.SuperGiftPoints or 0
 		
 	end
 
@@ -697,42 +732,44 @@ function DoPatches()
 				end
 			end
 
-			DebugAssert({ Condition = RoomData[CurrentRun.CurrentRoom.Name] ~= nil, Text = "Missing Room: "..tostring(CurrentRun.CurrentRoom.Name) })
+			local roomName = CurrentRun.CurrentRoom.OriginalName or CurrentRun.CurrentRoom.Name
+			DebugAssert({ Condition = RoomData[roomName] ~= nil, Text = "Missing Room: "..tostring(roomName) })
 
-			CurrentRun.CurrentRoom.StoreDataName = CurrentRun.CurrentRoom.StoreDataName or RoomData[CurrentRun.CurrentRoom.Name].StoreDataName
+			CurrentRun.CurrentRoom.StoreDataName = CurrentRun.CurrentRoom.StoreDataName or RoomData[roomName].StoreDataName
 
-			CurrentRun.CurrentRoom.SpawnRewardOnId = RoomData[CurrentRun.CurrentRoom.Name].SpawnRewardOnId
-			CurrentRun.CurrentRoom.ZeusManaSpawnPoints = RoomData[CurrentRun.CurrentRoom.Name].ZeusManaSpawnPoints
-			CurrentRun.CurrentRoom.SkipUnusedWeaponBonusReward = RoomData[CurrentRun.CurrentRoom.Name].SkipUnusedWeaponBonusReward
-			CurrentRun.CurrentRoom.SkipTimedDropResources = RoomData[CurrentRun.CurrentRoom.Name].SkipTimedDropResources
-			CurrentRun.CurrentRoom.DisableRewardMagnetisim = RoomData[CurrentRun.CurrentRoom.Name].DisableRewardMagnetisim
-			CurrentRun.CurrentRoom.SkipLoadNextMap = RoomData[CurrentRun.CurrentRoom.Name].SkipLoadNextMap
-			CurrentRun.CurrentRoom.ExitFunctionName = RoomData[CurrentRun.CurrentRoom.Name].ExitFunctionName
-			CurrentRun.CurrentRoom.ZoomFraction = RoomData[CurrentRun.CurrentRoom.Name].ZoomFraction
-			CurrentRun.CurrentRoom.NextHeroStartPoint = RoomData[CurrentRun.CurrentRoom.Name].NextHeroStartPoint
-			CurrentRun.CurrentRoom.NextHeroEndPoint = RoomData[CurrentRun.CurrentRoom.Name].NextHeroEndPoint
-			CurrentRun.CurrentRoom.HeroStartPointCameraLinkIds = RoomData[CurrentRun.CurrentRoom.Name].HeroStartPointCameraLinkIds
-			CurrentRun.CurrentRoom.HeroEndPointCameraLinkIds = RoomData[CurrentRun.CurrentRoom.Name].HeroEndPointCameraLinkIds
-			CurrentRun.CurrentRoom.HeroStartPointEndPointLinkIds = RoomData[CurrentRun.CurrentRoom.Name].HeroStartPointEndPointLinkIds
-			CurrentRun.CurrentRoom.RushMaxRangeOverride = RoomData[CurrentRun.CurrentRoom.Name].RushMaxRangeOverride
+			CurrentRun.CurrentRoom.SpawnRewardOnId = RoomData[roomName].SpawnRewardOnId
+			CurrentRun.CurrentRoom.ZeusManaSpawnPoints = RoomData[roomName].ZeusManaSpawnPoints
+			CurrentRun.CurrentRoom.SkipUnusedWeaponBonusReward = RoomData[roomName].SkipUnusedWeaponBonusReward
+			CurrentRun.CurrentRoom.SkipTimedDropResources = RoomData[roomName].SkipTimedDropResources
+			CurrentRun.CurrentRoom.SkipTimedDropResourceInDream = RoomData[roomName].SkipTimedDropResourceInDream
+			CurrentRun.CurrentRoom.DisableRewardMagnetisim = RoomData[roomName].DisableRewardMagnetisim
+			CurrentRun.CurrentRoom.SkipLoadNextMap = RoomData[roomName].SkipLoadNextMap
+			CurrentRun.CurrentRoom.ExitFunctionName = RoomData[roomName].ExitFunctionName
+			CurrentRun.CurrentRoom.ZoomFraction = RoomData[roomName].ZoomFraction
+			CurrentRun.CurrentRoom.NextHeroStartPoint = RoomData[roomName].NextHeroStartPoint
+			CurrentRun.CurrentRoom.NextHeroEndPoint = RoomData[roomName].NextHeroEndPoint
+			CurrentRun.CurrentRoom.HeroStartPointCameraLinkIds = RoomData[roomName].HeroStartPointCameraLinkIds
+			CurrentRun.CurrentRoom.HeroEndPointCameraLinkIds = RoomData[roomName].HeroEndPointCameraLinkIds
+			CurrentRun.CurrentRoom.HeroStartPointEndPointLinkIds = RoomData[roomName].HeroStartPointEndPointLinkIds
+			CurrentRun.CurrentRoom.RushMaxRangeOverride = RoomData[roomName].RushMaxRangeOverride
 
-			CurrentRun.CurrentRoom.PersistentExitDoorRewards = RoomData[CurrentRun.CurrentRoom.Name].PersistentExitDoorRewards
-			CurrentRun.CurrentRoom.LinkedRoom = RoomData[CurrentRun.CurrentRoom.Name].LinkedRoom
-			CurrentRun.CurrentRoom.CollectShadeMercs = RoomData[CurrentRun.CurrentRoom.Name].CollectShadeMercs
-			CurrentRun.CurrentRoom.ShadeMercsRequiredForBoss = RoomData[CurrentRun.CurrentRoom.Name].ShadeMercsRequiredForBoss
+			CurrentRun.CurrentRoom.PersistentExitDoorRewards = RoomData[roomName].PersistentExitDoorRewards
+			CurrentRun.CurrentRoom.LinkedRoom = RoomData[roomName].LinkedRoom
+			CurrentRun.CurrentRoom.CollectShadeMercs = RoomData[roomName].CollectShadeMercs
+			CurrentRun.CurrentRoom.ShadeMercsRequiredForBoss = RoomData[roomName].ShadeMercsRequiredForBoss
 			
-			CurrentRun.CurrentRoom.EntranceAnimation = RoomData[CurrentRun.CurrentRoom.Name].EntranceAnimation
-			CurrentRun.CurrentRoom.ExitAnimation = RoomData[CurrentRun.CurrentRoom.Name].ExitAnimation
-			CurrentRun.CurrentRoom.MaintainSpellCharge = RoomData[CurrentRun.CurrentRoom.Name].MaintainSpellCharge
-			CurrentRun.CurrentRoom.IgnoreEncounterUses = RoomData[CurrentRun.CurrentRoom.Name].IgnoreEncounterUses
-			CurrentRun.CurrentRoom.SkipRoomsPerUpgrade = RoomData[CurrentRun.CurrentRoom.Name].SkipRoomsPerUpgrade
-			CurrentRun.CurrentRoom.CauseOfDeathDisplayData = RoomData[CurrentRun.CurrentRoom.Name].CauseOfDeathDisplayData
+			CurrentRun.CurrentRoom.EntranceAnimation = RoomData[roomName].EntranceAnimation
+			CurrentRun.CurrentRoom.ExitAnimation = RoomData[roomName].ExitAnimation
+			CurrentRun.CurrentRoom.MaintainSpellCharge = RoomData[roomName].MaintainSpellCharge
+			CurrentRun.CurrentRoom.IgnoreEncounterUses = RoomData[roomName].IgnoreEncounterUses
+			CurrentRun.CurrentRoom.SkipRoomsPerUpgrade = RoomData[roomName].SkipRoomsPerUpgrade
+			CurrentRun.CurrentRoom.CauseOfDeathDisplayData = RoomData[roomName].CauseOfDeathDisplayData
 			
-			CurrentRun.CurrentRoom.LockExtraExitsWithEncounter = RoomData[CurrentRun.CurrentRoom.Name].LockExtraExitsWithEncounter
-			CurrentRun.CurrentRoom.ZagContractRewardDestinationId = RoomData[CurrentRun.CurrentRoom.Name].ZagContractRewardDestinationId
+			CurrentRun.CurrentRoom.LockExtraExitsWithEncounter = RoomData[roomName].LockExtraExitsWithEncounter
+			CurrentRun.CurrentRoom.ZagContractRewardDestinationId = RoomData[roomName].ZagContractRewardDestinationId
 
-			CurrentRun.CurrentRoom.ObstacleData = DeepCopyTable(RoomData[CurrentRun.CurrentRoom.Name].ObstacleData)
-			CurrentRun.CurrentRoom.WrappingData = DeepCopyTable(RoomData[CurrentRun.CurrentRoom.Name].WrappingData)
+			CurrentRun.CurrentRoom.ObstacleData = DeepCopyTable(RoomData[roomName].ObstacleData)
+			CurrentRun.CurrentRoom.WrappingData = DeepCopyTable(RoomData[roomName].WrappingData)
 
 			if CurrentRun.CurrentRoom.ObjectStates ~= nil then
 				for k, objectState in pairs( CurrentRun.CurrentRoom.ObjectStates ) do
@@ -1074,6 +1111,8 @@ function DoPatches()
 					addTraitToUpdate( trait )
 				elseif trait.Name == "SuitComboAspect" and Revision <= 123655 then
 					addTraitToUpdate( trait )
+				elseif trait.Name == "AphroditeSprintBoon" and Revision <= 136355 then
+					addTraitToUpdate( trait )
 				elseif trait.Name == "PoseidonSprintBoon" and Revision <= 109231 then
 					addTraitToUpdate( trait )
 				elseif trait.Name == "PoseidonWeaponBoon" and Revision <= 121817 then
@@ -1278,6 +1317,7 @@ function DoPatches()
 				CurrentRun.CurrentRoom.Encounter.RequireNearPlayerDistance = encounterData.RequireNearPlayerDistance
 				CurrentRun.CurrentRoom.Encounter.NeverDelaySpellCharge = encounterData.NeverDelaySpellCharge
 				CurrentRun.CurrentRoom.Encounter.NeverDelayManaRegen = encounterData.NeverDelayManaRegen
+				CurrentRun.CurrentRoom.Encounter.RecordSpawnedEnemiesForBlockDeath = encounterData.RecordSpawnedEnemiesForBlockDeath
 			end
 
 			if CurrentRun.CurrentRoom.Encounter.Name == "O_Empty" then
@@ -1346,6 +1386,11 @@ function DoPatches()
 
 		if CurrentRun.TextLinesRecord.ZagreusPastMeeting06_B then
 			CurrentRun.TextLinesRecord.ZagreusPastMeeting06 = true
+		end
+
+		if CurrentRun.ClearedBiomes ~= nil then
+			CurrentRun.EnteredBiomes = CurrentRun.ClearedBiomes
+			CurrentRun.ClearedBiomes = nil
 		end
 
 		if CurrentRun.LootTypeHistory ~= nil and not CurrentRun.Hero.IsDead then

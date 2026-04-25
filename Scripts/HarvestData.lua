@@ -1506,7 +1506,6 @@ FishingData =
 					RandomRemaining = true,
 					PreLineWait = 1.0,
 					SuccessiveChanceToPlayAll = 0.66,
-					AllowTalkOverTextLines = true,
 					Cooldowns =
 					{
 						{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -1548,7 +1547,6 @@ FishingData =
 					RandomRemaining = true,
 					PreLineWait = 1.0,
 					SuccessiveChanceToPlayAll = 0.66,
-					AllowTalkOverTextLines = true,
 					Cooldowns =
 					{
 						{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -1590,7 +1588,6 @@ FishingData =
 					RandomRemaining = true,
 					PreLineWait = 1.0,
 					SuccessiveChanceToPlayAll = 0.66,
-					AllowTalkOverTextLines = true,
 					Cooldowns =
 					{
 						{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -2361,7 +2358,6 @@ FishingData =
 					RandomRemaining = true,
 					PreLineWait = 1.0,
 					SuccessiveChanceToPlayAll = 0.66,
-					AllowTalkOverTextLines = true,
 					Cooldowns =
 					{
 						{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -2396,7 +2392,6 @@ FishingData =
 					RandomRemaining = true,
 					PreLineWait = 1.0,
 					SuccessiveChanceToPlayAll = 0.66,
-					AllowTalkOverTextLines = true,
 					Cooldowns =
 					{
 						{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -2439,7 +2434,6 @@ FishingData =
 					RandomRemaining = true,
 					PreLineWait = 1.0,
 					SuccessiveChanceToPlayAll = 0.66,
-					AllowTalkOverTextLines = true,
 					Cooldowns =
 					{
 						{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -2613,7 +2607,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "HecateFishing01" },
+				HasAny = { "HecateFishing01", "HecateFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2635,7 +2629,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "DoraFishing01" },
+				HasAny = { "DoraFishing01", "DoraFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2645,6 +2639,11 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{ Cue = "/VO/Dora_0084", Text = "{#Emph}Ungh{#Prev}, this is going to be {#Emph}so {#Prev}fun..." },
 		{ Cue = "/VO/Dora_0085", Text = "I'm starting to get why you hate fish so much..." },
 		{ Cue = "/VO/Dora_0086", Text = "Seems like an awful lot of trouble for some weird fish...", PlayFirst = true },
+		{ Cue = "/VO/Dora_0679", Text = "C'mon, Mel, show 'em what you got." },
+		{ Cue = "/VO/Dora_0680", Text = "You better catch one for me, or else." },
+		{ Cue = "/VO/Dora_0681", Text = "Let's see what you can do with that thing." },
+		{ Cue = "/VO/Dora_0682", Text = "Sure is different here than in the tent..." },
+		{ Cue = "/VO/Dora_0683", Text = "And, now we wait...?" },
 	},
 	{
 		RandomRemaining = true,
@@ -2657,7 +2656,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "OdysseusFishing01" },
+				HasAny = { "OdysseusFishing01", "OdysseusFishing02", "OdysseusFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2682,7 +2681,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "NemesisFishing01" },
+				HasAny = { "NemesisFishing01", "NemesisFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2704,7 +2703,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "MorosFishing01" },
+				HasAny = { "MorosFishing01", "MorosFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2726,7 +2725,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "ErisFishing01" },
+				HasAny = { "ErisFishing01", "ErisFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2748,7 +2747,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "IcarusFishing01" },
+				HasAny = { "IcarusFishing01", "IcarusFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2763,6 +2762,7 @@ GlobalVoiceLines.AboutToFishVoiceLines =
 GlobalVoiceLines.FishCaughtVoiceLines =
 {
 	{
+		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		UsePlayerSource = true,
@@ -2853,8 +2853,9 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 			},
 		},
 	},
+
+	-- Hub NPC Reactions
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		Queue = "Interrupt",
@@ -2864,7 +2865,7 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "HecateFishing01", "HecateFishing02" },
+				HasAny = { "HecateFishing01", "HecateFishing02", "HecateFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2876,7 +2877,6 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{ Cue = "/VO/Hecate_0387", Text = "Ensnared!" },
 	},
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		Queue = "Interrupt",
@@ -2886,18 +2886,21 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "DoraFishing01" },
+				HasAny = { "DoraFishing01", "DoraFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
 			},
 		},
 
-		{ Cue = "/VO/Dora_0093", Text = "Now! I think?" },
+		{ Cue = "/VO/Dora_0093", Text = "{#Emph}Now! {#Prev}I... I think." },
 		{ Cue = "/VO/Dora_0094", Text = "Swimtime's over!", PlayFirst = true },
+		{ Cue = "/VO/Dora_0688", Text = "Yeah!" },
+		{ Cue = "/VO/Dora_0689", Text = "Did you get it?" },
+		{ Cue = "/VO/Dora_0690", Text = "{#Emph}Hah!" },
+		{ Cue = "/VO/Dora_0691", Text = "Whoa." },
 	},
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		Queue = "Interrupt",
@@ -2907,7 +2910,7 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "OdysseusFishing01", "OdysseusFishing02" },
+				HasAny = { "OdysseusFishing01", "OdysseusFishing02", "OdysseusFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2921,7 +2924,6 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{ Cue = "/VO/Odysseus_0768", Text = "{#Emph}Hah!" },
 	},
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		Queue = "Interrupt",
@@ -2931,7 +2933,7 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "NemesisFishing01" },
+				HasAny = { "NemesisFishing01", "NemesisFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2943,7 +2945,6 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{ Cue = "/VO/Nemesis_0193", Text = "Caught one...", PlayFirst = true },
 	},
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		Queue = "Interrupt",
@@ -2953,7 +2954,7 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "MorosFishing01" },
+				HasAny = { "MorosFishing01", "MorosFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2964,7 +2965,6 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{ Cue = "/VO/Moros_0355", Text = "Your fate is sealed!" },
 	},
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
 		Queue = "Interrupt",
@@ -2974,7 +2974,7 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{
 			{
 				Path = { "CurrentRun", "TextLinesRecord", },
-				HasAny = { "ErisFishing01" },
+				HasAny = { "ErisFishing01", "ErisFishingRepeatable01" },
 			},
 			{
 				PathTrue = { "CurrentRun", "Hero", "IsDead" },
@@ -2984,11 +2984,36 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{ Cue = "/VO/Eris_0228", Text = "All {#Emph}you{#Prev}, babe!", PlayFirst = true },
 		{ Cue = "/VO/Eris_0229", Text = "{#Emph}Wha-ho-hoh!" },
 	},
-	{ GlobalVoiceLines = "IcarusFishCaughtReactionVoiceLines" },
 	{
-		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.35,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Icarus_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord" },
+				HasAny = { "IcarusFishing01", "IcarusFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Icarus_0220", Text = "Oh {#Emph}wow!" },
+		{ Cue = "/VO/Icarus_0221", Text = "Caught!" },
+		-- { Cue = "/VO/Icarus_0222", Text = "A bite!" },
+		{ Cue = "/VO/Icarus_0223", Text = "What {#Emph}is {#Prev}that thing?" },
+		{ Cue = "/VO/Icarus_0224", Text = "{#Emph}Nice {#Prev}one!", PlayFirst = true },
+		{ Cue = "/VO/Icarus_0225", Text = "Well done." },
+		{ Cue = "/VO/Icarus_0226", Text = "Sure is something..." },
+		{ Cue = "/VO/Icarus_0227", Text = "Victory!" },
+		{ Cue = "/VO/Icarus_0228", Text = "Success!" },
+	},
+
+	{
+		RandomRemaining = true,
 		UsePlayerSource = true,
 		Queue = "Interrupt",
 		AllowTalkOverTextLines = true,
@@ -3002,6 +3027,168 @@ GlobalVoiceLines.FishCaughtVoiceLines =
 		{ Cue = "/VO/Melinoe_0350", Text = "{#Emph}<Laugh>" },
 		{ Cue = "/VO/Melinoe_0351", Text = "{#Emph}<Laugh>" },
 	},
+
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Hecate_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "HecateFishing01", "HecateFishing02", "HecateFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Hecate_0386", Text = "And caught." },
+		{ Cue = "/VO/Hecate_0575", Text = "{#Emph}Hmm." },
+		{ Cue = "/VO/Hecate_0578", Text = "{#Emph}Hm." },
+		{ Cue = "/VO/Hecate_0580", Text = "{#Emph}Hmm." },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Dora_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "DoraFishing01", "DoraFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Dora_0091", Text = "Well there you go!" },
+		{ Cue = "/VO/Dora_0692", Text = "Wow, Mel..." },
+		{ Cue = "/VO/Dora_0693", Text = "Made it look easy..." },
+		{ Cue = "/VO/Dora_0694", Text = "Nice form..." },
+		{ Cue = "/VO/Dora_0695", Text = "That's a keeper!" },
+		{ Cue = "/VO/Dora_0092", Text = "{#Emph}Hah! {#Prev}You tricked a fish!", PlayFirst = true },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Odysseus_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "OdysseusFishing01", "OdysseusFishing02", "OdysseusFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Odysseus_0076", Text = "Hey, you got one!" },
+		{ Cue = "/VO/Odysseus_0077", Text = "{#Emph}Hoh{#Prev}, nice catch!" },
+		{ Cue = "/VO/Odysseus_0765", Text = "{#Emph}There {#Prev}it is!" },
+		{ Cue = "/VO/Odysseus_0767", Text = "Caught!" },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Nemesis_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "NemesisFishing01", "NemesisFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+		{ Cue = "/VO/Nemesis_0183", Text = "Fair catch.", PlayFirst = true },
+		{ Cue = "/VO/Nemesis_0190", Text = "Big deal." },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Moros_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "MorosFishing01", "MorosFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Moros_0352", Text = "Impressive catch." },
+		{ Cue = "/VO/Moros_0353", Text = "Skillfully caught." },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Eris_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "ErisFishing01", "ErisFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Eris_0230", Text = "Real {#Emph}beauty {#Prev}there!" },
+		{ Cue = "/VO/Eris_0232", Text = "{#Emph}Ugly!" },
+	},
+	{
+		BreakIfPlayed = true,
+		RandomRemaining = true,
+		PreLineWait = 0.1,
+		Queue = "Interrupt",
+		ObjectType = "NPC_Icarus_01",
+		AllowTalkOverTextLines = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "TextLinesRecord", },
+				HasAny = { "IcarusFishing01", "IcarusFishingRepeatable01" },
+			},
+			{
+				PathTrue = { "CurrentRun", "Hero", "IsDead" },
+			},
+		},
+
+		{ Cue = "/VO/Icarus_0220", Text = "Oh {#Emph}wow!" },
+		{ Cue = "/VO/Icarus_0221", Text = "Caught!" },
+		-- { Cue = "/VO/Icarus_0222", Text = "A bite!" },
+		{ Cue = "/VO/Icarus_0223", Text = "What {#Emph}is {#Prev}that thing?" },
+		{ Cue = "/VO/Icarus_0224", Text = "{#Emph}Nice {#Prev}one!", PlayFirst = true },
+		{ Cue = "/VO/Icarus_0225", Text = "Well done." },
+		{ Cue = "/VO/Icarus_0226", Text = "Sure is something..." },
+		{ Cue = "/VO/Icarus_0227", Text = "Victory!" },
+		{ Cue = "/VO/Icarus_0228", Text = "Success!" },
+	},
 }
 GlobalVoiceLines.FishIdentifiedVoiceLines =
 {
@@ -3009,7 +3196,6 @@ GlobalVoiceLines.FishIdentifiedVoiceLines =
 		RandomRemaining = true,
 		PreLineWait = 1.0,
 		UsePlayerSource = true,
-		AllowTalkOverTextLines = true,
 		Cooldowns =
 		{
 			{ Name = "MelGlobalFishCaughtVoiceLinesPlayed", Time = 10 },
@@ -3022,46 +3208,11 @@ GlobalVoiceLines.FishIdentifiedVoiceLines =
 		{ Cue = "/VO/Melinoe_3546", Text = "Now come along." },
 		{ Cue = "/VO/Melinoe_3547", Text = "Victory is mine." },
 		{ Cue = "/VO/Melinoe_3548", Text = "Sweet victory..." },
-		{ Cue = "/VO/Melinoe_3549", Text = "Glad you could join me.",
-			GameStateRequirements =
-			{
-				{
-					PathFalse = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-		},
-		{ Cue = "/VO/MelinoeField_1359", Text = "Hello.",
-			GameStateRequirements =
-			{
-				{
-					PathFalse = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-		},
-		{ Cue = "/VO/MelinoeField_1360", Text = "Figures.",
-			GameStateRequirements =
-			{
-				{
-					PathFalse = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-		},
-		{ Cue = "/VO/MelinoeField_1361", Text = "Come with me.",
-			GameStateRequirements =
-			{
-				{
-					PathFalse = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-		},
-		{ Cue = "/VO/MelinoeField_1362", Text = "A fine catch.",
-			GameStateRequirements =
-			{
-				{
-					PathFalse = { "CurrentRun", "Hero", "IsDead" },
-				},
-			},
-		},
+		{ Cue = "/VO/Melinoe_3549", Text = "Glad you could join me." },
+		{ Cue = "/VO/MelinoeField_1359", Text = "Hello." },
+		{ Cue = "/VO/MelinoeField_1360", Text = "Figures." },
+		{ Cue = "/VO/MelinoeField_1361", Text = "Come with me." },
+		{ Cue = "/VO/MelinoeField_1362", Text = "A fine catch." },
 	},
 	{ GlobalVoiceLines = "FishIdentifiedReactionLines" },
 }
@@ -3094,6 +3245,8 @@ GlobalVoiceLines.FishCaughtByCatVoiceLines =
 		{ Cue = "/VO/MelinoeField_2676", Text = "Toula never fails." },
 		{ Cue = "/VO/MelinoeField_2677", Text = "She makes it look easy." },
 		{ Cue = "/VO/MelinoeField_2678", Text = "Cheers for that, Toula." },
+		{ Cue = "/VO/MelinoeField_2095", Text = "Good work, Toula." },
+		{ Cue = "/VO/MelinoeField_2096", Text = "Cheers, Toula." },
 	},
 	{ GlobalVoiceLines = "FishIdentifiedReactionLines" },
 }

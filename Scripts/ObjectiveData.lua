@@ -51,19 +51,31 @@ ObjectiveData =
 
 	ExorcismPrompt = { Description = "Objective_Exorcism", StartingScaleTarget = 0.7, PostDisplayWait = 1.5 },
 
-	SurvivalChallenge = { Description = "Objective_SurvivalTimer", LuaKey = "RemainingSeconds", StartingLuaValue = "-" },
-
 	BountyAdvancedTooltip = { Description = "Objective_BountyAdvancedTooltip" },
 	CheckFamiliarInfoPrompt = { Description = "Objective_CheckFamiliarInfoPrompt" },
 	ActivateCatFamiliar = { Description = "Objective_ActivateCatFamiliar" },
 	CheckFamiliarUpgradeInfoPrompt = { Description = "Objective_CheckFamiliarUpgradeInfoPrompt" },
 	FamiliarUpgradePrompt = { Description = "Objective_FamiliarUpgradePrompt" },
 
-	ThanatosKills = { Description = "Objective_ThanatosKills", LuaKey = "ThanatosKills", StartingLuaValue = "0" },
 	NemesisBet = { Description = "Objective_NemesisBet", GoalValue = 100 },
-	NemesisKills = { Description = "Objective_NemesisKills", LuaKey = "NemesisKills", StartingLuaValue = "0" },
+	NemesisKills =
+	{
+		Description = "Objective_NemesisKills",
+		AlternateDescriptions =
+		{
+			{
+				Description = "Objective_NemesisKills_DreamRun",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			}
+		},
+		LuaKey = "NemesisKills", StartingLuaValue = "0",
+	},
 	PlayerKills = { Description = "Objective_PlayerKills", LuaKey = "PlayerKills", StartingLuaValue = "0" },
-
 
 	HeraclesMoney = { Description = "Objective_HeraclesMoney", LuaKey = "HeraclesMoney", StartingLuaValue = "0" },
 	PlayerMoney = { Description = "Objective_PlayerMoney", LuaKey = "PlayerMoney", StartingLuaValue = "0" },
@@ -91,6 +103,7 @@ ObjectiveData =
 	KillTyphon = { Description = "Objective_KillTyphon" },
 	KillChronos = { Description = "Objective_KillChronos" },
 	PostCreditsStartNewRun = { Description = "Objective_PostCreditsStartNewRun" },
+	UseDreamRunDoor = { Description = "Objective_UseDreamRunDoor" },
 }
 
 ObjectiveSetData =
@@ -1151,6 +1164,17 @@ ObjectiveSetData =
 		Objectives =
 		{
 			{ "PostCreditsStartNewRun" },
+		},
+	},
+
+	DreamRunPrompt =
+	{
+		ManualActivationOnly = true,
+		StartDelay = 1.0,
+		BlockWeaponObjectives = true,
+		Objectives =
+		{
+			{ "UseDreamRunDoor" },
 		},
 	},
 }

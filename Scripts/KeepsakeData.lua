@@ -846,6 +846,8 @@ ScreenData.KeepsakeRack =
 			"ShopBackground",
 			"InfoBoxBacking",
 			"RankProgressBox",
+			"HoverFrame",
+			"SaveFirstFrame",
 			"EquippedFrame",
 		},
 
@@ -1123,6 +1125,30 @@ ScreenData.KeepsakeRack =
 }
 
 -- Keepsakes Lines
+GlobalVoiceLines.OpenedAwardMenuEpilogueHintVoiceLines =
+{
+	{
+		SkipAnim = true,
+		PlayOnce = true,
+		BreakIfPlayed = true,
+		PreLineWait = 0.65,
+		SkipCooldownCheckIfNonePlayed = true,
+		GameStateRequirements =
+		{
+			{
+				PathFalse = { "CurrentRun", "Hero", "IsDead" },
+			},
+			{
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+				IsAny = { "F" },
+			},
+			NamedRequirements = { "TrueFatesQuestCanBeCompleted" },
+		},
+		TriggerCooldowns = { "KeepsakesMentionedRecently", "MelinoeRemainsSilent" },
+
+		{ Cue = "/VO/MelinoeField_5406", Text = "The Fates are close... just need to use the Pin." },
+	},
+}
 GlobalVoiceLines.OpenedAwardMenuVoiceLines =
 {
 	PlayOnceFromTableThisRun = true,
@@ -1159,6 +1185,23 @@ GlobalVoiceLines.OpenedAwardMenuVoiceLines =
 			},
 		},
 		{ Cue = "/VO/Melinoe_5781", Text = "These Keepsakes, have I... had them all this time...?" },
+	},
+	{
+		SkipAnim = true,
+		PlayOnce = true,
+		BreakIfPlayed = true,
+		PreLineWait = 0.65,
+		SkipCooldownCheckIfNonePlayed = true,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+				IsAny = { "F" },
+			},
+			NamedRequirements = { "TrueFatesQuestCanBeCompleted" },
+		},
+
+		{ Cue = "/VO/MelinoeField_5406", Text = "The Fates are close... just need to use the Pin." },
 	},
 	{
 		SkipAnim = true,
@@ -1413,6 +1456,53 @@ GlobalVoiceLines.AwardSelectedVoiceLines =
 GlobalVoiceLines.AwardMenuClosedVoiceLines =
 {
 	{
+		-- PlayOnceFromTableThisRun = true,
+		BreakIfPlayed = true,
+		PlayOnce = true,
+		PreLineWait = 0.65,
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentRun", "CurrentRoom", "RoomSetName" },
+				IsAny = { "F" },
+			},
+			{
+				Path = { "CurrentRun", "Hero", "TraitDictionary" },
+				HasAny = { "BlockDeathKeepsake" },
+			},
+			NamedRequirements = { "TrueFatesQuestCanBeCompleted" },
+		},
+		TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
+
+		{ Cue = "/VO/MelinoeField_5407", Text = "{#Emph}Activate the Pin three chambers in a row. Then, return to shadow from that place..." },
+	},
+	{
+		PreLineWait = 0.8,
+		PlayOnceFromTableThisRun = true,
+		RandomRemaining = true,
+		BreakIfPlayed = true,
+		ObjectType = "NPC_Dora_01",
+		SuccessiveChanceToPlayAll = 0.5,
+		Cooldowns =
+		{
+			{ Name = "KeepsakeGiverSpeechPlayedRecently", Time = 30 },
+		},
+		GameStateRequirements =
+		{
+			{
+				Path = { "CurrentHubRoom", "Name" },
+				IsAny = { "Hub_PreRun"},
+			},
+			{
+				FunctionName = "RequiredAlive",
+				FunctionArgs = { Units = { "NPC_Dora_01" } },
+			},
+		},
+
+		{ Cue = "/VO/Dora_0698", Text = "Excellent choice." },
+		{ Cue = "/VO/Dora_0699", Text = "Smart!" },
+	},
+	{
 		BreakIfPlayed = true,
 		RandomRemaining = true,
 		PreLineWait = 0.45,
@@ -1460,6 +1550,7 @@ GlobalVoiceLines.AwardMenuClosedVoiceLines =
 		-- PlayOnceFromTableThisRun = true,
 		PreLineWait = 0.45,
 		SuccessiveChanceToPlay = 0.5,
+		SuccessiveChanceToPlayAll = 0.5,
 		Cooldowns =
 		{
 			{ Name = "MelinoeAnyQuipSpeech" },

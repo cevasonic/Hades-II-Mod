@@ -22,6 +22,9 @@ function OpenGameStatsScreen( openedFrom )
 	OnScreenOpened( screen )
 	CreateScreenFromData( screen, screen.ComponentData )
 
+	wait( 0.3 )
+	SetAlpha({ Ids = screen.CategoryButtonIds, Fraction = 1.0, Duration = 0.1 })
+
 	-- Headers
 
 	local columnHeaders = screen.WeaponColumnHeaders
@@ -39,6 +42,7 @@ function OpenGameStatsScreen( openedFrom )
 			headerFormat.Text = columnData.Text
 			headerFormat.Justification = columnData.HeaderJustification or columnData.Justification
 			CreateTextBox( headerFormat )
+			ModifyTextBox({ Id = component.Id, FadeDuration = 0.1 })
 			SetInteractProperty({ DestinationId = component.Id, Property = "FreeFormSelectable", Value = false })
 		end
 	end
@@ -66,6 +70,7 @@ function OpenGameStatsScreen( openedFrom )
 end
 
 function GameStatsScreenCreateCategories( screen )
+	screen.CategoryButtonIds = {}
 	local categoryX = screen.CategoryStartX
 	local categoryY = screen.CategoryStartY
 	for filterIndex, filter in ipairs( screen.TraitFilters ) do
@@ -77,7 +82,8 @@ function GameStatsScreenCreateCategories( screen )
 			Y = categoryY + tab.Y,
 			Animation = tab.Animation,
 			Scale = screen.CategoryScale,
-			Group = screen.ComponentData.DefaultGroup
+			Group = screen.ComponentData.DefaultGroup,
+			Alpha = 0.0,
 		})
 		categoryButton.OnMouseOverFunctionName = "MouseOverCodexChapter"
 		categoryButton.OnMouseOffFunctionName = "MouseOffCodexChapter"
@@ -89,6 +95,7 @@ function GameStatsScreenCreateCategories( screen )
 		AttachLua({ Id = categoryButton.Id, Table = categoryButton })
 		SetInteractProperty({ DestinationId = categoryButton.Id, Property = "FreeFormSelectable", Value = false })
 		screen.Components["Category"..filterName] = categoryButton
+		table.insert( screen.CategoryButtonIds, categoryButton.Id )
 
 		local activeOverlay = CreateScreenComponent({
 			Name = "BlankObstacle",
@@ -107,12 +114,14 @@ function GameStatsScreenCreateCategories( screen )
 			Group = screen.ComponentData.DefaultGroup,
 			Scale = screen.CategoryIconScale,
 			X = categoryX + tab.X,
-			Y = categoryY + tab.Y
+			Y = categoryY + tab.Y,
+			Alpha = 0.0,
 		})
 		categoryButton.IconShiftRequests = {}
 		categoryButton.IconId = categoryButtonIcon.Id
 		SetAnimation({ DestinationId = categoryButtonIcon.Id, Name = filter.Icon })
 		screen.Components["CategoryIcon"..filterName] = categoryButtonIcon
+		table.insert( screen.CategoryButtonIds, categoryButtonIcon.Id )
 		
 		categoryX = categoryX + screen.CategorySpacingX
 	end
@@ -129,7 +138,7 @@ function ShowTraitStats( screen )
 
 	if screen.PrevCategoryName ~= category.Name then
 		if screen.PrevCategoryName ~= nil then
-		local prevCategoryButton = screen.Components["Category"..screen.PrevCategoryName]
+			local prevCategoryButton = screen.Components["Category"..screen.PrevCategoryName]
 			if prevCategoryButton ~= nil then
 				SetAlpha({ Id = prevCategoryButton.ActiveOverlayId, Fraction = 0.0, Duration = 0.1 })
 				local previousShift = not IsEmpty( prevCategoryButton.IconShiftRequests )
@@ -238,7 +247,7 @@ function ShowTraitStats( screen )
 
 			-- Icon
 			local columnData = columnHeaders[2]
-			local component = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, X = columnData.X, Y = locationY, Scale = screen.IconScaleTraits })
+			local component = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, X = columnData.X, Y = locationY, Scale = screen.IconScaleTraits, Alpha = 0, AlphaTarget = 1, AlphaTargetDuration = 0.1 })
 			components[columnData.ColumnName..i] = component
 			SetAnimation({ DestinationId = component.Id, Name = TraitData[traitName].Icon })
 			table.insert( screen.IconIds, component.Id )
@@ -248,7 +257,7 @@ function ShowTraitStats( screen )
 
 			-- BarGraph
 			local columnData = columnHeaders[4]
-			local component = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, X = columnData.X, Y = locationY })
+			local component = CreateScreenComponent({ Name = "BlankObstacle", Group = screen.ComponentData.DefaultGroup, X = columnData.X, Y = locationY, Alpha = 0, AlphaTarget = 1, AlphaTargetDuration = 0.1 })
 			components[columnData.ColumnName..i] = component
 			SetAnimation({ DestinationId = component.Id, Name = "BarGraphBar" }) --nopkg
 			local usageRate = traitStat.UseCount / highestUseCount
@@ -295,40 +304,26 @@ function GameStatsCreateEntryTextbox( screen, positionData, args )
 	end
 	format.Justification = columnData.Justification
 	CreateTextBox( format )
+	ModifyTextBox({ Id = component.Id, FadeDuration = 0.1 })
 end
 
 function PassesTraitFilter( filterName, traitName )
 
 	local traitData = TraitData[traitName]
-	if traitData == nil then
-		return false
-	end
-	if traitData.Icon == nil then
+	if traitData == nil or traitData.Icon == nil then
 		return false
 	end
 
-	if filterName == "GameStats_Boons" then
-		if IsGodTrait( traitData.Name, { ForShop = true }) then
-			return true
-		end
-	end
-
-	if filterName == "GameStats_WeaponUpgrades" then
-		if traitData.IsHammerTrait then
-			return true
-		end
-	end
-
-	if filterName == "GameStats_Weapons" then
-		if traitData.Slot == "Aspect" then
-			return true
-		end
-	end
-
-	if filterName == "GameStats_Keepsakes" then
-		if traitData.Slot == "Keepsake" or traitData.Slot == "Assist" then
-			return true
-		end
+	if filterName == "GameStats_Boons" and IsGodTrait( traitData.Name, { ForShop = true } ) then
+		return true
+	elseif filterName == "GameStats_WeaponUpgrades" and traitData.IsHammerTrait then
+		return true
+	elseif filterName == "GameStats_Weapons" and traitData.Slot == "Aspect" then
+		return true
+	elseif filterName == "GameStats_Keepsakes" and traitData.Slot == "Keepsake" then
+		return true
+	elseif filterName == "GameStats_Familiars" and traitData.FamiliarTrait then
+		return true
 	end
 
 	return false
@@ -366,6 +361,9 @@ function GameStatsPrevCategory( screen, button )
 end
 
 function GameStatsSelectCategory( screen, button )
+	if screen.ActiveCategoryIndex == button.CategoryIndex then
+		return
+	end
 	screen.ScrollOffset = 0
 	ModifyTextBox({ Id = screen.Components["Category"..screen.CurrentFilter].Id, Color = Color.CodexTitleUnselected })
 	screen.CurrentFilter = button.Category
@@ -423,7 +421,7 @@ function CloseGameStatsScreen( screen, button )
 	GameStatScreenClosePresentation( screen, button )
 	AltAspectRatioFramesHide()
 	OnScreenCloseStarted( screen )
-	CloseScreen( GetAllIds( screen.Components ) )
+	CloseScreen( GetAllIds( screen.Components ), 0, screen )
 	OnScreenCloseFinished( screen )
 	ShowCombatUI( screen.Name )
 end

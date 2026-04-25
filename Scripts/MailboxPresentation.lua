@@ -42,7 +42,6 @@ function SetupMailboxDeliveryPendingPresentation( source, args )
 	local mailboxStatus = GameState.MailboxStatus[source.ObjectId]
 	local text = "MailboxStatus_DeliveryPending"
 	if mailboxStatus.TimeRemaining <= 0 then
-		PlayStatusAnimation( source, { Animation = "StatusIconWantsToTalkImportant", } )
 		SetAnimation({ Name = "SupplyDropObjectFull", DestinationId = source.ObjectId }) --nopkg
 		if SessionMapState.MailboxTimerId ~= nil then
 			Destroy({ Id = SessionMapState.MailboxTimerId })
@@ -92,9 +91,7 @@ function UseMailboxDeliveryPendingPresentation( usee, args )
 	wait( 1.85 )
 	RemoveInputBlock({ Name = "MelUsedLockedMailbox" })
 	wait( 1.35, RoomThreadName )
-	if not usee.UseableToggleBlocked then
-		UseableOn({ Id = usee.ObjectId })
-	end
+	UseableOn({ Id = usee.ObjectId })
 end
 
 function UseMailboxDeliveryReadyPresentation( usee, args )

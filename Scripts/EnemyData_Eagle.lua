@@ -2,7 +2,7 @@ UnitSetData.Eagle =
 {
 	Eagle =
 	{
-		InheritFrom = { "BaseVulnerableEnemy"},
+		InheritFrom = { "BasePEnemy", "BaseVulnerableEnemy" },
 		GenusName = "Prometheus",
 		RequiredKill = false,
 
@@ -21,6 +21,33 @@ UnitSetData.Eagle =
 		OnDamagedFunctionName = "CheckEagleRetreat",
 
 		MoneyDropOnDeath = { Chance = 0 },
+
+		SetupEvents =
+		{
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					GrannyTexture = "GR2/PrometheusEagleDream_Color",
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+		},
 
 		DefaultAIData =
 		{
@@ -54,79 +81,44 @@ UnitSetData.Eagle =
 
 		FledVoiceLines =
 		{
+			BreakIfPlayed = true,
 			UsePlayerSource = true,
 			PlayOnce = true,
 			PlayOnceContext = "EagleFirstExitVO",
+			PlayOnceFromTableThisRun = true,
 			PreLineWait = 0.75,
 			TriggerCooldowns = { "MelinoeAnyQuipSpeech" },
 
 			{ Cue = "/VO/Melinoe_0988", Text = "Flew off...", PlayFirst = true },
-		},
-
-		OnKillVoiceLines =
-		{
-			GameStateRequirements =
-			{
-				{
-					Path = { "CurrentRun", "BossHealthBarRecord", "Prometheus" },
-					Comparison = ">=",
-					Value = 0.2,
-				},
-			},
-			{
-				BreakIfPlayed = true,
-				RandomRemaining = true,
-				PreLineWait = 0.5,
-				SuccessiveChanceToPlay = 0.85,
-				SuccessiveChanceToPlayAll = 0.66,
-				ObjectType = "Prometheus",
-				TriggerCooldowns = { "PrometheusSpokeRecently" },
-
-				{ Cue = "/VO/Prometheus_0232", Text = "Aetos!" },
-				{ Cue = "/VO/Prometheus_0233", Text = "Aetos, retreat!" },
-				{ Cue = "/VO/Prometheus_0234", Text = "Fly, Aetos!" },
-				{ Cue = "/VO/Prometheus_0235", Text = "Away, Aetos!" },
-				{ Cue = "/VO/Prometheus_0236", Text = "Get out, Aetos!" },
-				{ Cue = "/VO/Prometheus_0237", Text = "I have this, Aetos!" },
-				{ Cue = "/VO/Prometheus_0238", Text = "Leave this to me, Aetos!" },
-				{ Cue = "/VO/Prometheus_0239", Text = "How dare you." },
-				{ Cue = "/VO/Prometheus_0240", Text = "You'll regret that!", PlayFirst = true,
-					GameStateRequirements =
-					{
-						{
-							PathFalse = { "CurrentRun", "SpeechRecord", "/VO/Prometheus_0213" },
-						},
-					},
-				},
-				{ Cue = "/VO/Prometheus_0241", Text = "I'll get you for that." },
-			},
-			{
-				UsePlayerSource = true,
-				RandomRemaining = true,
-				PreLineWait = 0.35,
-				SuccessiveChanceToPlayAll = 0.5,
+			{ Cue = "/VO/MelinoeField_2804", Text = "Blasted bird...",
 				GameStateRequirements =
 				{
 					{
-						Path = { "CurrentRun", "CurrentRoom", "Name" },
-						IsAny = { "P_Boss01" },
-					},
-					{
-						FunctionName = "RequiredAlive",
-						FunctionArgs = { Units = { "Prometheus", }, Alive = true },
+						PathFalse = { "CurrentRun", "SpeechRecord", "/VO/MelinoeField_2804" },
 					},
 				},
-				Cooldowns =
+			},
+			{ Cue = "/VO/MelinoeField_2807", Text = "Fly on home!",
+				GameStateRequirements =
 				{
-					{ Name = "MelinoeAnyQuipSpeech", Time = 4 },
+					{
+						Path = { "GameState", "EnemyKills", "Prometheus" },
+						Comparison = ">=",
+						Value = 5,
+					},
 				},
-				{ Cue = "/VO/MelinoeField_2804", Text = "Blasted bird..." },
-				{ Cue = "/VO/MelinoeField_2805", Text = "Got you, Eagle!" },
-				{ Cue = "/VO/MelinoeField_2806", Text = "Bye, Aetos." },
-				{ Cue = "/VO/MelinoeField_2807", Text = "Fly on home!" },
-			}
+			},
+			{ Cue = "/VO/MelinoeField_2806", Text = "Bye, Aetos.",
+				GameStateRequirements =
+				{
+					{
+						Path = { "GameState", "EnemyKills", "Prometheus" },
+						Comparison = ">=",
+						Value = 10,
+					},
+				},
+			},
 		},
-
 	},
 
 }

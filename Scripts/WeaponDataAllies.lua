@@ -119,6 +119,9 @@ WeaponDataAllies =
 					},
 					GameStateRequirements =
 					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
 						ChanceToPlay = 0.2,
 					},
 					{ Cue = "/VO/Melinoe_0132", Text = "Go!", PlayFirst = true },
@@ -126,6 +129,44 @@ WeaponDataAllies =
 					{ Cue = "/VO/Melinoe_3977", Text = "Now, Shade!" },
 					{ Cue = "/VO/Melinoe_3979", Text = "For the Underworld!" },
 					{ Cue = "/VO/Melinoe_3980", Text = "We fight!" },
+					{ Cue = "/VO/MelinoeField_5701", Text = "Legions of Anubis!",
+						PlayFirst = true,
+						GameStateRequirements =
+						{
+							{
+								PathFromArgs = true,
+								PathTrue = { "OriginalSource", "FromAspect" },
+							},
+						},
+					},
+					{ Cue = "/VO/MelinoeField_5702", Text = "Fight for Anubis!",
+						GameStateRequirements =
+						{
+							{
+								PathFromArgs = true,
+								PathTrue = { "OriginalSource", "FromAspect" },
+							},
+						},
+					},
+					{ Cue = "/VO/MelinoeField_5703", Text = "For Anubis!",
+						GameStateRequirements =
+						{
+							{
+								PathFromArgs = true,
+								PathTrue = { "OriginalSource", "FromAspect" },
+							},
+						},
+					},
+					{ Cue = "/VO/MelinoeField_5704", Text = "Anubis!",
+						PlayFirst = true,
+						GameStateRequirements =
+						{
+							{
+								PathFromArgs = true,
+								PathTrue = { "OriginalSource", "FromAspect" },
+							},
+						},
+					},
 					{ Cue = "/VO/Melinoe_3982", Text = "Show the Commander!",
 						PlayFirst = true,
 						GameStateRequirements =
@@ -474,6 +515,7 @@ WeaponDataAllies =
 			ProjectileName = "IcarusBombardment_Large",
 			
 			TargetRequiredKillEnemy = true,
+			TrackKillSteal = true,
 
 			PreAttackThreadedFunctionName = "IcarusFlyByPresentation",
 			PreAttackThreadedFunctionArgs = { FlyByZHeight = 450, FlyByDuration = 1.0, FlyBySpeed = 4500, FlyByScale = 1.8, ReverseDirection = true },
@@ -1090,6 +1132,17 @@ WeaponDataAllies =
 					{ Cue = "/VO/Heracles_0203", Text = "Your turn!" },
 					{ Cue = "/VO/Heracles_0204", Text = "Your turn!" },
 					{ Cue = "/VO/Heracles_0205", Text = "Prepare!" },
+					{ Cue = "/VO/Heracles_0677", Text = "Next!" },
+					{ Cue = "/VO/Heracles_0675", Text = "You there!" },
+					{ Cue = "/VO/Heracles_0678", Text = "Now {#Emph}you!" },
+					{ Cue = "/VO/Heracles_0679", Text = "One by one!" },
+					{ Cue = "/VO/Heracles_0680", Text = "All of you!" },
+					{ Cue = "/VO/Heracles_0682", Text = "Fool!" },
+					{ Cue = "/VO/Heracles_0684", Text = "Pathetic wretch!" },
+					{ Cue = "/VO/Heracles_0685", Text = "You are next!" },
+					{ Cue = "/VO/Heracles_0686", Text = "Now for {#Emph}you!" },
+					{ Cue = "/VO/Heracles_0687", Text = "How about you?" },
+					{ Cue = "/VO/Heracles_0688", Text = "Weaklings, all of you!" },
 				},
 			},
 		},

@@ -3,7 +3,7 @@ UnitSetData.Chronos =
 	-- see also Chronos_TyphonFight below
 	Chronos =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseIEnemy", "BaseVulnerableEnemy"},
 		Portrait = "Portrait_Chronos_Default_01",
 		Groups = { "NPCs", "GroundEnemies" },
 		SubtitleColor = Color.ChronosVoice,
@@ -27,14 +27,12 @@ UnitSetData.Chronos =
 		ProjectileBlockPresentationFunctionName = "UnitInvulnerableHitPresentation",
 		InvulnerableFx = "ChronosInvincibubble",
 		SpeechCooldownTime = 11,
-		BlockPostBossMetaUpgrades= true,
 		OnDeathFunctionName = "ChronosKillPresentation",
 		OnDeathFunctionArgs =
 		{
 			Message = "ChronosDefeatedMessage",
 			CameraPanTime = 1.5,
 			StartSound = "/Leftovers/Menu Sounds/EmoteShocked",
-			BatsAfterDeath = false,
 			FlashRed = true,
 			FlashDuration = 0.45,
 			AddInterBiomeTimerBlock = true,
@@ -58,11 +56,17 @@ UnitSetData.Chronos =
 				{
 					PathTrue = { "GameState", "ReachedTrueEnding" },
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			},
 			SpawnChronosRemainsRequirements =
 			{
 				{
 					PathFalse = { "GameState", "ReachedTrueEnding" },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun", },
 				},
 			},
 		},
@@ -70,12 +74,93 @@ UnitSetData.Chronos =
 		DeathAnimation = "Enemy_Chronos_BattleOutro_End",
 		DeathPanOffsetY = -140,
 		DeathAngle = 210,
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
 
 		OnHitFlash = { MaxFraction = 0.45 },
 
 		Material = "Organic",
 		HealthBarTextId = "Chronos_Full",
 		Phase3HealthBarTextId = "Chronos_Full_Alt",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Chronos_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.25,
+					HealingMultiplier = 0.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.4,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.37,
+					HealingMultiplier = 0.37,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.65,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.9,
+					HealingMultiplier = 0.9,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.95,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.4,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.2,
+				},
+			},
+		},
 
 		InvulnerableHitFx = "Chronos360BlockFront",
 		
@@ -103,10 +188,18 @@ UnitSetData.Chronos =
 			"ChronosScytheThrow", "ChronosScytheThrow",
 			"ChronosRush", "ChronosRush",
 		},
-		
-		BossDifficultyShrineRequiredCount = 4,
+
 		SetupEvents =
 		{
+			{
+				FunctionName = "SetupBossIntroTextLines",
+				GameStateRequirements =
+				{
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 			{
 				FunctionName = "OverwriteSelf",
 				Args =
@@ -126,6 +219,56 @@ UnitSetData.Chronos =
 				{
 					Phases = 3,
 					MaxHealth = 22000,
+					DreamBiomeData =
+					{
+						[1] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.2,
+								HealingMultiplier = 0.2,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 0.4,
+							},
+						},
+						[2] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.3,
+								HealingMultiplier = 0.3,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 0.65,
+							},
+						},
+						[3] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.72,
+								HealingMultiplier = 0.72,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 0.95,
+							},
+						},
+						[4] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 1.12,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.2,
+							},
+						},
+					},
 					OnDamagedEvents =
 					{
 						{
@@ -142,15 +285,7 @@ UnitSetData.Chronos =
 				},
 				GameStateRequirements =
 				{
-					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 4,
-						},
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 			},
 			{
@@ -165,6 +300,42 @@ UnitSetData.Chronos =
 				GameStateRequirements =
 				{
 					NamedRequirements = { "HecateMissing" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "ChronosDream_Mesh",
+					SetAnimation = "Enemy_Chronos_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
 				},
 			},
 		},
@@ -653,8 +824,8 @@ UnitSetData.Chronos =
 				{
 					{
 						PathFromArgs = true,
-						Path = { "EffectName", },
-						IsAny = { "HadesSweepEffect" },
+						Path = { "SourceProjectile", },
+						IsAny = { "SpearWeaponSpin" },
 					},
 					{
 						Path = { "CurrentRun", "BossHealthBarRecord", "Chronos" },
@@ -1226,6 +1397,23 @@ UnitSetData.Chronos =
 		{
 			Queue = "Interrupt",
 			{
+				PlayOnce = true,
+				PlayOnceContext = "DreamRunChronosKillVO",
+				BreakIfPlayed = true,
+				PreLineWait = 1.5,
+				SkipAnim = true,
+				UsePlayerSource = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+
+				{ Cue = "/VO/MelinoeField_5577", Text = "This outcome is no longer a mere dream.", PlayFirst = true, },
+				{ Cue = "/VO/MelinoeField_5578", Text = "Such bitter memories shall fade with time..." },
+			},
+			{
 				BreakIfPlayed = true,
 				PreLineWait = 1.0,
 				SkipAnim = true,
@@ -1383,6 +1571,9 @@ UnitSetData.Chronos =
 					GameStateRequirements =
 					{
 						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
 					}
@@ -1408,6 +1599,9 @@ UnitSetData.Chronos =
 					GameStateRequirements =
 					{
 						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
 					}
@@ -1424,6 +1618,9 @@ UnitSetData.Chronos =
 					GameStateRequirements =
 					{
 						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
 					}
@@ -1432,6 +1629,9 @@ UnitSetData.Chronos =
 					GameStateRequirements =
 					{
 						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
+						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
 					}
@@ -1439,6 +1639,9 @@ UnitSetData.Chronos =
 				{ Cue = "/VO/Chronos_1371", Text = "You, who did this to me, how...?",
 					GameStateRequirements =
 					{
+						{
+							PathFalse = { "CurrentRun", "IsDreamRun" },
+						},
 						{
 							PathTrue = { "GameState", "ReachedTrueEnding" },
 						},
@@ -2061,6 +2264,13 @@ UnitSetData.Chronos =
 							"BountyDaggerHeat24IBoss",
 							"BountyTorchHeat24IBoss",
 							"BountySuitHeat24IBoss",
+
+							"BountyShrineStaffIBoss",
+							"BountyShrineDaggerIBoss",
+							"BountyShrineTorchIBoss",
+							"BountyShrineAxeIBoss",
+							"BountyShrineLobIBoss",
+							"BountyShrineSuitIBoss",
 						},
 					},
 					{
@@ -2088,10 +2298,22 @@ UnitSetData.Chronos =
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ChronosBossAboutChaos01" },
 					},
+					OrRequirements =
 					{
-						Path = { "CurrentRun", "ActiveBounty" },
-						IsAny = GameData.AllRandomPackagedBounties,
-					},
+						{
+							{
+								Path = { "CurrentRun", "UseRecord", "TrialUpgrade" },
+								Comparison = ">=",
+								Value = 2,
+							},
+						},
+						{
+							{
+								Path = { "CurrentRun", "ActiveBounty" },
+								IsAny = GameData.AllRandomPackagedBounties,
+							},
+						},
+					}
 				},
 				{ Cue = "/VO/Chronos_1237",
 					Text = "The ill effects of Chaos, here... such senselessness! So then have you persuaded the Primordial Originator into thinking that I somehow got the best of our exchange? Nyx and the Three Fates, for nothing at all!" },
@@ -2101,6 +2323,37 @@ UnitSetData.Chronos =
 					PostLineFunctionName = "StartFinalBossChronos",
 					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
 					Text = "{#Emph}Impartial{#Prev}, you say? A thinking being is incapable of that! The moment Chaos first conceived of anything, they renounced impartiality forever! And certainly they are not on {#Emph}my {#Prev}side." },
+			},
+			ChronosBossAboutRandomBounties02 =
+			{
+				PlayOnce = true,
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "GameState", "TextLinesRecord", "ChronosBossAboutRandomBounties1" },
+					},
+					{
+						PathTrue = { "CurrentRun", "UseRecord", "TrialUpgrade" },
+					},
+					{
+						Path = { "CurrentRun", "ActiveBounty" },
+						IsAny = GameData.AllRandomPackagedBounties,
+					},
+					{
+						Path = { "CurrentRun", "GameplayTime" },
+						Comparison = "<=",
+						Value = 1080,
+					},
+				},
+				{ Cue = "/VO/Chronos_1273",
+					Text = "How is it you arrived so suddenly? I am not prone to being taken by surprise, unless... the whims of Chaos are at play in this, perhaps. To form allegiances with such beings!" },
+				{ Cue = "/VO/MelinoeField_4127", UsePlayerSource = true,
+					Portrait = "Portrait_Mel_Intense_01",
+					Text = "You have made powerful enemies, Titan. More such surprises may be in store, because of what you've done." },
+				{ Cue = "/VO/Chronos_1274",
+					PostLineFunctionName = "StartFinalBossChronos",
+					PreContentSound = "/Leftovers/Menu Sounds/TextReveal3",
+					Text = "Oh, likewise, Granddaughter! Barge in on me this way all you like. You accomplish naught but what Chaos alone desires!" },
 			},
 
 			ChronosBossAboutFamily01 =
@@ -2864,11 +3117,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/MelinoeField_3662", UsePlayerSource = true,
@@ -2885,11 +3134,7 @@ UnitSetData.Chronos =
 				GameStateRequirements =
 				{
 					--[[
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 					]]--
 					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Chronos" },
@@ -2918,13 +3163,9 @@ UnitSetData.Chronos =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Chronos" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/Chronos_1333",
@@ -3237,14 +3478,10 @@ UnitSetData.Chronos =
 				GameStateRequirements = 
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
-					{
 						FunctionName = "RequiredBossPhase",
 						FunctionArgs = { Phase = 3 },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 					NamedRequirementsFalse = { "HecateMissing" },
 				},
 				{ Cue = "/VO/Chronos_0987",
@@ -3259,11 +3496,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0216",
 					PreLineWait = 0.35,
@@ -3276,11 +3509,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0221",
 					PreLineWait = 0.35,
@@ -3292,11 +3521,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0222",
 					PreLineWait = 0.35,
@@ -3308,11 +3533,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0223",
 					PreLineWait = 0.35,
@@ -3324,11 +3545,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0224",
 					PreLineWait = 0.35,
@@ -3340,11 +3557,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0225",
 					PreLineWait = 0.35,
@@ -3356,11 +3569,7 @@ UnitSetData.Chronos =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 4,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0226",
 					PreLineWait = 0.35,
@@ -3916,11 +4125,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0998",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -3934,11 +4139,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_0999",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -3952,11 +4153,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1000",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -3970,11 +4167,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1001",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -4124,11 +4317,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1510",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -4142,11 +4331,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1511",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -4223,11 +4408,7 @@ UnitSetData.Chronos =
 				SkipPreNarrativeUnequip = true,
 				GameStateRequirements = 
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 4,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/Chronos_1513",
 					Portrait = "Portrait_Chronos_Pained_01",
@@ -4342,6 +4523,38 @@ UnitSetData.Chronos =
 		IgnoreTimeSlowEffects = true,
 
 		MoneyDropOnDeath = {},
+		
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.2,
+				},
+			},
+			[2] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[3] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.62,
+				},
+			},
+			[4] =
+			{
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.87,
+				},
+			},
+		},
 
 		SetupEvents =
 		{
@@ -4360,6 +4573,42 @@ UnitSetData.Chronos =
 			},
 			{
 				FunctionName = "CheckElapsedTimeMultiplierIgnores",
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "ChronosDream_Mesh",
+					SetAnimation = "Enemy_Chronos_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 			},
 		},
 
@@ -4587,6 +4836,42 @@ UnitSetData.Chronos =
 			},
 			{
 				FunctionName = "CheckElapsedTimeMultiplierIgnores",
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
+					{
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "ChronosDream_Mesh",
+					SetAnimation = "Enemy_Chronos_Idle",
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
 			},
 		},
 
@@ -5401,16 +5686,6 @@ GlobalVoiceLines.PreBabalityVoiceLines =
 GlobalVoiceLines.BabalityVoiceLines =
 {
 	Queue = "Interrupt",
-	--[[
-	{
-		PreLineWait = 0.25,
-		PlayOnce = true,
-		PlayOnceContext = "BabalityIntroVO",
-		Source = { LineHistoryName = "NPC_Chronos_01", SubtitleColor = Color.ChronosVoice },
-
-		{ Cue = "/VO/Chronos_1152", Text = "And as for you...", PlayFirst = true },
-	},
-	]]--
 	{
 		PreLineWait = 0.25,
 		RandomRemaining = true,
@@ -5446,10 +5721,33 @@ GlobalVoiceLines.BabalityVoiceLines =
 	},
 	{
 		UsePlayerSource = true,
-		SuccessiveChanceToPlay = 0.5,
+		-- SuccessiveChanceToPlay = 0.5,
 
 		{ Cue = "/VO/MelinoeField_3787", Text = "{#Emph}Aaah!" },
 	},
+}
+GlobalVoiceLines.BabalityDreamRunVoiceLines =
+{
+	Queue = "Interrupt",
+	{
+		PreLineWait = 0.75,
+		RandomRemaining = true,
+		UsePlayerSource = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue =  { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_3794", Text = "Do you think this is funny, Titan?!" },
+		{ Cue = "/VO/MelinoeField_3795", Text = "You have made a grave error in judgment." },
+		{ Cue = "/VO/MelinoeField_3796", Text = "How you shall suffer once I break this spell." },
+		{ Cue = "/VO/MelinoeField_3797", Text = "There shall be consequences for humiliating me." },
+		{ Cue = "/VO/MelinoeField_3798", Text = "You'll soon learn that I'm not the little girl I once was." },
+		{ Cue = "/VO/MelinoeField_3799", Text = "Laugh all you like you wretched fools." },
+		{ Cue = "/VO/MelinoeField_3789", Text = "You'll pay for this, Titan! I swear it!" },
+	}
 }
 GlobalVoiceLines.PostBabalityVoiceLines =
 {
@@ -5671,11 +5969,7 @@ GlobalVoiceLines.ChronosRunClearVoiceLines =
 				Path = { "CurrentRun", "CurrentRoom", "Name" },
 				IsAny = { "Q_Boss02" },
 			},
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 4,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 
 		{ Cue = "/VO/Chronos_1203", Text = "All right, all right, you {#Emph}win{#Prev}, you little...", PlayFirst = true },

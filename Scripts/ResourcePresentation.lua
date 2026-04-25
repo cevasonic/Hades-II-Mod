@@ -24,82 +24,65 @@ function MouseOverResourceItem( button )
 
 	GenericMouseOverPresentation( button )
 
-	local components = screen.Components
-
-	if button.ResourceData ~= nil and CanShowResourceInInventory( button.ResourceData ) then
-		if button.Viewable then
-			if button.NewIcon ~= nil then
-				Destroy({ Id = button.NewIcon.Id })
-			end
-			GameState.ResourcesViewed[button.ResourceData.Name] = true
+	if button.Viewable then
+		if button.NewIcon ~= nil then
+			Destroy({ Id = button.NewIcon.Id })
 		end
-
-		screen.ClipboardText = button.ResourceData.Name
-
-		SetAnimation({ DestinationId = button.Highlight.Id, Name = "InventoryScreenSlotIn" })
-		
-		ModifyTextBox({ Id = components.InfoBoxName.Id,
-			Text = button.MouseOverText or button.ResourceData.Name,
-			UseDescription = false,
-			FadeTarget = 1.0,
-		})
-		ModifyTextBox({ Id = components.InfoBoxDescription.Id,
-			Text = button.MouseOverText or button.ResourceData.Name,
-			UseDescription = true,
-			FadeTarget = 1.0,
-		})
-		if button.MouseOverText == nil then
-			ModifyTextBox({ Id = components.InfoBoxDetails.Id,
-				Text = button.ResourceData.Name.."_Details",
-				UseDescription = true,
-				FadeTarget = 1.0,
-			})
-			if button.ResourceData.ExtraDescriptions ~= nil then
-				for i, extraDescription in ipairs( button.ResourceData.ExtraDescriptions ) do
-					if extraDescription.Requirements == nil or IsGameStateEligible( button.ResourceData, extraDescription.Requirements ) then
-						ModifyTextBox({ Id = components.InfoBoxDetails.Id,
-							Text = extraDescription.TextId,
-							UseDescription = true,
-							Append = true,
-							NumLineBreaks = 2,
-							FadeTarget = 1.0,
-						})
-					elseif not extraDescription.HideIfRequirementsFailed then
-						ModifyTextBox({ Id = components.InfoBoxDetails.Id,
-							Text = "InventoryScreen_UnknownDetails",
-							Append = true,
-							NumLineBreaks = 2,
-							FadeTarget = 1.0,
-						})
-					end
-				end
-			end
-			ModifyTextBox({ Id = components.InfoBoxFlavor.Id,
-				Text = button.ResourceData.Name.."_Flavor",
-				UseDescription = true,
-				FadeTarget = 1.0,
-			})
-		else
-			ModifyTextBox({ Id = components.InfoBoxDetails.Id, FadeTarget = 0.0, })
-			ModifyTextBox({ Id = components.InfoBoxFlavor.Id, FadeTarget = 0.0, })
-		end
-	else
-		ModifyTextBox({ Id = components.InfoBoxName.Id,
-			Text = button.MouseOverText or "InventoryScreen_ResourceNotFound",
-			UseDescription = false,
-			FadeTarget = 1.0,
-		})
-		ModifyTextBox({ Id = components.InfoBoxDescription.Id,
-			Text = button.MouseOverText or "InventoryScreen_ResourceNotFound",
-			UseDescription = true,
-			FadeTarget = 1.0,
-		})
-		ModifyTextBox({ Id = components.InfoBoxDetails.Id, FadeTarget = 0.0, })
-		ModifyTextBox({ Id = components.InfoBoxFlavor.Id, FadeTarget = 0.0, })
+		GameState.ResourcesViewed[button.ResourceData.Name] = true
 	end
 
-	if button.ResourceData.InventoryVoiceLines then
-		thread( PlayVoiceLines, button.ResourceData.InventoryVoiceLines )
+	screen.ClipboardText = button.ResourceData.Name
+
+	SetAnimation({ DestinationId = button.Highlight.Id, Name = "InventoryScreenSlotIn" })
+
+	local components = screen.Components
+	ModifyTextBox({ Id = components.InfoBoxName.Id,
+		Text = button.MouseOverText or button.ResourceData.Name,
+		UseDescription = false,
+		FadeTarget = 1.0,
+	})
+	ModifyTextBox({ Id = components.InfoBoxDescription.Id,
+		Text = button.MouseOverText or button.ResourceData.Name,
+		UseDescription = true,
+		FadeTarget = 1.0,
+	})
+	if button.MouseOverText == nil then
+		ModifyTextBox({ Id = components.InfoBoxDetails.Id,
+			Text = button.ResourceData.Name.."_Details",
+			UseDescription = true,
+			FadeTarget = 1.0,
+		})
+		if button.ResourceData.ExtraDescriptions ~= nil then
+			for i, extraDescription in ipairs( button.ResourceData.ExtraDescriptions ) do
+				if extraDescription.Requirements == nil or IsGameStateEligible( button.ResourceData, extraDescription.Requirements ) then
+					ModifyTextBox({ Id = components.InfoBoxDetails.Id,
+						Text = extraDescription.TextId,
+						UseDescription = true,
+						Append = true,
+						NumLineBreaks = 2,
+						FadeTarget = 1.0,
+					})
+				elseif not extraDescription.HideIfRequirementsFailed then
+					ModifyTextBox({ Id = components.InfoBoxDetails.Id,
+						Text = "InventoryScreen_UnknownDetails",
+						Append = true,
+						NumLineBreaks = 2,
+						FadeTarget = 1.0,
+					})
+				end
+			end
+		end
+		ModifyTextBox({ Id = components.InfoBoxFlavor.Id,
+			Text = button.ResourceData.Name.."_Flavor",
+			UseDescription = true,
+			FadeTarget = 1.0,
+		})
+		if button.ResourceData.InventoryVoiceLines then
+			thread( PlayVoiceLines, button.ResourceData.InventoryVoiceLines )
+		end
+	else
+		ModifyTextBox({ Id = components.InfoBoxDetails.Id, FadeTarget = 0.0, })
+		ModifyTextBox({ Id = components.InfoBoxFlavor.Id, FadeTarget = 0.0, })
 	end
 
 	SetScale({ Id = button.Id, Fraction = (button.ResourceData.IconScale or 1.0) * screen.IconMouseOverScale, Duration = 0.1, EaseIn = 0.9, EaseOut = 1.0, SkipGeometryUpdate = true })

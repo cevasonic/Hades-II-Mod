@@ -3,11 +3,12 @@ UnitSetData.LightRanged =
 
 	LightRanged =
 	{
-		InheritFrom = { "BaseVulnerableEnemy" },
+		InheritFrom = { "BaseFEnemy", "BaseVulnerableEnemy" },
 
 		MaxHealth = 70,
 		HealthBarOffsetY = -200,
-		
+		HealthBarType = "Small",
+
 		BlockNextBiomeEnemyShrineUpgrade = true,
 
 		PreferredSpawnPoint = "EnemyPointRanged",
@@ -110,12 +111,13 @@ UnitSetData.LightRanged =
 
 	SpreadShotUnit =
 	{
-		InheritFrom = { "LightRanged", },
+		InheritFrom = { "BaseGEnemy", "LightRanged", },
 		GenusName = "SpreadShotUnit",
 
 		AttachedAnimationName = "LightRangedAsphodelGlow",
 
 		MaxHealth = 150,
+		HealthBarType = "Medium",
 
 		DefaultAIData =
 		{

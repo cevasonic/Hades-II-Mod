@@ -440,7 +440,7 @@ function FrogLeap( familiar, args )
 	if (args.Id == nil and room.FamiliarsPreferSpawnPointMovement) or IsLocationBlocked({ Id = familiar.LockedTargetId, CheckUnits = not args.IgnoreUnitCollision, PathfindersPreferAvoid = false }) then
 		local spawnPointId = nil
 		local familiarPoints = GetIdsByType({ Name = "FamiliarPoint" })
-		spawnPointId = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationName = "SpawnPoints", DestinationIds = familiarPoints, Distance = maxLeapDistance, ScaleY = familiar.LeapDistanceMaxScaleY, MaxDistanceFromId = familiar.ObjectId, RequiredLocationUnblocked = true })
+		spawnPointId = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationName = "SpawnPoints", DestinationIds = familiarPoints, Distance = maxLeapDistance, MaxDistanceFromId = familiar.ObjectId, RequiredLocationUnblocked = true })
 		if spawnPointId <= 0 or spawnPointId == familiar.LastSpawnPointId then
 			-- No distance restriction for backup jump
 			spawnPointId = GetClosest({ Id = CurrentRun.Hero.ObjectId, DestinationName = "SpawnPoints", DestinationIds = familiarPoints, RequiredLocationUnblocked = true })
@@ -492,7 +492,7 @@ function FrogLeap( familiar, args )
 	end
 
 	SetAnimation({ DestinationId = familiar.ObjectId, Name = familiar.LeapLandingAnimation })
-	CreateProjectileFromUnit({ Name = "FrogFamiliarLand", Id = familiar.ObjectId, Destination = familiar.ObjectId })
+	CreateProjectileFromUnit({ Name = "FrogFamiliarLand", Id = familiar.ObjectId })
 	Destroy({ Id = familiar.LockedTargetId })
 	familiar.LockedTargetId = nil
 
@@ -629,7 +629,7 @@ function CatFamiliarAI( familiar, args )
 					local distanceToTarget = GetDistance({ Id = familiar.ObjectId, DestinationId = targetId })
 					if distanceToTarget > familiar.AttackDistance then
 						local enemy = ActiveEnemies[targetId]
-						Move({ Id = familiar.ObjectId, DestinationId = targetId })
+						Move({ Id = familiar.ObjectId, DestinationId = targetId, OnFailGoToNearestToGoal = roomData.CatFamiliarOnFailGoToNearestToGoal })
 						NotifyWithinDistance({ Id = familiar.ObjectId, DestinationId = targetId, Distance = enemy.CatFamiliarAttackDistance or familiar.AttackDistance, Notify = familiar.AINotifyName, Timeout = 9.0 })
 						waitUntil( familiar.AINotifyName )
 					end
@@ -659,7 +659,7 @@ function CatFamiliarAI( familiar, args )
 				end
 			end
 			
-			CatFamiliarMoveToRandomLocation( familiar, { OnlyUseFamiliarPoints = roomData.CatFamiliarOnlyRestOnFamiliarPoints } )
+			CatFamiliarMoveToRandomLocation( familiar, { OnlyUseFamiliarPoints = roomData.CatFamiliarOnlyRestOnFamiliarPoints, OnFailGoToNearestToGoal = roomData.CatFamiliarOnFailGoToNearestToGoal } )
 
 			RemoveInteractBlock( familiar, "Alerted" )
 			familiar.BlockVictoryPresentation = false
@@ -683,7 +683,7 @@ function CatFamiliarMoveToRandomLocation( familiar, args )
 	RemoveValue( spawnPointIds, familiar.LastSpawnPointId )
 	local randomSpawnPointId = GetRandomValue( spawnPointIds )
 	familiar.LastSpawnPointId = randomSpawnPointId
-	CatFamiliarMoveToLocation( familiar, { Id = randomSpawnPointId, SuccessDistance = 100, KeepAIAlive = true } )
+	CatFamiliarMoveToLocation( familiar, { Id = randomSpawnPointId, SuccessDistance = 100, KeepAIAlive = true, OnFailGoToNearestToGoal = args.OnFailGoToNearestToGoal } )
 end
 
 -- Raki / RavenFamiliar

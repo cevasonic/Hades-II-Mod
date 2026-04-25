@@ -132,5 +132,6 @@ ScreenData.GhostAdmin.ItemCategories =
 		"WorldUpgradeFamiliarPoints",
 		"WorldUpgradeCardUpgradePoints2",
 		"WorldUpgradeMixerShadow",
+		"WorldUpgradeReviveIcarusRepeatable",
 	},
 }

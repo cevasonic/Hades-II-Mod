@@ -2,7 +2,7 @@ UnitSetData.Eris =
 {
 	Eris =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BaseOEnemy", "BaseVulnerableEnemy" },
 		Portrait = "Portrait_Eris_Default_01",
 		Groups = { "NPCs", "GroundEnemies" },
 		SubtitleColor = Color.ErisVoice,
@@ -49,6 +49,11 @@ UnitSetData.Eris =
 		SpeechCooldownTime = 9,
 		SelfBuffDamage = 100, -- used for text
 
+		MoneyDropOnDeath =
+		{
+			Chance = 0.0,
+		},
+
 		WipeEnemyTypesOnDeath = { "GunBombUnit" },
 
 		OnDeathFunctionName = "ErisKillPresentation",
@@ -66,19 +71,47 @@ UnitSetData.Eris =
 		DeathSound = "/SFX/Enemy Sounds/Hades/HadesSpearEmerge",
 		ClearChillOnDeath = true,
 
+		KillEnemyEvents =
+		{
+			{
+				FunctionName = "RecordBossKillerName",
+			},
+		},
+
 		Material = "Organic",
 		HealthBarTextId = "Eris_Full",
 		HealthBarOffsetY = -275,
 		AltHealthBarTextIds =
 		{
-			{ TextId = "Eris_AltFight01",
+			{
+				TextId = "Eris_AltFight01",
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+			{
+				TextId = "Eris_DreamRun01",
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+		AltDeathMessageTextIds =
+		{
+			{
+				TextId = "DreamBossDefeatedMessage",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
 				},
 			},
 		},
@@ -99,7 +132,55 @@ UnitSetData.Eris =
 		WeaponOptions = { "ErisSpray", "ErisGrenadeCluster01", "ErisDash", "ErisFlyUp", "ErisSummonSelector" },
 		--WeaponOptions = { "ErisSummonSelector3", "ErisSpray" },
 
-		BossDifficultyShrineRequiredCount = 2,
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.41,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.6,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.75,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.8,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.6,
+					SpeedMultiplier = 1.1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 1.35,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 3.0,
+					SpeedMultiplier = 1.2,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 2,
+				},
+			},
+		},
 
 		SetupEvents =
 		{
@@ -109,6 +190,55 @@ UnitSetData.Eris =
 				{
 					AISetupDelay = 0.5,
 					MaxHealth = 18500,
+					DreamBiomeData =
+					{
+						[1] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.41,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 0.6,
+							},
+						},
+						[2] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 0.75,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 0.8,
+							},
+						},
+						[3] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 1.6,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 1.35,
+							},
+						},
+						[4] =
+						{
+							DataOverrides =
+							{
+								HealthMultiplier = 3.0,
+								SpeedMultiplier = 1.0,
+							},
+							AddOutgoingDamageModifier =
+							{
+							 	PlayerMultiplier = 2,
+							},
+						},
+					},
 					OnDamagedEvents =
 					{
 						{
@@ -125,15 +255,7 @@ UnitSetData.Eris =
 				},
 				GameStateRequirements =
 				{
-					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 2,
-						},
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 			},
 			{
@@ -141,10 +263,6 @@ UnitSetData.Eris =
 				Args =
 				{
 					SetAnimation = "Enemy_Eris_HubIdle",
-					ThingProperties =
-					{
-						GrannyModel = "Eris_Lucifer_Mesh"
-					},
 					OverwriteSourceKeys =
 					{
 						PortraitSwapMap =
@@ -157,17 +275,73 @@ UnitSetData.Eris =
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				}
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 2,
-						},
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				}
-			}
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "Eris_Lucifer_Mesh",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathFalse = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "ErisDream_Mesh",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirementsFalse = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "ErisDream_Lucifer_Mesh",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
 		},
 
 		PreBossAISetupFunctionName = "GenericPresentation",
@@ -736,7 +910,8 @@ UnitSetData.Eris =
 			{ Cue = "/VO/ErisField_0092", Text = "{#Emph}Ungh!" },
 			{ Cue = "/VO/ErisField_0099", Text = "{#Emph}Guh!" },
 		},
-		DeathVoiceLines =
+		-- Played via ErisKillPresentation. Can't use normal DeathVoiceLines because it plays before encounter stats are recorded.
+		ErisDeathVoiceLines =
 		{
 			Queue = "Interrupt",
 			{
@@ -826,7 +1001,7 @@ UnitSetData.Eris =
 								{
 									Path = { "CurrentRun", "EncounterClearStats", "BossEris01", "ClearTime" },
 									Comparison = "<=",
-									Value = 20.0
+									Value = 30.0
 								},
 							},
 							{
@@ -836,7 +1011,7 @@ UnitSetData.Eris =
 								{
 									Path = { "CurrentRun", "EncounterClearStats", "BossEris02", "ClearTime" },
 									Comparison = "<=",
-									Value = 20.0
+									Value = 30.0
 								},
 							},
 						},
@@ -876,6 +1051,7 @@ UnitSetData.Eris =
 			{
 				{ Name = "BossVanquishedSpeech", Time = 60 },
 			},
+			{ GlobalVoiceLines = "CatFamiliarBossFightLastHitVoiceLines" },
 			{ GlobalVoiceLines = "SeleneVictoryVoiceLines" },
 			{ GlobalVoiceLines = "BarelySurvivedBossFightVoiceLines" },
 			{
@@ -894,6 +1070,24 @@ UnitSetData.Eris =
 				{ Cue = "/VO/MelinoeField_1912", Text = "She never learns." },
 				{ Cue = "/VO/MelinoeField_1913", Text = "See you, Strife." },
 				{ Cue = "/VO/MelinoeField_1914", Text = "Much better..." },
+				{ Cue = "/VO/MelinoeField_5587", Text = "You can't trouble me as you once did.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
+				{ Cue = "/VO/MelinoeField_5588", Text = "Always a pleasure, dream-version of Eris.",
+					PlayFirst = true,
+					GameStateRequirements =
+					{
+						{
+							PathTrue = { "CurrentRun", "IsDreamRun" },
+						},
+					},
+				},
 			},
 		},
 
@@ -2042,11 +2236,7 @@ UnitSetData.Eris =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/ErisField_0386",
@@ -2078,11 +2268,7 @@ UnitSetData.Eris =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/ErisField_0389",
@@ -2105,16 +2291,12 @@ UnitSetData.Eris =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
-					{
 						PathTrue = { "GameState", "LastBossDifficultyRecord", "Eris" },
 					},
 					{
 						PathTrue = { "GameState", "TextLinesRecord", "ErisBossAboutAltFight01" },
 					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/ErisField_0391",
@@ -2141,13 +2323,9 @@ UnitSetData.Eris =
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Eris" },
 					},
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
-					{
 						PathTrue = { "GameState", "TextLinesRecord", "ErisBossAboutAltFight03" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/ErisField_0393",
@@ -2169,11 +2347,7 @@ UnitSetData.Eris =
 				PlayOnce = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 
 				{ Cue = "/VO/ErisField_0395",
@@ -2347,11 +2521,7 @@ UnitSetData.Eris =
 			{
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = "<",
-						Value = 2,
-					},
+					NamedRequirementsFalse = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/ErisField_0132",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -2649,13 +2819,9 @@ UnitSetData.Eris =
 				GameStateRequirements =
 				{
 					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
-					{
 						PathFalse = { "GameState", "LastBossDifficultyRecord", "Eris" },
 					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/ErisField_0457",
 					PreLineFunctionName = "StartBossRoomMusic",
@@ -2668,11 +2834,7 @@ UnitSetData.Eris =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/ErisField_0458",
 					Emote = "PortraitEmoteSparkly",
@@ -2685,11 +2847,7 @@ UnitSetData.Eris =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/ErisField_0459",
 					Emote = "PortraitEmoteFiredUp",
@@ -2703,11 +2861,7 @@ UnitSetData.Eris =
 				PlayFirst = true,
 				GameStateRequirements =
 				{
-					{
-						Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-						Comparison = ">=",
-						Value = 2,
-					},
+					NamedRequirements = { "BossDifficultyActive" },
 				},
 				{ Cue = "/VO/ErisField_0460",
 					Portrait = "Portrait_Eris_FiredUp_01",
@@ -2757,6 +2911,23 @@ UnitSetData.Eris =
 -- Global Eris Lines
 GlobalVoiceLines.ErisBossGreetingLines =
 {
+	{ GlobalVoiceLines = "DreamRunFinalBossGreetingVoiceLines" },
+	{
+		PlayOnce = true,
+		PlayOnceContext = "DreamRunErisIntroVO",
+		RandomRemaining = true,
+		PreLineWait = 0.85,
+		UsePlayerSource = true,
+		GameStateRequirements =
+		{
+			{
+				PathTrue = { "CurrentRun", "IsDreamRun" },
+			},
+		},
+
+		{ Cue = "/VO/MelinoeField_5584", Text = "Apparently I like to dream of Strife!", PlayFirst = true, },
+		{ Cue = "/VO/MelinoeField_5585", Text = "Occupying my thoughts again, Eris?" },
+	},
 	{
 		BreakIfPlayed = true,
 		RandomRemaining = true,
@@ -2764,6 +2935,7 @@ GlobalVoiceLines.ErisBossGreetingLines =
 		SuccessiveChanceToPlay = 0.85,
 		ObjectType = "Eris",
 		PreLineAnim = "Enemy_Eris_Hub_Greet",
+		IgnorePreLineAnimInDreamRuns = true,
 
 		{ Cue = "/VO/Eris_0072", Text = "Lookee who!" },
 		{ Cue = "/VO/Eris_0074", Text = "{#Emph}Ahh, heh!" },
@@ -2791,6 +2963,9 @@ GlobalVoiceLines.ErisBossGreetingLines =
 				{
 					PathTrue = { "GameState", "LastBossDifficultyRecord", "Eris" },
 				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
+				},
 			},
 		},
 		{ Cue = "/VO/ErisField_0404", Text = "Stupid Rail...", PlayFirst = true,
@@ -2802,6 +2977,9 @@ GlobalVoiceLines.ErisBossGreetingLines =
 				},
 				{
 					PathTrue = { "GameState", "LastBossDifficultyRecord", "Eris" },
+				},
+				{
+					PathFalse = { "CurrentRun", "IsDreamRun" },
 				},
 			},
 		},
@@ -2827,62 +3005,38 @@ GlobalVoiceLines.ErisBossGreetingLines =
 		{ Cue = "/VO/ErisField_0397", Text = "{#Emph}Eugh{#Prev}, what happened to this beach...?",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/ErisField_0398", Text = "Something {#Emph}stinks...!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/ErisField_0399", Text = "Get a load of {#Emph}this!",
 			PlayFirst = true,
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/ErisField_0400", Text = "Look what {#Emph}I {#Prev}got!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/ErisField_0401", Text = "Look what I got...!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/ErisField_0402", Text = "It's the nightly special!",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 	},
@@ -2895,24 +3049,45 @@ GlobalVoiceLines.ErisBossGreetingLines =
 		{ Cue = "/VO/MelinoeField_3485", Text = "What happened here...?",
 			GameStateRequirements =
 			{
-				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
-				},
+				NamedRequirements = { "BossDifficultyActive" },
 			},
 		},
 		{ Cue = "/VO/MelinoeField_3486", Text = "This beach...",
 			GameStateRequirements =
 			{
+				NamedRequirements = { "BossDifficultyActive" },
+			},
+		},
+		{ Cue = "/VO/MelinoeField_5584", Text = "Apparently I like to dream of Strife!",
+			GameStateRequirements =
+			{
 				{
-					Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-					Comparison = ">=",
-					Value = 2,
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/MelinoeField_5584" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
 				},
 			},
 		},
-
+		{ Cue = "/VO/MelinoeField_5585", Text = "Occupying my thoughts again, Eris?",
+			GameStateRequirements =
+			{
+				{
+					PathTrue = { "CurrentRun", "IsDreamRun" },
+				},
+				{
+					SumPrevRuns = 8,
+					Path = { "SpeechRecord", "/VO/MelinoeField_5585" },
+					CountPathTrue = true,
+					Comparison = "<=",
+					Value = 0,
+				},
+			},
+		},
 		{ Cue = "/VO/MelinoeField_1903", Text = "Eris...", PlayFirst = true },
 		{ Cue = "/VO/MelinoeField_1905", Text = "You.", PlayFirst = true },
 		{ Cue = "/VO/MelinoeField_1904", Text = "You're in my way." },
@@ -3126,11 +3301,7 @@ GlobalVoiceLines.ErisGrenadeVoiceLines =
 	{ Cue = "/VO/ErisField_0415", Text = "Have a glowie!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 2,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 }
@@ -3167,31 +3338,19 @@ GlobalVoiceLines.ErisGrenadeClusterVoiceLines =
 	{ Cue = "/VO/ErisField_0413", Text = "Ooh, {#Emph}glowy!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 2,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/ErisField_0414", Text = "Night lights!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 2,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 	{ Cue = "/VO/ErisField_0416", Text = "Glow-bombs!",
 		GameStateRequirements =
 		{
-			{
-				Path = { "GameState", "ShrineUpgrades", "BossDifficultyShrineUpgrade" },
-				Comparison = ">=",
-				Value = 2,
-			},
+			NamedRequirements = { "BossDifficultyActive" },
 		},
 	},
 }

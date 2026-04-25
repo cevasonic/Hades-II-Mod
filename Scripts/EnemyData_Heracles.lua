@@ -2,7 +2,7 @@ UnitSetData.Heracles =
 {
 	Heracles =
 	{
-		InheritFrom = { "BaseBossEnemy", "BaseVulnerableEnemy"},
+		InheritFrom = { "BaseBossEnemy", "BasePEnemy", "BaseVulnerableEnemy"},
 		Portrait = "Portrait_Heracles_Default_01",
 		SpeakerName = "Heracles",
 		LoadPackages = { "Heracles", },
@@ -64,14 +64,44 @@ UnitSetData.Heracles =
 				},
 				GameStateRequirements =
 				{
+					NamedRequirements = { "BossDifficultyActive" },
+				},
+			},
+			{
+				FunctionName = "OverwriteSelf",
+				Args =
+				{
+					AddOutlineImmediately = true,
+					Outline =
 					{
-						FunctionName = "RequiredShrineLevel",
-						FunctionArgs =
-						{
-							ShrineUpgradeName = "BossDifficultyShrineUpgrade",
-							Comparison = ">=",
-							Value = 3,
-						},
+						R = 230,
+						G = 23,
+						B = 0,
+						Opacity = 0.8,
+						Thickness = 3,
+						Threshold = 0.6,
+					},
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					},
+				},
+			},
+			{
+				FunctionName = "GenericPresentation",
+				Args =
+				{
+					SetModel = "HeraclesDreamEM_Mesh",
+					SetAnimation = "Heracles_Hub_Idle",
+				},
+				GameStateRequirements =
+				{
+					NamedRequirements = { "BossDifficultyActive" },
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
 					},
 				},
 			},
@@ -81,6 +111,68 @@ UnitSetData.Heracles =
 		--WeaponOptions = { "HeraclesEMLeap_Passive", },
 
 		OnDeathFunctionName = "HeraclesKillPresentation",
+		
+		HealthBarTextId = "Heracles",
+		AltHealthBarTextIds =
+		{
+			{
+				TextId = "Heracles_DreamRun01",
+				GameStateRequirements =
+				{
+					{
+						PathTrue = { "CurrentRun", "IsDreamRun" },
+					}
+				},
+			},
+		},
+
+		DreamBiomeData =
+		{
+			[1] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.25,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.3,
+				},
+			},
+			[2] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 0.46,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.4,
+				},
+			},
+			[3] =
+			{
+				DataOverrides =
+				{
+					--HealthMultiplier = 1,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	PlayerMultiplier = 0.75,
+				},
+			},
+			[4] =
+			{
+				DataOverrides =
+				{
+					HealthMultiplier = 1.8,
+				},
+				AddOutgoingDamageModifier =
+				{
+				 	--PlayerMultiplier = 1,
+				},
+			},
+		},
 
 		AIEndHealthThreshold = 0.5,
 		AIStages =
@@ -241,6 +333,7 @@ UnitSetData.Heracles =
 				{ Name = "HeraclesAnyQuipSpeech", Time = 12 },
 			},
 			{
+				RandomRemaining = true,
 				GameStateRequirements = 
 				{
 					{
@@ -253,6 +346,7 @@ UnitSetData.Heracles =
 				{ Cue = "/VO/Heracles_0532", Text = "Back, toad..." },
 			},
 			{
+				RandomRemaining = true,
 				GameStateRequirements =
 				{
 
@@ -266,6 +360,7 @@ UnitSetData.Heracles =
 				{ Cue = "/VO/Heracles_0536", Text = "Back off, cat..." },
 			},
 			{
+				RandomRemaining = true,
 				GameStateRequirements =
 				{
 					{
@@ -279,6 +374,7 @@ UnitSetData.Heracles =
 				{ Cue = "/VO/Heracles_0534", Text = "Damn bird..." },
 			},
 			{
+				RandomRemaining = true,
 				GameStateRequirements =
 				{
 					{
@@ -292,6 +388,7 @@ UnitSetData.Heracles =
 				{ Cue = "/VO/Heracles_0538", Text = "Get off me, cur..." },
 			},
 			{
+				RandomRemaining = true,
 				GameStateRequirements =
 				{
 					{
@@ -304,6 +401,10 @@ UnitSetData.Heracles =
 				{ Cue = "/VO/Heracles_0539", Text = "Bloody weasel..." },
 				{ Cue = "/VO/Heracles_0540", Text = "Blasted weasel..." },
 			},
+		},
+		LastStandReactionVoiceLines =
+		{
+			{ GlobalVoiceLines = "HeraclesLastStandReactionVoiceLines" },
 		},
 
 		DeathVoiceLines =
@@ -588,150 +689,6 @@ WeaponSetData =
 					{ Cue = "/VO/Heracles_0681", Text = "Come!" },
 					{ Cue = "/VO/Heracles_0683", Text = "I'll crush you!" },
 					{ Cue = "/VO/Heracles_0689", Text = "You're {#Emph}dead!" },
-					{ Cue = "/VO/Heracles_0677", Text = "Next!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0675", Text = "You there!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0678", Text = "Now {#Emph}you!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0679", Text = "One by one!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0680", Text = "All of you!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0682", Text = "Fool!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0684", Text = "Pathetic wretch!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0685", Text = "You are next!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0686", Text = "Now for {#Emph}you!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0687", Text = "How about you?",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0688", Text = "Weaklings, all of you!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0196", Text = "Die!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0198", Text = "You!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0199", Text = "You!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0203", Text = "Your turn!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
-					{ Cue = "/VO/Heracles_0204", Text = "Your turn!",
-						GameStateRequirements =
-						{
-							{
-								Path = { "CurrentRun", "CurrentRoom", "Name" },
-								IsNone = { "P_Boss01" },
-							},
-						},
-					},
 				},
 			},
 		},

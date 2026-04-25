@@ -197,6 +197,10 @@ function HandleNemesisCombatSpawn( eventSource, args )
 	newUnit.ObjectId = SpawnUnit({ Name = "NPC_Nemesis_01", Group = "Standing", DestinationId = spawnPointId })
 	newUnit.UseActivatePresentation = false
 
+	if CurrentRun.CurrentRoom.SpawnedRewardCageIndicators then
+		CreateScreenEdgeIndicator( newUnit, { AnimName = newUnit.Icon } )
+	end
+
 	currentEncounter.NemesisId = newUnit.ObjectId
 	SetupUnit( newUnit, CurrentRun, { IgnoreAI = true, IgnoreAssert = true } )
 	MapState.RoomRequiredObjects[newUnit.ObjectId] = newUnit
@@ -444,7 +448,7 @@ function CanDionysusSkip( encounter, sourceTrait )
 end
 
 function ProcessDionysusSkip( sourceTrait )
-	if CurrentRun.ClearedBiomes >= 4 then
+	if CurrentRun.EnteredBiomes >= GameData.FullRunBiomeCount then
 		sourceTrait.CustomTrayText = "PersistentDionysusSkipKeepsake_NoBiomes"
 	else
 		sourceTrait.CustomTrayText = "PersistentDionysusSkipKeepsake_Recharging"
@@ -786,10 +790,11 @@ function HandleNextSpawn( encounter, ignoreSpawnPreferences, spawnInfo, override
 				local originalName = spawnInfo.Name
 				--DebugPrint({ Text = "originalName = "..originalName })
 				local swapMap = MetaUpgradeData.NextBiomeEnemyShrineUpgrade.SwapMap[originalName]
+				spawnInfo.SpawnOverrides = spawnInfo.SpawnOverrides or {}
+				spawnInfo.SpawnOverrides.IsFromNextBiomeEnemyShrineUpgrade = true
 				if swapMap ~= nil then
 					spawnInfo.Name = swapMap.Name
 					--DebugPrint({ Text = "spawnInfo.Name = "..spawnInfo.Name })
-					spawnInfo.SpawnOverrides = spawnInfo.SpawnOverrides or {}
 					spawnInfo.SpawnOverrides.RequiredSpawnPoint = swapMap.RequiredSpawnPoint or "nil"
 					spawnInfo.SpawnOverrides.ActiveCapWeight = swapMap.ActiveCapWeight
 				else
@@ -797,7 +802,6 @@ function HandleNextSpawn( encounter, ignoreSpawnPreferences, spawnInfo, override
 					if nextEnemySet ~= nil then
 						spawnInfo.Name = GetRandomValue( nextEnemySet )
 						--DebugPrint({ Text = "spawnInfo.Name = "..spawnInfo.Name })
-						spawnInfo.SpawnOverrides = spawnInfo.SpawnOverrides or {}
 						spawnInfo.SpawnOverrides.RequiredSpawnPoint = "nil"
 					end
 				end
@@ -1368,86 +1372,6 @@ function CalculateActiveEnemyCap( currentRun, currentRoom, currentEncounter )
 	return enemyCap
 end
 
-function HandleTimedSpawns( eventSource, args )
-
-	local currentRun = CurrentRun
-	local currentRoom = CurrentRun.CurrentRoom
-	local currentEncounter = eventSource
-
-	local newSpawns = currentEncounter.SpawnWaves
-	local nextLayerIndex = 1
-
-	local timeLimit = currentEncounter.TimeLimit
-	local startingTime = _worldTime
-	currentEncounter.RemainingTime = timeLimit
-	currentEncounter.TimeModifier = currentEncounter.TimeModifier or 0
-
-	CheckObjectiveSet( currentEncounter.EncounterType )
-	CheckObjectiveSet( EncounterData[currentEncounter.Name].ObjectiveSets )
-
-	UpdateObjective( currentEncounter.EncounterType, "RemainingSeconds", math.ceil(currentEncounter.RemainingTime))
-	thread( SurvivalObjectivePresentation, currentEncounter )
-
-	currentEncounter.ActiveEnemyCap = CalculateActiveEnemyCap(currentRun, currentRoom, currentEncounter)
-
-	if currentEncounter.SpawnHazards then
-		thread(HandleHazardSpawns, currentRoom, currentEncounter)
-	end
-
-	if SessionState.BlockSpawns then
-		waitUntil( "BlockSpawnsOff" )
-	end
-	wait( 1.0, RoomThreadName )
-
-	local spawnIntervalStart = 0
-	local nextSpawnInterval = 0
-
-	local lastTrapActivateTime = 0
-	local trapType = GetRandomValue(currentEncounter.TrapTypes)
-	currentEncounter.DisabledTrapIds = GetIds({ Name = "Traps" })
-	currentEncounter.EnabledTrapIds = {}
-
-	-- While there is still time
-	currentEncounter.TimeIsUp = false
-	while currentEncounter.RemainingTime > 0 do
-		-- Check if there are new spawn layers to add
-		if newSpawns ~= nil and newSpawns[nextLayerIndex] ~= nil and currentEncounter.RemainingTime <= newSpawns[nextLayerIndex].AddAtTime then
-			AddEncounterLayer(currentRun, currentRoom, currentEncounter, newSpawns[nextLayerIndex])
-			nextLayerIndex = nextLayerIndex + 1
-		end
-
-		-- Spawn a new unit
-		if _worldTime > spawnIntervalStart + nextSpawnInterval then
-			if currentEncounter.ActiveEnemyCap == nil or GetActiveEnemyCount(currentEncounter) < currentEncounter.ActiveEnemyCap then
-				HandleNextSpawn(currentEncounter)
-			elseif GetActiveEnemyCount(currentEncounter) >= currentEncounter.ActiveEnemyCap then
-				if currentEncounter.SpawnIntervalMin == 0 and currentEncounter.SpawnIntervalMax == 0 then
-					nextSpawnInterval = 0.2
-				end
-			end
-
-			nextSpawnInterval = RandomFloat( currentEncounter.SpawnIntervalMin, currentEncounter.SpawnIntervalMax )
-			spawnIntervalStart = _worldTime
-		end
-
-		if CurrentRun.CurrentRoom.ElapsedTimeMultiplier then
-			startingTime = startingTime + ( 1 - CurrentRun.CurrentRoom.ElapsedTimeMultiplier) * 0.25
-		end
-		if SessionState.BlockSpawns then
-			waitUntil( "BlockSpawnsOff" )
-		end
-		wait( 0.25, RoomThreadName )
-		currentEncounter.RemainingTime = timeLimit - (_worldTime - startingTime) + currentEncounter.TimeModifier
-	end
-	currentEncounter.TimeIsUp = true
-	--thread( HadesSpeakingPresentation, eventSource, { VoiceLines = GlobalVoiceLines.SurvivalEncounterSurvivedVoiceLines } )
-
-	if currentEncounter.EncounterType == "SurvivalChallenge" then
-		thread(DestroyRequiredKills, ({ BlockLoot = true, DestroyInterval = currentEncounter.DestroyEnemyInterval or 0.05, BlockDeathWeapons = true }) )
-	end
-	thread( MarkObjectiveComplete, currentEncounter.EncounterType )
-end
-
 function AddEncounterLayer( currentRun, currentRoom, currentEncounter, layerData )
 
 	for k, spawnInfo in pairs( layerData.Spawns ) do
@@ -1680,27 +1604,18 @@ function PostCombatAudio( eventSource )
 
 	if currentEncounter.Spawns ~= nil or encounterData.ForceCombatResolvedAudio then
 		-- VO
-		if currentEncounter.ArtemisId == nil or currentEncounter.HeraclesId == nil then
-			local currentHealth = currentRun.Hero.Health
-			local currentHealthFraction = currentRun.Hero.Health / currentRun.Hero.MaxHealth
-			local prevRoom = GetPreviousRoom( currentRun )
-			local roomCombatResolvedVoiceLines = roomData.CombatResolvedVoiceLines
-			if roomCombatResolvedVoiceLines ~= nil then
-				thread( PlayVoiceLines, roomCombatResolvedVoiceLines, true )
-			else
-				-- if you suffered a lot of damage and were reduced to low health
-				if prevRoom ~= nil and prevRoom.EndingHealth ~= nil and prevRoom.EndingHealth - currentHealth >= 25 and currentHealthFraction < 0.3 then
-					thread( PlayVoiceLines, GlobalVoiceLines.CombatResolvedLowHealthVoiceLines, true )
-				end
-				thread( PlayVoiceLines, GlobalVoiceLines.CombatResolvedVoiceLines, true )
-			end
+		local currentHealth = currentRun.Hero.Health
+		local currentHealthFraction = currentRun.Hero.Health / currentRun.Hero.MaxHealth
+		local prevRoom = GetPreviousRoom( currentRun )
+		local roomCombatResolvedVoiceLines = roomData.CombatResolvedVoiceLines
+		if roomCombatResolvedVoiceLines ~= nil then
+			thread( PlayVoiceLines, roomCombatResolvedVoiceLines, true, nil, { CurrentEncounter = currentEncounter } )
 		else
-			-- @todo Presumably dead code with the above condition always true
-			for k, unit in pairs( ShallowCopyTable( ActiveEnemies ) ) do
-				if unit.EncounterEndVoiceLines ~= nil then
-					thread( PlayVoiceLines, unit.EncounterEndVoiceLines, nil, unit )
-				end
+			-- if you suffered a lot of damage and were reduced to low health
+			if prevRoom ~= nil and prevRoom.EndingHealth ~= nil and prevRoom.EndingHealth - currentHealth >= 25 and currentHealthFraction < 0.3 then
+				thread( PlayVoiceLines, GlobalVoiceLines.CombatResolvedLowHealthVoiceLines, true, nil, { CurrentEncounter = currentEncounter } )
 			end
+			thread( PlayVoiceLines, GlobalVoiceLines.CombatResolvedVoiceLines, true, nil, { CurrentEncounter = currentEncounter } )
 		end
 
 		if MusicSection ~= 2 and not roomData.IgnorePostCombatGuitar then
@@ -1905,7 +1820,11 @@ function BossIntro( eventSource, args )
 	if SessionState.BlockSpawns then
 		waitUntil( "BlockSpawnsOff" )
 	end
-
+	
+	if CurrentRun.CurrentRoom and CurrentRun.CurrentRoom.Encounter and CurrentRun.CurrentRoom.Encounter.SpawnsSkipped then
+		return
+	end
+	
 	HideCombatUI("BossIntro")
 	AddInputBlock({ Name = "BossIntro" })
 	AddTimerBlock( CurrentRun, "BossIntro" )
@@ -1923,31 +1842,46 @@ function BossIntro( eventSource, args )
 	if args.ProcessTextLinesIds ~= nil then
 		for k, id in ipairs( args.ProcessTextLinesIds ) do
 			if ActiveEnemies[id] ~= nil then
-
-				wait( args.PreTextLinesWaitTime or 0.5, RoomThreadName )
-
 				local enemy = ActiveEnemies[id]
-				if not args.SkipAngleTowardTarget then
-					AngleTowardTarget({ Id = id, DestinationId = CurrentRun.Hero.ObjectId })
-				end
-				local cameraDuration = args.DurationIn or 1.5
-				if not args.SkipCameraPan then
-					PanCamera({ Ids = args.PanTargetIds or id, Duration = cameraDuration, EaseIn = 0.05, EaseOut = 0.03 })
-					didPan = true
-				end
-				if args.UsePanSound then
-					PlaySound({ Name = "/Leftovers/World Sounds/MapZoomSlow" })
-				end
 
-				local textLines = enemy.QueuedBossIntroTextLines or GetRandomEligibleTextLines( enemy, enemy.BossIntroTextLineSets, GetNarrativeDataValue( enemy, "BossIntroTextLinePriorities" ) )
-				PlayTextLines( enemy, textLines, args )
-				if textLines ~= nil and didPan then
-					local remainingPanTime = cameraDuration - (args.TotalElapsedTime or 0)
-					wait( remainingPanTime )
-				end
+				if CurrentRun.IsDreamRun and args.DreamRunIntroFunctionName ~= nil then
+					CallFunctionName( args.DreamRunIntroFunctionName, enemy, args )
+					if not args.SkipCameraPan then
+						didPan = true
+					end
+				else
+					local defaultWaitTime = nil
+					wait( args.PreTextLinesWaitTime or defaultWaitTime, RoomThreadName )
 
-				if not args.SkipBossMusic then
-					StartBossRoomMusic()
+					if not args.SkipAngleTowardTarget then
+						AngleTowardTarget({ Id = id, DestinationId = CurrentRun.Hero.ObjectId })
+					end
+					local cameraDuration = args.DurationIn or 1.5
+					if not args.SkipCameraPan then
+						PanCamera({ Ids = args.PanTargetIds or id, Duration = cameraDuration, EaseIn = 0.05, EaseOut = 0.03 })
+						didPan = true
+					end
+					if args.UsePanSound then
+						PlaySound({ Name = "/Leftovers/World Sounds/MapZoomSlow" })
+					end
+
+					local shouldWaitForRemainingPanTime = false
+					local textLines = enemy.QueuedBossIntroTextLines
+					if textLines == nil or not IsTextLineEligible( CurrentRun, enemy, textLines ) then
+						textLines = GetRandomEligibleTextLines( enemy, enemy.BossIntroTextLineSets, GetNarrativeDataValue( enemy, "BossIntroTextLinePriorities" ) )
+					end
+					if textLines ~= nil then
+						PlayTextLines( enemy, textLines, args )
+						shouldWaitForRemainingPanTime = true
+					end
+					if didPan and shouldWaitForRemainingPanTime then
+						local remainingPanTime = cameraDuration - (args.TotalElapsedTime or 0)
+						wait( remainingPanTime )
+					end
+
+					if not args.SkipBossMusic then
+						StartBossRoomMusic()
+					end
 				end
 			end
 		end
@@ -2143,7 +2077,11 @@ function StartChallengeEncounter( challengeSwitch )
 	challengeSwitch.UseText = "UseChallengeSwitchInProgress"
 	RefreshUseButton( challengeSwitch.ObjectId, challengeSwitch )
 
-	ModifyTextBox({ Id = challengeSwitch.ValueTextAnchor, Text = challengeSwitch.ChallengeText, LuaKey = "Amount", LuaValue = round(challengeSwitch.StartingValue), Format = "LootFormat", FadeTarget = 1.0, FadeDuration = 0.5 })
+	local valueText = challengeSwitch.ChallengeText
+	if challengeSwitch.ChallengeTextFlipped ~= nil and IsHorizontallyFlipped({ Id = challengeSwitch.ObjectId }) then
+		valueText = challengeSwitch.ChallengeTextFlipped
+	end
+	ModifyTextBox({ Id = challengeSwitch.ValueTextAnchor, Text = valueText, LuaKey = "Amount", LuaValue = round(challengeSwitch.StartingValue), Format = "LootFormat", FadeTarget = 1.0, FadeDuration = 0.5 })
 	
 	SetScaleX({ Id = challengeSwitch.ValueTextAnchor, Fraction = 0.66 })
 
@@ -2190,7 +2128,11 @@ function EndChallengeEncounter( challengeEncounter )
 	challengeSwitch.UseText = challengeSwitch.ChallengeResolvedUseText
 	RefreshUseButton( challengeSwitch.ObjectId, challengeSwitch )
 	challengeSwitch.ReadyToUse = true
-
+	
+	if challengeSwitch.RewardType == "Money" then
+		local moneyMultiplier = GetTotalHeroTraitValue( "MoneyMultiplier", { IsMultiplier = true } )
+		challengeSwitch.CurrentValue = round( challengeSwitch.CurrentValue * moneyMultiplier )
+	end
 	if CurrentRun.CurrentRoom.WellShop then
 		SetAnimation({ DestinationId = CurrentRun.CurrentRoom.WellShop.ObjectId, Name = "WellShopUnlocked" })
 		UseableOn({ Id = CurrentRun.CurrentRoom.WellShop.ObjectId })
@@ -2333,9 +2275,6 @@ function RegenerateElysiumPillar(pillar, currentRun)
 end
 
 function TrackNemesisChallengeProgress( encounter, victim, killer )
-	if victim.IgnoreThanatosChallengeTracker then
-		return
-	end
 
 	if killer ~= nil and killer.KillOwner ~= nil then
 		if killer.KillOwner == CurrentRun.Hero.ObjectId then
@@ -2395,9 +2334,6 @@ function CheckHeraclesBounty( unit, encounter )
 end
 
 function TrackHeraclesChallengeProgress( encounter, victim, killer )
-	if victim.IgnoreThanatosChallengeTracker then
-		return
-	end
 
 	if victim.HeraclesBounty == nil then
 		return
@@ -2785,7 +2721,7 @@ function SetupArachneCombatEncounter( eventSource, args )
 	roomRewardCocoon.OnDeathFunctionArgs = { NofifyWaitersName = "ArachneRewardFound" }
 	roomRewardCocoon.OnDeathThreadedFunctionName = "ArachneCombatRewardSpawnPresentation"
 	roomRewardCocoon.SpawnUnitOnDeath = nil
-	roomRewardCocoon.OnKillVoiceLines = GlobalVoiceLines.PositiveReactionVoiceLines
+	roomRewardCocoon.OnKillVoiceLines = GlobalVoiceLines.CocoonRewardFoundVoiceLines
 	CurrentRun.CurrentRoom.SpawnRewardOnId = roomRewardCocoon.ObjectId
 end
 
@@ -2814,7 +2750,6 @@ end
 
 function WaitForArachneRewardFound( encounter )
 	waitUntil("ArachneRewardFound")
-	ArachneRewardFoundPresentation( encounter )
 end
 
 function ScyllaCoverManager( encounter, args )
@@ -2882,7 +2817,7 @@ function ApplyScyllaFightSpotlight( scylla, args )
 
 	CreateAnimation({ Name = "StageSpotlight", DestinationId = flagData.Id, Group = "FX_Add_Top" })
 	CreateAnimation({ Name = "ScyllaBoostedFxSpawner", DestinationId = flagData.Id })
-	PlaySound({ Name = "/Leftovers/SFX/LightOn", flagData.Id })
+	PlaySound({ Name = "/Leftovers/SFX/LightOn", Id = flagData.Id })
 
 	if flagData.ApplyEffect ~= nil then
 		flagData.ApplyEffect.Id = scylla.ObjectId
